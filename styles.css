@@ -574,7 +574,7 @@ select.form-control {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-@media (max-width: 960px) {
+@media (max-width: 1100px) {
   .profile-grid {
     grid-template-columns: 1fr;
   }
@@ -679,6 +679,7 @@ select.form-control {
   display: grid;
   gap: var(--space-16);
   padding: var(--space-20);
+  position: relative;
 }
 
 .onboarding-card__body h3 {
@@ -691,6 +692,12 @@ select.form-control {
   margin: 0;
   font-size: var(--font-size-md);
   color: var(--color-text-secondary);
+}
+
+.onboarding-card__dismiss {
+  position: absolute;
+  top: var(--space-12);
+  right: var(--space-12);
 }
 
 .onboarding-card__steps {
@@ -781,6 +788,35 @@ select.form-control {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--space-16);
+}
+
+.results-zero-state {
+  display: none;
+  padding: var(--space-24);
+  text-align: center;
+  border: 1px dashed var(--color-card-border);
+  border-radius: var(--radius-lg);
+  background: rgba(var(--color-info-rgb), 0.12);
+  color: var(--color-text);
+  margin-bottom: var(--space-24);
+}
+
+.results-zero-state h3 {
+  margin: 0 0 var(--space-8);
+  font-size: var(--font-size-2xl);
+}
+
+.results-zero-state p {
+  margin: 0 0 var(--space-16);
+  color: var(--color-text-secondary);
+}
+
+.results-zero-state.is-active {
+  display: block;
+}
+
+#results-detail.is-dimmed {
+  display: none;
 }
 
 .form-section,
@@ -1003,6 +1039,7 @@ select.form-control {
   display: inline-block;
   cursor: help;
   border-bottom: 1px dotted var(--color-border);
+  color: var(--color-primary);
 }
 
 /* Lightweight tooltips driven by data-tooltip attribute */
@@ -1032,6 +1069,12 @@ select.form-control {
 .tooltip[data-tooltip]:hover::after,
 .tooltip[data-tooltip]:focus::after {
   opacity: 1;
+}
+
+.tooltip:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
 }
 
 /* Helper text under inputs */

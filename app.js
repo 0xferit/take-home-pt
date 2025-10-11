@@ -36,6 +36,8 @@ const setText = (id, value) => {
 
 const ACTIVITY_DEFAULT = 'services_general';
 
+let onboardingDismissed = false;
+
 const appState = {
     nhrStatus: 'standard',
     activityProfile: ACTIVITY_DEFAULT,
@@ -68,6 +70,7 @@ function initApp() {
     }
     updateExpenseTotal();
     calculateAndUpdate();
+    if (hasAnyUserInput()) dismissOnboarding();
     populateAppVersion();
 }
 
@@ -87,6 +90,7 @@ function setupEventListeners() {
 
     document.getElementById('nhr-status').addEventListener('change', (event) => {
         appState.nhrStatus = event.target.value;
+        dismissOnboarding();
         recalc();
     });
 
@@ -94,6 +98,7 @@ function setupEventListeners() {
         input.addEventListener('change', (event) => {
             if (!event.target.checked) return;
             setActivityProfile(event.target.value || ACTIVITY_DEFAULT, { source: 'manual' });
+            dismissOnboarding();
             recalc();
         });
     });
@@ -156,6 +161,7 @@ function setupEventListeners() {
             event.target.value = value;
             appState[key] = value;
             updateExpenseTotal();
+            dismissOnboarding();
             recalc();
         });
     });
@@ -168,6 +174,7 @@ function setupEventListeners() {
                 const incomeInput = document.getElementById('gross-income');
                 if (incomeInput) incomeInput.focus();
             }, 80);
+            dismissOnboarding();
         });
     }
 
@@ -177,6 +184,7 @@ function setupEventListeners() {
             switchTab('results');
             const resultsRegion = document.getElementById('results');
             if (resultsRegion) resultsRegion.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            dismissOnboarding();
         });
     }
 
@@ -186,6 +194,7 @@ function setupEventListeners() {
             event.target.value = value;
             appState.expenses[event.target.id] = value;
             updateExpenseTotal();
+            dismissOnboarding();
             recalc();
         });
     });
@@ -208,9 +217,30 @@ function setupEventListeners() {
             const key = id.split('-')[0];
             appState.personalDeductions[key] = value;
             updatePersonalDeductions();
+            dismissOnboarding();
             recalc();
         });
     });
+
+    document.querySelectorAll('[data-tab-target]').forEach((trigger) => {
+        trigger.addEventListener('click', (event) => {
+            const target = event.currentTarget?.dataset?.tabTarget;
+            if (!target) return;
+            switchTab(target);
+            if (target === 'income') {
+                setTimeout(() => {
+                    const incomeInput = document.getElementById('gross-income');
+                    if (incomeInput) incomeInput.focus();
+                }, 80);
+            }
+            dismissOnboarding();
+        });
+    });
+
+    const onboardingDismiss = document.getElementById('btn-dismiss-onboarding');
+    if (onboardingDismiss) {
+        onboardingDismiss.addEventListener('click', () => dismissOnboarding());
+    }
 }
 
 function switchTab(tabName) {
@@ -414,6 +444,7 @@ function calculateAndUpdate() {
     updateComparisonTable(simplifiedResults, transparentResults);
     updateRecommendation(simplifiedResults, transparentResults);
     updateSanityChecks();
+    updateResultsVisibility();
 }
 
 function updateResultsDisplayDual(simplified, transparent) {
@@ -874,6 +905,38 @@ function updateSanityChecks() {
         li.textContent = msg;
         list.appendChild(li);
     });
+}
+
+function hasAnyUserInput() {
+    return appState.grossIncome > 0 || appState.divintIncome > 0 || appState.capgainsIncome > 0;
+}
+
+function updateResultsVisibility() {
+    const zeroState = document.getElementById('results-zero-state');
+    const detail = document.getElementById('results-detail');
+    if (!zeroState || !detail) return;
+    const hasData = hasAnyUserInput();
+    if (hasData) {
+        zeroState.classList.remove('is-active');
+        zeroState.setAttribute('hidden', 'hidden');
+        detail.classList.remove('is-dimmed');
+        detail.removeAttribute('aria-hidden');
+    } else {
+        zeroState.classList.add('is-active');
+        zeroState.removeAttribute('hidden');
+        detail.classList.add('is-dimmed');
+        detail.setAttribute('aria-hidden', 'true');
+    }
+}
+
+function dismissOnboarding() {
+    if (onboardingDismissed) return;
+    onboardingDismissed = true;
+    const card = document.getElementById('onboarding-card');
+    if (card) {
+        card.classList.add('hidden');
+        card.setAttribute('aria-hidden', 'true');
+    }
 }
 
 document.addEventListener('DOMContentLoaded', initApp);

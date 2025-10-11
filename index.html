@@ -27,8 +27,9 @@
 
         <!-- Basic Info Tab -->
         <div class="tab-content active" id="basic">
-            <div class="onboarding-card" role="region" aria-labelledby="onboarding-title">
+            <div class="onboarding-card" id="onboarding-card" role="region" aria-labelledby="onboarding-title">
                 <div class="onboarding-card__body">
+                    <button type="button" class="onboarding-card__dismiss btn btn--sm btn--outline" id="btn-dismiss-onboarding" aria-label="Hide welcome tips">×</button>
                     <div>
                         <h3 id="onboarding-title">Welcome! Let’s estimate your 2025 take-home pay</h3>
                         <p class="onboarding-card__lead">Follow the three steps below. You can update outputs at any time&mdash;results refresh automatically.</p>
@@ -103,11 +104,11 @@
                                         <span class="value" id="activity-summary-label">General services (default)</span>
                                     </div>
                                     <div class="profile-summary__item">
-                                        <span class="label">Coefficient applied <span class="tooltip" data-tooltip="Simplified regime taxes a share of your invoiced revenue. Remaining percentage is treated as deemed expenses.">ℹ️</span></span>
+                                        <span class="label">Coefficient applied <span class="tooltip" tabindex="0" data-tooltip="Simplified regime taxes a share of your invoiced revenue. The remainder is treated as deemed expenses for tax purposes.">ℹ️</span></span>
                                         <span class="value" id="activity-summary-coef">35% taxable / 65% deemed expenses</span>
                                     </div>
                                     <div class="profile-summary__item">
-                                        <span class="label">High value CAE examples <span class="tooltip" data-tooltip="Annex II professions typically include software, engineering, design and scientific activities.">ℹ️</span></span>
+                                        <span class="label">High value CAE examples <span class="tooltip" tabindex="0" data-tooltip="Annex II professions typically include software, engineering, design, finance, science and technical consulting activities.">ℹ️</span></span>
                                         <span class="value" id="activity-summary-codes">62010, 62020, 62090, 63110, 63990, 70220, 73110</span>
                                     </div>
                                 </div>
@@ -121,7 +122,7 @@
                             </div>
                             <div class="profile-card__content">
                                 <div class="form-group compact">
-                                    <label class="form-label" for="nhr-status">NHR status</label>
+                                    <label class="form-label" for="nhr-status">NHR status <span class="tooltip" tabindex="0" data-tooltip="If you qualify for NHR, your eligible Category B income can benefit from a 20% flat IRS rate.">ℹ️</span></label>
                                     <select id="nhr-status" class="form-control">
                                         <option value="standard">Standard progressive rates</option>
                                         <option value="original_nhr">Original NHR (20% flat)</option>
@@ -165,7 +166,7 @@
                     <div class="form-group">
                         <label class="form-label" for="gross-income">
                             Gross Annual Income (€)
-                            <span class="tooltip" tabindex="0" title="Your total invoices/revenue from self‑employment for the year, before VAT and before any expenses." data-tooltip="Your total invoices/revenue from self‑employment for the year, before VAT and before any expenses. Do not include salary (Category A). If you invoice with VAT, enter the net amount without VAT.">ℹ️</span>
+                            <span class="tooltip" tabindex="0" data-tooltip="Your total invoices/revenue from self-employment before VAT and expenses. Do not include salary (Category A). Enter the net amount without VAT.">ℹ️</span>
                         </label>
                         <input type="number" id="gross-income" class="form-control" min="0" step="0.01" placeholder="e.g. 170000">
                         <small class="help-text">Category B revenue only. Exclude salary income and enter net amounts (before VAT) you invoice.</small>
@@ -176,13 +177,13 @@
                     <h3>Other Personal Income (optional)</h3>
                     <div class="form-group">
                         <label class="form-label" for="divint-income">Dividends/Interest (€)
-                            <span class="tooltip" tabindex="0" title="Category E – typically taxed at 28% flat as final tax. You may opt for aggregation in your IRS return, not modeled here." data-tooltip="Category E – typically taxed at 28% flat as final tax. You may opt for aggregation in your IRS return, not modeled here.">ℹ️</span>
+                            <span class="tooltip" tabindex="0" data-tooltip="Category E income is usually taxed at 28% flat. Optional aggregation to progressive rates is not modelled here.">ℹ️</span>
                         </label>
                         <input type="number" id="divint-income" class="form-control" min="0" step="0.01" placeholder="0">
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="capgains-income">Capital Gains (Securities) (€)
-                            <span class="tooltip" tabindex="0" title="Category G – securities gains typically taxed at 28% flat as final tax. Enter net gains." data-tooltip="Category G – securities gains typically taxed at 28% flat as final tax. Enter net gains.">ℹ️</span>
+                            <span class="tooltip" tabindex="0" data-tooltip="Category G securities gains are typically taxed at 28% flat as final tax. Enter net gains.">ℹ️</span>
                         </label>
                         <input type="number" id="capgains-income" class="form-control" min="0" step="0.01" placeholder="e.g. 25000">
                     </div>
@@ -209,20 +210,20 @@
                     <div class="expense-grid" style="grid-template-columns: 1fr 1fr;">
                         <div class="form-group">
                             <label class="form-label" for="total-business-expenses">Total Business Expenses (€)
-                                <span class="tooltip" tabindex="0" title="Sum of all annual business costs (rent, equipment, services, subscriptions, travel, etc.)." data-tooltip="Sum of all annual business costs (rent, equipment, services, subscriptions, travel, etc.).">ℹ️</span>
+                                <span class="tooltip" tabindex="0" data-tooltip="Sum of all annual business costs (rent, equipment, services, subscriptions, travel, etc.).">ℹ️</span>
                             </label>
                             <input type="number" class="form-control expense-input" id="total-business-expenses" min="0" step="0.01" placeholder="e.g. 25000">
                             <small class="help-text">Common costs that apply regardless of setup (coworking, tools, subscriptions, travel, etc.).</small>
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="admin-freelancer">Admin &amp; Compliance — Freelancer (€)
-                                <span class="tooltip" tabindex="0" title="E.g., occasional accounting help, invoicing tools. Not required by law in simplified." data-tooltip="E.g., occasional accounting help, invoicing tools. Not required by law in simplified.">ℹ️</span>
+                                <span class="tooltip" tabindex="0" data-tooltip="Examples: occasional accounting help, invoicing tools, software, compliance services.">ℹ️</span>
                             </label>
                             <input type="number" class="form-control expense-input" id="admin-freelancer" min="0" step="0.01" placeholder="0">
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="admin-transparent">Admin &amp; Compliance — Transparent LLC (€)
-                                <span class="tooltip" tabindex="0" title="Certified accountant (TOC/CC), bank fees, company compliance." data-tooltip="Certified accountant (TOC/CC), bank fees, company compliance.">ℹ️</span>
+                                <span class="tooltip" tabindex="0" data-tooltip="Examples: certified accountant (TOC/CC), bank fees, mandatory filings and company compliance.">ℹ️</span>
                             </label>
                             <input type="number" class="form-control expense-input" id="admin-transparent" min="0" step="0.01" placeholder="0">
                         </div>
@@ -248,7 +249,7 @@
                     <h3>Personal Deductions</h3>
                     <div class="form-group">
                         <label class="form-label" for="health-expenses">Health Expenses (€):
-                            <span class="tooltip" data-tooltip="15% deductible up to €1,000 limit">ℹ️</span>
+                            <span class="tooltip" tabindex="0" data-tooltip="15% deductible up to €1,000 limit. Enter the total amounts you expect to claim.">ℹ️</span>
                         </label>
                         <input type="number" id="health-expenses" class="form-control" min="0" step="0.01" placeholder="0">
                     </div>
@@ -286,6 +287,12 @@
 
         <!-- Results Tab -->
                 <div class="tab-content" id="results" aria-live="polite">
+            <div id="results-zero-state" class="results-zero-state is-active" role="status" aria-live="polite">
+                <h3>No figures yet</h3>
+                <p>Start by adding your Category B revenue and expenses. We’ll calculate taxes, social security, and take-home pay instantly.</p>
+                <button type="button" class="btn btn--primary btn--lg" data-tab-target="income">Add your income</button>
+            </div>
+            <div id="results-detail" class="is-dimmed">
             <div class="summary-grid">
                 <div class="result-card summary-card">
                     <h3>Annual Summary</h3>
@@ -349,6 +356,7 @@
                             <span class="result-value"><span id="summary-rate-diff">+0,0%</span></span>
                         </div>
                     </div>
+                    <p class="result-note">Colour cues: green highlights a better outcome for Transparent LLC, red indicates higher tax or cost versus Freelancer.</p>
                 </div>
                 <div class="result-card sanity-card">
                     <h3>Sanity Checks</h3>
@@ -358,7 +366,7 @@
                 </div>
             </div>
             <div class="results-grid">
-                <div class="result-card" id="simp-results">
+                    <div class="result-card" id="simp-results">
                     <h3>Freelancer (Simplified) Results</h3>
                     <div class="result-section">
                         <h4>Income</h4>
@@ -510,20 +518,20 @@
                     <ul class="breakdown-list" id="calc-org-irs-breakdown"></ul>
                 </div>
             </div>
-
-            <div class="result-card" style="margin-top: var(--space-16);">
-                <h3>Take-Home Rate Information</h3>
-                <div class="result-item">
-                    <span>Freelancer Take-home Rate:</span>
-                    <span class="result-value"><span id="simp-effective">0.0</span>%</span>
-                </div>
-                <div class="result-item">
-                    <span>Transparent LLC Take-home Rate:</span>
-                    <span class="result-value"><span id="org-effective">0.0</span>%</span>
-                </div>
-                <div class="result-item" id="nhr-benefit-row" style="display: none;">
-                    <span>NHR Benefit Applied:</span>
-                    <span class="result-value status--success" id="nhr-benefit-value">20% rate applies.</span>
+                <div class="result-card" style="margin-top: var(--space-16);">
+                    <h3>Take-Home Rate Information</h3>
+                    <div class="result-item">
+                        <span>Freelancer Take-home Rate:</span>
+                        <span class="result-value"><span id="simp-effective">0.0</span>%</span>
+                    </div>
+                    <div class="result-item">
+                        <span>Transparent LLC Take-home Rate:</span>
+                        <span class="result-value"><span id="org-effective">0.0</span>%</span>
+                    </div>
+                    <div class="result-item" id="nhr-benefit-row" style="display: none;">
+                        <span>NHR Benefit Applied:</span>
+                        <span class="result-value status--success" id="nhr-benefit-value">20% rate applies.</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -659,7 +667,7 @@
                 <div class="form-section" style="margin-top: var(--space-24);">
                     <h4>Break-even Analysis</h4>
                     <p>Minimum annual expenses where Transparent LLC nets more than Freelancer: <strong><span id="breakeven-expenses">0,00&nbsp;€</span></strong></p>
-                    <p class="tooltip" data-tooltip="This is the minimum amount of annual business expenses where the Transparent LLC (fiscal transparency) becomes more advantageous than the Freelancer (simplified) setup.">ℹ️ What does this mean?</p>
+                    <p class="tooltip" tabindex="0" data-tooltip="This is the minimum amount of annual business expenses where the Transparent LLC (fiscal transparency) becomes more advantageous than the Freelancer (simplified) setup.">ℹ️ What does this mean?</p>
                 </div>
             </div>
         </div>
