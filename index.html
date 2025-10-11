@@ -21,6 +21,7 @@
             <button class="tab" data-tab="expenses">Expenses</button>
             <button class="tab" data-tab="deductions">Deductions</button>
             <button class="tab" data-tab="results">Results</button>
+            <button class="tab" data-tab="assumptions">Assumptions</button>
             <button class="tab" data-tab="comparison">Comparison</button>
         </div>
 
@@ -135,7 +136,7 @@
                             <label class="form-label" for="total-business-expenses">Total Business Expenses (€)
                                 <span class="tooltip" tabindex="0" title="Sum of all annual business costs (rent, equipment, services, subscriptions, travel, etc.)." data-tooltip="Sum of all annual business costs (rent, equipment, services, subscriptions, travel, etc.).">ℹ️</span>
                             </label>
-                            <input type="number" class="form-control expense-input" id="total-business-expenses" min="0" step="0.01" placeholder="0">
+                            <input type="number" class="form-control expense-input" id="total-business-expenses" min="0" step="0.01" placeholder="25000" value="25000">
                             <small class="help-text">Common costs that apply regardless of setup.</small>
                         </div>
                         <div class="form-group">
@@ -213,7 +214,7 @@
         </div>
 
         <!-- Results Tab -->
-        <div class="tab-content" id="results" aria-live="polite">
+                <div class="tab-content" id="results" aria-live="polite">
             <div class="summary-grid">
                 <div class="result-card summary-card">
                     <h3>Annual Summary</h3>
@@ -248,22 +249,6 @@
                         </div>
                     </div>
                     <div class="result-section">
-                        <h4>Take-home Rate</h4>
-                        <div class="result-item">
-                            <span>Freelancer:</span>
-                            <span class="result-value"><span id="summary-rate-simp">0,0</span>%</span>
-                        </div>
-                        <div class="result-item">
-                            <span>Transparent LLC:</span>
-                            <span class="result-value"><span id="summary-rate-org">0,0</span>%</span>
-                        </div>
-                        <div class="result-item difference">
-                            <span>Difference:</span>
-                            <span class="result-value"><span id="summary-rate-diff">+0,0%</span></span>
-                        </div>
-                    </div>
-
-                    <div class="result-section">
                         <h4>Taxes &amp; Contributions</h4>
                         <div class="result-item">
                             <span>Freelancer IRS + Social Security:</span>
@@ -278,6 +263,27 @@
                             <span class="result-value"><span id="summary-tax-diff">+0,00&nbsp;€</span></span>
                         </div>
                     </div>
+                    <div class="result-section">
+                        <h4>Take-home Rate</h4>
+                        <div class="result-item">
+                            <span>Freelancer:</span>
+                            <span class="result-value"><span id="summary-rate-simp">0,0</span>%</span>
+                        </div>
+                        <div class="result-item">
+                            <span>Transparent LLC:</span>
+                            <span class="result-value"><span id="summary-rate-org">0,0</span>%</span>
+                        </div>
+                        <div class="result-item difference">
+                            <span>Difference:</span>
+                            <span class="result-value"><span id="summary-rate-diff">+0,0%</span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="result-card sanity-card">
+                    <h3>Sanity Checks</h3>
+                    <ul id="sanity-list" class="sanity-list">
+                        <li>All inputs look good.</li>
+                    </ul>
                 </div>
             </div>
             <div class="results-grid">
@@ -417,21 +423,91 @@
 
             <div class="result-card" style="margin-top: var(--space-16);">
                 <h3>Take-Home Rate Information</h3>
-                    <div class="result-item">
-                        <span>Freelancer Take-home Rate:</span>
-                        <span class="result-value"><span id="simp-effective">0.0</span>%</span>
-                    </div>
-                    <div class="result-item">
-                        <span>Transparent LLC Take-home Rate:</span>
-                        <span class="result-value"><span id="org-effective">0.0</span>%</span>
-                    </div>
+                <div class="result-item">
+                    <span>Freelancer Take-home Rate:</span>
+                    <span class="result-value"><span id="simp-effective">0.0</span>%</span>
+                </div>
+                <div class="result-item">
+                    <span>Transparent LLC Take-home Rate:</span>
+                    <span class="result-value"><span id="org-effective">0.0</span>%</span>
+                </div>
                 <div class="result-item" id="nhr-benefit-row" style="display: none;">
                     <span>NHR Benefit Applied:</span>
                     <span class="result-value status--success">20% Rate</span>
                 </div>
             </div>
-
-            
+        </div>
+        <!-- Assumptions Tab -->
+        <div class="tab-content" id="assumptions">
+            <div class="results-grid">
+                <div class="result-card">
+                    <h3>Rates &amp; Thresholds</h3>
+                    <div class="result-item">
+                        <span>NHR Rate (services):</span>
+                        <span class="result-value"><span id="assumption-nhr-rate">—</span></span>
+                    </div>
+                    <div class="result-item">
+                        <span>Capital Gains Rate:</span>
+                        <span class="result-value"><span id="assumption-trading-rate">—</span></span>
+                    </div>
+                    <div class="result-item">
+                        <span>Simplified Regime Coefficient:</span>
+                        <span class="result-value"><span id="assumption-simplified-coef">—</span></span>
+                    </div>
+                    <div class="result-item">
+                        <span>Social Security Rate:</span>
+                        <span class="result-value"><span id="assumption-ss-rate">—</span></span>
+                    </div>
+                    <div class="result-item">
+                        <span>Social Security Coefficient:</span>
+                        <span class="result-value"><span id="assumption-ss-coef">—</span></span>
+                    </div>
+                </div>
+                <div class="result-card">
+                    <h3>Default Cash Costs</h3>
+                    <div class="result-item">
+                        <span>Freelancer admin (annual):</span>
+                        <span class="result-value"><span id="assumption-admin-freelancer">—</span></span>
+                    </div>
+                    <div class="result-item">
+                        <span>Liability insurance (auto):</span>
+                        <span class="result-value">1% of gross (included)</span>
+                    </div>
+                    <div class="result-item">
+                        <span>Transparency admin (annual):</span>
+                        <span class="result-value"><span id="assumption-admin-transparency">—</span></span>
+                    </div>
+                    <div class="result-item">
+                        <span>Real business expenses (default):</span>
+                        <span class="result-value"><span id="assumption-biz-expenses">25&nbsp;000&nbsp;€</span></span>
+                    </div>
+                </div>
+                <div class="result-card">
+                    <h3>Baseline Inputs</h3>
+                    <div class="result-item">
+                        <span>Software income:</span>
+                        <span class="result-value">170&nbsp;000&nbsp;€</span>
+                    </div>
+                    <div class="result-item">
+                        <span>Trading income:</span>
+                        <span class="result-value">25&nbsp;000&nbsp;€</span>
+                    </div>
+                    <div class="result-item">
+                        <span>Warning threshold:</span>
+                        <span class="result-value">200&nbsp;000&nbsp;€ (simplified regime)</span>
+                    </div>
+                    <p class="result-note">Defaults follow the audited workbook. Adjust inputs to match your situation.</p>
+                </div>
+                <div class="result-card">
+                    <h3>Disclaimers &amp; Sources</h3>
+                    <ul class="sanity-list">
+                        <li>Results assume NHR 20% eligibility and independent SS unless advanced options are enabled.</li>
+                        <li>Trading income taxed at 28% flat; englobamento not modeled.</li>
+                        <li>Limited liability protection is assumed via the LLC structure.</li>
+                        <li><a href="https://github.com/0xferit/take-home-pt" target="_blank" rel="noopener">View workbook &amp; sources</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
 
         <!-- Comparison Tab -->

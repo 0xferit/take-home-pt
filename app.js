@@ -17,6 +17,13 @@ const formatSignedCurrency = (value) => {
 };
 const formatPercent = (value) => `${value.toFixed(1)}%`;
 const formatSignedPercent = (value) => `${value >= 0 ? '+' : '−'}${Math.abs(value).toFixed(1)}%`;
+const DEFAULTS = {
+    softwareIncome: 170000,
+    tradingIncome: 25000,
+    bizExpenses: 25000,
+    tradingRate: 0.28,
+    simplifiedDeemed: 0.25,
+};
 const setText = (id, value) => {
     const el = document.getElementById(id);
     if (el) el.textContent = value;
@@ -27,9 +34,9 @@ const appState = {
     activityType: 'services',
     hasDependents: false,
     dependentsCount: 0,
-    grossIncome: 170000,
+    grossIncome: DEFAULTS.softwareIncome,
     divintIncome: 0,
-    capgainsIncome: 25000,
+    capgainsIncome: DEFAULTS.tradingIncome,
     expenses: {},
     isFirstYearSSExempt: false,
     isFirstYearIRS50pct: false,
@@ -44,7 +51,13 @@ const appState = {
 
 function initApp() {
     setupEventListeners();
+    populateAssumptions();
     applySuggestedAdminIfEnabled();
+    const baseField = document.getElementById('total-business-expenses');
+    if (baseField) {
+        const baseValue = Math.max(0, parseFloat(baseField.value) || DEFAULTS.bizExpenses);
+        appState.expenses['total-business-expenses'] = baseValue;
+    }
     updateExpenseTotal();
     calculateAndUpdate();
 }
@@ -108,12 +121,12 @@ function setupEventListeners() {
         'capgains-income': 'capgainsIncome',
     };
 
-    appState.grossIncome = 170000;
-    appState.capgainsIncome = 25000;
+    appState.grossIncome = DEFAULTS.softwareIncome;
+    appState.capgainsIncome = DEFAULTS.tradingIncome;
     const grossField = document.getElementById('gross-income');
-    if (grossField && !grossField.value) grossField.value = '170000';
+    if (grossField && !grossField.value) grossField.value = String(DEFAULTS.softwareIncome);
     const capField = document.getElementById('capgains-income');
-    if (capField && !capField.value) capField.value = '25000';
+    if (capField && !capField.value) capField.value = String(DEFAULTS.tradingIncome);
     Object.entries(incomeMap).forEach(([id, key]) => {
         const field = document.getElementById(id);
         if (!field) return;
@@ -280,6 +293,7 @@ function calculateAndUpdate() {
     updatePersonalDeductions();
     updateComparisonTable(simplifiedResults, transparentResults);
     updateRecommendation(simplifiedResults, transparentResults);
+    updateSanityChecks();
 }
 
 function updateResultsDisplayDual(simplified, transparent) {
@@ -459,6 +473,41 @@ function updateRecommendation(simplified, transparent) {
     }
     const breakEvenExpenses = Math.max(0, Math.min(appState.grossIncome, (low + high) / 2));
     breakevenEl.textContent = formatCurrency(breakEvenExpenses);
+}
+
+function populateAssumptions() {
+    setText('assumption-nhr-rate', formatPercent(TAX_DATA.nhrRates.original_nhr * 100));
+    setText('assumption-trading-rate', formatPercent(DEFAULTS.tradingRate * 100));
+    setText('assumption-simplified-coef', `${TAX_DATA.activityCoefficients.services}% taxable (25% deemed expenses)`);
+    setText('assumption-ss-rate', formatPercent(TAX_DATA.socialSecurity.rate * 100));
+    setText('assumption-ss-coef', formatPercent(TAX_DATA.socialSecurity.relevantIncomeFactor * 100));
+    setText('assumption-admin-freelancer', formatCurrency(SUGGESTED_ADMIN.freelancer));
+    setText('assumption-admin-transparency', formatCurrency(SUGGESTED_ADMIN.transparent));
+    setText('assumption-biz-expenses', formatCurrency(DEFAULTS.bizExpenses));
+}
+
+function updateSanityChecks() {
+    const messages = [];
+    const softwareIncome = appState.grossIncome;
+    const tradingIncome = appState.capgainsIncome;
+    const totals = softwareIncome + tradingIncome;
+
+    if (!Number.isFinite(softwareIncome)) messages.push('Software income is not a number.');
+    if (!Number.isFinite(tradingIncome)) messages.push('Trading income is not a number.');
+    if (totals <= 0) messages.push('Gross income is zero.');
+    if (softwareIncome < 0) messages.push('Software income cannot be negative.');
+    if (tradingIncome < 0) messages.push('Trading income cannot be negative.');
+    if (totals > 200000) messages.push('Gross exceeds 200k; simplified regime assumptions may not hold. Results are indicative only.');
+
+    const list = document.getElementById('sanity-list');
+    if (!list) return;
+    list.innerHTML = '';
+    const items = messages.length ? messages : ['All inputs look good.'];
+    items.forEach((msg) => {
+        const li = document.createElement('li');
+        li.textContent = msg;
+        list.appendChild(li);
+    });
 }
 
 document.addEventListener('DOMContentLoaded', initApp);
