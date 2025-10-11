@@ -90,6 +90,7 @@ function setupEventListeners() {
 
     document.getElementById('nhr-status').addEventListener('change', (event) => {
         appState.nhrStatus = event.target.value;
+        updateInputsAtGlance();
         dismissOnboarding();
         recalc();
     });
@@ -125,6 +126,7 @@ function setupEventListeners() {
     if (ssExemption) {
         ssExemption.addEventListener('change', (event) => {
             appState.isFirstYearSSExempt = event.target.checked;
+            updateInputsAtGlance();
             recalc();
         });
     }
@@ -133,6 +135,7 @@ function setupEventListeners() {
     if (irsReduction) {
         irsReduction.addEventListener('change', (event) => {
             appState.isFirstYearIRS50pct = event.target.checked;
+            updateInputsAtGlance();
             recalc();
         });
     }
@@ -313,12 +316,51 @@ function getCurrentActivityCoefficient() {
     return profile.coefficient;
 }
 
+function getNHRStatusLabel() {
+    const select = document.getElementById('nhr-status');
+    if (!select) return 'Standard progressive rates';
+    const selectedOption = Array.from(select.options).find((option) => option.value === appState.nhrStatus);
+    if (selectedOption) return selectedOption.textContent.trim();
+    const fallback = select.options[select.selectedIndex];
+    return fallback ? fallback.textContent.trim() : 'Standard progressive rates';
+}
+
+function updateInputsAtGlance() {
+    const nhrSummary = document.getElementById('glance-nhr-status');
+    if (nhrSummary) {
+        nhrSummary.textContent = getNHRStatusLabel();
+    }
+    const firstYearContainer = document.getElementById('glance-firstyear');
+    if (firstYearContainer) {
+        const chips = [];
+        if (appState.isFirstYearSSExempt) {
+            const chip = document.createElement('span');
+            chip.className = 'chip';
+            chip.textContent = 'SS exemption';
+            chips.push(chip);
+        }
+        if (appState.isFirstYearIRS50pct) {
+            const chip = document.createElement('span');
+            chip.className = 'chip';
+            chip.textContent = '50% IRS reduction';
+            chips.push(chip);
+        }
+        if (!chips.length) {
+            const chip = document.createElement('span');
+            chip.className = 'chip chip--muted';
+            chip.textContent = 'None selected';
+            chips.push(chip);
+        }
+        firstYearContainer.replaceChildren(...chips);
+    }
+}
+
 function updateActivitySelectionDisplay() {
     syncActivityRadios();
     const profile = getActivityProfileData(appState.activityProfile);
     const taxablePercent = (profile.coefficient * 100).toFixed(1).replace(/\.0$/, '');
     const deemedPercent = ((1 - profile.coefficient) * 100).toFixed(1).replace(/\.0$/, '');
-    setText('activity-summary-label', profile.label || 'General services (default)');
+    setText('activity-summary-label', profile.label || 'General professional services');
     setText('activity-summary-coef', `${taxablePercent}% taxable / ${deemedPercent}% deemed expenses`);
     const codeListElement = document.getElementById('activity-summary-codes');
     if (codeListElement) {
@@ -347,6 +389,7 @@ function updateActivitySelectionDisplay() {
         }
     }
     updateNHROptions();
+    updateInputsAtGlance();
 }
 
 function applySuggestedAdminIfEnabled() {

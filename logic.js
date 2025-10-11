@@ -26,15 +26,15 @@
     activityProfiles: {
       services_general: {
         id: 'services_general',
-        label: 'General services (default)',
+        label: 'General professional services',
         coefficient: 0.35,
-        description: 'Applies to Category B services outside the high added value list. 35% of gross income is taxable.',
+        description: 'Applies to Category B services outside the high added value list. 35% of gross income remains taxable (65% deemed expenses).',
       },
       services_high_value: {
         id: 'services_high_value',
-        label: 'High value services (Annex II)',
+        label: 'High added value services (Annex II)',
         coefficient: 0.75,
-        description: 'For CAE codes on the high added value list (e.g. 62010, 62020, 62090, 63110, 63990, 70220, 73110). 75% of gross income is taxable.',
+        description: 'For CAE codes on the high added value list (e.g. 62010, 62020, 62090, 63110, 63990, 70220, 73110). 75% of gross income remains taxable (25% deemed expenses).',
       },
     },
     highValueServiceCodes: [
