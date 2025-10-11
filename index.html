@@ -31,54 +31,75 @@
                 
 
                 <div class="form-section">
-                    <h3>NHR Status &amp; Activity Profile</h3>
-                    <div class="form-group">
-                        <label class="form-label" for="nhr-status">NHR Status:</label>
-                        <select id="nhr-status" class="form-control">
-                            <option value="standard">Standard Rates</option>
-                            <option value="original_nhr">Original NHR (20%)</option>
-                            <option value="nhr_2_ifici">NHR 2.0 (IFICI) (20%)</option>
-                        </select>
-                        <small id="nhr-status-note" class="help-text">NHR 20% rate applies only to high added value services.</small>
-                    </div>
-                    <div class="form-group">
-                        <span class="form-label">Category B service profile:</span>
-                        <div class="radio-group" role="radiogroup">
-                            <label class="radio-option selected" data-activity-option="services_general">
-                                <input type="radio" name="activity-profile" id="activity-general" value="services_general" checked>
-                                <div>
-                                    <strong>General services</strong>
-                                    <div class="help-text">Default for most tech freelancing CAE codes. 35% taxable base (65% deemed expenses).</div>
+                    <h3>Activity Profile &amp; NHR Status</h3>
+                    <div class="profile-grid">
+                        <div class="profile-card">
+                            <div class="profile-card__header">
+                                <h4>Choose your activity</h4>
+                                <p class="profile-card__intro">Pick the option that best matches the CAE code you invoice under.</p>
+                            </div>
+                            <div class="profile-card__content">
+                                <div class="radio-group" role="radiogroup" aria-labelledby="activity-general activity-high-value">
+                                    <label class="radio-option selected" data-activity-option="services_general">
+                                        <input type="radio" name="activity-profile" id="activity-general" value="services_general" checked>
+                                        <div>
+                                            <strong>General services</strong>
+                                            <div class="help-text">For most tech/consulting freelancers. 35% taxable base (65% deemed expenses).</div>
+                                        </div>
+                                    </label>
+                                    <label class="radio-option" data-activity-option="services_high_value">
+                                        <input type="radio" name="activity-profile" id="activity-high-value" value="services_high_value">
+                                        <div>
+                                            <strong>High value services</strong>
+                                            <div class="help-text">Article 151 / Annex II professions (e.g. software, design, finance). 75% taxable base.</div>
+                                        </div>
+                                    </label>
                                 </div>
-                            </label>
-                            <label class="radio-option" data-activity-option="services_high_value">
-                                <input type="radio" name="activity-profile" id="activity-high-value" value="services_high_value">
-                                <div>
-                                    <strong>High value services</strong>
-                                    <div class="help-text">For CAE codes on the high added value list (Annex II). 75% taxable base (25% deemed expenses).</div>
+                                <div class="form-group compact">
+                                    <label class="form-label" for="activity-code">CAE code (optional)</label>
+                                    <input type="text" name="activity-code" id="activity-code" class="form-control" placeholder="e.g. 62010" list="activity-code-options" inputmode="numeric" pattern="\d{5}">
+                                    <datalist id="activity-code-options"></datalist>
+                                    <small id="activity-code-status" class="help-text">Enter a 5-digit CAE code to auto-select the correct coefficient.</small>
                                 </div>
-                            </label>
+                                <div class="profile-summary">
+                                    <div class="profile-summary__item">
+                                        <span class="label">Current selection</span>
+                                        <span class="value" id="activity-summary-label">General services (default)</span>
+                                    </div>
+                                    <div class="profile-summary__item">
+                                        <span class="label">Coefficient applied</span>
+                                        <span class="value" id="activity-summary-coef">35% taxable / 65% deemed expenses</span>
+                                    </div>
+                                    <div class="profile-summary__item">
+                                        <span class="label">High value CAE examples</span>
+                                        <span class="value" id="activity-summary-codes">62010, 62020, 62090, 63110, 63990, 70220, 73110</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="profile-card__footer">We assume Category B income only (self-employment). Category A salary income is out of scope. Transparent LLC results presume the activity already qualifies for fiscal transparency (management in Portugal, single member, professional services).</p>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label" for="activity-code">CAE code (optional):</label>
-                            <input type="text" name="activity-code" id="activity-code" class="form-control" placeholder="e.g. 62010" list="activity-code-options" inputmode="numeric" pattern="\d{5}">
-                            <datalist id="activity-code-options"></datalist>
-                            <small id="activity-code-status" class="help-text">Enter your CAE code to auto-select a coefficient.</small>
+                        <div class="profile-card">
+                            <div class="profile-card__header">
+                                <h4>Select your tax rate regime</h4>
+                                <p class="profile-card__intro">NHR options unlock automatically for high added value activities.</p>
+                            </div>
+                            <div class="profile-card__content">
+                                <div class="form-group compact">
+                                    <label class="form-label" for="nhr-status">NHR status</label>
+                                    <select id="nhr-status" class="form-control">
+                                        <option value="standard">Standard progressive rates</option>
+                                        <option value="original_nhr">Original NHR (20% flat)</option>
+                                        <option value="nhr_2_ifici">NHR 2.0 (IFICI) (20% flat)</option>
+                                    </select>
+                                    <small id="nhr-status-note" class="help-text">Enable a high-value activity to apply the 20% NHR rate.</small>
+                                </div>
+                                <ul class="profile-hint-list">
+                                    <li>The calculator shows both setups side-by-side once you add income.</li>
+                                    <li>NHR logic applies to Category B only; Category A salary is not included.</li>
+                                    <li>Switching back to general services automatically restores progressive rates.</li>
+                                </ul>
+                            </div>
                         </div>
-                        <div class="result-item" style="margin-top: var(--space-12);">
-                            <span>Current selection:</span>
-                            <span class="result-value"><span id="activity-summary-label">General services (default)</span></span>
-                        </div>
-                        <div class="result-item">
-                            <span>Coefficient applied:</span>
-                            <span class="result-value"><span id="activity-summary-coef">35% taxable / 65% deemed expenses</span></span>
-                        </div>
-                        <div class="result-item">
-                            <span>High value CAE examples:</span>
-                            <span class="result-value"><span id="activity-summary-codes">62010, 62020, 62090, 63110, 63990, 70220, 73110</span></span>
-                        </div>
-                        <small class="help-text">We assume Category B income only (self-employment). Category A salary income is out of scope.</small>
-                        <small class="help-text">Transparent LLC results presume the activity meets fiscal transparency conditions (management in Portugal, single member, professional services).</small>
                     </div>
                 </div>
 
