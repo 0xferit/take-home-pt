@@ -28,11 +28,18 @@ Our priorities (in order when trade‑offs arise)
 - Avoid layout jitter; keep tab layouts consistent. Reuse components and helper text styles.
 - Validate inputs early; prefer informative hints over silent failures.
 
+5) Consistency
+- Keep components, copy, and interactions uniform across tabs (same order, same wording, same styles).
+- Reuse the master tab layout (`tab-shell`), helper text styles, and button/toggle patterns.
+- Persist selected states clearly; avoid re-ordering or relabeling options between screens.
+- Align typography, spacing, and iconography; avoid one-off variations.
+
 Change acceptance criteria
 - Simplicity: Does this reduce code or cognitive load without harming clarity?
 - Auditability: Are formulas/constants in `logic.js`, with parameters and outputs easy to inspect?
 - Maintainability: Does it follow our CSS/JS rules and naming, and reduce coupling?
 - Usability: Is the UI consistent, predictable, and clear under typical scenarios?
+ - Consistency: Does it keep layout/components/copy patterns uniform across tabs and states?
 
 Examples of preferred approaches
 - Adding a tax change: Update constants and pure functions in `logic.js`, adjust copy, and cite sources.
