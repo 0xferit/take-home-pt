@@ -194,6 +194,25 @@
                 <div class="expense-category">
                     <h4>Annual Expenses</h4>
                     <div class="form-group">
+                        <label class="form-label">Freelancer tax basis</label>
+                        <div class="radio-group" role="radiogroup" aria-label="Freelancer tax basis">
+                            <label class="radio-option">
+                                <input type="radio" name="freelancer-basis" id="freelancer-basis-simplified" value="simplified" checked>
+                                <div>
+                                    <strong>Simplified (deemed expenses)</strong>
+                                    <div class="help-text">Coefficients apply (e.g., 75% or 35% taxable). Your declared expenses <strong>do not</strong> reduce the taxable base.</div>
+                                </div>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="freelancer-basis" id="freelancer-basis-organized" value="organized">
+                                <div>
+                                    <strong>Organized accounting (real expenses)</strong>
+                                    <div class="help-text">Taxable profit = income − expenses. Your declared expenses reduce taxable income.</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <div class="checkbox-group">
                             <input type="checkbox" id="use-suggested-admin" checked>
                             <label for="use-suggested-admin" class="form-label">Use suggested admin/compliance costs (recommended)</label>
@@ -391,8 +410,8 @@
                 </div>
             </div>
             <div class="results-grid">
-                    <div class="result-card" id="simp-results">
-                    <h3>Freelancer (Simplified) Results</h3>
+                <div class="result-card" id="simp-results">
+                    <h3><span id="freelancer-results-title">Freelancer (Simplified) Results</span></h3>
                     <div class="result-section">
                         <h4>Income</h4>
                         <div class="result-item">

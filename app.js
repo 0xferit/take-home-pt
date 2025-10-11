@@ -3,6 +3,7 @@
             computeDeducoesAColeta,
             computeSimplified,
             computeTransparent,
+            computeFreelancerOrganized,
             SUGGESTED_ADMIN,
             computeExpenseTotals,
             getLiabilityInsurance,
@@ -47,6 +48,7 @@ const appState = {
     isFirstYearSSExempt: false,
     isFirstYearIRS50pct: false,
     liabilityInsurance: 0,
+    freelancerBasis: 'simplified',
     personalDeductions: {
         health: 0,
         education: 0,
@@ -84,6 +86,16 @@ function setupEventListeners() {
             if (tabName) switchTab(tabName);
         });
     });
+    const freelancerBasisRadios = document.querySelectorAll('input[name="freelancer-basis"]');
+    freelancerBasisRadios.forEach((input) => {
+        input.addEventListener('change', (event) => {
+            if (!event.target.checked) return;
+            appState.freelancerBasis = event.target.value === 'organized' ? 'organized' : 'simplified';
+            updateFreelancerTitle();
+            recalc();
+        });
+    });
+
 
     document.getElementById('nhr-status').addEventListener('change', (event) => {
         appState.nhrStatus = event.target.value;
@@ -430,14 +442,22 @@ function calculateAndUpdate() {
 
     const nhrEligible = isCurrentNHREligible();
 
-    const simplifiedResults = computeSimplified({
-        ...commonInputs,
-        activityCoefficient: getCurrentActivityCoefficient(),
-        baseExpenses,
-        adminExpenses: adminSimplified,
-        insuranceExpenses: appState.liabilityInsurance ?? getLiabilityInsurance(appState.grossIncome),
-        isNHREligible: nhrEligible,
-    });
+    const simplifiedResults = appState.freelancerBasis === 'organized'
+        ? computeFreelancerOrganized({
+              ...commonInputs,
+              baseExpenses,
+              adminExpenses: adminSimplified,
+              insuranceExpenses: appState.liabilityInsurance ?? getLiabilityInsurance(appState.grossIncome),
+              isNHREligible: nhrEligible,
+          })
+        : computeSimplified({
+              ...commonInputs,
+              activityCoefficient: getCurrentActivityCoefficient(),
+              baseExpenses,
+              adminExpenses: adminSimplified,
+              insuranceExpenses: appState.liabilityInsurance ?? getLiabilityInsurance(appState.grossIncome),
+              isNHREligible: nhrEligible,
+          });
     const transparentResults = computeTransparent({
         ...commonInputs,
         baseExpenses,
@@ -462,7 +482,12 @@ function updateResultsDisplayDual(simplified, transparent) {
 
     setText('simp-gross', formatCurrency(appState.grossIncome));
     const coefficientPercent = (simplified.coefficient * 100).toFixed(1).replace(/\.0$/, '');
-    setText('simp-coefficient', coefficientPercent);
+    setText('simp-coefficient', appState.freelancerBasis === 'organized' ? '—' : coefficientPercent);
+function updateFreelancerTitle() {
+    const title = document.getElementById('freelancer-results-title');
+    if (!title) return;
+    title.textContent = appState.freelancerBasis === 'organized' ? 'Freelancer (Organized) Results' : 'Freelancer (Simplified) Results';
+}
     setText('simp-expenses-base', formatCurrency(simplified.baseExpenses || 0));
     setText('simp-expenses-admin', formatCurrency(simplified.adminExpenses || 0));
     setText('simp-expenses-total', formatCurrency(simplified.totalExpenses));

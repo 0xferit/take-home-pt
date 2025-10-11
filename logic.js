@@ -316,6 +316,48 @@
     };
   }
 
+  function computeFreelancerOrganized({
+    grossIncome = 0,
+    nhrStatus,
+    dependentsCount,
+    personalDeductions,
+    isFirstYearIRS50pct,
+    isFirstYearSSExempt,
+    baseExpenses = 0,
+    adminExpenses = 0,
+    insuranceExpenses = 0,
+    isNHREligible = true,
+  } = {}) {
+    const income = sanitizeAmount(grossIncome);
+    const totalExpenses = sanitizeAmount(baseExpenses) + sanitizeAmount(adminExpenses) + sanitizeAmount(insuranceExpenses);
+    const netBusinessIncome = Math.max(0, income - totalExpenses);
+    const taxableIncome = netBusinessIncome;
+    const irsDetails = computeIRSDetails(taxableIncome, nhrStatus, { isNHREligible });
+    const grossIRS = irsDetails.grossIRS;
+    const deducoes = computeDeducoesAColeta({ dependentsCount, personalDeductions });
+    let incomeTax = Math.max(0, grossIRS - deducoes);
+    if (isFirstYearIRS50pct) incomeTax *= 0.5;
+    const socialSecurityInfo = computeSSAnnual(netBusinessIncome, { isFirstYearSSExempt });
+    const netIncome = income - totalExpenses - incomeTax - socialSecurityInfo.annual;
+    return {
+      taxableIncome,
+      incomeTax,
+      socialSecurity: socialSecurityInfo.annual,
+      socialSecurityInfo,
+      netIncome,
+      netBusinessIncome,
+      coefficient: 1,
+      totalExpenses,
+      baseExpenses: sanitizeAmount(baseExpenses),
+      adminExpenses: sanitizeAmount(adminExpenses),
+      insuranceExpenses: sanitizeAmount(insuranceExpenses),
+      deducoesATax: deducoes,
+      grossIRS,
+      irsDetails,
+      isNHREligible,
+    };
+  }
+
   function computeTransparent({
     grossIncome = 0,
     nhrStatus,
@@ -387,6 +429,7 @@
     computeSSAnnual,
     getMarginalTaxRate,
     computeSimplified,
+    computeFreelancerOrganized,
     computeTransparent,
     getLiabilityInsurance,
     computeExpenseTotals,
