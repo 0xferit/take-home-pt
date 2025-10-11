@@ -33,31 +33,14 @@
                             <div class="profile-card__body">
                                 <section class="profile-card__section">
                                     <div class="profile-card__header">
-                                        <h4>Select your activity profile</h4>
-                                        <p class="profile-card__intro">Choose a high‑value profession (Art. 151 CIRS) if applicable; otherwise select General professional services.</p>
+                                        <h4>Activity profile (assumed)</h4>
+                                        <p class="profile-card__intro">Assuming a high‑value profession (Article 151, CIRS). 75% of gross is taxable (25% deemed expenses).</p>
                                     </div>
                                     <div class="profile-card__content">
-                                        <div class="radio-group" role="radiogroup" aria-labelledby="activity-high-value activity-general">
-                                            <label class="radio-option selected" data-activity-option="services_high_value">
-                                                <input type="radio" name="activity-profile" id="activity-high-value" value="services_high_value" checked>
-                                                <div>
-                                                    <strong>High-value professions (Article 151)</strong>
-                                                    <div class="help-text">Article 151 professional services such as software, engineering, design, and consulting. 75% of gross remains taxable (25% presumed expenses).</div>
-                                                </div>
-                                            </label>
-                                            <label class="radio-option" data-activity-option="services_general">
-                                                <input type="radio" name="activity-profile" id="activity-general" value="services_general">
-                                                <div>
-                                                    <strong>General professional services</strong>
-                                                    <div class="help-text">Use this if your CAE is not in the high added value list. 35% of gross remains taxable (65% deemed expenses).</div>
-                                                </div>
-                                            </label>
-                                        </div>
-                                        <div class="form-group compact">
-                                            <label class="form-label" for="activity-code">CAE code (optional)</label>
-                                            <input type="text" name="activity-code" id="activity-code" class="form-control" placeholder="e.g. 62010" list="activity-code-options" inputmode="numeric" pattern="\d{5}">
-                                            <datalist id="activity-code-options"></datalist>
-                                            <small id="activity-code-status" class="help-text">Enter a 5-digit CAE code to auto-select the correct coefficient.</small>
+                                        <div class="info-card">
+                                            <div class="info-card__list">
+                                                <p class="help-text">This simplification removes profile/CAE selection. If you need general services (0.35), switch the project mode later.</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </section>
@@ -83,6 +66,10 @@
                                         </ul>
                                     </div>
                                 </section>
+                            </div>
+                            <div class="profile-card__footer">
+                                <button type="button" class="btn btn--primary" data-tab-target="income">Start with income</button>
+                                <button type="button" class="btn btn--secondary mx-8" data-tab-target="results">View results</button>
                             </div>
                             <p class="profile-card__footer">This comparison covers Category B service activities—either Annex II high added value or other professional services. Category A salary income is out of scope. Transparent LLC results presume the activity already qualifies for fiscal transparency (management in Portugal, single member, professional services).</p>
                         </div>

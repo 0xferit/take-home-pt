@@ -103,31 +103,9 @@ function setupEventListeners() {
         recalc();
     });
 
-    document.querySelectorAll('input[name="activity-profile"]').forEach((input) => {
-        input.addEventListener('change', (event) => {
-            if (!event.target.checked) return;
-            setActivityProfile(event.target.value || ACTIVITY_DEFAULT, { source: 'manual' });
-            recalc();
-        });
-    });
+    // Activity profile is fixed to high-value in simplified mode; inputs removed
 
-    const activityCodeField = document.getElementById('activity-code');
-    if (activityCodeField) {
-        activityCodeField.addEventListener('input', (event) => {
-            const code = normalizeActivityCode(event.target.value);
-            appState.activityCode = code;
-            const profile = getActivityProfileForCode(code);
-            if (profile) {
-                setActivityProfile(profile.id, { source: 'cae', silent: true });
-            }
-            updateActivitySelectionDisplay();
-            recalc();
-        });
-        activityCodeField.addEventListener('blur', (event) => {
-            const code = normalizeActivityCode(event.target.value);
-            event.target.value = code || '';
-        });
-    }
+    // CAE input removed in simplified mode
 
     const ssExemption = document.getElementById('firstyear-ss-exempt');
     if (ssExemption) {
