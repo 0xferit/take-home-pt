@@ -25,9 +25,9 @@ const appState = {
     activityType: 'services',
     hasDependents: false,
     dependentsCount: 0,
-    grossIncome: 0,
+    grossIncome: 170000,
     divintIncome: 0,
-    capgainsIncome: 0,
+    capgainsIncome: 25000,
     expenses: {},
     isFirstYearSSExempt: false,
     isFirstYearIRS50pct: false,
@@ -105,6 +105,13 @@ function setupEventListeners() {
         'divint-income': 'divintIncome',
         'capgains-income': 'capgainsIncome',
     };
+
+    appState.grossIncome = 170000;
+    appState.capgainsIncome = 25000;
+    const grossField = document.getElementById('gross-income');
+    if (grossField && !grossField.value) grossField.value = '170000';
+    const capField = document.getElementById('capgains-income');
+    if (capField && !capField.value) capField.value = '25000';
     Object.entries(incomeMap).forEach(([id, key]) => {
         const field = document.getElementById(id);
         if (!field) return;
