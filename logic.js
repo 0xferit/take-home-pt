@@ -27,14 +27,14 @@
       services_general: {
         id: 'services_general',
         label: 'General services (default)',
-        coefficient: 0.75,
-        description: 'Applies to Category B services not on the high value list. 75% of gross income is taxable.',
+        coefficient: 0.35,
+        description: 'Applies to Category B services outside the high added value list. 35% of gross income is taxable.',
       },
       services_high_value: {
         id: 'services_high_value',
         label: 'High value services (Annex II)',
-        coefficient: 0.35,
-        description: 'For CAE codes on the high added value list (e.g. 62010, 62020, 62090, 63110, 63990, 70220, 73110). 35% of gross income is taxable.',
+        coefficient: 0.75,
+        description: 'For CAE codes on the high added value list (e.g. 62010, 62020, 62090, 63110, 63990, 70220, 73110). 75% of gross income is taxable.',
       },
     },
     highValueServiceCodes: [

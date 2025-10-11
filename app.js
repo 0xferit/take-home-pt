@@ -382,6 +382,7 @@ function updateActivitySelectionDisplay() {
             caeInfo.textContent = 'Enter your CAE code to auto-select a coefficient.';
         }
     }
+    updateNHROptions();
 }
 
 function applySuggestedAdminIfEnabled() {
@@ -911,6 +912,31 @@ function populateAppVersion() {
             }
         })
         .catch(() => fallback());
+}
+
+function updateNHROptions() {
+    const nhrSelect = document.getElementById('nhr-status');
+    const note = document.getElementById('nhr-status-note');
+    if (!nhrSelect) return;
+    const eligible = isCurrentNHREligible();
+    Array.from(nhrSelect.options).forEach((option) => {
+        if (option.value === 'standard') return;
+        option.disabled = !eligible;
+    });
+    if (!eligible && appState.nhrStatus !== 'standard') {
+        appState.nhrStatus = 'standard';
+        nhrSelect.value = 'standard';
+    }
+    if (note) {
+        note.classList.remove('status--error', 'status--success');
+        if (eligible) {
+            note.textContent = 'High added value activity detected. NHR 20% rate can be applied.';
+            note.classList.add('status--success');
+        } else {
+            note.textContent = 'Select a high added value CAE/service to unlock the NHR 20% rate.';
+            note.classList.add('status--error');
+        }
+    }
 }
 
 function updateSanityChecks() {
