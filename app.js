@@ -1,4 +1,4 @@
-const { TAX_DATA, computeDeducoesAColeta, computeSimplified, computeTransparent, getMarginalTaxRate } = window.TakeHomeLogic;
+        const { TAX_DATA, computeDeducoesAColeta, computeSimplified, computeTransparent } = window.TakeHomeLogic;
 
 const currencyFormatter = new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' });
 const formatCurrency = (value) => currencyFormatter.format(Number.isFinite(value) ? value : 0);
@@ -293,13 +293,8 @@ function updateResultsDisplayDual(simplified, transparent) {
     const orgTotalTax = transparent.incomeTax + transparent.socialSecurity;
     const simpEffective = appState.grossIncome > 0 ? (simpTotalTax / appState.grossIncome) * 100 : 0;
     const orgEffective = appState.grossIncome > 0 ? (orgTotalTax / appState.grossIncome) * 100 : 0;
-    const simpMarginal = getMarginalTaxRate(simplified.taxableIncome);
-    const orgMarginal = getMarginalTaxRate(transparent.taxableIncome);
-
     setText('simp-effective', simpEffective.toFixed(1));
     setText('org-effective', orgEffective.toFixed(1));
-    setText('simp-marginal', simpMarginal.toFixed(1));
-    setText('org-marginal', orgMarginal.toFixed(1));
 
     const nhrRow = document.getElementById('nhr-benefit-row');
     if (nhrRow) nhrRow.style.display = appState.nhrStatus !== 'standard' ? 'flex' : 'none';
