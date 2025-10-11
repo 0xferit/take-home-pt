@@ -15,6 +15,8 @@ const formatSignedCurrency = (value) => {
     const prefix = normalized >= 0 ? '+' : '−';
     return `${prefix} ${formatCurrency(Math.abs(normalized))}`;
 };
+const formatPercent = (value) => `${value.toFixed(1)}%`;
+const formatSignedPercent = (value) => `${value >= 0 ? '+' : '−'}${Math.abs(value).toFixed(1)}%`;
 const setText = (id, value) => {
     const el = document.getElementById(id);
     if (el) el.textContent = value;
@@ -314,16 +316,17 @@ function updateResultsDisplayDual(simplified, transparent) {
 
     const simpTotalTax = simplified.incomeTax + simplified.socialSecurity;
     const orgTotalTax = transparent.incomeTax + transparent.socialSecurity;
-    const simpEffective = appState.grossIncome > 0 ? (simpTotalTax / appState.grossIncome) * 100 : 0;
-    const orgEffective = appState.grossIncome > 0 ? (orgTotalTax / appState.grossIncome) * 100 : 0;
-    setText('simp-effective', simpEffective.toFixed(1));
-    setText('org-effective', orgEffective.toFixed(1));
+    const simpTakeHome = appState.grossIncome > 0 ? (simplified.netIncome / appState.grossIncome) * 100 : 0;
+    const orgTakeHome = appState.grossIncome > 0 ? (transparent.netIncome / appState.grossIncome) * 100 : 0;
+    setText('simp-effective', formatPercent(simpTakeHome));
+    setText('org-effective', formatPercent(orgTakeHome));
 
     const summaryNetSimp = simplified.netIncome + otherNet;
     const summaryNetOrg = transparent.netIncome + otherNet;
     const netDiff = summaryNetOrg - summaryNetSimp;
     const costDiff = transparent.totalExpenses - simplified.totalExpenses;
     const taxDiff = orgTotalTax - simpTotalTax;
+    const rateDiff = orgTakeHome - simpTakeHome;
 
     setText('summary-net-simp', formatCurrency(summaryNetSimp));
     setText('summary-net-org', formatCurrency(summaryNetOrg));
@@ -334,6 +337,9 @@ function updateResultsDisplayDual(simplified, transparent) {
     setText('summary-tax-simp', formatCurrency(simpTotalTax));
     setText('summary-tax-org', formatCurrency(orgTotalTax));
     setText('summary-tax-diff', formatSignedCurrency(taxDiff));
+    setText('summary-rate-simp', formatPercent(simpTakeHome));
+    setText('summary-rate-org', formatPercent(orgTakeHome));
+    setText('summary-rate-diff', formatSignedPercent(rateDiff));
 
     const applyDiffColor = (id, value, positiveIsGood = true) => {
         const el = document.getElementById(id);
@@ -349,6 +355,7 @@ function updateResultsDisplayDual(simplified, transparent) {
     applyDiffColor('summary-net-diff', netDiff, true);
     applyDiffColor('summary-cost-diff', costDiff, false);
     applyDiffColor('summary-tax-diff', taxDiff, false);
+    applyDiffColor('summary-rate-diff', rateDiff, true);
 
     const nhrRow = document.getElementById('nhr-benefit-row');
     if (nhrRow) nhrRow.style.display = appState.nhrStatus !== 'standard' ? 'flex' : 'none';
