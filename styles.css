@@ -276,11 +276,10 @@ code {
   display: block;
 }
 
+/* Card base (all card variants inherit) */
 .card,
-.profile-card,
-.info-card,
-.result-card,
-.form-section {
+[class*="card"],
+[class*="-section"] {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
@@ -288,9 +287,14 @@ code {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
-.card h3,
-.card h4 {
+[class*="card"] h3,
+[class*="card"] h4 {
   margin-top: 0;
+}
+
+/* Card variants */
+.summary-card {
+  border-left: 4px solid var(--color-primary);
 }
 
 .profile-card--split .profile-card__body {
@@ -323,13 +327,13 @@ code {
   }
 }
 
-.profile-card__header h4,
-.info-card__header h4 {
+/* Card child elements (cascade) */
+[class*="__header"] h4 {
   margin: 0 0 var(--space-xs);
 }
 
-.profile-card__intro,
-.info-card__intro {
+[class*="__intro"],
+[class*="__footer"] {
   margin: 0;
   color: var(--color-text-muted);
   font-size: var(--font-size-sm);
@@ -339,49 +343,44 @@ code {
   margin-top: var(--space-lg);
   padding-top: var(--space-md);
   border-top: 1px dashed var(--color-border);
-  font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
 }
 
-.summary-card {
-  border-left: 4px solid var(--color-primary);
-}
-
-.glance-card__list {
+/* Glance card specifics */
+[class*="glance-card"] [class*="__list"] {
   display: grid;
   gap: var(--space-md);
 }
 
-.glance-card__item {
+[class*="glance-card"] [class*="__item"] {
   display: flex;
   flex-direction: column;
   gap: var(--space-xs);
 }
 
-.glance-card__label {
+[class*="glance-card"] [class*="__label"] {
   font-size: var(--font-size-sm);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--color-text-muted);
 }
 
-.glance-card__value {
+[class*="glance-card"] [class*="__value"] {
   font-weight: 500;
 }
 
-.glance-card__chips {
+[class*="glance-card"] [class*="__chips"] {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-sm);
 }
 
-.glance-card__hint {
+[class*="glance-card"] [class*="__hint"] {
   margin-top: var(--space-lg);
   padding-top: var(--space-md);
   border-top: 1px dashed var(--color-border);
 }
 
-.glance-card__hint .label {
+[class*="glance-card"] [class*="__hint"] .label {
   font-size: var(--font-size-sm);
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -390,7 +389,7 @@ code {
   margin-bottom: var(--space-xs);
 }
 
-.glance-card__hint-text {
+[class*="glance-card"] [class*="__hint-text"] {
   font-family: var(--font-family-mono);
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
