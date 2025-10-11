@@ -673,13 +673,14 @@ input[type="number"],
 @media (max-width: 900px) {
   .profile-card--split .profile-card__body {
     grid-template-columns: 1fr;
+    gap: var(--space-8);
   }
   
   .profile-card__section--divider {
     padding-left: 0;
-    padding-top: var(--space-7);
+    padding-top: 0;
     border-left: none;
-    border-top: 3px solid var(--border-accent);
+    border-top: none;
   }
 }
 
