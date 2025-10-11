@@ -8,8 +8,9 @@ globs:
 Our priorities (in order when trade‑offs arise)
 1) Simplicity
 - Minimize moving parts. Prefer plain HTML/CSS/vanilla JS over frameworks.
-- Remove options and branches that don’t materially change outcomes (e.g., assume high‑value when in simplified mode).
+- Remove options and branches that don't materially change outcomes (e.g., assume high‑value when in simplified mode).
 - Keep functions small and pure; avoid side effects.
+- **DRY (Don't Repeat Yourself):** Extract shared logic/styles/patterns. Use cascading CSS, utility tokens, and shared functions instead of duplicating code.
 
 2) Auditability
 - Keep all tax constants and calculations in `logic.js` (pure, UI‑agnostic). No hidden logic in HTML/CSS.
@@ -35,11 +36,16 @@ Our priorities (in order when trade‑offs arise)
 - Align typography, spacing, and iconography; avoid one-off variations.
 
 Change acceptance criteria
-- Simplicity: Does this reduce code or cognitive load without harming clarity?
+- Simplicity: Does this reduce code or cognitive load without harming clarity? Does it avoid duplication (DRY)?
 - Auditability: Are formulas/constants in `logic.js`, with parameters and outputs easy to inspect?
 - Maintainability: Does it follow our CSS/JS rules and naming, and reduce coupling?
 - Usability: Is the UI consistent, predictable, and clear under typical scenarios?
- - Consistency: Does it keep layout/components/copy patterns uniform across tabs and states?
+- Consistency: Does it keep layout/components/copy patterns uniform across tabs and states?
+
+DRY enforcement examples
+- CSS: Use cascading (`[class*="card"]` for all cards), attribute selectors, utility tokens instead of repeating properties.
+- JS: Extract shared formatting/validation into helper functions; avoid copy-pasting logic between compute* functions.
+- HTML: Reuse the same tab-shell layout structure, card/form-section wrappers, and copy patterns across tabs.
 
 Examples of preferred approaches
 - Adding a tax change: Update constants and pure functions in `logic.js`, adjust copy, and cite sources.
