@@ -1223,6 +1223,7 @@ select.form-control {
 
 .tab-content.active {
   display: block;
+  min-height: 600px;
 }
 
 .tooltip {
