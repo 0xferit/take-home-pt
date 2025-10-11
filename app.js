@@ -310,37 +310,9 @@ function updateInputsAtGlance() {
 }
 
 function updateActivitySelectionDisplay() {
-    syncActivityRadios();
-    const profile = getActivityProfileData(appState.activityProfile);
-    const taxablePercent = (profile.coefficient * 100).toFixed(1).replace(/\.0$/, '');
-    const deemedPercent = ((1 - profile.coefficient) * 100).toFixed(1).replace(/\.0$/, '');
-    setText('activity-summary-label', profile.label || 'General professional services');
-    setText('activity-summary-coef', `${taxablePercent}% taxable / ${deemedPercent}% deemed expenses`);
     const codeListElement = document.getElementById('activity-summary-codes');
     if (codeListElement) {
-        codeListElement.textContent =
-            profile.id === 'services_high_value'
-                ? TAX_DATA.highValueServiceCodes.join(', ')
-                : 'Select "High value services" to view the code list.';
-    }
-    const caeInfo = document.getElementById('activity-code-status');
-    if (caeInfo) {
-        caeInfo.classList.remove('status--error', 'status--success');
-        if (appState.activityCode) {
-            if (appState.activityCode.length < 5) {
-                caeInfo.textContent = 'Enter the full 5-digit CAE code to auto-select a coefficient.';
-            } else if (isActivityCodeKnown(appState.activityCode)) {
-                const entry = (TAX_DATA.activityCatalog || []).find((item) => item.code === appState.activityCode);
-                const labelText = entry ? `${profile.label} · ${entry.label}` : profile.label;
-                caeInfo.textContent = `CAE ${appState.activityCode} recognised (${labelText}).`;
-                caeInfo.classList.add('status--success');
-            } else {
-                caeInfo.textContent = `CAE ${appState.activityCode} is not on the reference list. Please confirm the coefficient manually.`;
-                caeInfo.classList.add('status--error');
-            }
-        } else {
-            caeInfo.textContent = 'Enter your CAE code to auto-select a coefficient.';
-        }
+        codeListElement.textContent = TAX_DATA.highValueServiceCodes.join(', ');
     }
     updateNHROptions();
     updateInputsAtGlance();
