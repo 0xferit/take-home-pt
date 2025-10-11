@@ -1,6 +1,6 @@
 ---
-name: Codebase Values – Simplicity, Auditability, Maintainability, Usability
-description: Decision-making guide for changes. Prefer simple, auditable, maintainable, and usable solutions.
+name: Codebase Values – Simplicity, Auditability, Maintainability, Usability, Consistency
+description: Decision-making guide for changes. Prefer simple, auditable, maintainable, usable, and consistent solutions.
 globs:
   - "**/*"
 ---
