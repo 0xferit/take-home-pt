@@ -55,6 +55,15 @@ Follow SMACSS when creating or modifying CSS. Keep changes minimal, readable, an
 - If moving styles, place Base first, then Layout, then Modules, States, and Theme sections. Keep each section grouped and ordered alphabetically where sensible.
 - Do not change visual design or tokens while reorganizing unless explicitly requested.
 
-References: SMACSS by Jonathan Snook (https://smacss.com/book/), comparison guides (https://css-tricks.com/methods-organize-css/).
+10) Typography scale
++- Use mathematical typographic scales for font sizes, following Spencer Mortensen's methodology (https://spencermortensen.com/articles/typographic-scale/).
++- Formula: f_i = f_0 × r^(i/n), where f_0 is base size (typically 1rem/16px), r is ratio (commonly 1.5, 1.618, or 2), n is number of steps, i is the step index.
++- For this project: n=5, r=2 (doubling), base=1rem. This creates harmonious size relationships.
++- Define scale tokens in :root as custom properties (--text-xs, --text-sm, --text-base, --text-lg, --text-xl, --text-2xl, --text-3xl, --text-4xl).
++- Use these tokens consistently. Do not introduce arbitrary font sizes. If the scale doesn't fit your needs, recalculate the entire scale with different n or r values rather than adding one-off sizes.
++- Common ratios: 1.25 (major third), 1.333 (perfect fourth), 1.5 (perfect fifth), 1.618 (golden ratio), 2 (octave). Choose based on desired contrast between heading levels.
++- Pair scale with consistent line-height tokens (--line-tight: 1.25, --line-snug: 1.375, --line-normal: 1.5, --line-relaxed: 1.625, --line-loose: 1.75).
++
++References: SMACSS by Jonathan Snook (https://smacss.com/book/), comparison guides (https://css-tricks.com/methods-organize-css/), typographic scales (https://spencermortensen.com/articles/typographic-scale/).
 
 
