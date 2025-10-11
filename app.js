@@ -787,7 +787,9 @@ function populateAssumptions() {
     setText('assumption-ss-rate', formatPercent(TAX_DATA.socialSecurity.rate * 100));
     setText('assumption-ss-coef', formatPercent(TAX_DATA.socialSecurity.relevantIncomeFactor * 100));
     const ssCap = TAX_DATA.socialSecurity.ias * TAX_DATA.socialSecurity.maxBaseMultiplier;
-    setText('assumption-ss-cap', `${formatCurrency(ssCap)} per month (base cap)`);
+    setText('assumption-ss-cap', `${formatCurrency(ssCap)} per month (base cap, not payable)`);
+    const ssMax = ssCap * TAX_DATA.socialSecurity.rate;
+    setText('assumption-ss-max', `${formatCurrency(ssMax)} per month (max contribution)`);
     setText('assumption-admin-freelancer', formatCurrency(SUGGESTED_ADMIN.freelancer));
     setText('assumption-admin-transparency', formatCurrency(SUGGESTED_ADMIN.transparent));
     setText('assumption-biz-expenses', formatCurrency(DEFAULTS.bizExpenses));
