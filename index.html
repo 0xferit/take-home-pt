@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portugal Freelancer vs Transparent LLC (2025)</title>
+    <title>Portugal Category B Services Calculator (2025)</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header class="app-header">
         <div class="container">
-            <h1 class="app-title">Freelancer vs Transparent LLC — Portugal 2025</h1>
-            <p class="app-subtitle">Compare Recibos Verdes (Simplified) vs Unipessoal Transparente (Fiscal Transparency)</p>
+            <h1 class="app-title">Category B Services — Portugal 2025</h1>
+            <p class="app-subtitle">Self-employed services (Category B, no salary income) comparing Recibos Verdes (Simplified) vs Transparent LLC.</p>
         </div>
     </header>
 
@@ -31,7 +31,7 @@
                 
 
                 <div class="form-section">
-                    <h3>NHR Status &amp; Activity Type</h3>
+                    <h3>NHR Status &amp; Activity Profile</h3>
                     <div class="form-group">
                         <label class="form-label" for="nhr-status">NHR Status:</label>
                         <select id="nhr-status" class="form-control">
@@ -41,12 +41,42 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="form-label" for="activity-type">Activity Type:</label>
-                        <select id="activity-type" class="form-control">
-                            <option value="services">Services (75%)</option>
-                            <option value="goods">Goods/Commerce (15%)</option>
-                            <option value="accommodation_food">Accommodation &amp; Food (35%)</option>
-                        </select>
+                        <span class="form-label">Category B service profile:</span>
+                        <div class="radio-group" role="radiogroup">
+                            <label class="radio-option selected" data-activity-option="services_general">
+                                <input type="radio" name="activity-profile" id="activity-general" value="services_general" checked>
+                                <div>
+                                    <strong>General services</strong>
+                                    <div class="help-text">Default for most tech freelancing CAE codes. 75% taxable base (25% deemed expenses).</div>
+                                </div>
+                            </label>
+                            <label class="radio-option" data-activity-option="services_high_value">
+                                <input type="radio" name="activity-profile" id="activity-high-value" value="services_high_value">
+                                <div>
+                                    <strong>High value services</strong>
+                                    <div class="help-text">For CAE codes on the high added value list (Annex II). 35% taxable base (65% deemed expenses).</div>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="activity-code">CAE code (optional):</label>
+                            <input type="text" name="activity-code" id="activity-code" class="form-control" placeholder="e.g. 62010" list="activity-code-options" inputmode="numeric" pattern="\d{5}">
+                            <datalist id="activity-code-options"></datalist>
+                            <small id="activity-code-status" class="help-text">Enter your CAE code to auto-select a coefficient.</small>
+                        </div>
+                        <div class="result-item" style="margin-top: var(--space-12);">
+                            <span>Current selection:</span>
+                            <span class="result-value"><span id="activity-summary-label">General services (default)</span></span>
+                        </div>
+                        <div class="result-item">
+                            <span>Coefficient applied:</span>
+                            <span class="result-value"><span id="activity-summary-coef">75% taxable / 25% deemed expenses</span></span>
+                        </div>
+                        <div class="result-item">
+                            <span>High value CAE examples:</span>
+                            <span class="result-value"><span id="activity-summary-codes">62010, 62020, 62090, 63110, 63990, 70220, 73110</span></span>
+                        </div>
+                        <small class="help-text">We assume Category B income only (self-employment). Category A salary income is out of scope.</small>
                     </div>
                 </div>
 
@@ -64,6 +94,32 @@
                             <label for="firstyear-irs-50" class="form-label">50% IRS reduction (first year)</label>
                         </div>
                     </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Transparent LLC Eligibility</h3>
+                    <div class="form-group">
+                        <label class="form-label" for="llc-management">Management location:</label>
+                        <select id="llc-management" class="form-control">
+                            <option value="portugal" selected>Management in Portugal (required)</option>
+                            <option value="abroad">Management outside Portugal</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="llc-members">Member structure:</label>
+                        <select id="llc-members" class="form-control">
+                            <option value="single" selected>Single member</option>
+                            <option value="multi">Multi-member</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="llc-activity">Activity type:</label>
+                        <select id="llc-activity" class="form-control">
+                            <option value="professional" selected>Professional Category B services</option>
+                            <option value="non_professional">Commercial / non-professional activity</option>
+                        </select>
+                    </div>
+                    <small id="llc-eligibility-status" class="help-text">All transparency conditions must be met. Adjust the inputs if your LLC does not qualify.</small>
                 </div>
 
                 <div class="form-section">
@@ -337,6 +393,7 @@
                             <span>Social Security:</span>
                             <span class="result-value"><span id="simp-ss">0,00&nbsp;€</span></span>
                         </div>
+                        <p class="result-subtext" id="simp-ss-note"></p>
                     </div>
                     <div class="result-section">
                         <h4>Net Results</h4>
@@ -402,6 +459,8 @@
                             <span>Social Security:</span>
                             <span class="result-value"><span id="org-ss">0,00&nbsp;€</span></span>
                         </div>
+                        <p class="result-subtext" id="org-ss-note"></p>
+                        <p class="result-subtext" id="org-eligibility-note"></p>
                     </div>
                     <div class="result-section">
                         <h4>Net Results</h4>
@@ -421,6 +480,23 @@
                 </div>
             </div>
 
+            <div class="results-grid" style="margin-top: var(--space-16);">
+                <div class="result-card" id="calc-simp-card">
+                    <h3>Freelancer (Simplified) Calculation</h3>
+                    <p class="result-note">Use these steps to reproduce the freelancer figures manually.</p>
+                    <ul class="breakdown-list" id="calc-simp-steps"></ul>
+                    <h4>IRS brackets applied</h4>
+                    <ul class="breakdown-list" id="calc-simp-irs-breakdown"></ul>
+                </div>
+                <div class="result-card" id="calc-org-card">
+                    <h3>Transparent LLC Calculation</h3>
+                    <p class="result-note">Real expenses reduce both the cash net and the taxable base here.</p>
+                    <ul class="breakdown-list" id="calc-org-steps"></ul>
+                    <h4>IRS brackets applied</h4>
+                    <ul class="breakdown-list" id="calc-org-irs-breakdown"></ul>
+                </div>
+            </div>
+
             <div class="result-card" style="margin-top: var(--space-16);">
                 <h3>Take-Home Rate Information</h3>
                 <div class="result-item">
@@ -433,7 +509,7 @@
                 </div>
                 <div class="result-item" id="nhr-benefit-row" style="display: none;">
                     <span>NHR Benefit Applied:</span>
-                    <span class="result-value status--success">20% Rate</span>
+                    <span class="result-value status--success" id="nhr-benefit-value">20% rate applies.</span>
                 </div>
             </div>
         </div>
@@ -455,12 +531,20 @@
                         <span class="result-value"><span id="assumption-simplified-coef">—</span></span>
                     </div>
                     <div class="result-item">
+                        <span>High value CAE examples:</span>
+                        <span class="result-value"><span id="assumption-highvalue-codes">—</span></span>
+                    </div>
+                    <div class="result-item">
                         <span>Social Security Rate:</span>
                         <span class="result-value"><span id="assumption-ss-rate">—</span></span>
                     </div>
                     <div class="result-item">
                         <span>Social Security Coefficient:</span>
                         <span class="result-value"><span id="assumption-ss-coef">—</span></span>
+                    </div>
+                    <div class="result-item">
+                        <span>Social Security monthly cap:</span>
+                        <span class="result-value"><span id="assumption-ss-cap">—</span></span>
                     </div>
                 </div>
                 <div class="result-card">
@@ -501,6 +585,8 @@
                 <div class="result-card">
                     <h3>Disclaimers &amp; Sources</h3>
                     <ul class="sanity-list">
+                        <li>Category B services only; goods/accommodation activities are not modelled in this version.</li>
+                        <li>Transparent LLC results assume management in Portugal, a single member, and professional Category B activity.</li>
                         <li>Results assume NHR 20% eligibility and independent SS unless advanced options are enabled.</li>
                         <li>Trading income taxed at 28% flat; englobamento not modeled.</li>
                         <li>Limited liability protection is assumed via the LLC structure.</li>

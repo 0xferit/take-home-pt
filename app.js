@@ -6,6 +6,10 @@
             SUGGESTED_ADMIN,
             computeExpenseTotals,
             getLiabilityInsurance,
+            normalizeActivityCode,
+            getActivityProfileForCode,
+            isActivityCodeKnown,
+            isNHREligibleCode,
         } = window.TakeHomeLogic;
 
 const currencyFormatter = new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' });
@@ -17,6 +21,7 @@ const formatSignedCurrency = (value) => {
 };
 const formatPercent = (value) => `${value.toFixed(1)}%`;
 const formatSignedPercent = (value) => `${value >= 0 ? '+' : '−'}${Math.abs(value).toFixed(1)}%`;
+const formatRate = (value) => `${(value * 100).toFixed(1).replace(/\.0$/, '')}%`;
 const DEFAULTS = {
     softwareIncome: 170000,
     tradingIncome: 25000,
@@ -29,9 +34,15 @@ const setText = (id, value) => {
     if (el) el.textContent = value;
 };
 
+const ACTIVITY_DEFAULT = 'services_general';
+
 const appState = {
     nhrStatus: 'standard',
-    activityType: 'services',
+    activityProfile: ACTIVITY_DEFAULT,
+    activityCode: '',
+    llcManagementLocation: 'portugal',
+    llcMemberStructure: 'single',
+    llcActivityType: 'professional',
     hasDependents: false,
     dependentsCount: 0,
     grossIncome: DEFAULTS.softwareIncome,
@@ -53,6 +64,9 @@ function initApp() {
     setupEventListeners();
     populateAssumptions();
     applySuggestedAdminIfEnabled();
+    populateActivityCodeOptions();
+    updateLLCEligibilityStatus();
+    updateActivitySelectionDisplay();
     const baseField = document.getElementById('total-business-expenses');
     if (baseField) {
         const baseValue = Math.max(0, parseFloat(baseField.value) || DEFAULTS.bizExpenses);
@@ -81,10 +95,31 @@ function setupEventListeners() {
         recalc();
     });
 
-    document.getElementById('activity-type').addEventListener('change', (event) => {
-        appState.activityType = event.target.value;
-        recalc();
+    document.querySelectorAll('input[name="activity-profile"]').forEach((input) => {
+        input.addEventListener('change', (event) => {
+            if (!event.target.checked) return;
+            setActivityProfile(event.target.value || ACTIVITY_DEFAULT, { source: 'manual' });
+            recalc();
+        });
     });
+
+    const activityCodeField = document.getElementById('activity-code');
+    if (activityCodeField) {
+        activityCodeField.addEventListener('input', (event) => {
+            const code = normalizeActivityCode(event.target.value);
+            appState.activityCode = code;
+            const profile = getActivityProfileForCode(code);
+            if (profile) {
+                setActivityProfile(profile.id, { source: 'cae', silent: true });
+            }
+            updateActivitySelectionDisplay();
+            recalc();
+        });
+        activityCodeField.addEventListener('blur', (event) => {
+            const code = normalizeActivityCode(event.target.value);
+            event.target.value = code || '';
+        });
+    }
 
     document.getElementById('has-dependents').addEventListener('change', (event) => {
         appState.hasDependents = event.target.checked;
@@ -111,6 +146,33 @@ function setupEventListeners() {
     if (irsReduction) {
         irsReduction.addEventListener('change', (event) => {
             appState.isFirstYearIRS50pct = event.target.checked;
+            recalc();
+        });
+    }
+
+    const llcManagement = document.getElementById('llc-management');
+    if (llcManagement) {
+        llcManagement.addEventListener('change', (event) => {
+            appState.llcManagementLocation = event.target.value;
+            updateLLCEligibilityStatus();
+            recalc();
+        });
+    }
+
+    const llcMembers = document.getElementById('llc-members');
+    if (llcMembers) {
+        llcMembers.addEventListener('change', (event) => {
+            appState.llcMemberStructure = event.target.value;
+            updateLLCEligibilityStatus();
+            recalc();
+        });
+    }
+
+    const llcActivity = document.getElementById('llc-activity');
+    if (llcActivity) {
+        llcActivity.addEventListener('change', (event) => {
+            appState.llcActivityType = event.target.value;
+            updateLLCEligibilityStatus();
             recalc();
         });
     }
@@ -200,6 +262,127 @@ function setExpenseValue(id, value) {
     appState.expenses[id] = normalized;
 }
 
+function setActivityProfile(profileId = ACTIVITY_DEFAULT, { source = 'manual', silent = false } = {}) {
+    if (!profileId || !TAX_DATA.activityProfiles[profileId]) {
+        profileId = ACTIVITY_DEFAULT;
+    }
+    appState.activityProfile = profileId;
+    syncActivityRadios();
+    if (!silent) {
+        updateActivitySelectionDisplay();
+    }
+    if (source === 'manual') {
+        appState.activityCode = '';
+        const codeField = document.getElementById('activity-code');
+        if (codeField) codeField.value = '';
+    }
+}
+
+function syncActivityRadios() {
+    document.querySelectorAll('[data-activity-option]').forEach((option) => {
+        if (!option) return;
+        const optionId = option.getAttribute('data-activity-option');
+        const input = option.querySelector('input[type="radio"]');
+        const isSelected = optionId === appState.activityProfile;
+        option.classList.toggle('selected', isSelected);
+        if (input) input.checked = isSelected;
+    });
+}
+
+function populateActivityCodeOptions() {
+    const datalist = document.getElementById('activity-code-options');
+    if (!datalist) return;
+    datalist.innerHTML = '';
+    (TAX_DATA.activityCatalog || []).forEach((entry) => {
+        const option = document.createElement('option');
+        option.value = entry.code;
+        option.textContent = `${entry.code} — ${entry.label}`;
+        datalist.appendChild(option);
+    });
+}
+
+function getActivityProfileData(profileId = ACTIVITY_DEFAULT) {
+    return TAX_DATA.activityProfiles[profileId] || TAX_DATA.activityProfiles[ACTIVITY_DEFAULT];
+}
+
+function isCurrentNHREligible() {
+    if (appState.activityCode) {
+        return isNHREligibleCode(appState.activityCode);
+    }
+    return appState.activityProfile === 'services_high_value';
+}
+
+function getLLCEligibility() {
+    const reasons = [];
+    if (appState.llcManagementLocation !== 'portugal') {
+        reasons.push('Management must be located in Portugal for transparency.');
+    }
+    if (appState.llcMemberStructure !== 'single') {
+        reasons.push('Only single-member LLCs qualify for fiscal transparency.');
+    }
+    if (appState.llcActivityType !== 'professional') {
+        reasons.push('Only professional Category B activities qualify for transparency.');
+    }
+    return {
+        eligible: reasons.length === 0,
+        reason: reasons.join(' ')
+    };
+}
+
+function updateLLCEligibilityStatus() {
+    const statusEl = document.getElementById('llc-eligibility-status');
+    if (!statusEl) return;
+    const eligibility = getLLCEligibility();
+    statusEl.classList.remove('status--error', 'status--success');
+    if (eligibility.eligible) {
+        statusEl.textContent = 'All transparency conditions met. Transparent LLC calculations are enabled.';
+        statusEl.classList.add('status--success');
+    } else {
+        statusEl.textContent = eligibility.reason || 'Transparent LLC assumptions are not satisfied. Results become indicative only.';
+        statusEl.classList.add('status--error');
+    }
+}
+
+function getCurrentActivityCoefficient() {
+    const profile = getActivityProfileData(appState.activityProfile);
+    return profile.coefficient;
+}
+
+function updateActivitySelectionDisplay() {
+    syncActivityRadios();
+    const profile = getActivityProfileData(appState.activityProfile);
+    const taxablePercent = (profile.coefficient * 100).toFixed(1).replace(/\.0$/, '');
+    const deemedPercent = ((1 - profile.coefficient) * 100).toFixed(1).replace(/\.0$/, '');
+    setText('activity-summary-label', profile.label || 'General services (default)');
+    setText('activity-summary-coef', `${taxablePercent}% taxable / ${deemedPercent}% deemed expenses`);
+    const codeListElement = document.getElementById('activity-summary-codes');
+    if (codeListElement) {
+        codeListElement.textContent =
+            profile.id === 'services_high_value'
+                ? TAX_DATA.highValueServiceCodes.join(', ')
+                : 'Select "High value services" to view the code list.';
+    }
+    const caeInfo = document.getElementById('activity-code-status');
+    if (caeInfo) {
+        caeInfo.classList.remove('status--error', 'status--success');
+        if (appState.activityCode) {
+            if (appState.activityCode.length < 5) {
+                caeInfo.textContent = 'Enter the full 5-digit CAE code to auto-select a coefficient.';
+            } else if (isActivityCodeKnown(appState.activityCode)) {
+                const entry = (TAX_DATA.activityCatalog || []).find((item) => item.code === appState.activityCode);
+                const labelText = entry ? `${profile.label} · ${entry.label}` : profile.label;
+                caeInfo.textContent = `CAE ${appState.activityCode} recognised (${labelText}).`;
+                caeInfo.classList.add('status--success');
+            } else {
+                caeInfo.textContent = `CAE ${appState.activityCode} is not on the reference list. Please confirm the coefficient manually.`;
+                caeInfo.classList.add('status--error');
+            }
+        } else {
+            caeInfo.textContent = 'Enter your CAE code to auto-select a coefficient.';
+        }
+    }
+}
+
 function applySuggestedAdminIfEnabled() {
     const toggle = document.getElementById('use-suggested-admin');
     if (!toggle || !toggle.checked) return;
@@ -276,20 +459,28 @@ function calculateAndUpdate() {
         isFirstYearSSExempt: appState.isFirstYearSSExempt,
     };
 
+    const nhrEligible = isCurrentNHREligible();
+    const llcEligibility = getLLCEligibility();
+
     const simplifiedResults = computeSimplified({
         ...commonInputs,
-        activityType: appState.activityType,
+        activityCoefficient: getCurrentActivityCoefficient(),
         baseExpenses,
         adminExpenses: adminSimplified,
         insuranceExpenses: appState.liabilityInsurance ?? getLiabilityInsurance(appState.grossIncome),
+        isNHREligible: nhrEligible,
     });
     const transparentResults = computeTransparent({
         ...commonInputs,
         baseExpenses,
         adminExpenses: adminTransparent,
+        isNHREligible: nhrEligible,
     });
+    transparentResults.llcEligibility = llcEligibility;
+    transparentResults.llcEligible = llcEligibility.eligible;
 
     updateResultsDisplayDual(simplifiedResults, transparentResults);
+    updateCalculationBreakdown(simplifiedResults, transparentResults);
     updatePersonalDeductions();
     updateComparisonTable(simplifiedResults, transparentResults);
     updateRecommendation(simplifiedResults, transparentResults);
@@ -302,7 +493,8 @@ function updateResultsDisplayDual(simplified, transparent) {
     const otherNet = Math.max(0, otherIncome - otherTax);
 
     setText('simp-gross', formatCurrency(appState.grossIncome));
-    setText('simp-coefficient', simplified.coefficient);
+    const coefficientPercent = (simplified.coefficient * 100).toFixed(1).replace(/\.0$/, '');
+    setText('simp-coefficient', coefficientPercent);
     setText('simp-expenses-base', formatCurrency(simplified.baseExpenses || 0));
     setText('simp-expenses-admin', formatCurrency(simplified.adminExpenses || 0));
     setText('simp-expenses-total', formatCurrency(simplified.totalExpenses));
@@ -327,6 +519,36 @@ function updateResultsDisplayDual(simplified, transparent) {
     setText('org-net', formatCurrency(transparent.netIncome));
     setText('org-other-net', formatCurrency(otherNet));
     setText('org-total-net', formatCurrency(transparent.netIncome + otherNet));
+
+    const simpSSNote = document.getElementById('simp-ss-note');
+    const orgSSNote = document.getElementById('org-ss-note');
+    const orgEligibilityNote = document.getElementById('org-eligibility-note');
+    const buildSSNote = (info) => {
+        if (!info) return '';
+        if (info.monthly === 0) {
+            return appState.isFirstYearSSExempt
+                ? 'First-year exemption applied.'
+                : 'No Social Security payable under current inputs.';
+        }
+        const baseApplied = formatCurrency(info.monthlyBaseApplied);
+        const monthlyContribution = formatCurrency(info.monthly);
+        if (info.capped) {
+            const capBase = formatCurrency(info.monthlyCap);
+            return `Monthly base ${baseApplied} (capped at ${capBase}); contribution ${monthlyContribution}.`;
+        }
+        return `Monthly base ${baseApplied}; contribution ${monthlyContribution}.`;
+    };
+    if (simpSSNote) simpSSNote.textContent = buildSSNote(simplified.socialSecurityInfo);
+    if (orgSSNote) orgSSNote.textContent = buildSSNote(transparent.socialSecurityInfo);
+    if (orgEligibilityNote) {
+        orgEligibilityNote.classList.remove('status--error', 'status--success');
+        if (!transparent.llcEligibility || transparent.llcEligibility.eligible) {
+            orgEligibilityNote.textContent = '';
+        } else {
+            orgEligibilityNote.textContent = transparent.llcEligibility.reason || 'Transparent LLC inputs do not satisfy fiscal transparency requirements.';
+            orgEligibilityNote.classList.add('status--error');
+        }
+    }
 
     const simpTotalTax = simplified.incomeTax + simplified.socialSecurity;
     const orgTotalTax = transparent.incomeTax + transparent.socialSecurity;
@@ -372,8 +594,148 @@ function updateResultsDisplayDual(simplified, transparent) {
     applyDiffColor('summary-rate-diff', rateDiff, true);
 
     const nhrRow = document.getElementById('nhr-benefit-row');
-    if (nhrRow) nhrRow.style.display = appState.nhrStatus !== 'standard' ? 'flex' : 'none';
+    if (nhrRow) {
+        if (appState.nhrStatus === 'standard') {
+            nhrRow.style.display = 'none';
+        } else {
+            nhrRow.style.display = 'flex';
+            const nhrValue = document.getElementById('nhr-benefit-value');
+            if (nhrValue) {
+                const nhrApplied = simplified.irsDetails?.nhrApplied || transparent.irsDetails?.nhrApplied;
+                const nhrReason = simplified.irsDetails?.nhrReason || transparent.irsDetails?.nhrReason;
+                nhrValue.classList.remove('status--error', 'status--success');
+                if (nhrApplied) {
+                    nhrValue.textContent = '20% NHR rate applied to taxable income.';
+                    nhrValue.classList.add('status--success');
+                } else {
+                    nhrValue.textContent = nhrReason || 'Progressive rates used because inputs are not NHR eligible.';
+                    nhrValue.classList.add('status--error');
+                }
+            }
+        }
+    }
 
+}
+
+function fillBreakdownList(element, lines = []) {
+    if (!element) return;
+    element.innerHTML = '';
+    const entries = lines.length ? lines : ['No taxable income in this scenario.'];
+    entries.forEach((line) => {
+        const li = document.createElement('li');
+        li.textContent = line;
+        element.appendChild(li);
+    });
+}
+
+function buildIRSBreakdownLines(irsDetails) {
+    if (!irsDetails || !Array.isArray(irsDetails.breakdown)) return [];
+    return irsDetails.breakdown.map((entry) => {
+        const amount = formatCurrency(entry.amount);
+        const rate = formatRate(entry.rate);
+        const tax = formatCurrency(entry.tax);
+        const minLabel = formatCurrency(entry.min);
+        const maxLabel = entry.max === Infinity ? 'Infinity' : formatCurrency(entry.max);
+        return `${amount} @ ${rate} (bracket ${minLabel} - ${maxLabel}) -> ${tax}`;
+    });
+}
+
+function updateCalculationBreakdown(simplified, transparent) {
+    const simpList = document.getElementById('calc-simp-steps');
+    const orgList = document.getElementById('calc-org-steps');
+    const simpIRSList = document.getElementById('calc-simp-irs-breakdown');
+    const orgIRSList = document.getElementById('calc-org-irs-breakdown');
+    if (!simpList || !orgList || !simpIRSList || !orgIRSList) return;
+
+    const grossIncome = appState.grossIncome;
+    const ssFactor = TAX_DATA.socialSecurity.relevantIncomeFactor;
+    const ssRate = TAX_DATA.socialSecurity.rate;
+    const ssCap = TAX_DATA.socialSecurity.ias * TAX_DATA.socialSecurity.maxBaseMultiplier;
+
+    const coefficientPercent = formatRate(simplified.coefficient);
+    const simpCashLine = `Cash expenses = shared ${formatCurrency(simplified.baseExpenses)} + admin ${formatCurrency(simplified.adminExpenses)} + liability ${formatCurrency(simplified.insuranceExpenses || 0)} = ${formatCurrency(simplified.totalExpenses)}`;
+    const simpGrossIRSLine =
+        simplified.irsDetails.method === 'nhr'
+            ? `Gross IRS (NHR ${formatRate(simplified.irsDetails.rate)}) = ${formatCurrency(simplified.grossIRS)}`
+            : `Gross IRS (progressive brackets) = ${formatCurrency(simplified.grossIRS)}`;
+    const simpIRSAfterDeductions = Math.max(0, simplified.grossIRS - simplified.deducoesATax);
+    const simplifiedSteps = [
+        `Taxable income = ${formatCurrency(grossIncome)} * ${coefficientPercent} = ${formatCurrency(simplified.taxableIncome)}`,
+        simpCashLine,
+        simpGrossIRSLine,
+        `Deductions to tax = ${formatCurrency(simplified.deducoesATax)}`,
+    ];
+    if (simplified.irsDetails.nhrRequested && !simplified.irsDetails.nhrApplied) {
+        simplifiedSteps.push(`NHR 20% requested but not applied: ${simplified.irsDetails.nhrReason || 'activity not eligible.'}`);
+    }
+    if (appState.isFirstYearIRS50pct) {
+        simplifiedSteps.push(`IRS after deductions = ${formatCurrency(simpIRSAfterDeductions)} -> 50% first-year relief = ${formatCurrency(simplified.incomeTax)}`);
+    } else {
+        simplifiedSteps.push(`Final IRS = max(0, ${formatCurrency(simplified.grossIRS)} − ${formatCurrency(simplified.deducoesATax)}) = ${formatCurrency(simplified.incomeTax)}`);
+    }
+    if (appState.isFirstYearSSExempt) {
+        simplifiedSteps.push('Social Security: first-year exemption applied -> 0,00 €');
+    } else {
+        const quarterlyGross = grossIncome / 4;
+        const quarterlyRelevant = quarterlyGross * ssFactor;
+        const monthlyRelevant = quarterlyRelevant / 3;
+        const monthlyBaseApplied = simplified.socialSecurityInfo.monthlyBaseApplied;
+        simplifiedSteps.push(`Quarterly gross ${formatCurrency(quarterlyGross)} * ${formatRate(ssFactor)} = ${formatCurrency(quarterlyRelevant)} relevant; /3 -> monthly ${formatCurrency(monthlyRelevant)}`);
+        if (simplified.socialSecurityInfo.capped) {
+            simplifiedSteps.push(`Monthly base capped at ${formatCurrency(ssCap)} -> ${formatCurrency(monthlyBaseApplied)}`);
+        } else {
+            simplifiedSteps.push(`Monthly base (no cap) = ${formatCurrency(monthlyBaseApplied)}`);
+        }
+        simplifiedSteps.push(`Social Security = ${formatCurrency(monthlyBaseApplied)} * ${formatRate(ssRate)} * 12 = ${formatCurrency(simplified.socialSecurity)}`);
+    }
+    simplifiedSteps.push(`Net Category B = ${formatCurrency(grossIncome)} − ${formatCurrency(simplified.totalExpenses)} − ${formatCurrency(simplified.incomeTax)} − ${formatCurrency(simplified.socialSecurity)} = ${formatCurrency(simplified.netIncome)}`);
+
+    const orgCashLine = `Cash expenses = shared ${formatCurrency(transparent.baseExpenses)} + admin ${formatCurrency(transparent.adminExpenses)} = ${formatCurrency(transparent.totalExpenses)}`;
+    const orgGrossIRSLine =
+        transparent.irsDetails.method === 'nhr'
+            ? `Gross IRS (NHR ${formatRate(transparent.irsDetails.rate)}) = ${formatCurrency(transparent.grossIRS)}`
+            : `Gross IRS (progressive brackets) = ${formatCurrency(transparent.grossIRS)}`;
+    const orgIRSAfterDeductions = Math.max(0, transparent.grossIRS - transparent.deducoesATax);
+    const orgSteps = [
+        `Net business income = ${formatCurrency(appState.grossIncome)} − ${formatCurrency(transparent.totalExpenses)} = ${formatCurrency(transparent.netBusinessIncome)}`,
+        `Taxable income = max(0, net business income) = ${formatCurrency(transparent.taxableIncome)}`,
+        orgCashLine,
+        orgGrossIRSLine,
+        `Deductions to tax = ${formatCurrency(transparent.deducoesATax)}`,
+    ];
+    if (transparent.irsDetails.nhrRequested && !transparent.irsDetails.nhrApplied) {
+        orgSteps.push(`NHR 20% requested but not applied: ${transparent.irsDetails.nhrReason || 'activity not eligible.'}`);
+    }
+    if (appState.isFirstYearIRS50pct) {
+        orgSteps.push(`IRS after deductions = ${formatCurrency(orgIRSAfterDeductions)} -> 50% first-year relief = ${formatCurrency(transparent.incomeTax)}`);
+    } else {
+        orgSteps.push(`Final IRS = max(0, ${formatCurrency(transparent.grossIRS)} − ${formatCurrency(transparent.deducoesATax)}) = ${formatCurrency(transparent.incomeTax)}`);
+    }
+    if (appState.isFirstYearSSExempt) {
+        orgSteps.push('Social Security: first-year exemption applied -> 0,00 €');
+    } else {
+        const quarterlyGrossOrg = transparent.netBusinessIncome / 4;
+        const quarterlyRelevantOrg = quarterlyGrossOrg * ssFactor;
+        const monthlyRelevantOrg = quarterlyRelevantOrg / 3;
+        const monthlyBaseAppliedOrg = transparent.socialSecurityInfo.monthlyBaseApplied;
+        orgSteps.push(`Quarterly net business ${formatCurrency(quarterlyGrossOrg)} * ${formatRate(ssFactor)} = ${formatCurrency(quarterlyRelevantOrg)} relevant; /3 -> monthly ${formatCurrency(monthlyRelevantOrg)}`);
+        if (transparent.socialSecurityInfo.capped) {
+            orgSteps.push(`Monthly base capped at ${formatCurrency(ssCap)} -> ${formatCurrency(monthlyBaseAppliedOrg)}`);
+        } else {
+            orgSteps.push(`Monthly base (no cap) = ${formatCurrency(monthlyBaseAppliedOrg)}`);
+        }
+        orgSteps.push(`Social Security = ${formatCurrency(monthlyBaseAppliedOrg)} * ${formatRate(ssRate)} * 12 = ${formatCurrency(transparent.socialSecurity)}`);
+    }
+    orgSteps.push(`Net Category B = ${formatCurrency(appState.grossIncome)} − ${formatCurrency(transparent.totalExpenses)} − ${formatCurrency(transparent.incomeTax)} − ${formatCurrency(transparent.socialSecurity)} = ${formatCurrency(transparent.netIncome)}`);
+
+    fillBreakdownList(simpList, simplifiedSteps);
+    fillBreakdownList(orgList, orgSteps);
+
+    const simpIRSBreakdownLines = buildIRSBreakdownLines(simplified.irsDetails);
+    const orgIRSBreakdownLines = buildIRSBreakdownLines(transparent.irsDetails);
+
+    fillBreakdownList(simpIRSList, simpIRSBreakdownLines);
+    fillBreakdownList(orgIRSList, orgIRSBreakdownLines);
 }
 
 function updateComparisonTable(simplified, transparent) {
@@ -428,6 +790,12 @@ function updateRecommendation(simplified, transparent) {
 
     const netDifference = transparent.netIncome - simplified.netIncome;
 
+    if (!transparent.llcEligibility?.eligible) {
+        recommendationEl.textContent = 'Transparent LLC inputs do not meet fiscal transparency requirements. Default to Freelancer (Simplified) results.';
+        breakevenEl.textContent = '—';
+        return;
+    }
+
     if (appState.grossIncome === 0) {
         recommendationEl.textContent = 'Enter your income and expenses to see a personalized recommendation.';
         breakevenEl.textContent = formatCurrency(0);
@@ -458,6 +826,7 @@ function updateRecommendation(simplified, transparent) {
             isFirstYearSSExempt: appState.isFirstYearSSExempt,
             baseExpenses: baseExpensesCandidate,
             adminExpenses: appState.expenses['admin-transparent'] || 0,
+            isNHREligible: isCurrentNHREligible(),
         };
         return computeTransparent(inputs).netIncome;
     };
@@ -476,11 +845,19 @@ function updateRecommendation(simplified, transparent) {
 }
 
 function populateAssumptions() {
+    const generalProfile = getActivityProfileData('services_general');
+    const highValueProfile = getActivityProfileData('services_high_value');
+    const generalPercent = (generalProfile.coefficient * 100).toFixed(1).replace(/\.0$/, '');
+    const highValuePercent = (highValueProfile.coefficient * 100).toFixed(1).replace(/\.0$/, '');
     setText('assumption-nhr-rate', formatPercent(TAX_DATA.nhrRates.original_nhr * 100));
     setText('assumption-trading-rate', formatPercent(DEFAULTS.tradingRate * 100));
-    setText('assumption-simplified-coef', `${TAX_DATA.activityCoefficients.services}% taxable (25% deemed expenses)`);
+    setText('assumption-simplified-coef', `${generalPercent}% taxable (general services) · ${highValuePercent}% taxable (high value list)`);
+    const codes = TAX_DATA.highValueServiceCodes.join(', ');
+    setText('assumption-highvalue-codes', codes);
     setText('assumption-ss-rate', formatPercent(TAX_DATA.socialSecurity.rate * 100));
     setText('assumption-ss-coef', formatPercent(TAX_DATA.socialSecurity.relevantIncomeFactor * 100));
+    const ssCap = TAX_DATA.socialSecurity.ias * TAX_DATA.socialSecurity.maxBaseMultiplier;
+    setText('assumption-ss-cap', `${formatCurrency(ssCap)} per month (base cap)`);
     setText('assumption-admin-freelancer', formatCurrency(SUGGESTED_ADMIN.freelancer));
     setText('assumption-admin-transparency', formatCurrency(SUGGESTED_ADMIN.transparent));
     setText('assumption-biz-expenses', formatCurrency(DEFAULTS.bizExpenses));
@@ -498,6 +875,13 @@ function updateSanityChecks() {
     if (softwareIncome < 0) messages.push('Software income cannot be negative.');
     if (tradingIncome < 0) messages.push('Trading income cannot be negative.');
     if (totals > 200000) messages.push('Gross exceeds 200k; simplified regime assumptions may not hold. Results are indicative only.');
+    if (appState.activityCode && appState.activityCode.length === 5 && !isActivityCodeKnown(appState.activityCode)) {
+        messages.push('Entered CAE code not found in the current mapping. Please confirm the coefficient manually.');
+    }
+    const llcEligibility = getLLCEligibility();
+    if (!llcEligibility.eligible) {
+        messages.push(llcEligibility.reason || 'Transparent LLC transparency requirements not satisfied. Results are indicative only.');
+    }
 
     const list = document.getElementById('sanity-list');
     if (!list) return;
