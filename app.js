@@ -1,4 +1,12 @@
-        const { TAX_DATA, computeDeducoesAColeta, computeSimplified, computeTransparent } = window.TakeHomeLogic;
+        const {
+            TAX_DATA,
+            computeDeducoesAColeta,
+            computeSimplified,
+            computeTransparent,
+            SUGGESTED_ADMIN,
+            computeExpenseTotals,
+            getLiabilityInsurance,
+        } = window.TakeHomeLogic;
 
 const currencyFormatter = new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' });
 const formatCurrency = (value) => currencyFormatter.format(Number.isFinite(value) ? value : 0);
@@ -12,11 +20,6 @@ const setText = (id, value) => {
     if (el) el.textContent = value;
 };
 
-const SUGGESTED_ADMIN = {
-    freelancer: 2050,
-    transparent: 5935,
-};
-
 const appState = {
     nhrStatus: 'standard',
     activityType: 'services',
@@ -28,6 +31,7 @@ const appState = {
     expenses: {},
     isFirstYearSSExempt: false,
     isFirstYearIRS50pct: false,
+    liabilityInsurance: 0,
     personalDeductions: {
         health: 0,
         education: 0,
@@ -185,14 +189,19 @@ function updateExpenseTotal() {
     const base = appState.expenses['total-business-expenses'] || 0;
     const adminSimplified = appState.expenses['admin-freelancer'] || 0;
     const adminTransparent = appState.expenses['admin-transparent'] || 0;
-    const liabilityInsurance = Math.max(0, appState.grossIncome * 0.01);
-    const totalSimplified = base + adminSimplified + liabilityInsurance;
-    const totalTransparent = base + adminTransparent;
+    const { liabilityInsurance, totalFreelancer, totalTransparent } = computeExpenseTotals({
+        grossIncome: appState.grossIncome,
+        baseExpenses: base,
+        adminFreelancer: adminSimplified,
+        adminTransparent,
+    });
 
-    setText('total-expenses-simp', formatCurrency(totalSimplified));
+    appState.liabilityInsurance = liabilityInsurance;
+
+    setText('total-expenses-simp', formatCurrency(totalFreelancer));
     setText('total-expenses-org', formatCurrency(totalTransparent));
 
-    const totalMax = Math.max(totalSimplified, totalTransparent);
+    const totalMax = Math.max(totalFreelancer, totalTransparent);
     const warningElement = document.getElementById('expense-warning');
     const errorElement = document.getElementById('expense-error');
     const hasIncome = appState.grossIncome > 0;
@@ -245,13 +254,12 @@ function calculateAndUpdate() {
         isFirstYearSSExempt: appState.isFirstYearSSExempt,
     };
 
-    const liabilityInsurance = Math.max(0, appState.grossIncome * 0.01);
     const simplifiedResults = computeSimplified({
         ...commonInputs,
         activityType: appState.activityType,
         baseExpenses,
         adminExpenses: adminSimplified,
-        insuranceExpenses: liabilityInsurance,
+        insuranceExpenses: appState.liabilityInsurance ?? getLiabilityInsurance(appState.grossIncome),
     });
     const transparentResults = computeTransparent({
         ...commonInputs,
@@ -345,7 +353,13 @@ function updateComparisonTable(simplified, transparent) {
 }
 
 function updateRecommendation(simplified, transparent) {
-    const totalExpenses = Object.values(appState.expenses).reduce((sum, value) => sum + (value || 0), 0);
+    const { totalFreelancer, totalTransparent } = computeExpenseTotals({
+        grossIncome: appState.grossIncome,
+        baseExpenses: appState.expenses['total-business-expenses'] || 0,
+        adminFreelancer: appState.expenses['admin-freelancer'] || 0,
+        adminTransparent: appState.expenses['admin-transparent'] || 0,
+    });
+    const totalExpenses = Math.max(totalFreelancer, totalTransparent);
     const recommendationEl = document.getElementById('recommendation-text');
     const breakevenEl = document.getElementById('breakeven-expenses');
 

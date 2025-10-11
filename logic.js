@@ -1,5 +1,10 @@
 // Pure business logic for TakeHomePT — exposed via window.TakeHomeLogic
 (function (global) {
+  const SUGGESTED_ADMIN = {
+    freelancer: 2050,
+    transparent: 5935,
+  };
+
   const TAX_DATA = {
     // Sources: AT IRS tables for 2025 (Portaria n.º 43/2024) and Segurança Social contribution guidance.
     taxBrackets2025: [
@@ -96,6 +101,27 @@
     return TAX_DATA.taxBrackets2025[TAX_DATA.taxBrackets2025.length - 1].rate * 100;
   }
 
+  function getLiabilityInsurance(grossIncome = 0) {
+    return sanitizeAmount(grossIncome) * 0.01;
+  }
+
+  function computeExpenseTotals({
+    grossIncome = 0,
+    baseExpenses = 0,
+    adminFreelancer = 0,
+    adminTransparent = 0,
+  } = {}) {
+    const liability = getLiabilityInsurance(grossIncome);
+    const base = sanitizeAmount(baseExpenses);
+    const adminSimp = sanitizeAmount(adminFreelancer);
+    const adminOrg = sanitizeAmount(adminTransparent);
+    return {
+      liabilityInsurance: liability,
+      totalFreelancer: base + adminSimp + liability,
+      totalTransparent: base + adminOrg,
+    };
+  }
+
   function computeSimplified({
     grossIncome = 0,
     activityType = 'services',
@@ -168,12 +194,15 @@
 
   global.TakeHomeLogic = {
     TAX_DATA,
+    SUGGESTED_ADMIN,
     computeProgressiveTax,
     computeGrossIRS,
     computeDeducoesAColeta,
     computeSSAnnual,
     getMarginalTaxRate,
     computeSimplified,
-    computeTransparent
+    computeTransparent,
+    getLiabilityInsurance,
+    computeExpenseTotals,
   };
 })(window);
