@@ -63,6 +63,7 @@ function initApp() {
     applySuggestedAdminIfEnabled();
     populateActivityCodeOptions();
     updateActivitySelectionDisplay();
+    updateFreelancerTitle();
     const baseField = document.getElementById('total-business-expenses');
     if (baseField) {
         const baseValue = Math.max(0, parseFloat(baseField.value) || DEFAULTS.bizExpenses);
@@ -203,8 +204,18 @@ function setupEventListeners() {
 function switchTab(tabName) {
     document.querySelectorAll('.tab').forEach((tab) => tab.classList.remove('active'));
     document.querySelectorAll('.tab-content').forEach((content) => content.classList.remove('active'));
-    document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
-    document.getElementById(tabName).classList.add('active');
+    const tabButton = document.querySelector(`[data-tab="${tabName}"]`);
+    const tabContent = document.getElementById(tabName);
+    if (tabButton) tabButton.classList.add('active');
+    if (tabContent) tabContent.classList.add('active');
+}
+
+function updateFreelancerTitle() {
+    const title = document.getElementById('freelancer-results-title');
+    if (!title) return;
+    title.textContent = appState.freelancerBasis === 'organized'
+        ? 'Freelancer (Organized) Results'
+        : 'Freelancer (Simplified) Results';
 }
 
 function setExpenseValue(id, value) {
@@ -461,12 +472,7 @@ function updateResultsDisplayDual(simplified, transparent) {
 
     setText('simp-gross', formatCurrency(appState.grossIncome));
     const coefficientPercent = (simplified.coefficient * 100).toFixed(1).replace(/\.0$/, '');
-    setText('simp-coefficient', appState.freelancerBasis === 'organized' ? '—' : coefficientPercent);
-function updateFreelancerTitle() {
-    const title = document.getElementById('freelancer-results-title');
-    if (!title) return;
-    title.textContent = appState.freelancerBasis === 'organized' ? 'Freelancer (Organized) Results' : 'Freelancer (Simplified) Results';
-}
+    setText('simp-coefficient', appState.freelancerBasis === 'organized' ? '—' : `${coefficientPercent}%`);
     setText('simp-expenses-base', formatCurrency(simplified.baseExpenses || 0));
     setText('simp-expenses-admin', formatCurrency(simplified.adminExpenses || 0));
     setText('simp-expenses-total', formatCurrency(simplified.totalExpenses));
