@@ -693,6 +693,7 @@ select.form-control {
   grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
   gap: var(--space-16);
   align-items: flex-start;
+  width: 100%;
 }
 
 .tab-shell__main,
@@ -700,6 +701,7 @@ select.form-control {
   display: flex;
   flex-direction: column;
   gap: var(--space-16);
+  min-width: 0;
 }
 
 @media (max-width: 1100px) {
