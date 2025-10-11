@@ -74,6 +74,7 @@ function initApp() {
     }
     updateExpenseTotal();
     calculateAndUpdate();
+    populateAppVersion();
 }
 
 function setupEventListeners() {
@@ -861,6 +862,55 @@ function populateAssumptions() {
     setText('assumption-admin-freelancer', formatCurrency(SUGGESTED_ADMIN.freelancer));
     setText('assumption-admin-transparency', formatCurrency(SUGGESTED_ADMIN.transparent));
     setText('assumption-biz-expenses', formatCurrency(DEFAULTS.bizExpenses));
+}
+
+function populateAppVersion() {
+    const versionEl = document.getElementById('app-version');
+    if (!versionEl) return;
+    const fallback = () => {
+        const lastModified = new Date(document.lastModified || Date.now());
+        versionEl.textContent = `Last updated ${lastModified.toISOString().slice(0, 10)}`;
+    };
+    if (typeof window.fetch !== 'function') {
+        fallback();
+        return;
+    }
+    const owner = '0xferit';
+    const repo = 'take-home-pt';
+    const branch = 'main';
+    const url = `https://api.github.com/repos/${owner}/${repo}/commits/${branch}`;
+    fetch(url, {
+        headers: {
+            Accept: 'application/vnd.github+json'
+        }
+    })
+        .then((response) => {
+            if (!response.ok) throw new Error(`status ${response.status}`);
+            return response.json();
+        })
+        .then((data) => {
+            const sha = (data?.sha || '').slice(0, 7);
+            const isoDate = data?.commit?.committer?.date;
+            let stamp = '';
+            if (isoDate) {
+                const date = new Date(isoDate);
+                if (!Number.isNaN(date.valueOf())) {
+                    const datePart = date.toISOString().slice(0, 10);
+                    const timePart = date.toISOString().slice(11, 16);
+                    stamp = `${datePart} ${timePart} UTC`;
+                }
+            }
+            if (sha && stamp) {
+                versionEl.textContent = `Version ${sha} · ${stamp}`;
+            } else if (sha) {
+                versionEl.textContent = `Version ${sha}`;
+            } else if (stamp) {
+                versionEl.textContent = `Last updated ${stamp}`;
+            } else {
+                fallback();
+            }
+        })
+        .catch(() => fallback());
 }
 
 function updateSanityChecks() {
