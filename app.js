@@ -104,9 +104,16 @@ function setupEventListeners() {
         recalc();
     });
 
-    // Activity profile is fixed to high-value in simplified mode; inputs removed
-
-    // CAE input removed in simplified mode
+    // Activity profile selector
+    const activityProfileSelect = document.getElementById('activity-profile');
+    if (activityProfileSelect) {
+        activityProfileSelect.addEventListener('change', (event) => {
+            appState.activityProfile = event.target.value;
+            updateInputsAtGlance();
+            updateNHROptions();
+            recalc();
+        });
+    }
 
     const ssExemption = document.getElementById('firstyear-ss-exempt');
     if (ssExemption) {
@@ -294,6 +301,14 @@ function updateInputsAtGlance() {
     const nhrSummary = document.getElementById('glance-nhr-status');
     if (nhrSummary) {
         nhrSummary.textContent = getNHRStatusLabel();
+    }
+    const activitySummary = document.getElementById('glance-activity-value');
+    if (activitySummary) {
+        const profile = getActivityProfileData(appState.activityProfile);
+        const label = profile?.id === 'services_high_value'
+            ? 'High‑value professions (Art. 151) – 75% taxable'
+            : 'General professional services – 35% taxable';
+        activitySummary.textContent = label;
     }
     const firstYearContainer = document.getElementById('glance-firstyear');
     if (firstYearContainer) {

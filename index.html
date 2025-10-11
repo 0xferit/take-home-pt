@@ -33,14 +33,17 @@
                             <div class="profile-card__body">
                                 <section class="profile-card__section">
                                     <div class="profile-card__header">
-                                        <h4>Activity profile (assumed)</h4>
-                                        <p class="profile-card__intro">Assuming a high‑value profession (Article 151, CIRS). 75% of gross is taxable (25% deemed expenses).</p>
+                                        <h4>Select your activity profile</h4>
+                                        <p class="profile-card__intro">Choose the coefficient that applies to your professional services under Portuguese simplified regime.</p>
                                     </div>
                                     <div class="profile-card__content">
-                                        <div class="info-card">
-                                            <div class="info-card__list">
-                                                <p class="help-text">This simplification removes profile/CAE selection. If you need general services (0.35), switch the project mode later.</p>
-                                            </div>
+                                        <div class="form-group compact">
+                                            <label class="form-label" for="activity-profile">Activity type <span class="tooltip" tabindex="0" data-tooltip="Article 151 high-value professions (software, engineering, design, consulting) use 0.75 coefficient. General professional services (accounting, legal, healthcare) use 0.35 coefficient.">ℹ️</span></label>
+                                            <select id="activity-profile" class="form-control">
+                                                <option value="services_high_value" selected>High-Value Professions (Article 151) – 75% taxable</option>
+                                                <option value="services_general">General Professional Services – 35% taxable</option>
+                                            </select>
+                                            <small class="help-text">High-value: Software (CAE 620xx), engineering, design, scientific consulting. General: Accounting, legal, healthcare, other professional services.</small>
                                         </div>
                                     </div>
                                 </section>
@@ -98,8 +101,8 @@
                             </div>
                             <div class="glance-card__list">
                                 <div class="glance-card__item">
-                                    <span class="glance-card__label">Activity (assumed)</span>
-                                    <span class="glance-card__value">High‑value professions (Art. 151) – 75% taxable</span>
+                                    <span class="glance-card__label">Activity</span>
+                                    <span class="glance-card__value" id="glance-activity-value">High‑value professions (Art. 151) – 75% taxable</span>
                                 </div>
                                 <div class="glance-card__item">
                                     <span class="glance-card__label">Rate regime</span>
@@ -583,7 +586,31 @@
             <div class="tab-shell__main">
             <div class="results-grid">
                 <div class="result-card">
-                    <h3>Rates &amp; Thresholds</h3>
+                    <h3>2025 IRS Progressive Tax Brackets</h3>
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Taxable Income</th>
+                                <th>Rate</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Up to €8,059</td><td>13%</td></tr>
+                            <tr><td>€8,060 – €12,160</td><td>16.5%</td></tr>
+                            <tr><td>€12,161 – €17,233</td><td>22%</td></tr>
+                            <tr><td>€17,234 – €22,306</td><td>25%</td></tr>
+                            <tr><td>€22,307 – €28,400</td><td>32%</td></tr>
+                            <tr><td>€28,401 – €41,629</td><td>35.5%</td></tr>
+                            <tr><td>€41,630 – €44,987</td><td>43.5%</td></tr>
+                            <tr><td>€44,988 – €83,696</td><td>45%</td></tr>
+                            <tr><td>Over €83,696</td><td>48%</td></tr>
+                        </tbody>
+                    </table>
+                    <p class="result-note"><strong>Solidarity Tax:</strong> Additional 2.5% on income €80,000–€250,000; 5% on income over €250,000.</p>
+                    <p class="result-note"><strong>Personal Allowance:</strong> €4,462.15 automatically deducted from taxable income before applying brackets.</p>
+                </div>
+                <div class="result-card">
+                    <h3>Key Rates &amp; Thresholds</h3>
                     <div class="result-item">
                         <span>NHR Rate (services):</span>
                         <span class="result-value"><span id="assumption-nhr-rate">—</span></span>
@@ -622,23 +649,47 @@
                     </div>
                 </div>
                 <div class="result-card">
-                    <h3>Default Cash Costs</h3>
-                    <div class="result-item">
-                        <span>Freelancer admin (annual):</span>
-                        <span class="result-value"><span id="assumption-admin-freelancer">—</span></span>
-                    </div>
-                    <div class="result-item">
-                        <span>Liability insurance (auto):</span>
-                        <span class="result-value">1% of gross (included)</span>
-                    </div>
-                    <div class="result-item">
-                        <span>Transparency admin (annual):</span>
-                        <span class="result-value"><span id="assumption-admin-transparency">—</span></span>
-                    </div>
-                    <div class="result-item">
-                        <span>Real business expenses (default):</span>
-                        <span class="result-value"><span id="assumption-biz-expenses">25&nbsp;000&nbsp;€</span></span>
-                    </div>
+                    <h3>Annual Compliance Costs (2025 Estimates)</h3>
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Structure</th>
+                                <th>Typical Range</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Freelancer (Simplified)</strong></td>
+                                <td>€360 – €1,200</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: var(--space-6); font-size: var(--text-sm);">Invoicing software, occasional accounting, bank fees</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Freelancer (Organized)</strong></td>
+                                <td>€2,400 – €3,600</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: var(--space-6); font-size: var(--text-sm);">Certified accountant (TOC), full bookkeeping, filings</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Portuguese LDA</strong></td>
+                                <td>€3,650 – €8,000</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: var(--space-6); font-size: var(--text-sm);">TOC/CC accountant, corporate filings, registry, digital cert</td>
+                                <td></td>
+                            </tr>
+                            <tr style="background: var(--warning-50);">
+                                <td><strong>LDA Setup (Year 1 only)</strong></td>
+                                <td>+€1,000 – €2,000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p class="result-note"><strong>Important:</strong> LDA has mandatory minimum costs including manager salary (€6,270/year) and associated social security (€2,179/year) if no foreign exemption applies. Total mandatory minimum: ~€8,449/year.</p>
+                    <p class="result-note">Default suggested costs in this calculator: Freelancer €800/year, LDA €4,800/year. Adjust in Expenses tab to match your actual costs.</p>
                 </div>
                 <div class="result-card">
                     <h3>Baseline Inputs</h3>
