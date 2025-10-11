@@ -159,14 +159,33 @@
     return { totalTax, breakdown };
   }
 
+  function computeSolidarityTax(taxableIncome) {
+    const income = sanitizeAmount(taxableIncome);
+    let tax = 0;
+    const tier1Min = 80000;
+    const tier2Min = 250000;
+    if (income > tier1Min) {
+      const tier1Portion = Math.min(income, tier2Min) - tier1Min;
+      if (tier1Portion > 0) tax += tier1Portion * 0.025;
+    }
+    if (income > tier2Min) {
+      const tier2Portion = income - tier2Min;
+      if (tier2Portion > 0) tax += tier2Portion * 0.05;
+    }
+    return tax;
+  }
+
   function computeIRSDetails(taxableIncome, nhrStatus, { isNHREligible = true } = {}) {
     const income = sanitizeAmount(taxableIncome);
     const nhrRequested = nhrStatus === 'original_nhr' || nhrStatus === 'nhr_2_ifici';
     if (nhrRequested && isNHREligible) {
       const rate = TAX_DATA.nhrRates[nhrStatus];
-      const grossIRS = income * rate;
+      const baseIRS = income * rate;
+      const solidarityTax = computeSolidarityTax(income);
       return {
-        grossIRS,
+        baseIRS,
+        solidarityTax,
+        totalIRSBeforeDeductions: baseIRS + solidarityTax,
         method: 'nhr',
         rate,
         nhrApplied: true,
@@ -177,14 +196,17 @@
             max: income,
             rate,
             amount: income,
-            tax: grossIRS,
+            tax: baseIRS,
           }
         ],
       };
     }
     const { totalTax, breakdown } = computeProgressiveTaxDetailed(income);
+    const solidarityTax = computeSolidarityTax(income);
     return {
-      grossIRS: totalTax,
+      baseIRS: totalTax,
+      solidarityTax,
+      totalIRSBeforeDeductions: totalTax + solidarityTax,
       method: 'progressive',
       nhrApplied: false,
       nhrRequested,
@@ -294,9 +316,10 @@
       sanitizeAmount(baseExpenses) + sanitizeAmount(adminExpenses) + sanitizeAmount(insuranceExpenses);
     const taxableIncome = income * coefficient;
     const irsDetails = computeIRSDetails(taxableIncome, nhrStatus, { isNHREligible });
-    const grossIRS = irsDetails.grossIRS;
+    const baseIRS = Number(irsDetails.baseIRS || 0);
+    const solidarityTax = Number(irsDetails.solidarityTax || 0);
     const deducoes = computeDeducoesAColeta({ dependentsCount, personalDeductions });
-    let incomeTax = Math.max(0, grossIRS - deducoes);
+    let incomeTax = Math.max(0, baseIRS - deducoes) + solidarityTax;
     if (isFirstYearIRS50pct) incomeTax *= 0.5;
     const socialSecurityInfo = computeSSAnnual(income, { isFirstYearSSExempt });
     const netIncome = income - totalExpenses - incomeTax - socialSecurityInfo.annual;
@@ -312,7 +335,7 @@
       adminExpenses: sanitizeAmount(adminExpenses),
       insuranceExpenses: sanitizeAmount(insuranceExpenses),
       deducoesATax: deducoes,
-      grossIRS,
+      grossIRS: baseIRS + solidarityTax,
       irsDetails,
       isNHREligible,
     };
@@ -335,9 +358,10 @@
     const netBusinessIncome = Math.max(0, income - totalExpenses);
     const taxableIncome = netBusinessIncome;
     const irsDetails = computeIRSDetails(taxableIncome, nhrStatus, { isNHREligible });
-    const grossIRS = irsDetails.grossIRS;
+    const baseIRS = Number(irsDetails.baseIRS || 0);
+    const solidarityTax = Number(irsDetails.solidarityTax || 0);
     const deducoes = computeDeducoesAColeta({ dependentsCount, personalDeductions });
-    let incomeTax = Math.max(0, grossIRS - deducoes);
+    let incomeTax = Math.max(0, baseIRS - deducoes) + solidarityTax;
     if (isFirstYearIRS50pct) incomeTax *= 0.5;
     const socialSecurityInfo = computeSSAnnual(netBusinessIncome, { isFirstYearSSExempt });
     const netIncome = income - totalExpenses - incomeTax - socialSecurityInfo.annual;
@@ -354,7 +378,7 @@
       adminExpenses: sanitizeAmount(adminExpenses),
       insuranceExpenses: sanitizeAmount(insuranceExpenses),
       deducoesATax: deducoes,
-      grossIRS,
+      grossIRS: baseIRS + solidarityTax,
       irsDetails,
       isNHREligible,
     };
@@ -377,9 +401,10 @@
     const netBusinessIncome = Math.max(0, income - totalExpenses);
     const taxableIncome = netBusinessIncome;
     const irsDetails = computeIRSDetails(taxableIncome, nhrStatus, { isNHREligible });
-    const grossIRS = irsDetails.grossIRS;
+    const baseIRS = Number(irsDetails.baseIRS || 0);
+    const solidarityTax = Number(irsDetails.solidarityTax || 0);
     const deducoes = computeDeducoesAColeta({ dependentsCount, personalDeductions });
-    let incomeTax = Math.max(0, grossIRS - deducoes);
+    let incomeTax = Math.max(0, baseIRS - deducoes) + solidarityTax;
     if (isFirstYearIRS50pct) incomeTax *= 0.5;
     let socialSecurityInfo;
     if (useLLCManagerMinSS && !isFirstYearSSExempt) {
@@ -414,7 +439,7 @@
       adminExpenses: sanitizeAmount(adminExpenses),
       netBusinessIncome,
       deducoesATax: deducoes,
-      grossIRS,
+      grossIRS: baseIRS + solidarityTax,
       irsDetails,
       isNHREligible,
       ssMode: useLLCManagerMinSS ? 'llc_manager_min' : 'self_employed',
@@ -427,6 +452,7 @@
     computeProgressiveTax,
     computeProgressiveTaxDetailed,
     computeIRSDetails,
+    computeSolidarityTax,
     computeDeducoesAColeta,
     computeSSAnnual,
     getMarginalTaxRate,
