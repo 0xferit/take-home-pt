@@ -152,6 +152,8 @@
 
         <!-- Income Tab -->
         <div class="tab-content" id="income">
+            <div class="tab-shell">
+            <div class="tab-shell__main">
             <div class="form-grid">
                 <div class="form-section">
                     <h3>Income</h3>
@@ -182,10 +184,15 @@
                     <small class="help-text">These are added with a flat 28% tax in this tool. Aggregation to progressive rates and crypto rules are not modeled in v1.</small>
                 </div>
             </div>
+            </div>
+            <aside class="tab-shell__side"></aside>
+            </div>
         </div>
 
         <!-- Expenses Tab -->
         <div class="tab-content" id="expenses">
+            <div class="tab-shell">
+            <div class="tab-shell__main">
             <div id="expenses-content">
                 <p class="info">Freelancer (Simplified): taxable base uses coefficients (deemed expenses). Freelancer (Organized) and Transparent LLC: taxable profit = income − expenses. Enter amounts <strong>net of VAT</strong>; exclude IRS and Social Security payments.</p>
             </div>
@@ -283,10 +290,15 @@
                     </details>
                 </div>
             </div>
+            </div>
+            <aside class="tab-shell__side"></aside>
+            </div>
         </div>
 
         <!-- Deductions Tab -->
         <div class="tab-content" id="deductions">
+            <div class="tab-shell">
+            <div class="tab-shell__main">
             <div class="form-grid">
                 <div class="form-section">
                     <h3>Personal Deductions</h3>
@@ -326,6 +338,9 @@
                     </div>
                 </div>
             </div>
+            </div>
+            <aside class="tab-shell__side"></aside>
+            </div>
         </div>
 
         <!-- Results Tab -->
@@ -336,6 +351,8 @@
                 <button type="button" class="btn btn--primary btn--lg" data-tab-target="income">Add your income</button>
             </div>
             <div id="results-detail" class="is-dimmed">
+            <div class="tab-shell">
+            <div class="tab-shell__main">
             <div class="summary-grid">
                 <div class="result-card summary-card">
                     <h3>Annual Summary</h3>
@@ -573,9 +590,14 @@
                     </div>
                 </div>
             </div>
+            <aside class="tab-shell__side"></aside>
+            </div>
+            </div>
         </div>
         <!-- Assumptions Tab -->
         <div class="tab-content" id="assumptions">
+            <div class="tab-shell">
+            <div class="tab-shell__main">
             <div class="results-grid">
                 <div class="result-card">
                     <h3>Rates &amp; Thresholds</h3>
@@ -670,10 +692,15 @@
                     </ul>
                 </div>
             </div>
+            </div>
+            <aside class="tab-shell__side"></aside>
+            </div>
         </div>
 
         <!-- Comparison Tab -->
         <div class="tab-content" id="comparison">
+            <div class="tab-shell">
+            <div class="tab-shell__main">
             <div class="form-section">
                 <h3>Freelancer vs Transparent LLC</h3>
                 <table class="comparison-table">
@@ -723,6 +750,9 @@
                     <p>Minimum annual expenses where Transparent LLC nets more than Freelancer: <strong><span id="breakeven-expenses">0,00&nbsp;€</span></strong></p>
                     <p class="tooltip" tabindex="0" data-tooltip="This is the minimum amount of annual business expenses where the Transparent LLC (fiscal transparency) becomes more advantageous than the Freelancer (simplified) setup.">ℹ️ What does this mean?</p>
                 </div>
+            </div>
+            </div>
+            <aside class="tab-shell__side"></aside>
             </div>
         </div>
     </main>
