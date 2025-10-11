@@ -795,7 +795,7 @@ function populateAssumptions() {
     const highValuePercent = (highValueProfile.coefficient * 100).toFixed(1).replace(/\.0$/, '');
     setText('assumption-nhr-rate', formatPercent(TAX_DATA.nhrRates.original_nhr * 100));
     setText('assumption-trading-rate', formatPercent(DEFAULTS.tradingRate * 100));
-    setText('assumption-simplified-coef', `${generalPercent}% taxable (general services) · ${highValuePercent}% taxable (high value list)`);
+    setText('assumption-simplified-coef', `${highValuePercent}% taxable (high value assumed)`);
     const codes = TAX_DATA.highValueServiceCodes.join(', ');
     setText('assumption-highvalue-codes', codes);
     setText('assumption-ss-rate', formatPercent(TAX_DATA.socialSecurity.rate * 100));
