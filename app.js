@@ -40,9 +40,9 @@ const appState = {
     nhrStatus: 'standard',
     activityProfile: ACTIVITY_DEFAULT,
     activityCode: '',
-    grossIncome: DEFAULTS.softwareIncome,
+    grossIncome: 0,
     divintIncome: 0,
-    capgainsIncome: DEFAULTS.tradingIncome,
+    capgainsIncome: 0,
     expenses: {},
     isFirstYearSSExempt: false,
     isFirstYearIRS50pct: false,
@@ -138,12 +138,16 @@ function setupEventListeners() {
         'capgains-income': 'capgainsIncome',
     };
 
-    appState.grossIncome = DEFAULTS.softwareIncome;
-    appState.capgainsIncome = DEFAULTS.tradingIncome;
     const grossField = document.getElementById('gross-income');
-    if (grossField && !grossField.value) grossField.value = String(DEFAULTS.softwareIncome);
+    if (grossField) {
+        const initial = Math.max(0, parseFloat(grossField.value) || 0);
+        appState.grossIncome = initial;
+    }
     const capField = document.getElementById('capgains-income');
-    if (capField && !capField.value) capField.value = String(DEFAULTS.tradingIncome);
+    if (capField) {
+        const initial = Math.max(0, parseFloat(capField.value) || 0);
+        appState.capgainsIncome = initial;
+    }
     Object.entries(incomeMap).forEach(([id, key]) => {
         const field = document.getElementById(id);
         if (!field) return;
@@ -155,6 +159,26 @@ function setupEventListeners() {
             recalc();
         });
     });
+
+    const onboardIncome = document.getElementById('btn-get-started');
+    if (onboardIncome) {
+        onboardIncome.addEventListener('click', () => {
+            switchTab('income');
+            setTimeout(() => {
+                const incomeInput = document.getElementById('gross-income');
+                if (incomeInput) incomeInput.focus();
+            }, 80);
+        });
+    }
+
+    const onboardResults = document.getElementById('btn-view-results');
+    if (onboardResults) {
+        onboardResults.addEventListener('click', () => {
+            switchTab('results');
+            const resultsRegion = document.getElementById('results');
+            if (resultsRegion) resultsRegion.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    }
 
     document.querySelectorAll('.expense-input').forEach((input) => {
         input.addEventListener('input', (event) => {

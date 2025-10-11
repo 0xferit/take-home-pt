@@ -667,6 +667,86 @@ select.form-control {
   font-size: var(--font-size-sm);
 }
 
+.onboarding-card {
+  background: var(--color-secondary);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--space-24);
+}
+
+.onboarding-card__body {
+  display: grid;
+  gap: var(--space-16);
+  padding: var(--space-20);
+}
+
+.onboarding-card__body h3 {
+  margin: 0 0 var(--space-6);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+}
+
+.onboarding-card__lead {
+  margin: 0;
+  font-size: var(--font-size-md);
+  color: var(--color-text-secondary);
+}
+
+.onboarding-card__steps {
+  display: grid;
+  gap: var(--space-12);
+}
+
+.onboarding-step {
+  display: flex;
+  gap: var(--space-12);
+  align-items: flex-start;
+}
+
+.onboarding-step__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: var(--color-cream-50);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
+  flex-shrink: 0;
+}
+
+.onboarding-step strong {
+  display: block;
+  font-size: var(--font-size-md);
+}
+
+.onboarding-step__hint {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.onboarding-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-12);
+}
+
+@media (max-width: 640px) {
+  .onboarding-card__body {
+    padding: var(--space-16);
+  }
+  .onboarding-card__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .onboarding-card__actions .btn {
+    width: 100%;
+  }
+}
+
 .breakdown-list {
   list-style: disc;
   margin: var(--space-12) 0;

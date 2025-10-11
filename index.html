@@ -27,6 +27,42 @@
 
         <!-- Basic Info Tab -->
         <div class="tab-content active" id="basic">
+            <div class="onboarding-card" role="region" aria-labelledby="onboarding-title">
+                <div class="onboarding-card__body">
+                    <div>
+                        <h3 id="onboarding-title">Welcome! Let’s estimate your 2025 take-home pay</h3>
+                        <p class="onboarding-card__lead">Follow the three steps below. You can update outputs at any time&mdash;results refresh automatically.</p>
+                    </div>
+                    <div class="onboarding-card__steps">
+                        <div class="onboarding-step">
+                            <span class="onboarding-step__badge">1</span>
+                            <div>
+                                <strong>Select your activity.</strong>
+                                <span class="onboarding-step__hint">High value CAE codes unlock the NHR 20% rate.</span>
+                            </div>
+                        </div>
+                        <div class="onboarding-step">
+                            <span class="onboarding-step__badge">2</span>
+                            <div>
+                                <strong>Enter your income &amp; costs.</strong>
+                                <span class="onboarding-step__hint">Category B revenue only&mdash;salary is out of scope.</span>
+                            </div>
+                        </div>
+                        <div class="onboarding-step">
+                            <span class="onboarding-step__badge">3</span>
+                            <div>
+                                <strong>Review the comparison.</strong>
+                                <span class="onboarding-step__hint">Check the recommendation, break-even and detailed taxes.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="onboarding-card__actions">
+                        <button type="button" class="btn btn--primary btn--lg" id="btn-get-started">Start with income</button>
+                        <button type="button" class="btn btn--secondary btn--lg" id="btn-view-results">See results</button>
+                    </div>
+                </div>
+            </div>
+
             <div class="form-grid">
                 
 
@@ -67,11 +103,11 @@
                                         <span class="value" id="activity-summary-label">General services (default)</span>
                                     </div>
                                     <div class="profile-summary__item">
-                                        <span class="label">Coefficient applied</span>
+                                        <span class="label">Coefficient applied <span class="tooltip" data-tooltip="Simplified regime taxes a share of your invoiced revenue. Remaining percentage is treated as deemed expenses.">ℹ️</span></span>
                                         <span class="value" id="activity-summary-coef">35% taxable / 65% deemed expenses</span>
                                     </div>
                                     <div class="profile-summary__item">
-                                        <span class="label">High value CAE examples</span>
+                                        <span class="label">High value CAE examples <span class="tooltip" data-tooltip="Annex II professions typically include software, engineering, design and scientific activities.">ℹ️</span></span>
                                         <span class="value" id="activity-summary-codes">62010, 62020, 62090, 63110, 63990, 70220, 73110</span>
                                     </div>
                                 </div>
@@ -131,8 +167,8 @@
                             Gross Annual Income (€)
                             <span class="tooltip" tabindex="0" title="Your total invoices/revenue from self‑employment for the year, before VAT and before any expenses." data-tooltip="Your total invoices/revenue from self‑employment for the year, before VAT and before any expenses. Do not include salary (Category A). If you invoice with VAT, enter the net amount without VAT.">ℹ️</span>
                         </label>
-                        <input type="number" id="gross-income" class="form-control" min="0" step="0.01" placeholder="170000" value="170000">
-                        <small class="help-text">Category B revenue only. Exclude Category A salary and include only the net (no VAT) invoiced amounts.</small>
+                        <input type="number" id="gross-income" class="form-control" min="0" step="0.01" placeholder="e.g. 170000">
+                        <small class="help-text">Category B revenue only. Exclude salary income and enter net amounts (before VAT) you invoice.</small>
                     </div>
                 </div>
 
@@ -148,7 +184,7 @@
                         <label class="form-label" for="capgains-income">Capital Gains (Securities) (€)
                             <span class="tooltip" tabindex="0" title="Category G – securities gains typically taxed at 28% flat as final tax. Enter net gains." data-tooltip="Category G – securities gains typically taxed at 28% flat as final tax. Enter net gains.">ℹ️</span>
                         </label>
-                        <input type="number" id="capgains-income" class="form-control" min="0" step="0.01" placeholder="25000" value="25000">
+                        <input type="number" id="capgains-income" class="form-control" min="0" step="0.01" placeholder="e.g. 25000">
                     </div>
                     <small class="help-text">These are added with a flat 28% tax in this tool. Aggregation to progressive rates and crypto rules are not modeled in v1.</small>
                 </div>
@@ -175,8 +211,8 @@
                             <label class="form-label" for="total-business-expenses">Total Business Expenses (€)
                                 <span class="tooltip" tabindex="0" title="Sum of all annual business costs (rent, equipment, services, subscriptions, travel, etc.)." data-tooltip="Sum of all annual business costs (rent, equipment, services, subscriptions, travel, etc.).">ℹ️</span>
                             </label>
-                            <input type="number" class="form-control expense-input" id="total-business-expenses" min="0" step="0.01" placeholder="25000" value="25000">
-                            <small class="help-text">Common costs that apply regardless of setup.</small>
+                            <input type="number" class="form-control expense-input" id="total-business-expenses" min="0" step="0.01" placeholder="e.g. 25000">
+                            <small class="help-text">Common costs that apply regardless of setup (coworking, tools, subscriptions, travel, etc.).</small>
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="admin-freelancer">Admin &amp; Compliance — Freelancer (€)
