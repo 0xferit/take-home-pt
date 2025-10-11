@@ -71,7 +71,7 @@
       maxBaseMultiplier: 12
     },
     personalDeductions: {
-      personalAllowanceMin: 4104,
+      personalAllowanceMin: 4462.15, // 8.54 × IAS 2025 (522.5)
       healthExpensesRate: 0.15,
       healthExpensesMax: 1000,
       dependentAllowance: 600
