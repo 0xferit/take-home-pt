@@ -312,17 +312,40 @@ function updateResultsDisplayDual(simplified, transparent) {
     setText('simp-effective', simpEffective.toFixed(1));
     setText('org-effective', orgEffective.toFixed(1));
 
+    const summaryNetSimp = simplified.netIncome + otherNet;
+    const summaryNetOrg = transparent.netIncome + otherNet;
+    const netDiff = summaryNetOrg - summaryNetSimp;
+    const costDiff = transparent.totalExpenses - simplified.totalExpenses;
+    const taxDiff = orgTotalTax - simpTotalTax;
+
+    setText('summary-net-simp', formatCurrency(summaryNetSimp));
+    setText('summary-net-org', formatCurrency(summaryNetOrg));
+    setText('summary-net-diff', formatSignedCurrency(netDiff));
+    setText('summary-cost-simp', formatCurrency(simplified.totalExpenses));
+    setText('summary-cost-org', formatCurrency(transparent.totalExpenses));
+    setText('summary-cost-diff', formatSignedCurrency(costDiff));
+    setText('summary-tax-simp', formatCurrency(simpTotalTax));
+    setText('summary-tax-org', formatCurrency(orgTotalTax));
+    setText('summary-tax-diff', formatSignedCurrency(taxDiff));
+
+    const applyDiffColor = (id, value, positiveIsGood = true) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (value === 0) {
+            el.style.color = 'var(--color-text)';
+            return;
+        }
+        const isGood = positiveIsGood ? value > 0 : value < 0;
+        el.style.color = isGood ? 'var(--color-success)' : 'var(--color-error)';
+    };
+
+    applyDiffColor('summary-net-diff', netDiff, true);
+    applyDiffColor('summary-cost-diff', costDiff, false);
+    applyDiffColor('summary-tax-diff', taxDiff, false);
+
     const nhrRow = document.getElementById('nhr-benefit-row');
     if (nhrRow) nhrRow.style.display = appState.nhrStatus !== 'standard' ? 'flex' : 'none';
 
-    setText('simp-monthly-gross', formatCurrency(appState.grossIncome / 12));
-    setText('simp-monthly-irs', formatCurrency(simplified.incomeTax / 12));
-    setText('simp-monthly-ss', formatCurrency(simplified.socialSecurity / 12));
-    setText('simp-monthly-net', formatCurrency(simplified.netIncome / 12));
-    setText('org-monthly-gross', formatCurrency(appState.grossIncome / 12));
-    setText('org-monthly-irs', formatCurrency(transparent.incomeTax / 12));
-    setText('org-monthly-ss', formatCurrency(transparent.socialSecurity / 12));
-    setText('org-monthly-net', formatCurrency(transparent.netIncome / 12));
 }
 
 function updateComparisonTable(simplified, transparent) {

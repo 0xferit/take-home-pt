@@ -214,6 +214,56 @@
 
         <!-- Results Tab -->
         <div class="tab-content" id="results" aria-live="polite">
+            <div class="summary-grid">
+                <div class="result-card summary-card">
+                    <h3>Annual Summary</h3>
+                    <div class="result-section">
+                        <h4>Net Income (incl. other categories)</h4>
+                        <div class="result-item">
+                            <span>Freelancer:</span>
+                            <span class="result-value"><strong><span id="summary-net-simp">0,00&nbsp;€</span></strong></span>
+                        </div>
+                        <div class="result-item">
+                            <span>Transparent LLC:</span>
+                            <span class="result-value"><strong><span id="summary-net-org">0,00&nbsp;€</span></strong></span>
+                        </div>
+                        <div class="result-item difference">
+                            <span>Difference (LLC − Freelancer):</span>
+                            <span class="result-value"><strong><span id="summary-net-diff">+0,00&nbsp;€</span></strong></span>
+                        </div>
+                    </div>
+                    <div class="result-section">
+                        <h4>Annual Costs</h4>
+                        <div class="result-item">
+                            <span>Freelancer costs (incl. insurance):</span>
+                            <span class="result-value"><span id="summary-cost-simp">0,00&nbsp;€</span></span>
+                        </div>
+                        <div class="result-item">
+                            <span>Transparent LLC costs:</span>
+                            <span class="result-value"><span id="summary-cost-org">0,00&nbsp;€</span></span>
+                        </div>
+                        <div class="result-item difference">
+                            <span>Cost difference:</span>
+                            <span class="result-value"><span id="summary-cost-diff">+0,00&nbsp;€</span></span>
+                        </div>
+                    </div>
+                    <div class="result-section">
+                        <h4>Taxes &amp; Contributions</h4>
+                        <div class="result-item">
+                            <span>Freelancer IRS + Social Security:</span>
+                            <span class="result-value"><span id="summary-tax-simp">0,00&nbsp;€</span></span>
+                        </div>
+                        <div class="result-item">
+                            <span>Transparent LLC IRS + Social Security:</span>
+                            <span class="result-value"><span id="summary-tax-org">0,00&nbsp;€</span></span>
+                        </div>
+                        <div class="result-item difference">
+                            <span>Tax difference:</span>
+                            <span class="result-value"><span id="summary-tax-diff">+0,00&nbsp;€</span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="results-grid">
                 <div class="result-card" id="simp-results">
                     <h3>Freelancer (Simplified) Results</h3>
@@ -365,25 +415,7 @@
                 </div>
             </div>
 
-            <div class="monthly-breakdown">
-                <h4>Monthly Breakdown (average of annual/12)</h4>
-                <div class="grid" style="grid-template-columns: 1fr 1fr; gap: var(--space-16);">
-                    <div>
-                        <h4>Freelancer</h4>
-                        <div class="monthly-item"><span>Gross:</span><span><span id="simp-monthly-gross">0,00&nbsp;€</span></span></div>
-                        <div class="monthly-item"><span>Income Tax:</span><span><span id="simp-monthly-irs">0,00&nbsp;€</span></span></div>
-                        <div class="monthly-item"><span>Social Security:</span><span><span id="simp-monthly-ss">0,00&nbsp;€</span></span></div>
-                        <div class="monthly-item"><span><strong>Net:</strong></span><span><strong><span id="simp-monthly-net">0,00&nbsp;€</span></strong></span></div>
-                    </div>
-                    <div>
-                        <h4>Transparent LLC</h4>
-                        <div class="monthly-item"><span>Gross:</span><span><span id="org-monthly-gross">0,00&nbsp;€</span></span></div>
-                        <div class="monthly-item"><span>Income Tax:</span><span><span id="org-monthly-irs">0,00&nbsp;€</span></span></div>
-                        <div class="monthly-item"><span>Social Security:</span><span><span id="org-monthly-ss">0,00&nbsp;€</span></span></div>
-                        <div class="monthly-item"><span><strong>Net:</strong></span><span><strong><span id="org-monthly-net">0,00&nbsp;€</span></strong></span></div>
-                    </div>
-                </div>
-            </div>
+            
         </div>
 
         <!-- Comparison Tab -->
