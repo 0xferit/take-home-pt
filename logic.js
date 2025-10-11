@@ -32,9 +32,9 @@
       },
       services_high_value: {
         id: 'services_high_value',
-        label: 'High added value services (Annex II)',
+        label: 'High-value professions (Article 151)',
         coefficient: 0.75,
-        description: 'For CAE codes on the Annex II high added value list (e.g. 62010, 62020, 62090, 63110, 63990, 70220, 73110). 75% of gross income remains taxable (25% deemed expenses).',
+        description: 'Professional services listed in Article 151 (CIRS). 75% of gross income remains taxable (25% deemed expenses).',
       },
     },
     highValueServiceCodes: [
