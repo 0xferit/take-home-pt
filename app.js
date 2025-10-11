@@ -550,27 +550,7 @@ function updateResultsDisplayDual(simplified, transparent) {
     applyDiffColor('summary-tax-diff', taxDiff, false);
     applyDiffColor('summary-rate-diff', rateDiff, true);
 
-    const nhrRow = document.getElementById('nhr-benefit-row');
-    if (nhrRow) {
-        if (appState.nhrStatus === 'standard') {
-            nhrRow.style.display = 'none';
-        } else {
-            nhrRow.style.display = 'flex';
-            const nhrValue = document.getElementById('nhr-benefit-value');
-            if (nhrValue) {
-                const nhrApplied = simplified.irsDetails?.nhrApplied || transparent.irsDetails?.nhrApplied;
-                const nhrReason = simplified.irsDetails?.nhrReason || transparent.irsDetails?.nhrReason;
-                nhrValue.classList.remove('status--error', 'status--success');
-                if (nhrApplied) {
-                    nhrValue.textContent = '20% NHR rate applied to taxable income.';
-                    nhrValue.classList.add('status--success');
-                } else {
-                    nhrValue.textContent = nhrReason || 'Progressive rates used because inputs are not NHR eligible.';
-                    nhrValue.classList.add('status--error');
-                }
-            }
-        }
-    }
+    // NHR benefit row removed from UI
 
 }
 
