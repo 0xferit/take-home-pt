@@ -605,17 +605,22 @@ function updateCalculationBreakdown(simplified, transparent) {
 
     const coefficientPercent = formatRate(simplified.coefficient);
     const simpCashLine = `Cash expenses = shared ${formatCurrency(simplified.baseExpenses)} + admin ${formatCurrency(simplified.adminExpenses)} + liability ${formatCurrency(simplified.insuranceExpenses || 0)} = ${formatCurrency(simplified.totalExpenses)}`;
+    const simpBaseIRS = simplified.irsDetails.baseIRS || simplified.grossIRS || 0;
+    const simpSolidarity = simplified.irsDetails.solidarityTax || 0;
     const simpGrossIRSLine =
         simplified.irsDetails.method === 'nhr'
-            ? `Gross IRS (NHR ${formatRate(simplified.irsDetails.rate)}) = ${formatCurrency(simplified.grossIRS)}`
-            : `Gross IRS (progressive brackets) = ${formatCurrency(simplified.grossIRS)}`;
-    const simpIRSAfterDeductions = Math.max(0, simplified.grossIRS - simplified.deducoesATax);
+            ? `Base IRS (NHR ${formatRate(simplified.irsDetails.rate)}) = ${formatCurrency(simpBaseIRS)}`
+            : `Base IRS (progressive brackets) = ${formatCurrency(simpBaseIRS)}`;
+    const simpIRSAfterDeductions = Math.max(0, simpBaseIRS - simplified.deducoesATax);
     const simplifiedSteps = [
         `Taxable income = ${formatCurrency(grossIncome)} * ${coefficientPercent} = ${formatCurrency(simplified.taxableIncome)}`,
         simpCashLine,
         simpGrossIRSLine,
         `Deductions to tax = ${formatCurrency(simplified.deducoesATax)}`,
     ];
+    if (simpSolidarity > 0) {
+        simplifiedSteps.push(`Solidarity tax = ${formatCurrency(simpSolidarity)}`);
+    }
     if (simplified.irsDetails.nhrRequested && !simplified.irsDetails.nhrApplied) {
         simplifiedSteps.push(`NHR 20% requested but not applied: ${simplified.irsDetails.nhrReason || 'activity not eligible.'}`);
     }
@@ -641,12 +646,14 @@ function updateCalculationBreakdown(simplified, transparent) {
     }
     simplifiedSteps.push(`Net Category B = ${formatCurrency(grossIncome)} − ${formatCurrency(simplified.totalExpenses)} − ${formatCurrency(simplified.incomeTax)} − ${formatCurrency(simplified.socialSecurity)} = ${formatCurrency(simplified.netIncome)}`);
 
+    const orgBaseIRS = transparent.irsDetails.baseIRS || transparent.grossIRS || 0;
+    const orgSolidarity = transparent.irsDetails.solidarityTax || 0;
     const orgCashLine = `Cash expenses = shared ${formatCurrency(transparent.baseExpenses)} + admin ${formatCurrency(transparent.adminExpenses)} = ${formatCurrency(transparent.totalExpenses)}`;
     const orgGrossIRSLine =
         transparent.irsDetails.method === 'nhr'
-            ? `Gross IRS (NHR ${formatRate(transparent.irsDetails.rate)}) = ${formatCurrency(transparent.grossIRS)}`
-            : `Gross IRS (progressive brackets) = ${formatCurrency(transparent.grossIRS)}`;
-    const orgIRSAfterDeductions = Math.max(0, transparent.grossIRS - transparent.deducoesATax);
+            ? `Base IRS (NHR ${formatRate(transparent.irsDetails.rate)}) = ${formatCurrency(orgBaseIRS)}`
+            : `Base IRS (progressive brackets) = ${formatCurrency(orgBaseIRS)}`;
+    const orgIRSAfterDeductions = Math.max(0, orgBaseIRS - transparent.deducoesATax);
     const orgSteps = [
         `Net business income = ${formatCurrency(appState.grossIncome)} − ${formatCurrency(transparent.totalExpenses)} = ${formatCurrency(transparent.netBusinessIncome)}`,
         `Taxable income = max(0, net business income) = ${formatCurrency(transparent.taxableIncome)}`,
@@ -654,6 +661,9 @@ function updateCalculationBreakdown(simplified, transparent) {
         orgGrossIRSLine,
         `Deductions to tax = ${formatCurrency(transparent.deducoesATax)}`,
     ];
+    if (orgSolidarity > 0) {
+        orgSteps.push(`Solidarity tax = ${formatCurrency(orgSolidarity)}`);
+    }
     if (transparent.irsDetails.nhrRequested && !transparent.irsDetails.nhrApplied) {
         orgSteps.push(`NHR 20% requested but not applied: ${transparent.irsDetails.nhrReason || 'activity not eligible.'}`);
     }
