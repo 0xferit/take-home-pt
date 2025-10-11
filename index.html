@@ -51,13 +51,13 @@
                                     </div>
                                     <div class="profile-card__content">
                                         <div class="form-group compact">
-                                            <label class="form-label" for="nhr-status">Rate regime <span class="tooltip" tabindex="0" data-tooltip="If you qualify for IFICI/NHR 2.0, eligible Category B income may be taxed at a 20% flat rate.">ℹ️</span></label>
+                                            <label class="form-label" for="nhr-status">Rate regime <span class="tooltip" tabindex="0" data-tooltip="IFICI/NHR 2.0 requires proof of high-value activity, academic qualifications, or experience. Original NHR applies only if registered before Dec 31, 2023.">ℹ️</span></label>
                                             <select id="nhr-status" class="form-control">
-                                                <option value="standard">Standard progressive rates</option>
-                                                <option value="original_nhr">Original NHR (20% flat)</option>
-                                                <option value="nhr_2_ifici">NHR 2.0 (IFICI) (20% flat)</option>
+                                                <option value="standard">Standard progressive rates (13–48%)</option>
+                                                <option value="original_nhr">Original NHR (20% flat, if registered by Dec 2023)</option>
+                                                <option value="nhr_2_ifici">IFICI/NHR 2.0 (20% flat, strict eligibility)</option>
                                             </select>
-                                            <small id="nhr-status-note" class="help-text">Enable only if you qualify for IFICI/NHR 2.0; otherwise use progressive rates.</small>
+                                            <small id="nhr-status-note" class="help-text status--warning">⚠️ IFICI/NHR 2.0 requires strict eligibility proof. Most users should use progressive rates.</small>
                                         </div>
                                         <ul class="profile-hint-list">
                                             <li>IFICI/NHR 2.0 (20%) is available only for eligible professions and applicants.</li>
@@ -83,11 +83,11 @@
                             <div class="switch-list">
                                 <label class="switch-item">
                                     <input type="checkbox" id="firstyear-ss-exempt">
-                                    <span>Social Security exemption (first 12 months)</span>
+                                    <span>Social Security exemption (first 12 months of activity) <span class="tooltip" tabindex="0" data-tooltip="Rolling 12 months from activity start date, not calendar year.">ℹ️</span></span>
                                 </label>
                                 <label class="switch-item">
                                     <input type="checkbox" id="firstyear-irs-50">
-                                    <span>50% IRS reduction (first year)</span>
+                                    <span>50% IRS coefficient reduction (first calendar year) <span class="tooltip" tabindex="0" data-tooltip="Applies in the first calendar year of activity, not rolling 12 months. Coefficient reduced by 50% (e.g., 0.75 → 0.375).">ℹ️</span></span>
                                 </label>
                             </div>
                         </div>
