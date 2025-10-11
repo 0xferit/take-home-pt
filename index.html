@@ -10,7 +10,7 @@
     <header class="app-header">
         <div class="container">
             <h1 class="app-title">Portugal Self-Employed Setup Planner — 2025</h1>
-            <p class="app-subtitle">Compare Recibos Verdes (Simplified) and a Transparent LLC to see which setup keeps more of your income—whether or not you qualify for a high added value activity or NHR.</p>
+            <p class="app-subtitle">Compare Recibos Verdes (Simplified) and a Transparent LLC to see which setup keeps more of your income—whether or not you qualify for high‑value professions (Art. 151) or IFICI/NHR 2.0.</p>
         </div>
     </header>
 
@@ -35,7 +35,7 @@
                                 <section class="profile-card__section">
                                     <div class="profile-card__header">
                                         <h4>Select your activity profile</h4>
-                                        <p class="profile-card__intro">High added value CAE codes are pre-selected because they unlock the 20% NHR rate. Choose “General professional services” if your work falls outside Annex II.</p>
+                                        <p class="profile-card__intro">Choose a high‑value profession (Art. 151 CIRS) if applicable; otherwise select General professional services.</p>
                                     </div>
                                     <div class="profile-card__content">
                                         <div class="radio-group" role="radiogroup" aria-labelledby="activity-high-value activity-general">
@@ -65,21 +65,21 @@
                                 <section class="profile-card__section profile-card__section--divider">
                                     <div class="profile-card__header">
                                         <h4>Select your tax rate regime</h4>
-                                        <p class="profile-card__intro">NHR options unlock automatically for high added value activities.</p>
+                                        <p class="profile-card__intro">IFICI/NHR 2.0 (20%) applies only if you meet the program criteria; otherwise progressive rates apply.</p>
                                     </div>
                                     <div class="profile-card__content">
                                         <div class="form-group compact">
-                                            <label class="form-label" for="nhr-status">NHR status <span class="tooltip" tabindex="0" data-tooltip="If you qualify for NHR, your eligible Category B income can benefit from a 20% flat IRS rate.">ℹ️</span></label>
+                                            <label class="form-label" for="nhr-status">Rate regime <span class="tooltip" tabindex="0" data-tooltip="If you qualify for IFICI/NHR 2.0, eligible Category B income may be taxed at a 20% flat rate.">ℹ️</span></label>
                                             <select id="nhr-status" class="form-control">
                                                 <option value="standard">Standard progressive rates</option>
                                                 <option value="original_nhr">Original NHR (20% flat)</option>
                                                 <option value="nhr_2_ifici">NHR 2.0 (IFICI) (20% flat)</option>
                                             </select>
-                                            <small id="nhr-status-note" class="help-text">Select a high added value activity profile to unlock the 20% NHR rate.</small>
+                                            <small id="nhr-status-note" class="help-text">Enable only if you qualify for IFICI/NHR 2.0; otherwise use progressive rates.</small>
                                         </div>
                                         <ul class="profile-hint-list">
-                                            <li>High added value activities unlock the 20% NHR option. Choose general professional services if your CAE sits outside Annex II.</li>
-                                            <li>NHR logic applies to Category B income only; salary or Category A revenue is not included.</li>
+                                            <li>IFICI/NHR 2.0 (20%) is available only for eligible professions and applicants.</li>
+                                            <li>Preferential rates apply to Category B income; Category A salary is out of scope.</li>
                                             <li>Results refresh instantly once you provide revenue and expenses.</li>
                                         </ul>
                                     </div>
@@ -113,7 +113,7 @@
                             <div class="glance-card__list">
                                 <div class="glance-card__item">
                                     <span class="glance-card__label">Activity profile</span>
-                                    <span class="glance-card__value" id="activity-summary-label">High added value services (Annex II)</span>
+                                    <span class="glance-card__value" id="activity-summary-label">High‑value professions (Article 151)</span>
                                 </div>
                                 <div class="glance-card__item">
                                     <span class="glance-card__label">Coefficient basis</span>
@@ -131,7 +131,7 @@
                                 </div>
                             </div>
                             <div class="glance-card__hint">
-                                <span class="label">High added value CAE examples <span class="tooltip" tabindex="0" data-tooltip="Annex II professions typically include software, engineering, design, finance, science, and technical consulting activities.">ℹ️</span></span>
+                                <span class="label">High‑value activity examples <span class="tooltip" tabindex="0" data-tooltip="Article 151 professional services typically include software, engineering, design, scientific and technical consulting.">ℹ️</span></span>
                                 <p class="glance-card__hint-text" id="activity-summary-codes">62010, 62020, 62090, 63110, 63990, 70220, 73110</p>
                             </div>
                         </div>
@@ -140,8 +140,8 @@
                                 <h4>Quick assumptions</h4>
                             </div>
                             <ul class="info-card__list">
-                                <li>Supports Category B service activities (Annex II high added value or other professional services). Goods, retail, and accommodation coefficients are not modelled.</li>
-                                <li>NHR rates apply only when you select a qualifying profile; the default view uses progressive IRS.</li>
+                                <li>Supports Category B service activities (Article 151 high‑value or other professional services). Goods, retail, and accommodation coefficients are not modelled.</li>
+                                <li>IFICI/NHR 2.0 applies only if you meet the criteria; default is progressive IRS.</li>
                                 <li>Transparent LLC assumes Portuguese management, a single member, and professional services.</li>
                                 <li>Results refresh instantly once you add revenue and expenses.</li>
                             </ul>
@@ -188,7 +188,7 @@
         <!-- Expenses Tab -->
         <div class="tab-content" id="expenses">
             <div id="expenses-content">
-                <p class="info">Business expenses reduce your cash net in both setups. They reduce taxable income only for Transparent LLC. Enter values <strong>net of VAT</strong> (without IVA). Do not include Social Security or IRS payments here.</p>
+                <p class="info">Freelancer (Simplified): taxable base uses coefficients (deemed expenses). Freelancer (Organized) and Transparent LLC: taxable profit = income − expenses. Enter amounts <strong>net of VAT</strong>; exclude IRS and Social Security payments.</p>
             </div>
             <div id="expenses-form">
                 <div class="expense-category">
@@ -593,7 +593,7 @@
                         <span class="result-value"><span id="assumption-simplified-coef">—</span></span>
                     </div>
                     <div class="result-item">
-                        <span>High added value CAE examples:</span>
+                        <span>High‑value activity examples:</span>
                         <span class="result-value"><span id="assumption-highvalue-codes">—</span></span>
                     </div>
                     <div class="result-item">
@@ -655,9 +655,9 @@
                 <div class="result-card">
                     <h3>Disclaimers &amp; Sources</h3>
                     <ul class="sanity-list">
-                        <li>Supports Category B service activities (Annex II high added value or other professional services); goods, accommodation, and retail coefficients are not modelled.</li>
+                        <li>Supports Category B service activities (Article 151 high‑value or other professional services); goods, accommodation, and retail coefficients are not modelled.</li>
                         <li>Transparent LLC results assume management in Portugal, a single member, and professional Category B activity.</li>
-                        <li>NHR rates apply only when you select them and the activity remains within the eligible list; otherwise the calculator keeps progressive IRS.</li>
+                        <li>IFICI/NHR 2.0 applies only if you qualify; otherwise the calculator keeps progressive IRS.</li>
                         <li>Trading income taxed at 28% flat; englobamento not modeled.</li>
                         <li>Limited liability protection is assumed via the LLC structure.</li>
                         <li><a href="https://github.com/0xferit/take-home-pt" target="_blank" rel="noopener">View source code &amp; references</a></li>
