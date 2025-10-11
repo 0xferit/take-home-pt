@@ -128,24 +128,28 @@ All monetary values are annual; “monthly” is annual/12 and labeled as an ave
 - Fast input response with 200 ms debouncing
 - No layout shift when results update
 
-### 9) Validation and Error Handling
+### 9) Assumptions for Fair Comparison
+- Freelancer results automatically include a professional liability insurance cost equal to 1% of gross annual income to reflect the need for personal coverage without limited liability.
+- Transparent LLC assumes liability protection is provided by the corporate structure and does not add this extra cost.
+
+### 10) Validation and Error Handling
 - Show inline warnings at 80% expense ratio; error banner at ≥ 100%
 - Disable recommendation and break‑even when in error state
 - Clamp invalid inputs; show helpful helper text on fields
 
-### 10) Maintenance
+### 11) Maintenance
 - Single `TAX_DATA` object with year‑scoped constants
 - Annual update checklist:
   - Update IRS brackets, SS parameters (rates/bases), NHR rules
   - Verify coefficients and deduction caps
   - Add a new `year` key if multi‑year support is added later
 
-### 11) Success Criteria
+### 12) Success Criteria
 - Produces correct, reproducible annual net and break‑even under the stated assumptions
 - Works offline, no external assets; three files only; size ≤ 100 KB
 - Clear recommendation and transparent breakdowns
 
-### 12) Assumptions and Limitations (disclaimer)
+### 13) Assumptions and Limitations (disclaimer)
 - NHR application assumes eligibility and correct activity classification; transitional NHR rules are not modeled
 - Solidarity surtax, regional adjustments, marital filing, and autonomous taxation are excluded in v1.1
 - VAT treatment is out of scope; figures represent pre‑VAT net from income

@@ -185,7 +185,8 @@ function updateExpenseTotal() {
     const base = appState.expenses['total-business-expenses'] || 0;
     const adminSimplified = appState.expenses['admin-freelancer'] || 0;
     const adminTransparent = appState.expenses['admin-transparent'] || 0;
-    const totalSimplified = base + adminSimplified;
+    const liabilityInsurance = Math.max(0, appState.grossIncome * 0.01);
+    const totalSimplified = base + adminSimplified + liabilityInsurance;
     const totalTransparent = base + adminTransparent;
 
     setText('total-expenses-simp', formatCurrency(totalSimplified));
@@ -244,11 +245,13 @@ function calculateAndUpdate() {
         isFirstYearSSExempt: appState.isFirstYearSSExempt,
     };
 
+    const liabilityInsurance = Math.max(0, appState.grossIncome * 0.01);
     const simplifiedResults = computeSimplified({
         ...commonInputs,
         activityType: appState.activityType,
         baseExpenses,
         adminExpenses: adminSimplified,
+        insuranceExpenses: liabilityInsurance,
     });
     const transparentResults = computeTransparent({
         ...commonInputs,
@@ -270,6 +273,7 @@ function updateResultsDisplayDual(simplified, transparent) {
     setText('simp-gross', formatCurrency(appState.grossIncome));
     setText('simp-coefficient', simplified.coefficient);
     setText('simp-expenses', formatCurrency(simplified.totalExpenses));
+    setText('simp-liability', formatCurrency(simplified.insuranceExpenses || 0));
     setText('simp-deducoes', formatCurrency(simplified.deducoesATax || 0));
     setText('simp-taxable', formatCurrency(simplified.taxableIncome));
     setText('simp-irs', formatCurrency(simplified.incomeTax));

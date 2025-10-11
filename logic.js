@@ -105,11 +105,13 @@
     isFirstYearIRS50pct,
     isFirstYearSSExempt,
     baseExpenses = 0,
-    adminExpenses = 0
+    adminExpenses = 0,
+    insuranceExpenses = 0
   } = {}) {
     const income = sanitizeAmount(grossIncome);
     const coefficient = TAX_DATA.activityCoefficients[activityType] ?? TAX_DATA.activityCoefficients.services;
-    const totalExpenses = sanitizeAmount(baseExpenses) + sanitizeAmount(adminExpenses);
+    const totalExpenses =
+      sanitizeAmount(baseExpenses) + sanitizeAmount(adminExpenses) + sanitizeAmount(insuranceExpenses);
     const taxableIncome = income * (coefficient / 100);
     const grossIRS = computeGrossIRS(taxableIncome, nhrStatus);
     const deducoes = computeDeducoesAColeta({ dependentsCount, personalDeductions });
@@ -126,6 +128,7 @@
       totalExpenses,
       baseExpenses: sanitizeAmount(baseExpenses),
       adminExpenses: sanitizeAmount(adminExpenses),
+      insuranceExpenses: sanitizeAmount(insuranceExpenses),
       deducoesATax: deducoes
     };
   }
