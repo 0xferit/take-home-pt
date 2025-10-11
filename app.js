@@ -40,11 +40,6 @@ const appState = {
     nhrStatus: 'standard',
     activityProfile: ACTIVITY_DEFAULT,
     activityCode: '',
-    llcManagementLocation: 'portugal',
-    llcMemberStructure: 'single',
-    llcActivityType: 'professional',
-    hasDependents: false,
-    dependentsCount: 0,
     grossIncome: DEFAULTS.softwareIncome,
     divintIncome: 0,
     capgainsIncome: DEFAULTS.tradingIncome,
@@ -65,7 +60,6 @@ function initApp() {
     populateAssumptions();
     applySuggestedAdminIfEnabled();
     populateActivityCodeOptions();
-    updateLLCEligibilityStatus();
     updateActivitySelectionDisplay();
     const baseField = document.getElementById('total-business-expenses');
     if (baseField) {
@@ -122,19 +116,6 @@ function setupEventListeners() {
         });
     }
 
-    document.getElementById('has-dependents').addEventListener('change', (event) => {
-        appState.hasDependents = event.target.checked;
-        toggleDependentsCount();
-        recalc();
-    });
-
-    document.getElementById('dependents-count').addEventListener('input', (event) => {
-        const clamped = Math.max(0, Math.min(10, parseInt(event.target.value, 10) || 0));
-        event.target.value = clamped;
-        appState.dependentsCount = clamped;
-        recalc();
-    });
-
     const ssExemption = document.getElementById('firstyear-ss-exempt');
     if (ssExemption) {
         ssExemption.addEventListener('change', (event) => {
@@ -147,33 +128,6 @@ function setupEventListeners() {
     if (irsReduction) {
         irsReduction.addEventListener('change', (event) => {
             appState.isFirstYearIRS50pct = event.target.checked;
-            recalc();
-        });
-    }
-
-    const llcManagement = document.getElementById('llc-management');
-    if (llcManagement) {
-        llcManagement.addEventListener('change', (event) => {
-            appState.llcManagementLocation = event.target.value;
-            updateLLCEligibilityStatus();
-            recalc();
-        });
-    }
-
-    const llcMembers = document.getElementById('llc-members');
-    if (llcMembers) {
-        llcMembers.addEventListener('change', (event) => {
-            appState.llcMemberStructure = event.target.value;
-            updateLLCEligibilityStatus();
-            recalc();
-        });
-    }
-
-    const llcActivity = document.getElementById('llc-activity');
-    if (llcActivity) {
-        llcActivity.addEventListener('change', (event) => {
-            appState.llcActivityType = event.target.value;
-            updateLLCEligibilityStatus();
             recalc();
         });
     }
@@ -242,19 +196,6 @@ function switchTab(tabName) {
     document.getElementById(tabName).classList.add('active');
 }
 
-function toggleDependentsCount() {
-    const countGroup = document.getElementById('dependents-count-group');
-    if (!countGroup) return;
-    if (appState.hasDependents) {
-        countGroup.style.display = 'block';
-    } else {
-        countGroup.style.display = 'none';
-        appState.dependentsCount = 0;
-        const dependentsField = document.getElementById('dependents-count');
-        if (dependentsField) dependentsField.value = 0;
-    }
-}
-
 function setExpenseValue(id, value) {
     const field = document.getElementById(id);
     if (!field) return;
@@ -311,37 +252,6 @@ function isCurrentNHREligible() {
         return isNHREligibleCode(appState.activityCode);
     }
     return appState.activityProfile === 'services_high_value';
-}
-
-function getLLCEligibility() {
-    const reasons = [];
-    if (appState.llcManagementLocation !== 'portugal') {
-        reasons.push('Management must be located in Portugal for transparency.');
-    }
-    if (appState.llcMemberStructure !== 'single') {
-        reasons.push('Only single-member LLCs qualify for fiscal transparency.');
-    }
-    if (appState.llcActivityType !== 'professional') {
-        reasons.push('Only professional Category B activities qualify for transparency.');
-    }
-    return {
-        eligible: reasons.length === 0,
-        reason: reasons.join(' ')
-    };
-}
-
-function updateLLCEligibilityStatus() {
-    const statusEl = document.getElementById('llc-eligibility-status');
-    if (!statusEl) return;
-    const eligibility = getLLCEligibility();
-    statusEl.classList.remove('status--error', 'status--success');
-    if (eligibility.eligible) {
-        statusEl.textContent = 'All transparency conditions met. Transparent LLC calculations are enabled.';
-        statusEl.classList.add('status--success');
-    } else {
-        statusEl.textContent = eligibility.reason || 'Transparent LLC assumptions are not satisfied. Results become indicative only.';
-        statusEl.classList.add('status--error');
-    }
 }
 
 function getCurrentActivityCoefficient() {
@@ -430,19 +340,16 @@ function updateExpenseTotal() {
 
 function computeDeducoesToTax() {
     return computeDeducoesAColeta({
-        dependentsCount: appState.dependentsCount,
         personalDeductions: appState.personalDeductions,
     });
 }
 
 function updatePersonalDeductions() {
-    const { personalAllowanceMin, dependentAllowance, healthExpensesRate, healthExpensesMax } = TAX_DATA.personalDeductions;
-    const dependentTotal = appState.dependentsCount * dependentAllowance;
+    const { personalAllowanceMin, healthExpensesRate, healthExpensesMax } = TAX_DATA.personalDeductions;
     const healthDeduction = Math.min(appState.personalDeductions.health * healthExpensesRate, healthExpensesMax);
     const total = computeDeducoesToTax();
 
     setText('personal-allowance-display', formatCurrency(personalAllowanceMin));
-    setText('dependent-allowance-display', formatCurrency(dependentTotal));
     setText('health-deduction-display', formatCurrency(healthDeduction));
     setText('total-deductions-display', formatCurrency(total));
 }
@@ -455,14 +362,12 @@ function calculateAndUpdate() {
     const commonInputs = {
         grossIncome: appState.grossIncome,
         nhrStatus: appState.nhrStatus,
-        dependentsCount: appState.dependentsCount,
         personalDeductions: appState.personalDeductions,
         isFirstYearIRS50pct: appState.isFirstYearIRS50pct,
         isFirstYearSSExempt: appState.isFirstYearSSExempt,
     };
 
     const nhrEligible = isCurrentNHREligible();
-    const llcEligibility = getLLCEligibility();
 
     const simplifiedResults = computeSimplified({
         ...commonInputs,
@@ -478,8 +383,6 @@ function calculateAndUpdate() {
         adminExpenses: adminTransparent,
         isNHREligible: nhrEligible,
     });
-    transparentResults.llcEligibility = llcEligibility;
-    transparentResults.llcEligible = llcEligibility.eligible;
 
     updateResultsDisplayDual(simplifiedResults, transparentResults);
     updateCalculationBreakdown(simplifiedResults, transparentResults);
@@ -524,7 +427,6 @@ function updateResultsDisplayDual(simplified, transparent) {
 
     const simpSSNote = document.getElementById('simp-ss-note');
     const orgSSNote = document.getElementById('org-ss-note');
-    const orgEligibilityNote = document.getElementById('org-eligibility-note');
     const buildSSNote = (info) => {
         if (!info) return '';
         if (info.monthly === 0) {
@@ -542,15 +444,6 @@ function updateResultsDisplayDual(simplified, transparent) {
     };
     if (simpSSNote) simpSSNote.textContent = buildSSNote(simplified.socialSecurityInfo);
     if (orgSSNote) orgSSNote.textContent = buildSSNote(transparent.socialSecurityInfo);
-    if (orgEligibilityNote) {
-        orgEligibilityNote.classList.remove('status--error', 'status--success');
-        if (!transparent.llcEligibility || transparent.llcEligibility.eligible) {
-            orgEligibilityNote.textContent = '';
-        } else {
-            orgEligibilityNote.textContent = transparent.llcEligibility.reason || 'Transparent LLC inputs do not satisfy fiscal transparency requirements.';
-            orgEligibilityNote.classList.add('status--error');
-        }
-    }
 
     const simpTotalTax = simplified.incomeTax + simplified.socialSecurity;
     const orgTotalTax = transparent.incomeTax + transparent.socialSecurity;
@@ -792,12 +685,6 @@ function updateRecommendation(simplified, transparent) {
 
     const netDifference = transparent.netIncome - simplified.netIncome;
 
-    if (!transparent.llcEligibility?.eligible) {
-        recommendationEl.textContent = 'Transparent LLC inputs do not meet fiscal transparency requirements. Default to Freelancer (Simplified) results.';
-        breakevenEl.textContent = '—';
-        return;
-    }
-
     if (appState.grossIncome === 0) {
         recommendationEl.textContent = 'Enter your income and expenses to see a personalized recommendation.';
         breakevenEl.textContent = formatCurrency(0);
@@ -822,7 +709,6 @@ function updateRecommendation(simplified, transparent) {
         const inputs = {
             grossIncome: appState.grossIncome,
             nhrStatus: appState.nhrStatus,
-            dependentsCount: appState.dependentsCount,
             personalDeductions: appState.personalDeductions,
             isFirstYearIRS50pct: appState.isFirstYearIRS50pct,
             isFirstYearSSExempt: appState.isFirstYearSSExempt,
@@ -953,10 +839,6 @@ function updateSanityChecks() {
     if (totals > 200000) messages.push('Gross exceeds 200k; simplified regime assumptions may not hold. Results are indicative only.');
     if (appState.activityCode && appState.activityCode.length === 5 && !isActivityCodeKnown(appState.activityCode)) {
         messages.push('Entered CAE code not found in the current mapping. Please confirm the coefficient manually.');
-    }
-    const llcEligibility = getLLCEligibility();
-    if (!llcEligibility.eligible) {
-        messages.push(llcEligibility.reason || 'Transparent LLC transparency requirements not satisfied. Results are indicative only.');
     }
 
     const list = document.getElementById('sanity-list');

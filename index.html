@@ -78,6 +78,7 @@
                             <span class="result-value"><span id="activity-summary-codes">62010, 62020, 62090, 63110, 63990, 70220, 73110</span></span>
                         </div>
                         <small class="help-text">We assume Category B income only (self-employment). Category A salary income is out of scope.</small>
+                        <small class="help-text">Transparent LLC results presume the activity meets fiscal transparency conditions (management in Portugal, single member, professional services).</small>
                     </div>
                 </div>
 
@@ -94,46 +95,6 @@
                             <input type="checkbox" id="firstyear-irs-50">
                             <label for="firstyear-irs-50" class="form-label">50% IRS reduction (first year)</label>
                         </div>
-                    </div>
-                </div>
-
-                <div class="form-section">
-                    <h3>Transparent LLC Eligibility</h3>
-                    <div class="form-group">
-                        <label class="form-label" for="llc-management">Management location:</label>
-                        <select id="llc-management" class="form-control">
-                            <option value="portugal" selected>Management in Portugal (required)</option>
-                            <option value="abroad">Management outside Portugal</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="llc-members">Member structure:</label>
-                        <select id="llc-members" class="form-control">
-                            <option value="single" selected>Single member</option>
-                            <option value="multi">Multi-member</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="llc-activity">Activity type:</label>
-                        <select id="llc-activity" class="form-control">
-                            <option value="professional" selected>Professional Category B services</option>
-                            <option value="non_professional">Commercial / non-professional activity</option>
-                        </select>
-                    </div>
-                    <small id="llc-eligibility-status" class="help-text">All transparency conditions must be met. Adjust the inputs if your LLC does not qualify.</small>
-                </div>
-
-                <div class="form-section">
-                    <h3>Personal Information</h3>
-                    <div class="form-group">
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="has-dependents">
-                            <label for="has-dependents" class="form-label">I have dependent children</label>
-                        </div>
-                    </div>
-                    <div class="form-group" id="dependents-count-group" style="display: none;">
-                        <label class="form-label" for="dependents-count">Number of Dependents:</label>
-                        <input type="number" id="dependents-count" class="form-control" min="0" max="10" value="0">
                     </div>
                 </div>
             </div>
@@ -252,11 +213,7 @@
                     <h3>Automatic Deductions</h3>
                     <div class="result-item">
                         <span>Personal Allowance:</span>
-                        <span class="result-value"><span id="personal-allowance-display">4&nbsp;104,00&nbsp;€</span></span>
-                    </div>
-                    <div class="result-item">
-                        <span>Dependent Allowances:</span>
-                        <span class="result-value"><span id="dependent-allowance-display">0,00&nbsp;€</span></span>
+                        <span class="result-value"><span id="personal-allowance-display">4&nbsp;462,15&nbsp;€</span></span>
                     </div>
                     <div class="result-item">
                         <span>Health Deduction (15%):</span>
@@ -264,7 +221,7 @@
                     </div>
                     <div class="result-item">
                         <span><strong>Total Personal Deductions:</strong></span>
-                        <span class="result-value"><strong><span id="total-deductions-display">4&nbsp;104,00&nbsp;€</span></strong></span>
+                        <span class="result-value"><strong><span id="total-deductions-display">4&nbsp;462,15&nbsp;€</span></strong></span>
                     </div>
                 </div>
             </div>
@@ -461,7 +418,6 @@
                             <span class="result-value"><span id="org-ss">0,00&nbsp;€</span></span>
                         </div>
                         <p class="result-subtext" id="org-ss-note"></p>
-                        <p class="result-subtext" id="org-eligibility-note"></p>
                     </div>
                     <div class="result-section">
                         <h4>Net Results</h4>
