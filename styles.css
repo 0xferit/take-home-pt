@@ -679,6 +679,27 @@ select.form-control {
   }
 }
 
+/* Master tab layout */
+.tab-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: var(--space-16);
+  align-items: flex-start;
+}
+
+.tab-shell__main,
+.tab-shell__side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+}
+
+@media (max-width: 1100px) {
+  .tab-shell {
+    grid-template-columns: 1fr;
+  }
+}
+
 .intro-banner {
   position: relative;
   margin: 0;
