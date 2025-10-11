@@ -885,3 +885,28 @@ select.form-control {
   justify-content: space-between;
   padding: var(--space-4) 0;
 }
+
+
+.result-section {
+  margin-top: var(--space-16);
+  padding-top: var(--space-12);
+  border-top: 1px solid var(--color-card-border-inner);
+}
+
+.result-section:first-of-type {
+  margin-top: var(--space-8);
+  padding-top: 0;
+  border-top: none;
+}
+
+.result-section h4 {
+  margin: 0 0 var(--space-8) 0;
+  font-size: var(--font-size-lg);
+  color: var(--color-primary);
+}
+
+.result-note {
+  margin-top: var(--space-8);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
