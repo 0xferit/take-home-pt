@@ -9,8 +9,8 @@
 <body>
     <header class="app-header">
         <div class="container">
-            <h1 class="app-title">Category B Services — Portugal 2025</h1>
-            <p class="app-subtitle">Self-employed services (Category B, no salary income) comparing Recibos Verdes (Simplified) vs Transparent LLC.</p>
+            <h1 class="app-title">High-Value Independents — Portugal 2025</h1>
+            <p class="app-subtitle">Compare the Recibos Verdes (Simplified) path against a Transparent LLC when you work in an Annex II / high added value profession.</p>
         </div>
     </header>
 
@@ -31,35 +31,35 @@
                 <div class="onboarding-card__body">
                     <button type="button" class="onboarding-card__dismiss btn btn--sm btn--outline" id="btn-dismiss-onboarding" aria-label="Hide welcome tips">×</button>
                     <div>
-                        <h3 id="onboarding-title">Welcome! Let’s estimate your 2025 take-home pay</h3>
-                        <p class="onboarding-card__lead">Follow the three steps below. You can update outputs at any time&mdash;results refresh automatically.</p>
+                        <h3 id="onboarding-title">Welcome! Let’s benchmark your 2025 take-home pay</h3>
+                        <p class="onboarding-card__lead">This tool is tuned for high added value (Annex II) professionals comparing the Simplified freelancer regime with a Transparent LLC.</p>
                     </div>
                     <div class="onboarding-card__steps">
                         <div class="onboarding-step">
                             <span class="onboarding-step__badge">1</span>
                             <div>
-                                <strong>Select your activity.</strong>
-                                <span class="onboarding-step__hint">High value CAE codes unlock the NHR 20% rate.</span>
+                                <strong>Confirm your high-value activity.</strong>
+                                <span class="onboarding-step__hint">We assume Annex II professions by default. Switch only if you invoice under a non-listed CAE.</span>
                             </div>
                         </div>
                         <div class="onboarding-step">
                             <span class="onboarding-step__badge">2</span>
                             <div>
-                                <strong>Enter your income &amp; costs.</strong>
-                                <span class="onboarding-step__hint">Category B revenue only&mdash;salary is out of scope.</span>
+                                <strong>Add your Category B revenue &amp; costs.</strong>
+                                <span class="onboarding-step__hint">Use net amounts (before VAT). Salary or Category A income is out of scope.</span>
                             </div>
                         </div>
                         <div class="onboarding-step">
                             <span class="onboarding-step__badge">3</span>
                             <div>
                                 <strong>Review the comparison.</strong>
-                                <span class="onboarding-step__hint">Check the recommendation, break-even and detailed taxes.</span>
+                                <span class="onboarding-step__hint">Understand take-home differences, break-even expenses, and detailed IRS/SS calculations.</span>
                             </div>
                         </div>
                     </div>
                     <div class="onboarding-card__actions">
                         <button type="button" class="btn btn--primary btn--lg" id="btn-get-started">Start with income</button>
-                        <button type="button" class="btn btn--secondary btn--lg" id="btn-view-results">See results</button>
+                        <button type="button" class="btn btn--secondary btn--lg" id="btn-view-results">Preview results</button>
                     </div>
                 </div>
             </div>
@@ -72,23 +72,23 @@
                     <div class="profile-grid">
                         <div class="profile-card">
                             <div class="profile-card__header">
-                                <h4>Choose your activity</h4>
-                                <p class="profile-card__intro">Pick the option that best matches the CAE code you invoice under.</p>
+                                <h4>Confirm your high-value activity</h4>
+                                <p class="profile-card__intro">This calculator defaults to Annex II / high added value CAE codes. Switch below only if you fall outside that list.</p>
                             </div>
                             <div class="profile-card__content">
-                                <div class="radio-group" role="radiogroup" aria-labelledby="activity-general activity-high-value">
-                                    <label class="radio-option selected" data-activity-option="services_general">
-                                        <input type="radio" name="activity-profile" id="activity-general" value="services_general" checked>
+                                <div class="radio-group" role="radiogroup" aria-labelledby="activity-high-value activity-general">
+                                    <label class="radio-option selected" data-activity-option="services_high_value">
+                                        <input type="radio" name="activity-profile" id="activity-high-value" value="services_high_value" checked>
                                         <div>
-                                            <strong>General services</strong>
-                                            <div class="help-text">For most tech/consulting freelancers. 35% taxable base (65% deemed expenses).</div>
+                                            <strong>High value services (default)</strong>
+                                            <div class="help-text">Annex II / Article 151 professions such as software, engineering, design, finance, scientific consulting. 75% of gross is taxable.</div>
                                         </div>
                                     </label>
-                                    <label class="radio-option" data-activity-option="services_high_value">
-                                        <input type="radio" name="activity-profile" id="activity-high-value" value="services_high_value">
+                                    <label class="radio-option" data-activity-option="services_general">
+                                        <input type="radio" name="activity-profile" id="activity-general" value="services_general">
                                         <div>
-                                            <strong>High value services</strong>
-                                            <div class="help-text">Article 151 / Annex II professions (e.g. software, design, finance). 75% taxable base.</div>
+                                            <strong>Other Category B services</strong>
+                                            <div class="help-text">Use this only if your CAE is not in the high added value list. 35% of gross is taxable.</div>
                                         </div>
                                     </label>
                                 </div>
@@ -101,11 +101,11 @@
                                 <div class="profile-summary">
                                     <div class="profile-summary__item">
                                         <span class="label">Current selection</span>
-                                        <span class="value" id="activity-summary-label">General services (default)</span>
+                                        <span class="value" id="activity-summary-label">High value services (default)</span>
                                     </div>
                                     <div class="profile-summary__item">
                                         <span class="label">Coefficient applied <span class="tooltip" tabindex="0" data-tooltip="Simplified regime taxes a share of your invoiced revenue. The remainder is treated as deemed expenses for tax purposes.">ℹ️</span></span>
-                                        <span class="value" id="activity-summary-coef">35% taxable / 65% deemed expenses</span>
+                                        <span class="value" id="activity-summary-coef">75% taxable / 25% deemed expenses</span>
                                     </div>
                                     <div class="profile-summary__item">
                                         <span class="label">High value CAE examples <span class="tooltip" tabindex="0" data-tooltip="Annex II professions typically include software, engineering, design, finance, science and technical consulting activities.">ℹ️</span></span>
@@ -113,7 +113,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <p class="profile-card__footer">We assume Category B income only (self-employment). Category A salary income is out of scope. Transparent LLC results presume the activity already qualifies for fiscal transparency (management in Portugal, single member, professional services).</p>
+                            <p class="profile-card__footer">We assume Annex II / high added value Category B income only (self-employment). Category A salary income is out of scope. Transparent LLC results presume the activity already qualifies for fiscal transparency (management in Portugal, single member, professional services).</p>
                         </div>
                         <div class="profile-card">
                             <div class="profile-card__header">
@@ -131,9 +131,9 @@
                                     <small id="nhr-status-note" class="help-text">Enable a high-value activity to apply the 20% NHR rate.</small>
                                 </div>
                                 <ul class="profile-hint-list">
-                                    <li>The calculator shows both setups side-by-side once you add income.</li>
-                                    <li>NHR logic applies to Category B only; Category A salary is not included.</li>
-                                    <li>Switching back to general services automatically restores progressive rates.</li>
+                                    <li>This flow is optimised for Annex II / high added value work. Switch profiles only if your CAE is outside the list.</li>
+                                    <li>NHR logic applies to Category B income only; salary or Category A revenue is not included.</li>
+                                    <li>Results refresh instantly once you provide revenue and expenses.</li>
                                 </ul>
                             </div>
                         </div>
@@ -289,7 +289,7 @@
                 <div class="tab-content" id="results" aria-live="polite">
             <div id="results-zero-state" class="results-zero-state is-active" role="status" aria-live="polite">
                 <h3>No figures yet</h3>
-                <p>Start by adding your Category B revenue and expenses. We’ll calculate taxes, social security, and take-home pay instantly.</p>
+                <p>Enter your Annex II / high added value Category B revenue and core costs to compare Freelancer vs Transparent LLC instantly.</p>
                 <button type="button" class="btn btn--primary btn--lg" data-tab-target="income">Add your income</button>
             </div>
             <div id="results-detail" class="is-dimmed">
@@ -607,7 +607,7 @@
                 <div class="result-card">
                     <h3>Disclaimers &amp; Sources</h3>
                     <ul class="sanity-list">
-                        <li>Category B services only; goods/accommodation activities are not modelled in this version.</li>
+                        <li>High value (Annex II) Category B services only; goods/accommodation activities and other simplified coefficients are not modelled.</li>
                         <li>Transparent LLC results assume management in Portugal, a single member, and professional Category B activity.</li>
                         <li>Results assume NHR 20% eligibility and independent SS unless advanced options are enabled.</li>
                         <li>Trading income taxed at 28% flat; englobamento not modeled.</li>

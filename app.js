@@ -34,7 +34,7 @@ const setText = (id, value) => {
     if (el) el.textContent = value;
 };
 
-const ACTIVITY_DEFAULT = 'services_general';
+const ACTIVITY_DEFAULT = 'services_high_value';
 
 let onboardingDismissed = false;
 
