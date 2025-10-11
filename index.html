@@ -188,7 +188,7 @@
         <!-- Expenses Tab -->
         <div class="tab-content" id="expenses">
             <div id="expenses-content">
-                <p class="info">Business expenses reduce your cash net in both setups. They reduce taxable income only for Transparent LLC.</p>
+                <p class="info">Business expenses reduce your cash net in both setups. They reduce taxable income only for Transparent LLC. Enter values <strong>net of VAT</strong> (without IVA). Do not include Social Security or IRS payments here.</p>
             </div>
             <div id="expenses-form">
                 <div class="expense-category">
@@ -203,22 +203,24 @@
                     <div class="expense-grid" style="grid-template-columns: 1fr 1fr;">
                         <div class="form-group">
                             <label class="form-label" for="total-business-expenses">Total Business Expenses (€)
-                                <span class="tooltip" tabindex="0" data-tooltip="Sum of all annual business costs (rent, equipment, services, subscriptions, travel, etc.).">ℹ️</span>
+                                <span class="tooltip" tabindex="0" data-tooltip="Sum of all annual business costs (rent, equipment, software, telecom, subcontractors, travel, training, small tools, insurance other than the auto 1% freelancer liability, etc.). Enter net amounts (without VAT).">ℹ️</span>
                             </label>
                             <input type="number" class="form-control expense-input" id="total-business-expenses" min="0" step="0.01" placeholder="e.g. 25000">
-                            <small class="help-text">Common costs that apply regardless of setup (coworking, tools, subscriptions, travel, etc.).</small>
+                            <small class="help-text">Common costs that apply regardless of setup. Do not include Social Security or income tax. Freelancer liability insurance is auto-added separately (1% of gross) so <strong>don’t double count it</strong> here.</small>
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="admin-freelancer">Admin &amp; Compliance — Freelancer (€)
-                                <span class="tooltip" tabindex="0" data-tooltip="Examples: occasional accounting help, invoicing tools, software, compliance services.">ℹ️</span>
+                                <span class="tooltip" tabindex="0" data-tooltip="Typical items: invoicing tool, occasional accountant, fiscal representation services, bank fees, small compliance services. Enter net amounts (without VAT).">ℹ️</span>
                             </label>
                             <input type="number" class="form-control expense-input" id="admin-freelancer" min="0" step="0.01" placeholder="0">
+                            <small class="help-text">Freelancer overhead that you wouldn’t need as a company (e.g. lighter accounting and admin stack).</small>
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="admin-transparent">Admin &amp; Compliance — Transparent LLC (€)
-                                <span class="tooltip" tabindex="0" data-tooltip="Examples: certified accountant (TOC/CC), bank fees, mandatory filings and company compliance.">ℹ️</span>
+                                <span class="tooltip" tabindex="0" data-tooltip="Typical items: certified accountant (TOC/CC), bank fees, mandatory filings, corporate registry, digital certificate, payroll if applicable. Enter net amounts (without VAT).">ℹ️</span>
                             </label>
                             <input type="number" class="form-control expense-input" id="admin-transparent" min="0" step="0.01" placeholder="0">
+                            <small class="help-text">Company overhead to keep the LLC compliant. This is usually higher than freelancer admin.</small>
                         </div>
                     </div>
                 </div>
@@ -231,6 +233,36 @@
                     <small class="help-text">Freelancer total includes an assumed 1% liability insurance for protection.</small>
                     <div id="expense-warning" class="warning" style="display: none;"></div>
                     <div id="expense-error" class="warning" style="display: none;"></div>
+                </div>
+
+                <div class="form-section" style="margin-top: var(--space-16);">
+                    <details>
+                        <summary><strong>What counts as a business expense?</strong></summary>
+                        <div class="my-8">
+                            <div class="grid" style="grid-template-columns: 1fr 1fr; gap: var(--space-16);">
+                                <div>
+                                    <h4 class="mt-0">Examples to include</h4>
+                                    <ul class="profile-hint-list">
+                                        <li>Coworking/office, utilities, internet, mobile</li>
+                                        <li>Equipment (laptop, peripherals), small tools</li>
+                                        <li>Software subscriptions, cloud services, domains</li>
+                                        <li>Subcontractors, professional services, training</li>
+                                        <li>Travel for work, conferences, meals with clients</li>
+                                        <li>Professional insurance (other than auto 1% freelancer liability)</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="mt-0">Do not include</h4>
+                                    <ul class="profile-hint-list">
+                                        <li>VAT you will reclaim (enter net of VAT)</li>
+                                        <li>Income taxes (IRS) and Social Security payments</li>
+                                        <li>Personal spending not tied to the activity</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <p class="result-note">Transparent LLC: real expenses reduce taxable profit. Freelancer: expenses reduce cash but <strong>do not</strong> reduce taxable base under the simplified regime.</p>
+                        </div>
+                    </details>
                 </div>
             </div>
         </div>
