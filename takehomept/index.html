@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portugal Freelancer vs Transparent LLC (2025)</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="app-header">
+        <div class="container">
+            <h1 class="app-title">Freelancer vs Transparent LLC — Portugal 2025</h1>
+            <p class="app-subtitle">Compare Recibos Verdes (Simplified) vs Unipessoal Transparente (Fiscal Transparency)</p>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="tabs">
+            <button class="tab active" data-tab="basic">Basic Info</button>
+            <button class="tab" data-tab="income">Income</button>
+            <button class="tab" data-tab="expenses">Expenses</button>
+            <button class="tab" data-tab="deductions">Deductions</button>
+            <button class="tab" data-tab="results">Results</button>
+            <button class="tab" data-tab="comparison">Comparison</button>
+        </div>
+
+        <!-- Basic Info Tab -->
+        <div class="tab-content active" id="basic">
+            <div class="form-grid">
+                
+
+                <div class="form-section">
+                    <h3>NHR Status &amp; Activity Type</h3>
+                    <div class="form-group">
+                        <label class="form-label" for="nhr-status">NHR Status:</label>
+                        <select id="nhr-status" class="form-control">
+                            <option value="standard">Standard Rates</option>
+                            <option value="original_nhr">Original NHR (20%)</option>
+                            <option value="nhr_2_ifici">NHR 2.0 (IFICI) (20%)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="activity-type">Activity Type:</label>
+                        <select id="activity-type" class="form-control">
+                            <option value="services">Services (75%)</option>
+                            <option value="goods">Goods/Commerce (15%)</option>
+                            <option value="accommodation_food">Accommodation &amp; Food (35%)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>First-year Options</h3>
+                    <div class="form-group">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="firstyear-ss-exempt">
+                            <label for="firstyear-ss-exempt" class="form-label">Social Security exemption (first 12 months)</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="firstyear-irs-50">
+                            <label for="firstyear-irs-50" class="form-label">50% IRS reduction (first year)</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Personal Information</h3>
+                    <div class="form-group">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="has-dependents">
+                            <label for="has-dependents" class="form-label">I have dependent children</label>
+                        </div>
+                    </div>
+                    <div class="form-group" id="dependents-count-group" style="display: none;">
+                        <label class="form-label" for="dependents-count">Number of Dependents:</label>
+                        <input type="number" id="dependents-count" class="form-control" min="0" max="10" value="0">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Income Tab -->
+        <div class="tab-content" id="income">
+            <div class="form-grid">
+                <div class="form-section">
+                    <h3>Income</h3>
+                    <div class="form-group">
+                        <label class="form-label" for="gross-income">
+                            Gross Annual Income (€)
+                            <span class="tooltip" tabindex="0" title="Your total invoices/revenue from self‑employment for the year, before VAT and before any expenses." data-tooltip="Your total invoices/revenue from self‑employment for the year, before VAT and before any expenses. Do not include salary (Category A). If you invoice with VAT, enter the net amount without VAT.">ℹ️</span>
+                        </label>
+                        <input type="number" id="gross-income" class="form-control" min="0" step="0.01" placeholder="50000">
+                        <small class="help-text">Category B revenue only. Exclude Category A salary and include only the net (no VAT) invoiced amounts.</small>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Other Personal Income (optional)</h3>
+                    <div class="form-group">
+                        <label class="form-label" for="divint-income">Dividends/Interest (€)
+                            <span class="tooltip" tabindex="0" title="Category E – typically taxed at 28% flat as final tax. You may opt for aggregation in your IRS return, not modeled here." data-tooltip="Category E – typically taxed at 28% flat as final tax. You may opt for aggregation in your IRS return, not modeled here.">ℹ️</span>
+                        </label>
+                        <input type="number" id="divint-income" class="form-control" min="0" step="0.01" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="capgains-income">Capital Gains (Securities) (€)
+                            <span class="tooltip" tabindex="0" title="Category G – securities gains typically taxed at 28% flat as final tax. Enter net gains." data-tooltip="Category G – securities gains typically taxed at 28% flat as final tax. Enter net gains.">ℹ️</span>
+                        </label>
+                        <input type="number" id="capgains-income" class="form-control" min="0" step="0.01" placeholder="0">
+                    </div>
+                    <small class="help-text">These are added with a flat 28% tax in this tool. Aggregation to progressive rates and crypto rules are not modeled in v1.</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Expenses Tab -->
+        <div class="tab-content" id="expenses">
+            <div id="expenses-content">
+                <p class="info">Business expenses reduce your cash net in both setups. They reduce taxable income only for Transparent LLC.</p>
+            </div>
+            <div id="expenses-form">
+                <div class="expense-category">
+                    <h4>Annual Expenses</h4>
+                    <div class="form-group">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="use-suggested-admin" checked>
+                            <label for="use-suggested-admin" class="form-label">Use suggested admin/compliance costs (recommended)</label>
+                        </div>
+                        <small class="help-text">You can uncheck to customize. Suggested values reflect typical market costs in 2025.</small>
+                    </div>
+                    <div class="expense-grid" style="grid-template-columns: 1fr 1fr;">
+                        <div class="form-group">
+                            <label class="form-label" for="total-business-expenses">Total Business Expenses (€)
+                                <span class="tooltip" tabindex="0" title="Sum of all annual business costs (rent, equipment, services, subscriptions, travel, etc.)." data-tooltip="Sum of all annual business costs (rent, equipment, services, subscriptions, travel, etc.).">ℹ️</span>
+                            </label>
+                            <input type="number" class="form-control expense-input" id="total-business-expenses" min="0" step="0.01" placeholder="0">
+                            <small class="help-text">Common costs that apply regardless of setup.</small>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="admin-freelancer">Admin &amp; Compliance — Freelancer (€)
+                                <span class="tooltip" tabindex="0" title="E.g., occasional accounting help, invoicing tools. Not required by law in simplified." data-tooltip="E.g., occasional accounting help, invoicing tools. Not required by law in simplified.">ℹ️</span>
+                            </label>
+                            <input type="number" class="form-control expense-input" id="admin-freelancer" min="0" step="0.01" placeholder="0">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="admin-transparent">Admin &amp; Compliance — Transparent LLC (€)
+                                <span class="tooltip" tabindex="0" title="Certified accountant (TOC/CC), bank fees, company compliance." data-tooltip="Certified accountant (TOC/CC), bank fees, company compliance.">ℹ️</span>
+                            </label>
+                            <input type="number" class="form-control expense-input" id="admin-transparent" min="0" step="0.01" placeholder="0">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="expense-category">
+                    <h4>Administration &amp; Compliance</h4>
+                    <div class="expense-grid">
+                        <div class="form-group">
+                            <label class="form-label" for="admin-costs">Accountant/Bank/Legal (€):</label>
+                            <input type="number" class="form-control expense-input" id="admin-costs" min="0" step="0.01" placeholder="0">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="expense-total">
+                    <div class="grid" style="grid-template-columns: 1fr 1fr; gap: var(--space-8);">
+                        <strong>Freelancer total costs: €<span id="total-expenses-simp">0.00</span></strong>
+                        <strong>Transparent LLC total costs: €<span id="total-expenses-org">0.00</span></strong>
+                    </div>
+                    <div id="expense-warning" class="warning" style="display: none;"></div>
+                    <div id="expense-error" class="warning" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Deductions Tab -->
+        <div class="tab-content" id="deductions">
+            <div class="form-grid">
+                <div class="form-section">
+                    <h3>Personal Deductions</h3>
+                    <div class="form-group">
+                        <label class="form-label" for="health-expenses">Health Expenses (€):
+                            <span class="tooltip" data-tooltip="15% deductible up to €1,000 limit">ℹ️</span>
+                        </label>
+                        <input type="number" id="health-expenses" class="form-control" min="0" step="0.01" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="education-expenses">Education Expenses (€):</label>
+                        <input type="number" id="education-expenses" class="form-control" min="0" step="0.01" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="charitable-donations">Charitable Donations (€):</label>
+                        <input type="number" id="charitable-donations" class="form-control" min="0" step="0.01" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="retirement-contributions">Retirement Contributions (€):</label>
+                        <input type="number" id="retirement-contributions" class="form-control" min="0" step="0.01" placeholder="0">
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Automatic Deductions</h3>
+                    <div class="result-item">
+                        <span>Personal Allowance:</span>
+                        <span class="result-value">€<span id="personal-allowance-display">4,104.00</span></span>
+                    </div>
+                    <div class="result-item">
+                        <span>Dependent Allowances:</span>
+                        <span class="result-value">€<span id="dependent-allowance-display">0.00</span></span>
+                    </div>
+                    <div class="result-item">
+                        <span>Health Deduction (15%):</span>
+                        <span class="result-value">€<span id="health-deduction-display">0.00</span></span>
+                    </div>
+                    <div class="result-item">
+                        <span><strong>Total Personal Deductions:</strong></span>
+                        <span class="result-value"><strong>€<span id="total-deductions-display">4,104.00</span></strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Tab -->
+        <div class="tab-content" id="results" aria-live="polite">
+            <div class="results-grid">
+                <div class="result-card" id="simp-results">
+                    <h3>Freelancer (Simplified) Results</h3>
+                    <div class="result-item">
+                        <span>Gross Income:</span>
+                        <span class="result-value">€<span id="simp-gross">0.00</span></span>
+                    </div>
+                    <div class="result-item">
+                        <span>Activity Coefficient:</span>
+                        <span class="result-value"><span id="simp-coefficient">75</span>%</span>
+                    </div>
+                    <div class="result-item">
+                        <span>Total Business Expenses:</span>
+                        <span class="result-value">€<span id="simp-expenses">0.00</span></span>
+                    </div>
+                    <div class="result-item">
+                        <span>Deductions to Tax:</span>
+                        <span class="result-value">€<span id="simp-deducoes">0.00</span></span>
+                    </div>
+                    <div class="result-item">
+                        <span>Taxable Income:</span>
+                        <span class="result-value">€<span id="simp-taxable">0.00</span></span>
+                    </div>
+                    <div class="result-item">
+                        <span>Income Tax:</span>
+                        <span class="result-value">€<span id="simp-irs">0.00</span></span>
+                    </div>
+                    <div class="result-item">
+                        <span>Social Security:</span>
+                        <span class="result-value">€<span id="simp-ss">0.00</span></span>
+                    </div>
+                    <div class="result-item">
+                        <span><strong>Net Annual Income:</strong></span>
+                        <span class="result-value"><strong>€<span id="simp-net">0.00</span></strong></span>
+                    </div>
+                    <div class="result-item">
+                        <span>Other Income (after 28%):</span>
+                        <span class="result-value">€<span id="simp-other-net">0.00</span></span>
+                    </div>
+                    <div class="result-item">
+                        <span><strong>Total Annual Net (with other):</strong></span>
+                        <span class="result-value"><strong>€<span id="simp-total-net">0.00</span></strong></span>
+                    </div>
+                </div>
+
+                <div class="result-card" id="org-results">
+                    <h3>Transparent LLC Results</h3>
+                    <div class="result-item">
+                        <span>Gross Income:</span>
+                        <span class="result-value">€<span id="org-gross">0.00</span></span>
+                    </div>
+                    <div class="result-item">
+                        <span>Total Business Expenses:</span>
+                        <span class="result-value">€<span id="org-expenses">0.00</span></span>
+                    </div>
+                    <div class="result-item">
+                        <span>Net Business Income:</span>
+                        <span class="result-value">€<span id="org-net-biz">0.00</span></span>
+                    </div>
+                    <div class="result-item">
+                        <span>Deductions to Tax:</span>
+                        <span class="result-value">€<span id="org-deducoes">0.00</span></span>
+                    </div>
+                    <div class="result-item">
+                        <span>Taxable Income:</span>
+                        <span class="result-value">€<span id="org-taxable">0.00</span></span>
+                    </div>
+                    <div class="result-item">
+                        <span>Income Tax:</span>
+                        <span class="result-value">€<span id="org-irs">0.00</span></span>
+                    </div>
+                    <div class="result-item">
+                        <span>Social Security:</span>
+                        <span class="result-value">€<span id="org-ss">0.00</span></span>
+                    </div>
+                    <div class="result-item">
+                        <span><strong>Net Annual Income:</strong></span>
+                        <span class="result-value"><strong>€<span id="org-net">0.00</span></strong></span>
+                    </div>
+                    <div class="result-item">
+                        <span>Other Income (after 28%):</span>
+                        <span class="result-value">€<span id="org-other-net">0.00</span></span>
+                    </div>
+                    <div class="result-item">
+                        <span><strong>Total Annual Net (with other):</strong></span>
+                        <span class="result-value"><strong>€<span id="org-total-net">0.00</span></strong></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-card" style="margin-top: var(--space-16);">
+                <h3>Tax Rate Information</h3>
+                <div class="result-item">
+                    <span>Freelancer Effective / Marginal:</span>
+                    <span class="result-value"><span id="simp-effective">0.0</span>% / <span id="simp-marginal">0.0</span>%</span>
+                </div>
+                <div class="result-item">
+                    <span>Transparent LLC Effective / Marginal:</span>
+                    <span class="result-value"><span id="org-effective">0.0</span>% / <span id="org-marginal">0.0</span>%</span>
+                </div>
+                <div class="result-item" id="nhr-benefit-row" style="display: none;">
+                    <span>NHR Benefit Applied:</span>
+                    <span class="result-value status--success">20% Rate</span>
+                </div>
+            </div>
+
+            <div class="monthly-breakdown">
+                <h4>Monthly Breakdown (average of annual/12)</h4>
+                <div class="grid" style="grid-template-columns: 1fr 1fr; gap: var(--space-16);">
+                    <div>
+                        <h4>Freelancer</h4>
+                        <div class="monthly-item"><span>Gross:</span><span>€<span id="simp-monthly-gross">0.00</span></span></div>
+                        <div class="monthly-item"><span>Income Tax:</span><span>€<span id="simp-monthly-irs">0.00</span></span></div>
+                        <div class="monthly-item"><span>Social Security:</span><span>€<span id="simp-monthly-ss">0.00</span></span></div>
+                        <div class="monthly-item"><span><strong>Net:</strong></span><span><strong>€<span id="simp-monthly-net">0.00</span></strong></span></div>
+                    </div>
+                    <div>
+                        <h4>Transparent LLC</h4>
+                        <div class="monthly-item"><span>Gross:</span><span>€<span id="org-monthly-gross">0.00</span></span></div>
+                        <div class="monthly-item"><span>Income Tax:</span><span>€<span id="org-monthly-irs">0.00</span></span></div>
+                        <div class="monthly-item"><span>Social Security:</span><span>€<span id="org-monthly-ss">0.00</span></span></div>
+                        <div class="monthly-item"><span><strong>Net:</strong></span><span><strong>€<span id="org-monthly-net">0.00</span></strong></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison Tab -->
+        <div class="tab-content" id="comparison">
+            <div class="form-section">
+                <h3>Freelancer vs Transparent LLC</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Freelancer (Simplified)</th>
+                            <th>Transparent LLC</th>
+                            <th>Difference</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Taxable Income</td>
+                            <td>€<span id="comp-simple-taxable">0.00</span></td>
+                            <td>€<span id="comp-organized-taxable">0.00</span></td>
+                            <td id="comp-taxable-diff">€0.00</td>
+                        </tr>
+                        <tr>
+                            <td>Income Tax</td>
+                            <td>€<span id="comp-simple-tax">0.00</span></td>
+                            <td>€<span id="comp-organized-tax">0.00</span></td>
+                            <td id="comp-tax-diff">€0.00</td>
+                        </tr>
+                        <tr>
+                            <td>Social Security</td>
+                            <td>€<span id="comp-simple-ss">0.00</span></td>
+                            <td>€<span id="comp-organized-ss">0.00</span></td>
+                            <td id="comp-ss-diff">€0.00</td>
+                        </tr>
+                        <tr style="font-weight: bold; background: rgba(var(--color-teal-500-rgb), 0.1);">
+                            <td>Net Income</td>
+                            <td>€<span id="comp-simple-net">0.00</span></td>
+                            <td>€<span id="comp-organized-net">0.00</span></td>
+                            <td id="comp-net-diff">€0.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="recommendation" id="regime-recommendation">
+                    <h4>💡 Recommendation</h4>
+                    <p id="recommendation-text">Enter your income and expenses to see a personalized recommendation.</p>
+                </div>
+
+                <div class="form-section" style="margin-top: var(--space-24);">
+                    <h4>Break-even Analysis</h4>
+                    <p>Minimum annual expenses where Transparent LLC nets more than Freelancer: <strong>€<span id="breakeven-expenses">0.00</span></strong></p>
+                    <p class="tooltip" data-tooltip="This is the minimum amount of annual business expenses where the Transparent LLC (fiscal transparency) becomes more advantageous than the Freelancer (simplified) setup.">ℹ️ What does this mean?</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="logic.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
