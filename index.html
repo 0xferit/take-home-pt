@@ -3,640 +3,464 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portugal Tax Calculator 2025</title>
+    <title>TakeHome PT – Tax Planning for Self-Employed Professionals in Portugal</title>
+    <meta name="description" content="Optimize your tax setup in Portugal. Compare Freelancer vs Transparent LLC to maximize your take-home income.">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header class="app-header">
-        <div class="container">
-            <h1 class="app-title">Portugal Tax Calculator</h1>
-            <p class="app-subtitle">Compare freelancer vs. Portuguese LDA. Get instant clarity on your 2025 take-home income.</p>
-        </div>
-    </header>
+    <div class="app">
+        <header class="header">
+            <div class="container">
+                <h1 class="header__title">TakeHome PT</h1>
+                <p class="header__subtitle">Tax optimization for self-employed professionals in Portugal</p>
+            </div>
+        </header>
 
-    <main class="main-content">
-        <!-- Streamlined Tabs -->
-        <div class="tabs">
-            <button class="tab active" data-tab="basic">Setup</button>
-            <button class="tab" data-tab="income">Income & Expenses</button>
-            <button class="tab" data-tab="deductions">Deductions</button>
-            <button class="tab" data-tab="results">Results</button>
-            <button class="tab" data-tab="comparison">Compare</button>
-        </div>
+        <nav class="tabs">
+            <div class="container">
+                <button class="tab active" data-tab="setup">Setup</button>
+                <button class="tab" data-tab="income">Income</button>
+                <button class="tab" data-tab="expenses">Expenses</button>
+                <button class="tab" data-tab="deductions">Deductions</button>
+                <button class="tab" data-tab="results">Results</button>
+            </div>
+        </nav>
 
-        <!-- Setup Tab -->
-        <div class="tab-content active" id="basic">
-            <div class="page-container">
-                <div class="page-main">
-                    <h2>Your Profile</h2>
+        <main class="main">
+            <div class="container">
+                
+                <!-- Setup Tab -->
+                <section id="setup" class="tab-content active">
+                    <h2>Your Profile & Tax Status</h2>
                     
                     <div class="form-group">
-                        <label class="form-label" for="activity-profile">
-                            Activity Type 
-                            <span class="tooltip" tabindex="0" data-tooltip="High-value professions (software, engineering, design, consulting) have 75% taxable income. General services (accounting, legal, healthcare) have 35% taxable income.">ℹ️</span>
-                        </label>
-                        <select id="activity-profile" class="form-control">
-                            <option value="services_high_value" selected>High-Value Professions (Article 151) – 75% taxable</option>
-                            <option value="services_general">General Professional Services – 35% taxable</option>
+                        <label for="nhr-status">NHR / Tax Status</label>
+                        <select id="nhr-status" class="input">
+                            <option value="standard">Standard progressive rates</option>
+                            <option value="original_nhr">Original NHR (20% flat rate)</option>
+                            <option value="nhr_2_ifici">NHR 2.0 / IFICI (20% flat rate)</option>
                         </select>
+                        <p id="nhr-status-note" class="help-text"></p>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label" for="nhr-status">
-                            Tax Rate Regime
-                            <span class="tooltip" tabindex="0" data-tooltip="IFICI/NHR 2.0 requires strict eligibility proof. Original NHR applies only if registered before Dec 31, 2023.">ℹ️</span>
-                        </label>
-                        <select id="nhr-status" class="form-control">
-                            <option value="standard">Standard Progressive Rates (13–48%)</option>
-                            <option value="original_nhr">Original NHR (20% flat)</option>
-                            <option value="nhr_2_ifici">IFICI/NHR 2.0 (20% flat)</option>
-                        </select>
-                        <small id="nhr-status-note" class="help-text">Progressive rates apply to most users.</small>
+                        <label>Activity Type</label>
+                        <div class="radio-group">
+                            <label class="radio-card" data-activity-option="services_high_value">
+                                <input type="radio" name="activity-profile" value="services_high_value" checked>
+                                <div class="radio-card__content">
+                                    <strong>High-value professions</strong>
+                                    <span>Article 151 services – 75% taxable, 25% deemed expenses</span>
+                                </div>
+                            </label>
+                            <label class="radio-card" data-activity-option="services_general">
+                                <input type="radio" name="activity-profile" value="services_general">
+                                <div class="radio-card__content">
+                                    <strong>General professional services</strong>
+                                    <span>Category B services – 35% taxable, 65% deemed expenses</span>
+                                </div>
+                            </label>
+                        </div>
+                        <details class="details">
+                            <summary>What are high-value professions?</summary>
+                            <p>High-value professions include software development, consulting, design, and other technical services listed in Article 151 of the Portuguese tax code.</p>
+                            <p><strong>CAE Codes:</strong> <span id="activity-summary-codes"></span></p>
+                        </details>
                     </div>
 
-                    <details class="collapsible">
-                        <summary><strong>First-Year Options</strong></summary>
-                        <div class="collapsible-content">
-                            <label class="switch-item">
+                    <div class="form-group">
+                        <label for="activity-code">CAE Activity Code (optional)</label>
+                        <input 
+                            type="text" 
+                            id="activity-code" 
+                            class="input" 
+                            list="activity-code-options"
+                            placeholder="e.g., 62010"
+                            maxlength="5">
+                        <datalist id="activity-code-options"></datalist>
+                        <p class="help-text">Enter your 5-digit CAE code to auto-select the correct activity type.</p>
+                    </div>
+
+                    <details class="details">
+                        <summary>First-year benefits</summary>
+                        <div class="checkbox-group">
+                            <label class="checkbox">
                                 <input type="checkbox" id="firstyear-ss-exempt">
                                 <span>Social Security exemption (first 12 months)</span>
                             </label>
-                            <label class="switch-item">
+                            <label class="checkbox">
                                 <input type="checkbox" id="firstyear-irs-50">
-                                <span>50% IRS coefficient reduction (first calendar year)</span>
+                                <span>50% IRS reduction (first tax year)</span>
                             </label>
                         </div>
                     </details>
+                </section>
 
-                    <div class="form-actions">
-                        <button type="button" class="btn btn--primary btn--lg" data-tab-target="income">Continue to Income →</button>
-                    </div>
-                </div>
-
-                <aside class="page-sidebar">
-                    <div class="info-card glance-card" aria-live="polite">
-                        <h4>Quick Summary</h4>
-                        <div class="glance-card__list">
-                            <div class="glance-card__item">
-                                <span class="glance-card__label">Activity</span>
-                                <span class="glance-card__value" id="glance-activity-value">High‑value professions</span>
-                            </div>
-                            <div class="glance-card__item">
-                                <span class="glance-card__label">Tax Regime</span>
-                                <span class="glance-card__value" id="glance-nhr-status">Progressive rates</span>
-                            </div>
-                            <div class="glance-card__item">
-                                <span class="glance-card__label">First-Year Relief</span>
-                                <div class="glance-card__chips" id="glance-firstyear">
-                                    <span class="chip chip--muted">None</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </aside>
-            </div>
-        </div>
-
-        <!-- Income & Expenses Tab -->
-        <div class="tab-content" id="income">
-            <h2>Income & Expenses</h2>
-            
-            <div class="form-grid">
-                <div class="form-section">
-                    <h3>Annual Income</h3>
+                <!-- Income Tab -->
+                <section id="income" class="tab-content">
+                    <h2>Your Income</h2>
                     
                     <div class="form-group">
-                        <label class="form-label" for="gross-income">
-                            Gross Business Income (€)
-                            <span class="tooltip" tabindex="0" data-tooltip="Total invoices from self-employment before VAT and expenses. Category B only.">ℹ️</span>
-                        </label>
-                        <input type="number" id="gross-income" class="form-control" min="0" step="0.01" placeholder="e.g. 170000">
+                        <label for="gross-income">Annual Gross Income from Services</label>
+                        <div class="input-group">
+                            <span class="input-group__prefix">€</span>
+                            <input type="number" id="gross-income" class="input" value="0" min="0" step="1000">
+                        </div>
+                        <p class="help-text">Your total business income before expenses (Category B).</p>
                     </div>
 
-                    <details class="collapsible">
-                        <summary><strong>Other Income (Optional)</strong></summary>
-                        <div class="collapsible-content">
-                            <div class="form-group">
-                                <label class="form-label" for="divint-income">Dividends/Interest (€)</label>
-                                <input type="number" id="divint-income" class="form-control" min="0" step="0.01" placeholder="0">
+                    <details class="details">
+                        <summary>Other income sources (optional)</summary>
+                        <div class="form-group">
+                            <label for="divint-income">Dividends & Interest Income</label>
+                            <div class="input-group">
+                                <span class="input-group__prefix">€</span>
+                                <input type="number" id="divint-income" class="input" value="0" min="0" step="100">
                             </div>
-                            <div class="form-group">
-                                <label class="form-label" for="capgains-income">Capital Gains (€)</label>
-                                <input type="number" id="capgains-income" class="form-control" min="0" step="0.01" placeholder="0">
+                            <p class="help-text">Taxed at 28% flat rate (Category E).</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="capgains-income">Capital Gains Income</label>
+                            <div class="input-group">
+                                <span class="input-group__prefix">€</span>
+                                <input type="number" id="capgains-income" class="input" value="0" min="0" step="100">
                             </div>
-                            <small class="help-text">Taxed at flat 28% rate</small>
+                            <p class="help-text">Taxed at 28% flat rate (Category G).</p>
                         </div>
                     </details>
-                </div>
+                </section>
 
-                <div class="form-section">
-                    <h3>Annual Expenses</h3>
+                <!-- Expenses Tab -->
+                <section id="expenses" class="tab-content">
+                    <h2>Your Business Expenses</h2>
+
+                    <div class="form-group">
+                        <label for="total-business-expenses">Shared Business Expenses</label>
+                        <div class="input-group">
+                            <span class="input-group__prefix">€</span>
+                            <input type="number" id="total-business-expenses" class="input expense-input" value="25000" min="0" step="100">
+                        </div>
+                        <p class="help-text">Office, equipment, software, travel, etc. These apply to both setups.</p>
+                    </div>
+
+                    <div class="expense-split">
+                        <div class="form-group">
+                            <label for="admin-freelancer">Freelancer Admin Costs</label>
+                            <div class="input-group">
+                                <span class="input-group__prefix">€</span>
+                                <input type="number" id="admin-freelancer" class="input expense-input" value="800" min="0" step="50">
+                            </div>
+                            <p class="help-text">Accountant, TOC fees for freelancer setup.</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="admin-transparent">Transparent LLC Admin Costs</label>
+                            <div class="input-group">
+                                <span class="input-group__prefix">€</span>
+                                <input type="number" id="admin-transparent" class="input expense-input" value="4800" min="0" step="50">
+                            </div>
+                            <p class="help-text">Accounting, compliance, legal fees for LLC.</p>
+                        </div>
+                    </div>
+
+                    <label class="checkbox">
+                        <input type="checkbox" id="use-suggested-admin">
+                        <span>Use suggested admin costs based on typical market rates</span>
+                    </label>
+
+                    <div class="expense-summary">
+                        <div class="expense-summary__item">
+                            <span>Freelancer total expenses:</span>
+                            <strong id="total-expenses-simp">€0.00</strong>
+                        </div>
+                        <div class="expense-summary__item">
+                            <span>Transparent LLC total expenses:</span>
+                            <strong id="total-expenses-org">€0.00</strong>
+                        </div>
+                    </div>
+
+                    <div id="expense-warning" class="alert alert--warning" style="display: none;"></div>
+                    <div id="expense-error" class="alert alert--error" style="display: none;"></div>
+                </section>
+
+                <!-- Deductions Tab -->
+                <section id="deductions" class="tab-content">
+                    <h2>Personal Tax Deductions</h2>
                     
+                    <p class="intro-text">These deductions reduce your final IRS bill. They apply to both setups.</p>
+
                     <div class="form-group">
-                        <label class="form-label">Freelancer Tax Basis</label>
-                        <div class="radio-group">
-                            <label class="radio-option">
-                                <input type="radio" name="freelancer-basis" id="freelancer-basis-simplified" value="simplified" checked>
-                                <div>
-                                    <strong>Simplified</strong>
-                                    <div class="help-text">Deemed expenses (75% or 35% taxable)</div>
+                        <label for="health-expenses">Health Expenses</label>
+                        <div class="input-group">
+                            <span class="input-group__prefix">€</span>
+                            <input type="number" id="health-expenses" class="input" value="0" min="0" step="10">
+                        </div>
+                        <p class="help-text">15% deductible, max €<span id="health-deduction-display">0.00</span>.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="education-expenses">Education Expenses</label>
+                        <div class="input-group">
+                            <span class="input-group__prefix">€</span>
+                            <input type="number" id="education-expenses" class="input" value="0" min="0" step="10">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="charitable-donations">Charitable Donations</label>
+                        <div class="input-group">
+                            <span class="input-group__prefix">€</span>
+                            <input type="number" id="charitable-donations" class="input" value="0" min="0" step="10">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="retirement-contributions">Retirement Contributions (PPR)</label>
+                        <div class="input-group">
+                            <span class="input-group__prefix">€</span>
+                            <input type="number" id="retirement-contributions" class="input" value="0" min="0" step="10">
+                        </div>
+                    </div>
+
+                    <div class="deduction-summary">
+                        <div class="deduction-summary__item">
+                            <span>Personal allowance:</span>
+                            <strong id="personal-allowance-display">€0.00</strong>
+                        </div>
+                        <div class="deduction-summary__item">
+                            <span>Total deductions:</span>
+                            <strong id="total-deductions-display">€0.00</strong>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Results Tab -->
+                <section id="results" class="tab-content">
+                    <h2>Your Results</h2>
+
+                    <div id="results-zero-state" class="zero-state">
+                        <p>👋 Enter your income and expenses to see your personalized tax comparison.</p>
+                        <button class="btn btn--primary" data-tab-target="income">Get Started</button>
+                    </div>
+
+                    <div id="results-detail">
+                        <!-- Quick Summary -->
+                        <div class="summary-cards">
+                            <div class="summary-card">
+                                <div class="summary-card__label">
+                                    <span>Freelancer Setup</span>
+                                    <div class="radio-toggle">
+                                        <label>
+                                            <input type="radio" name="freelancer-basis" value="simplified" checked>
+                                            <span>Simplified</span>
+                                        </label>
+                                        <label>
+                                            <input type="radio" name="freelancer-basis" value="organized">
+                                            <span>Organized</span>
+                                        </label>
+                                    </div>
                                 </div>
-                            </label>
-                            <label class="radio-option">
-                                <input type="radio" name="freelancer-basis" id="freelancer-basis-organized" value="organized">
-                                <div>
-                                    <strong>Organized Accounting</strong>
-                                    <div class="help-text">Real expenses reduce taxable income</div>
+                                <div class="summary-card__value" id="summary-net-simp">€0.00</div>
+                                <div class="summary-card__meta">
+                                    <span id="summary-rate-simp">0.0%</span> take-home
                                 </div>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label" for="total-business-expenses">
-                            Business Expenses (€)
-                            <span class="tooltip" tabindex="0" data-tooltip="Office, equipment, software, travel, training, insurance, etc. Enter net amounts without VAT.">ℹ️</span>
-                        </label>
-                        <input type="number" class="form-control expense-input" id="total-business-expenses" min="0" step="0.01" placeholder="e.g. 25000">
-                    </div>
-
-                    <div class="form-group">
-                        <label class="checkbox-item">
-                            <input type="checkbox" id="use-suggested-admin" checked>
-                            <span>Use suggested admin costs</span>
-                        </label>
-                    </div>
-
-                    <div class="expense-grid">
-                        <div class="form-group">
-                            <label class="form-label" for="admin-freelancer">Freelancer Admin (€/year)</label>
-                            <input type="number" class="form-control expense-input" id="admin-freelancer" min="0" step="0.01" placeholder="800">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="admin-transparent">LDA Admin (€/year)</label>
-                            <input type="number" class="form-control expense-input" id="admin-transparent" min="0" step="0.01" placeholder="4800">
-                        </div>
-                    </div>
-
-                    <div class="expense-total">
-                        <div class="expense-total__grid">
-                            <div>
-                                <strong>Freelancer Total</strong>
-                                <p id="total-expenses-simp">0,00&nbsp;€</p>
                             </div>
-                            <div>
-                                <strong>LDA Total</strong>
-                                <p id="total-expenses-org">0,00&nbsp;€</p>
+
+                            <div class="summary-card summary-card--highlight">
+                                <div class="summary-card__label">Transparent LLC</div>
+                                <div class="summary-card__value" id="summary-net-org">€0.00</div>
+                                <div class="summary-card__meta">
+                                    <span id="summary-rate-org">0.0%</span> take-home
+                                </div>
+                            </div>
+
+                            <div class="summary-card summary-card--diff">
+                                <div class="summary-card__label">Difference</div>
+                                <div class="summary-card__value" id="summary-net-diff">€0.00</div>
+                                <div class="summary-card__meta">
+                                    <span id="summary-rate-diff">0.0%</span> rate difference
+                                </div>
                             </div>
                         </div>
-                        <div id="expense-warning" class="warning" style="display: none;"></div>
-                        <div id="expense-error" class="warning" style="display: none;"></div>
+
+                        <!-- Recommendation -->
+                        <div class="recommendation">
+                            <h3>Recommendation</h3>
+                            <p id="recommendation-text"></p>
+                            <p class="recommendation__meta">
+                                Break-even point: <strong id="breakeven-expenses">€0.00</strong> in shared expenses
+                            </p>
+                        </div>
+
+                        <!-- Detailed Breakdown -->
+                        <div class="breakdown">
+                            <div class="breakdown__col">
+                                <h3 id="freelancer-results-title">Freelancer (Simplified) Results</h3>
+                                <dl class="data-list">
+                                    <dt>Gross income</dt>
+                                    <dd id="simp-gross">€0.00</dd>
+                                    
+                                    <dt>Coefficient</dt>
+                                    <dd id="simp-coefficient">75%</dd>
+                                    
+                                    <dt>Taxable income</dt>
+                                    <dd id="simp-taxable">€0.00</dd>
+                                    
+                                    <dt>Total expenses</dt>
+                                    <dd id="simp-expenses-total">€0.00</dd>
+                                    
+                                    <dt>Liability insurance</dt>
+                                    <dd id="simp-liability">€0.00</dd>
+                                    
+                                    <dt>Tax deductions</dt>
+                                    <dd id="simp-deducoes">€0.00</dd>
+                                    
+                                    <dt>IRS (income tax)</dt>
+                                    <dd id="simp-irs">€0.00</dd>
+                                    
+                                    <dt>Social Security</dt>
+                                    <dd id="simp-ss">€0.00</dd>
+                                    
+                                    <dt class="data-list__total">Net income</dt>
+                                    <dd class="data-list__total" id="simp-net">€0.00</dd>
+                                </dl>
+                                <p id="simp-ss-note" class="help-text"></p>
+                            </div>
+
+                            <div class="breakdown__col">
+                                <h3>Transparent LLC Results</h3>
+                                <dl class="data-list">
+                                    <dt>Gross income</dt>
+                                    <dd id="org-gross">€0.00</dd>
+                                    
+                                    <dt>Total expenses</dt>
+                                    <dd id="org-expenses-total">€0.00</dd>
+                                    
+                                    <dt>Net business income</dt>
+                                    <dd id="org-net-biz">€0.00</dd>
+                                    
+                                    <dt>Taxable income</dt>
+                                    <dd id="org-taxable">€0.00</dd>
+                                    
+                                    <dt>Tax deductions</dt>
+                                    <dd id="org-deducoes">€0.00</dd>
+                                    
+                                    <dt>IRS (income tax)</dt>
+                                    <dd id="org-irs">€0.00</dd>
+                                    
+                                    <dt>Social Security</dt>
+                                    <dd id="org-ss">€0.00</dd>
+                                    
+                                    <dt class="data-list__total">Net income</dt>
+                                    <dd class="data-list__total" id="org-net">€0.00</dd>
+                                </dl>
+                                <p id="org-ss-note" class="help-text"></p>
+                            </div>
+                        </div>
+
+                        <!-- Comparison Table -->
+                        <details class="details" open>
+                            <summary>Detailed comparison</summary>
+                            <div class="comparison-table">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Freelancer</th>
+                                            <th>Transparent LLC</th>
+                                            <th>Difference</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Taxable income</td>
+                                            <td id="comp-simple-taxable">€0.00</td>
+                                            <td id="comp-organized-taxable">€0.00</td>
+                                            <td id="comp-taxable-diff">€0.00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Income tax (IRS)</td>
+                                            <td id="comp-simple-tax">€0.00</td>
+                                            <td id="comp-organized-tax">€0.00</td>
+                                            <td id="comp-tax-diff">€0.00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Social Security</td>
+                                            <td id="comp-simple-ss">€0.00</td>
+                                            <td id="comp-organized-ss">€0.00</td>
+                                            <td id="comp-ss-diff">€0.00</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Net income</strong></td>
+                                            <td id="comp-simple-net">€0.00</td>
+                                            <td id="comp-organized-net">€0.00</td>
+                                            <td id="comp-net-diff">€0.00</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </details>
+
+                        <!-- Calculation Details -->
+                        <details class="details">
+                            <summary>View calculation steps</summary>
+                            <div class="calculation-breakdown">
+                                <div>
+                                    <h4>Freelancer Calculation</h4>
+                                    <ol id="calc-simp-steps" class="calc-steps"></ol>
+                                    <h5>IRS Bracket Breakdown</h5>
+                                    <ul id="calc-simp-irs-breakdown" class="calc-breakdown"></ul>
+                                </div>
+                                <div>
+                                    <h4>Transparent LLC Calculation</h4>
+                                    <ol id="calc-org-steps" class="calc-steps"></ol>
+                                    <h5>IRS Bracket Breakdown</h5>
+                                    <ul id="calc-org-irs-breakdown" class="calc-breakdown"></ul>
+                                </div>
+                            </div>
+                        </details>
+
+                        <!-- Sanity Checks -->
+                        <details class="details">
+                            <summary>Input validation</summary>
+                            <ul id="sanity-list" class="validation-list"></ul>
+                        </details>
+
+                        <!-- Inputs at a Glance -->
+                        <div class="glance">
+                            <h4>Your Current Setup</h4>
+                            <div class="glance__grid">
+                                <div class="glance__item">
+                                    <span class="glance__label">NHR Status</span>
+                                    <span class="glance__value" id="glance-nhr-status">Standard</span>
+                                </div>
+                                <div class="glance__item">
+                                    <span class="glance__label">Activity Type</span>
+                                    <span class="glance__value" id="glance-activity-value">High-value</span>
+                                </div>
+                                <div class="glance__item">
+                                    <span class="glance__label">First-year Benefits</span>
+                                    <div class="glance__value" id="glance-firstyear"></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </section>
+
             </div>
+        </main>
 
-            <div class="form-actions">
-                <button type="button" class="btn btn--secondary" data-tab-target="basic">← Back</button>
-                <button type="button" class="btn btn--primary btn--lg" data-tab-target="deductions">Continue to Deductions →</button>
+        <footer class="footer">
+            <div class="container">
+                <p id="app-version" class="footer__version"></p>
+                <p class="footer__disclaimer">
+                    <strong>Disclaimer:</strong> This calculator provides estimates based on 2025 Portuguese tax law. 
+                    Results are for informational purposes only. Consult a qualified tax professional before making financial decisions.
+                </p>
             </div>
-        </div>
-
-        <!-- Deductions Tab -->
-        <div class="tab-content" id="deductions">
-            <h2>Personal Deductions</h2>
-            
-            <div class="expense-grid">
-                <div class="form-group">
-                    <label class="form-label" for="health-expenses">Health Expenses (€)</label>
-                    <input type="number" id="health-expenses" class="form-control" min="0" step="0.01" placeholder="0">
-                    <small class="help-text">15% deductible, max €1,000</small>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label" for="education-expenses">Education (€)</label>
-                    <input type="number" id="education-expenses" class="form-control" min="0" step="0.01" placeholder="0">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label" for="charitable-donations">Charitable Donations (€)</label>
-                    <input type="number" id="charitable-donations" class="form-control" min="0" step="0.01" placeholder="0">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label" for="retirement-contributions">Retirement (€)</label>
-                    <input type="number" id="retirement-contributions" class="form-control" min="0" step="0.01" placeholder="0">
-                </div>
-            </div>
-
-            <div class="result-card">
-                <div class="result-item">
-                    <span>Personal Allowance:</span>
-                    <span class="result-value"><span id="personal-allowance-display">4&nbsp;462,15&nbsp;€</span></span>
-                </div>
-                <div class="result-item">
-                    <span>Health Deduction:</span>
-                    <span class="result-value"><span id="health-deduction-display">0,00&nbsp;€</span></span>
-                </div>
-                <div class="result-item">
-                    <span><strong>Total Deductions:</strong></span>
-                    <span class="result-value"><strong><span id="total-deductions-display">4&nbsp;462,15&nbsp;€</span></strong></span>
-                </div>
-            </div>
-
-            <div class="form-actions">
-                <button type="button" class="btn btn--secondary" data-tab-target="income">← Back</button>
-                <button type="button" class="btn btn--primary btn--lg" data-tab-target="results">View Results →</button>
-            </div>
-        </div>
-
-        <!-- Results Tab -->
-        <div class="tab-content" id="results" aria-live="polite">
-            <div id="results-zero-state" class="results-zero-state is-active">
-                <h3>Ready to Calculate</h3>
-                <p>Enter your income and expenses to see your comparison</p>
-                <button type="button" class="btn btn--primary btn--lg" data-tab-target="income">Get Started</button>
-            </div>
-
-            <div id="results-detail" class="is-dimmed">
-                <h2>Results</h2>
-                
-                <!-- Summary Cards -->
-                <div class="summary-grid">
-                    <div class="result-card summary-card">
-                        <h3>Net Income Comparison</h3>
-                        
-                        <div class="result-section">
-                            <div class="result-item">
-                                <span>Freelancer Net:</span>
-                                <span class="result-value"><strong><span id="summary-net-simp">0,00&nbsp;€</span></strong></span>
-                            </div>
-                            <div class="result-item">
-                                <span>Portuguese LDA Net:</span>
-                                <span class="result-value"><strong><span id="summary-net-org">0,00&nbsp;€</span></strong></span>
-                            </div>
-                            <div class="result-item difference">
-                                <span><strong>Difference (LDA - Freelancer):</strong></span>
-                                <span class="result-value"><strong><span id="summary-net-diff">+0,00&nbsp;€</span></strong></span>
-                            </div>
-                        </div>
-
-                        <div class="result-section">
-                            <h4>Take-Home Rate</h4>
-                            <div class="result-item">
-                                <span>Freelancer:</span>
-                                <span class="result-value"><span id="summary-rate-simp">0,0%</span></span>
-                            </div>
-                            <div class="result-item">
-                                <span>Portuguese LDA:</span>
-                                <span class="result-value"><span id="summary-rate-org">0,0%</span></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="result-card sanity-card">
-                        <h3>Notes</h3>
-                        <ul id="sanity-list" class="sanity-list">
-                            <li>All inputs look good.</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Detailed Breakdown -->
-                <div class="results-grid">
-                    <div class="result-card">
-                        <h3><span id="freelancer-results-title">Freelancer Results</span></h3>
-                        
-                        <div class="result-section">
-                            <h4>Income</h4>
-                            <div class="result-item">
-                                <span>Gross Income:</span>
-                                <span class="result-value"><span id="simp-gross">0,00&nbsp;€</span></span>
-                            </div>
-                            <div class="result-item">
-                                <span>Coefficient:</span>
-                                <span class="result-value"><span id="simp-coefficient">75%</span></span>
-                            </div>
-                            <div class="result-item">
-                                <span>Taxable:</span>
-                                <span class="result-value"><span id="simp-taxable">0,00&nbsp;€</span></span>
-                            </div>
-                        </div>
-
-                        <div class="result-section">
-                            <h4>Costs</h4>
-                            <div class="result-item">
-                                <span>Business Expenses:</span>
-                                <span class="result-value"><span id="simp-expenses-base">0,00&nbsp;€</span></span>
-                            </div>
-                            <div class="result-item">
-                                <span>Admin:</span>
-                                <span class="result-value"><span id="simp-expenses-admin">0,00&nbsp;€</span></span>
-                            </div>
-                            <div class="result-item">
-                                <span>Insurance (1%):</span>
-                                <span class="result-value"><span id="simp-liability">0,00&nbsp;€</span></span>
-                            </div>
-                            <div class="result-item">
-                                <span><strong>Total:</strong></span>
-                                <span class="result-value"><strong><span id="simp-expenses-total">0,00&nbsp;€</span></strong></span>
-                            </div>
-                        </div>
-
-                        <div class="result-section">
-                            <h4>Taxes</h4>
-                            <div class="result-item">
-                                <span>Deductions:</span>
-                                <span class="result-value"><span id="simp-deducoes">0,00&nbsp;€</span></span>
-                            </div>
-                            <div class="result-item">
-                                <span>Income Tax:</span>
-                                <span class="result-value"><span id="simp-irs">0,00&nbsp;€</span></span>
-                            </div>
-                            <div class="result-item">
-                                <span>Social Security:</span>
-                                <span class="result-value"><span id="simp-ss">0,00&nbsp;€</span></span>
-                            </div>
-                            <p class="result-subtext" id="simp-ss-note"></p>
-                        </div>
-
-                        <div class="result-section">
-                            <div class="result-item">
-                                <span><strong>Net Income:</strong></span>
-                                <span class="result-value"><strong><span id="simp-net">0,00&nbsp;€</span></strong></span>
-                            </div>
-                            <div class="result-item">
-                                <span>Other Income (after tax):</span>
-                                <span class="result-value"><span id="simp-other-net">0,00&nbsp;€</span></span>
-                            </div>
-                            <div class="result-item">
-                                <span><strong>Total Net:</strong></span>
-                                <span class="result-value"><strong><span id="simp-total-net">0,00&nbsp;€</span></strong></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="result-card">
-                        <h3>Portuguese LDA Results</h3>
-                        
-                        <div class="result-section">
-                            <h4>Income</h4>
-                            <div class="result-item">
-                                <span>Gross Income:</span>
-                                <span class="result-value"><span id="org-gross">0,00&nbsp;€</span></span>
-                            </div>
-                            <div class="result-item">
-                                <span>Net Business:</span>
-                                <span class="result-value"><span id="org-net-biz">0,00&nbsp;€</span></span>
-                            </div>
-                            <div class="result-item">
-                                <span>Taxable:</span>
-                                <span class="result-value"><span id="org-taxable">0,00&nbsp;€</span></span>
-                            </div>
-                        </div>
-
-                        <div class="result-section">
-                            <h4>Costs</h4>
-                            <div class="result-item">
-                                <span>Business Expenses:</span>
-                                <span class="result-value"><span id="org-expenses-base">0,00&nbsp;€</span></span>
-                            </div>
-                            <div class="result-item">
-                                <span>Admin:</span>
-                                <span class="result-value"><span id="org-expenses-admin">0,00&nbsp;€</span></span>
-                            </div>
-                            <div class="result-item">
-                                <span><strong>Total:</strong></span>
-                                <span class="result-value"><strong><span id="org-expenses-total">0,00&nbsp;€</span></strong></span>
-                            </div>
-                        </div>
-
-                        <div class="result-section">
-                            <h4>Taxes</h4>
-                            <div class="result-item">
-                                <span>Deductions:</span>
-                                <span class="result-value"><span id="org-deducoes">0,00&nbsp;€</span></span>
-                            </div>
-                            <div class="result-item">
-                                <span>Income Tax:</span>
-                                <span class="result-value"><span id="org-irs">0,00&nbsp;€</span></span>
-                            </div>
-                            <div class="result-item">
-                                <span>Social Security:</span>
-                                <span class="result-value"><span id="org-ss">0,00&nbsp;€</span></span>
-                            </div>
-                            <p class="result-subtext" id="org-ss-note"></p>
-                        </div>
-
-                        <div class="result-section">
-                            <div class="result-item">
-                                <span><strong>Net Income:</strong></span>
-                                <span class="result-value"><strong><span id="org-net">0,00&nbsp;€</span></strong></span>
-                            </div>
-                            <div class="result-item">
-                                <span>Other Income (after tax):</span>
-                                <span class="result-value"><span id="org-other-net">0,00&nbsp;€</span></span>
-                            </div>
-                            <div class="result-item">
-                                <span><strong>Total Net:</strong></span>
-                                <span class="result-value"><strong><span id="org-total-net">0,00&nbsp;€</span></strong></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Calculation Details -->
-                <details class="collapsible">
-                    <summary><strong>View Detailed Calculations</strong></summary>
-                    <div class="collapsible-content">
-                        <div class="results-grid">
-                            <div class="result-card">
-                                <h4>Freelancer Calculation</h4>
-                                <ul class="breakdown-list" id="calc-simp-steps"></ul>
-                                <h4>IRS Brackets</h4>
-                                <ul class="breakdown-list" id="calc-simp-irs-breakdown"></ul>
-                            </div>
-                            <div class="result-card">
-                                <h4>LDA Calculation</h4>
-                                <ul class="breakdown-list" id="calc-org-steps"></ul>
-                                <h4>IRS Brackets</h4>
-                                <ul class="breakdown-list" id="calc-org-irs-breakdown"></ul>
-                            </div>
-                        </div>
-                    </div>
-                </details>
-            </div>
-        </div>
-
-        <!-- Comparison Tab -->
-        <div class="tab-content" id="comparison">
-            <h2>Side-by-Side Comparison</h2>
-            
-            <table class="comparison-table">
-                <thead>
-                    <tr>
-                        <th>Metric</th>
-                        <th>Freelancer</th>
-                        <th>Portuguese LDA</th>
-                        <th>Difference</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Taxable Income</td>
-                        <td><span id="comp-simple-taxable">0,00&nbsp;€</span></td>
-                        <td><span id="comp-organized-taxable">0,00&nbsp;€</span></td>
-                        <td id="comp-taxable-diff">0,00&nbsp;€</td>
-                    </tr>
-                    <tr>
-                        <td>Income Tax</td>
-                        <td><span id="comp-simple-tax">0,00&nbsp;€</span></td>
-                        <td><span id="comp-organized-tax">0,00&nbsp;€</span></td>
-                        <td id="comp-tax-diff">0,00&nbsp;€</td>
-                    </tr>
-                    <tr>
-                        <td>Social Security</td>
-                        <td><span id="comp-simple-ss">0,00&nbsp;€</span></td>
-                        <td><span id="comp-organized-ss">0,00&nbsp;€</span></td>
-                        <td id="comp-ss-diff">0,00&nbsp;€</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Net Income</strong></td>
-                        <td><strong><span id="comp-simple-net">0,00&nbsp;€</span></strong></td>
-                        <td><strong><span id="comp-organized-net">0,00&nbsp;€</span></strong></td>
-                        <td><strong id="comp-net-diff">0,00&nbsp;€</strong></td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <div class="recommendation" id="regime-recommendation">
-                <h4>💡 Recommendation</h4>
-                <p id="recommendation-text">Enter your income and expenses to see a recommendation.</p>
-            </div>
-
-            <div class="info-card">
-                <h4>Break-Even Analysis</h4>
-                <p>Minimum annual expenses where LDA nets more: <strong><span id="breakeven-expenses">0,00&nbsp;€</span></strong></p>
-            </div>
-
-            <!-- Reference Data -->
-            <details class="collapsible">
-                <summary><strong>Tax Tables & Assumptions</strong></summary>
-                
-                <div class="collapsible-content">
-                    <div class="results-grid">
-                        <div class="result-card">
-                            <h4>2025 IRS Brackets</h4>
-                            <table class="comparison-table">
-                                <thead>
-                                    <tr>
-                                        <th>Income Range</th>
-                                        <th>Rate</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr><td>Up to €8,059</td><td>13%</td></tr>
-                                    <tr><td>€8,060 – €12,160</td><td>16.5%</td></tr>
-                                    <tr><td>€12,161 – €17,233</td><td>22%</td></tr>
-                                    <tr><td>€17,234 – €22,306</td><td>25%</td></tr>
-                                    <tr><td>€22,307 – €28,400</td><td>32%</td></tr>
-                                    <tr><td>€28,401 – €41,629</td><td>35.5%</td></tr>
-                                    <tr><td>€41,630 – €44,987</td><td>43.5%</td></tr>
-                                    <tr><td>€44,988 – €83,696</td><td>45%</td></tr>
-                                    <tr><td>Over €83,696</td><td>48%</td></tr>
-                                </tbody>
-                            </table>
-                            <p class="result-note"><strong>Solidarity Tax:</strong> +2.5% on €80k–€250k; +5% over €250k</p>
-                        </div>
-
-                        <div class="result-card">
-                            <h4>Key Rates</h4>
-                            <div class="result-item">
-                                <span>NHR Rate:</span>
-                                <span class="result-value"><span id="assumption-nhr-rate">20%</span></span>
-                            </div>
-                            <div class="result-item">
-                                <span>Capital Gains:</span>
-                                <span class="result-value"><span id="assumption-trading-rate">28%</span></span>
-                            </div>
-                            <div class="result-item">
-                                <span>Social Security:</span>
-                                <span class="result-value"><span id="assumption-ss-rate">21.4%</span></span>
-                            </div>
-                            <div class="result-item">
-                                <span>SS Base Factor:</span>
-                                <span class="result-value"><span id="assumption-ss-coef">70%</span></span>
-                            </div>
-                            <div class="result-item">
-                                <span>SS Cap (monthly):</span>
-                                <span class="result-value"><span id="assumption-ss-cap">€6,270</span></span>
-                            </div>
-                            <div class="result-item">
-                                <span>Max SS (monthly):</span>
-                                <span class="result-value"><span id="assumption-ss-max">€1,342</span></span>
-                            </div>
-                            <div class="result-item">
-                                <span>Simplified Coefficient:</span>
-                                <span class="result-value"><span id="assumption-simplified-coef">75%</span></span>
-                            </div>
-                            <div class="result-item">
-                                <span>High-Value CAE Codes:</span>
-                                <span class="result-value"><span id="assumption-highvalue-codes">—</span></span>
-                            </div>
-                        </div>
-
-                        <div class="result-card">
-                            <h4>Typical Admin Costs (2025)</h4>
-                            <table class="comparison-table">
-                                <thead>
-                                    <tr>
-                                        <th>Structure</th>
-                                        <th>Annual Range</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Freelancer (Simplified)</td>
-                                        <td>€360 – €1,200</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Freelancer (Organized)</td>
-                                        <td>€2,400 – €3,600</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Portuguese LDA</td>
-                                        <td>€3,650 – €8,000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>LDA Setup (Year 1)</td>
-                                        <td>+€1,000 – €2,000</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <p class="result-note">LDA mandatory costs: €6,270/year manager salary + €2,179/year social security = €8,449/year minimum</p>
-                        </div>
-
-                        <div class="result-card">
-                            <h4>Disclaimers</h4>
-                            <ul class="sanity-list">
-                                <li>Category B service activities only (Article 151 or general professional services)</li>
-                                <li>Portuguese LDA assumes single-member with management in Portugal</li>
-                                <li>IFICI/NHR 2.0 requires strict eligibility verification</li>
-                                <li>Capital gains taxed at 28% flat (englobamento not modeled)</li>
-                                <li><a href="https://github.com/0xferit/take-home-pt" target="_blank">View source & references</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </details>
-        </div>
-    </main>
-
-    <footer class="app-footer">
-        <div class="container footer-content">
-            <span>Portugal Tax Calculator 2025</span>
-            <span id="app-version" class="app-version">Loading...</span>
-        </div>
-    </footer>
+        </footer>
+    </div>
 
     <script src="logic.js"></script>
     <script src="app.js"></script>
