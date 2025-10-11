@@ -10,7 +10,7 @@
     <header class="app-header">
         <div class="container">
             <h1 class="app-title">Portugal High-Value Professional Tax Calculator</h1>
-            <p class="app-subtitle">Compare Recibos Verdes (Simplified) and Transparent LLC setups for high-value professions (Art. 151). Calculate your take-home income with IFICI/NHR 2.0 or progressive rates—instantly see which setup maximizes your net income.</p>
+            <p class="app-subtitle">Compare Recibos Verdes (Simplified) and Portuguese LDA (single-member LLC) setups for high-value professions (Art. 151). Calculate your take-home income with IFICI/NHR 2.0 or progressive rates—instantly see which setup maximizes your net income.</p>
         </div>
     </header>
 
@@ -71,7 +71,7 @@
                                 <button type="button" class="btn btn--primary" data-tab-target="income">Start with income</button>
                                 <button type="button" class="btn btn--secondary mx-8" data-tab-target="results">View results</button>
                             </div>
-                            <p class="profile-card__footer">This comparison covers Category B service activities—either Annex II high added value or other professional services. Category A salary income is out of scope. Transparent LLC results presume the activity already qualifies for fiscal transparency (management in Portugal, single member, professional services).</p>
+                            <p class="profile-card__footer">This comparison covers Category B service activities—either Annex II high added value or other professional services. Category A salary income is out of scope. Portuguese LDA results assume single-member structure with management in Portugal and professional services activity.</p>
                         </div>
                     </div>
                     <aside class="tab-shell__side">
@@ -214,7 +214,7 @@
                                 <span class="tooltip" tabindex="0" data-tooltip="Sum of all annual business costs (rent, equipment, software, telecom, subcontractors, travel, training, small tools, insurance other than the auto 1% freelancer liability, etc.). Enter net amounts (without VAT).">ℹ️</span>
                             </label>
                             <input type="number" class="form-control expense-input" id="total-business-expenses" min="0" step="0.01" placeholder="e.g. 25000">
-                            <small class="help-text">Common costs that apply regardless of setup. Do not include Social Security or income tax. Freelancer liability insurance is auto-added separately (1% of gross) so <strong>don’t double count it</strong> here.</small>
+                            <small class="help-text">Common costs that apply regardless of setup. Do not include Social Security or income tax. Freelancer liability insurance is auto-added separately (1% of gross) so don't double count it here.</small>
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="admin-freelancer">Admin &amp; Compliance — Freelancer (€)
@@ -224,7 +224,7 @@
                             <small class="help-text">Freelancer overhead that you wouldn’t need as a company (e.g. lighter accounting and admin stack).</small>
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="admin-transparent">Admin &amp; Compliance — Transparent LLC (€)
+                            <label class="form-label" for="admin-transparent">Admin &amp; Compliance — Portuguese LDA (€)
                                 <span class="tooltip" tabindex="0" data-tooltip="Typical items: certified accountant (TOC/CC), bank fees, mandatory filings, corporate registry, digital certificate, payroll if applicable. Enter net amounts (without VAT).">ℹ️</span>
                             </label>
                             <input type="number" class="form-control expense-input" id="admin-transparent" min="0" step="0.01" placeholder="0">
@@ -236,7 +236,7 @@
                 <div class="expense-total">
                     <div class="grid" style="grid-template-columns: 1fr 1fr; gap: var(--space-8);">
                         <strong>Freelancer total costs: <span id="total-expenses-simp">0,00&nbsp;€</span></strong>
-                        <strong>Transparent LLC total costs: <span id="total-expenses-org">0,00&nbsp;€</span></strong>
+                        <strong>Portuguese LDA total costs: <span id="total-expenses-org">0,00&nbsp;€</span></strong>
                     </div>
                     <small class="help-text">Freelancer total includes an assumed 1% liability insurance for protection.</small>
                     <div id="expense-warning" class="warning" style="display: none;"></div>
@@ -346,7 +346,7 @@
                             <span class="result-value"><strong><span id="summary-net-simp">0,00&nbsp;€</span></strong></span>
                         </div>
                         <div class="result-item">
-                            <span>Transparent LLC:</span>
+                            <span>Portuguese LDA:</span>
                             <span class="result-value"><strong><span id="summary-net-org">0,00&nbsp;€</span></strong></span>
                         </div>
                         <div class="result-item difference">
@@ -361,7 +361,7 @@
                             <span class="result-value"><span id="summary-cost-simp">0,00&nbsp;€</span></span>
                         </div>
                         <div class="result-item">
-                            <span>Transparent LLC costs:</span>
+                            <span>Portuguese LDA costs:</span>
                             <span class="result-value"><span id="summary-cost-org">0,00&nbsp;€</span></span>
                         </div>
                         <div class="result-item difference">
@@ -376,7 +376,7 @@
                             <span class="result-value"><span id="summary-tax-simp">0,00&nbsp;€</span></span>
                         </div>
                         <div class="result-item">
-                            <span>Transparent LLC IRS + Social Security:</span>
+                            <span>Portuguese LDA IRS + Social Security:</span>
                             <span class="result-value"><span id="summary-tax-org">0,00&nbsp;€</span></span>
                         </div>
                         <div class="result-item difference">
@@ -391,7 +391,7 @@
                             <span class="result-value"><span id="summary-rate-simp">0,0%</span></span>
                         </div>
                         <div class="result-item">
-                            <span>Transparent LLC:</span>
+                            <span>Portuguese LDA:</span>
                             <span class="result-value"><span id="summary-rate-org">0,0%</span></span>
                         </div>
                         <div class="result-item difference">
@@ -479,7 +479,7 @@
                 </div>
 
                 <div class="result-card" id="org-results">
-                    <h3>Transparent LLC Results</h3>
+                    <h3>Portuguese LDA Results</h3>
                     <div class="result-section">
                         <h4>Income</h4>
                         <div class="result-item">
@@ -554,7 +554,7 @@
                     <ul class="breakdown-list" id="calc-simp-irs-breakdown"></ul>
                 </div>
                 <div class="result-card" id="calc-org-card">
-                    <h3>Transparent LLC Calculation</h3>
+                    <h3>Portuguese LDA Calculation</h3>
                     <p class="result-note">Real expenses reduce both the cash net and the taxable base here.</p>
                     <ul class="breakdown-list" id="calc-org-steps"></ul>
                     <h4>IRS brackets applied</h4>
@@ -660,7 +660,7 @@
                     <h3>Disclaimers &amp; Sources</h3>
                     <ul class="sanity-list">
                         <li>Supports Category B service activities (Article 151 high‑value or other professional services); goods, accommodation, and retail coefficients are not modelled.</li>
-                        <li>Transparent LLC results assume management in Portugal, a single member, and professional Category B activity.</li>
+                        <li>Portuguese LDA (single-member LLC) results assume management in Portugal and professional Category B activity. Note: Portuguese LDAs are NOT tax transparent like US LLCs—income flows through but the entity is not transparent for Portuguese tax purposes.</li>
                         <li>IFICI/NHR 2.0 applies only if you qualify; otherwise the calculator keeps progressive IRS.</li>
                         <li>Trading income taxed at 28% flat; englobamento not modeled.</li>
                         <li>Limited liability protection is assumed via the LLC structure.</li>
@@ -685,13 +685,13 @@
             <div class="tab-shell">
             <div class="tab-shell__main">
             <div class="form-section">
-                <h3>Freelancer vs Transparent LLC</h3>
+                <h3>Freelancer vs Portuguese LDA</h3>
                 <table class="comparison-table">
                     <thead>
                         <tr>
                             <th>Metric</th>
                             <th>Freelancer (Simplified)</th>
-                            <th>Transparent LLC</th>
+                            <th>Portuguese LDA</th>
                             <th>Difference</th>
                         </tr>
                     </thead>
@@ -730,8 +730,8 @@
 
                 <div class="form-section" style="margin-top: var(--space-24);">
                     <h4>Break-even Analysis</h4>
-                    <p>Minimum annual expenses where Transparent LLC nets more than Freelancer: <strong><span id="breakeven-expenses">0,00&nbsp;€</span></strong></p>
-                    <p class="tooltip" tabindex="0" data-tooltip="This is the minimum amount of annual business expenses where the Transparent LLC (fiscal transparency) becomes more advantageous than the Freelancer (simplified) setup.">ℹ️ What does this mean?</p>
+                    <p>Minimum annual expenses where Portuguese LDA nets more than Freelancer: <strong><span id="breakeven-expenses">0,00&nbsp;€</span></strong></p>
+                    <p class="tooltip" tabindex="0" data-tooltip="This is the minimum amount of annual business expenses where the Portuguese LDA becomes more advantageous than the Freelancer (simplified) setup.">ℹ️ What does this mean?</p>
                 </div>
             </div>
             </div>
