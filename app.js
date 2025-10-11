@@ -443,6 +443,7 @@ function calculateAndUpdate() {
         baseExpenses,
         adminExpenses: adminTransparent,
         isNHREligible: nhrEligible,
+        useLLCManagerMinSS: true,
     });
 
     updateResultsDisplayDual(simplifiedResults, transparentResults);
@@ -505,7 +506,16 @@ function updateResultsDisplayDual(simplified, transparent) {
         return `Monthly base ${baseApplied}; contribution ${monthlyContribution}.`;
     };
     if (simpSSNote) simpSSNote.textContent = buildSSNote(simplified.socialSecurityInfo);
-    if (orgSSNote) orgSSNote.textContent = buildSSNote(transparent.socialSecurityInfo);
+    if (orgSSNote) {
+        if (transparent.socialSecurityInfo?.mode === 'llc_manager_min') {
+            const emp = formatCurrency(transparent.socialSecurityInfo.monthlyEmployee);
+            const er = formatCurrency(transparent.socialSecurityInfo.monthlyEmployer);
+            const base = formatCurrency(transparent.socialSecurityInfo.monthlyBaseApplied);
+            orgSSNote.textContent = `LLC manager minimum applied: base ${base}; employee ${emp} + employer ${er} per month.`;
+        } else {
+            orgSSNote.textContent = buildSSNote(transparent.socialSecurityInfo);
+        }
+    }
 
     const simpTotalTax = simplified.incomeTax + simplified.socialSecurity;
     const orgTotalTax = transparent.incomeTax + transparent.socialSecurity;

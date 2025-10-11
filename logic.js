@@ -326,6 +326,7 @@
     baseExpenses = 0,
     adminExpenses = 0,
     isNHREligible = true,
+    useLLCManagerMinSS = true,
   } = {}) {
     const income = sanitizeAmount(grossIncome);
     const totalExpenses = sanitizeAmount(baseExpenses) + sanitizeAmount(adminExpenses);
@@ -336,7 +337,27 @@
     const deducoes = computeDeducoesAColeta({ dependentsCount, personalDeductions });
     let incomeTax = Math.max(0, grossIRS - deducoes);
     if (isFirstYearIRS50pct) incomeTax *= 0.5;
-    const socialSecurityInfo = computeSSAnnual(netBusinessIncome, { isFirstYearSSExempt });
+    let socialSecurityInfo;
+    if (useLLCManagerMinSS && !isFirstYearSSExempt) {
+      const monthlyBase = TAX_DATA.socialSecurity.ias; // 1× IAS as minimum manager base
+      const employeeRate = 0.11;
+      const employerRate = 0.2375;
+      const monthlyEmployee = monthlyBase * employeeRate;
+      const monthlyEmployer = monthlyBase * employerRate;
+      const monthly = monthlyEmployee + monthlyEmployer;
+      socialSecurityInfo = {
+        annual: monthly * 12,
+        monthly,
+        monthlyEmployee,
+        monthlyEmployer,
+        monthlyBaseApplied: monthlyBase,
+        monthlyCap: TAX_DATA.socialSecurity.ias * TAX_DATA.socialSecurity.maxBaseMultiplier,
+        capped: false,
+        mode: 'llc_manager_min',
+      };
+    } else {
+      socialSecurityInfo = computeSSAnnual(netBusinessIncome, { isFirstYearSSExempt });
+    }
     const netIncome = income - totalExpenses - incomeTax - socialSecurityInfo.annual;
     return {
       taxableIncome,
@@ -352,6 +373,7 @@
       grossIRS,
       irsDetails,
       isNHREligible,
+      ssMode: useLLCManagerMinSS ? 'llc_manager_min' : 'self_employed',
     };
   }
 
