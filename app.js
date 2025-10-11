@@ -371,7 +371,8 @@ function updateActivitySelectionDisplay() {
 function applySuggestedAdminIfEnabled() {
     const toggle = document.getElementById('use-suggested-admin');
     if (!toggle || !toggle.checked) return;
-    setExpenseValue('admin-freelancer', SUGGESTED_ADMIN.freelancer);
+    const freelAdmin = appState.freelancerBasis === 'organized' ? SUGGESTED_ADMIN.freelancer_organized : SUGGESTED_ADMIN.freelancer;
+    setExpenseValue('admin-freelancer', freelAdmin);
     setExpenseValue('admin-transparent', SUGGESTED_ADMIN.transparent);
 }
 

@@ -1,8 +1,10 @@
 // Pure business logic for TakeHomePT — exposed via window.TakeHomeLogic
 (function (global) {
   const SUGGESTED_ADMIN = {
-    freelancer: 2050,
-    transparent: 5935,
+    // Annual admin/compliance midpoints (EUR)
+    freelancer: 800, // simplified regime typical support
+    freelancer_organized: 3000, // organized accounting with TOC
+    transparent: 4800, // LDA ongoing accounting/compliance
   };
 
   const TAX_DATA = {
