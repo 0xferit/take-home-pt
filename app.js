@@ -36,8 +36,6 @@ const setText = (id, value) => {
 
 const ACTIVITY_DEFAULT = 'services_high_value';
 
-let onboardingDismissed = false;
-
 const appState = {
     nhrStatus: 'standard',
     activityProfile: ACTIVITY_DEFAULT,
@@ -70,7 +68,6 @@ function initApp() {
     }
     updateExpenseTotal();
     calculateAndUpdate();
-    if (hasAnyUserInput()) dismissOnboarding();
     populateAppVersion();
 }
 
@@ -91,7 +88,6 @@ function setupEventListeners() {
     document.getElementById('nhr-status').addEventListener('change', (event) => {
         appState.nhrStatus = event.target.value;
         updateInputsAtGlance();
-        dismissOnboarding();
         recalc();
     });
 
@@ -99,7 +95,6 @@ function setupEventListeners() {
         input.addEventListener('change', (event) => {
             if (!event.target.checked) return;
             setActivityProfile(event.target.value || ACTIVITY_DEFAULT, { source: 'manual' });
-            dismissOnboarding();
             recalc();
         });
     });
@@ -164,32 +159,9 @@ function setupEventListeners() {
             event.target.value = value;
             appState[key] = value;
             updateExpenseTotal();
-            dismissOnboarding();
             recalc();
         });
     });
-
-    const onboardIncome = document.getElementById('btn-get-started');
-    if (onboardIncome) {
-        onboardIncome.addEventListener('click', () => {
-            switchTab('income');
-            setTimeout(() => {
-                const incomeInput = document.getElementById('gross-income');
-                if (incomeInput) incomeInput.focus();
-            }, 80);
-            dismissOnboarding();
-        });
-    }
-
-    const onboardResults = document.getElementById('btn-view-results');
-    if (onboardResults) {
-        onboardResults.addEventListener('click', () => {
-            switchTab('results');
-            const resultsRegion = document.getElementById('results');
-            if (resultsRegion) resultsRegion.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            dismissOnboarding();
-        });
-    }
 
     document.querySelectorAll('.expense-input').forEach((input) => {
         input.addEventListener('input', (event) => {
@@ -197,7 +169,6 @@ function setupEventListeners() {
             event.target.value = value;
             appState.expenses[event.target.id] = value;
             updateExpenseTotal();
-            dismissOnboarding();
             recalc();
         });
     });
@@ -220,7 +191,6 @@ function setupEventListeners() {
             const key = id.split('-')[0];
             appState.personalDeductions[key] = value;
             updatePersonalDeductions();
-            dismissOnboarding();
             recalc();
         });
     });
@@ -236,14 +206,8 @@ function setupEventListeners() {
                     if (incomeInput) incomeInput.focus();
                 }, 80);
             }
-            dismissOnboarding();
         });
     });
-
-    const onboardingDismiss = document.getElementById('btn-dismiss-onboarding');
-    if (onboardingDismiss) {
-        onboardingDismiss.addEventListener('click', () => dismissOnboarding());
-    }
 }
 
 function switchTab(tabName) {
@@ -969,16 +933,6 @@ function updateResultsVisibility() {
         zeroState.removeAttribute('hidden');
         detail.classList.add('is-dimmed');
         detail.setAttribute('aria-hidden', 'true');
-    }
-}
-
-function dismissOnboarding() {
-    if (onboardingDismissed) return;
-    onboardingDismissed = true;
-    const card = document.getElementById('onboarding-card');
-    if (card) {
-        card.classList.add('hidden');
-        card.setAttribute('aria-hidden', 'true');
     }
 }
 
