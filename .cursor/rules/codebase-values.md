@@ -5,6 +5,11 @@ globs:
   - "**/*"
 ---
 
+Product objective
++- This website helps self-employed professionals in Portugal optimally plan their tax and business setups to maximize take-home amounts.
++- Every feature, calculation, and UI decision should serve this goal: enabling informed, optimal financial planning.
++- Prioritize accuracy, transparency, and usability for financial decision-making.
+
 Our priorities (in order when trade‑offs arise)
 1) Simplicity
 - Minimize moving parts. Prefer plain HTML/CSS/vanilla JS over frameworks.
