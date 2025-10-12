@@ -1404,6 +1404,7 @@ The tool doesn't just calculate taxes—it shows users **which structure puts th
      - Income Tax (IRS):        €XX,XXX
      - Solidarity Tax:          €X,XXX
      - Social Security:         €XX,XXX
+     - Other income tax (28%):  €XX,XXX
      = Total Taxes:             €XX,XXX
      
      Admin Costs:               €X,XXX
@@ -2201,21 +2202,24 @@ START: Freelancer choosing between simplified and organized
 
 ### Edge Case 2: Multiple Income Sources
 
-**Scenario:** User has both Portuguese freelance income AND foreign passive income
+**Scenario:** User has both Portuguese freelance income AND other Portuguese passive income (dividends, capital gains)
 
-**Challenges:**
-- Tool assumes single income source
-- NHR status affects different income types differently
-- Solidarity tax applies to total taxable income (not just freelance)
+**Current Support:**
+- ✅ Tool supports Portuguese dividends & interest (Category E) at 28% flat rate
+- ✅ Tool supports Portuguese capital gains (Category G) at 28% flat rate
+- ✅ Other income tax (28%) is now properly displayed in tax breakdown
+- ✅ Other income (net) is included in total net income calculation
+- ⚠️ Foreign income under NHR 1.0 exemptions is NOT modeled (user must exclude it)
 
-**Current Behavior:**
-- Tool only models Portuguese professional income
-- Doesn't account for other income sources
+**Limitations:**
+- Tool does NOT model foreign rental income, foreign wages, or other complex income sources
+- Solidarity tax calculation includes Category B income only (not other income types)
+- Users with NHR 1.0 and foreign income must manually exclude exempt amounts
 
-**Recommendation:**
-- Add input: "Other taxable income (if any)"
-- Include in total for solidarity tax calculation
-- Add help text: "Include rental income, foreign wages, etc."
+**User Guidance:**
+- Help text clearly states: "If you have NHR 1.0 with foreign dividends/interest, those are typically exempt - don't include them here"
+- Calculator scope disclaimer prominently displayed
+- Users directed to consult tax advisor for comprehensive foreign income analysis
 
 ---
 
