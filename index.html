@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TakeHome PT – Tax Planning for Self-Employed Professionals in Portugal</title>
-    <meta name="description" content="Optimize your tax setup in Portugal. Compare Freelancer vs Transparent LLC to maximize your take-home income.">
+    <meta name="description" content="Optimize your tax setup in Portugal. Compare Freelancer vs Single-Member Company (LDA) to maximize your take-home income.">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -82,16 +82,32 @@
                     </div>
 
                     <details class="details">
-                        <summary>First-year benefits</summary>
+                        <summary>First-year benefits & age-based exemptions</summary>
                         <div class="checkbox-group">
                             <label class="checkbox">
                                 <input type="checkbox" id="firstyear-ss-exempt">
-                                <span>Social Security exemption (first 12 months)</span>
+                                <span>Social Security exemption (first 12 months of activity)</span>
                             </label>
                             <label class="checkbox">
                                 <input type="checkbox" id="firstyear-irs-50">
                                 <span>50% IRS reduction (first tax year)</span>
                             </label>
+                            <label class="checkbox">
+                                <input type="checkbox" id="irs-jovem">
+                                <span>IRS Jovem (under 35, progressive exemption up to 10 years)</span>
+                            </label>
+                        </div>
+                        <div id="irs-jovem-year-selector" class="form-group" style="display: none; margin-top: var(--space-4);">
+                            <label for="irs-jovem-year">IRS Jovem Year</label>
+                            <select id="irs-jovem-year" class="input">
+                                <option value="1">Year 1 (100% exemption)</option>
+                                <option value="2">Year 2 (75% exemption)</option>
+                                <option value="3">Year 3 (50% exemption)</option>
+                                <option value="4">Year 4 (50% exemption)</option>
+                                <option value="5">Year 5 (25% exemption)</option>
+                                <option value="6">Year 6+ (no exemption)</option>
+                            </select>
+                            <p class="help-text">Select which year of IRS Jovem benefit you're in. Available for residents under 35 with completed higher education.</p>
                         </div>
                     </details>
                 </section>
@@ -155,7 +171,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="admin-transparent">Transparent LLC Admin Costs</label>
+                            <label for="admin-transparent">Single-Member Company (LDA) Admin Costs</label>
                             <div class="input-group">
                                 <span class="input-group__prefix">€</span>
                                 <input type="number" id="admin-transparent" class="input expense-input" value="4800" min="0" step="50">
@@ -175,7 +191,7 @@
                             <strong id="total-expenses-simp">€0.00</strong>
                         </div>
                         <div class="expense-summary__item">
-                            <span>Transparent LLC total expenses:</span>
+                            <span>Single-Member Company (LDA) total expenses:</span>
                             <strong id="total-expenses-org">€0.00</strong>
                         </div>
                     </div>
@@ -268,7 +284,7 @@
                             </div>
 
                             <div class="summary-card summary-card--highlight">
-                                <div class="summary-card__label">Transparent LLC</div>
+                                <div class="summary-card__label">Single-Member Company (LDA)</div>
                                 <div class="summary-card__value" id="summary-net-org">€0.00</div>
                                 <div class="summary-card__meta">
                                     <span id="summary-rate-org">0.0%</span> take-home
@@ -329,7 +345,7 @@
                             </div>
 
                             <div class="breakdown__col">
-                                <h3>Transparent LLC Results</h3>
+                                <h3>Single-Member Company (LDA) Results</h3>
                                 <dl class="data-list">
                                     <dt>Gross income</dt>
                                     <dd id="org-gross">€0.00</dd>
@@ -368,7 +384,7 @@
                                         <tr>
                                             <th></th>
                                             <th>Freelancer</th>
-                                            <th>Transparent LLC</th>
+                                            <th>Single-Member Company</th>
                                             <th>Difference</th>
                                         </tr>
                                     </thead>
@@ -413,7 +429,7 @@
                                     <ul id="calc-simp-irs-breakdown" class="calc-breakdown"></ul>
                                 </div>
                                 <div>
-                                    <h4>Transparent LLC Calculation</h4>
+                                    <h4>Single-Member Company (LDA) Calculation</h4>
                                     <ol id="calc-org-steps" class="calc-steps"></ol>
                                     <h5>IRS Bracket Breakdown</h5>
                                     <ul id="calc-org-irs-breakdown" class="calc-breakdown"></ul>

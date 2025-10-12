@@ -47,6 +47,8 @@ const appState = {
     expenses: {},
     isFirstYearSSExempt: false,
     isFirstYearIRS50pct: false,
+    irsJovemEnabled: false,
+    irsJovemYear: 1,
     liabilityInsurance: 0,
     freelancerBasis: 'simplified',
     personalDeductions: {

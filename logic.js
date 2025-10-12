@@ -237,6 +237,20 @@
     );
   }
 
+  function getIRSJovemExemption(year) {
+    // IRS Jovem progressive exemption rates for residents under 35
+    // Source: Portuguese Tax Code, IRS Jovem benefit (2020+)
+    const exemptionRates = {
+      1: 1.00,   // Year 1: 100% exemption
+      2: 0.75,   // Year 2: 75% exemption
+      3: 0.50,   // Year 3: 50% exemption
+      4: 0.50,   // Year 4: 50% exemption
+      5: 0.25,   // Year 5: 25% exemption
+    };
+    const yearNum = Number(year) || 0;
+    return exemptionRates[yearNum] || 0;
+  }
+
   function computeSSAnnual(grossIncome, { isFirstYearSSExempt } = {}) {
     const income = sanitizeAmount(grossIncome);
     const rate = TAX_DATA.socialSecurity.rate;
@@ -305,6 +319,8 @@
     personalDeductions,
     isFirstYearIRS50pct,
     isFirstYearSSExempt,
+    irsJovemEnabled,
+    irsJovemYear,
     baseExpenses = 0,
     adminExpenses = 0,
     insuranceExpenses = 0,
@@ -319,8 +335,20 @@
     const baseIRS = Number(irsDetails.baseIRS || 0);
     const solidarityTax = Number(irsDetails.solidarityTax || 0);
     const deducoes = computeDeducoesAColeta({ dependentsCount, personalDeductions });
-    let incomeTax = Math.max(0, baseIRS - deducoes) + solidarityTax;
-    if (isFirstYearIRS50pct) incomeTax *= 0.5;
+    let irsAfterDeductions = Math.max(0, baseIRS - deducoes);
+    
+    // Apply IRS Jovem exemption (if applicable)
+    let irsJovemReduction = 0;
+    if (irsJovemEnabled) {
+      const exemptionRate = getIRSJovemExemption(irsJovemYear);
+      irsJovemReduction = irsAfterDeductions * exemptionRate;
+      irsAfterDeductions -= irsJovemReduction;
+    }
+    
+    // Apply first-year 50% reduction (if applicable)
+    if (isFirstYearIRS50pct) irsAfterDeductions *= 0.5;
+    
+    let incomeTax = irsAfterDeductions + solidarityTax;
     const socialSecurityInfo = computeSSAnnual(income, { isFirstYearSSExempt });
     const netIncome = income - totalExpenses - incomeTax - socialSecurityInfo.annual;
     return {
@@ -338,6 +366,7 @@
       grossIRS: baseIRS + solidarityTax,
       irsDetails,
       isNHREligible,
+      irsJovemReduction,
     };
   }
 
@@ -348,6 +377,8 @@
     personalDeductions,
     isFirstYearIRS50pct,
     isFirstYearSSExempt,
+    irsJovemEnabled,
+    irsJovemYear,
     baseExpenses = 0,
     adminExpenses = 0,
     insuranceExpenses = 0,
@@ -361,8 +392,20 @@
     const baseIRS = Number(irsDetails.baseIRS || 0);
     const solidarityTax = Number(irsDetails.solidarityTax || 0);
     const deducoes = computeDeducoesAColeta({ dependentsCount, personalDeductions });
-    let incomeTax = Math.max(0, baseIRS - deducoes) + solidarityTax;
-    if (isFirstYearIRS50pct) incomeTax *= 0.5;
+    let irsAfterDeductions = Math.max(0, baseIRS - deducoes);
+    
+    // Apply IRS Jovem exemption (if applicable)
+    let irsJovemReduction = 0;
+    if (irsJovemEnabled) {
+      const exemptionRate = getIRSJovemExemption(irsJovemYear);
+      irsJovemReduction = irsAfterDeductions * exemptionRate;
+      irsAfterDeductions -= irsJovemReduction;
+    }
+    
+    // Apply first-year 50% reduction (if applicable)
+    if (isFirstYearIRS50pct) irsAfterDeductions *= 0.5;
+    
+    let incomeTax = irsAfterDeductions + solidarityTax;
     const socialSecurityInfo = computeSSAnnual(netBusinessIncome, { isFirstYearSSExempt });
     const netIncome = income - totalExpenses - incomeTax - socialSecurityInfo.annual;
     return {
@@ -381,6 +424,7 @@
       grossIRS: baseIRS + solidarityTax,
       irsDetails,
       isNHREligible,
+      irsJovemReduction,
     };
   }
 
@@ -391,6 +435,8 @@
     personalDeductions,
     isFirstYearIRS50pct,
     isFirstYearSSExempt,
+    irsJovemEnabled,
+    irsJovemYear,
     baseExpenses = 0,
     adminExpenses = 0,
     isNHREligible = true,
@@ -404,8 +450,20 @@
     const baseIRS = Number(irsDetails.baseIRS || 0);
     const solidarityTax = Number(irsDetails.solidarityTax || 0);
     const deducoes = computeDeducoesAColeta({ dependentsCount, personalDeductions });
-    let incomeTax = Math.max(0, baseIRS - deducoes) + solidarityTax;
-    if (isFirstYearIRS50pct) incomeTax *= 0.5;
+    let irsAfterDeductions = Math.max(0, baseIRS - deducoes);
+    
+    // Apply IRS Jovem exemption (if applicable)
+    let irsJovemReduction = 0;
+    if (irsJovemEnabled) {
+      const exemptionRate = getIRSJovemExemption(irsJovemYear);
+      irsJovemReduction = irsAfterDeductions * exemptionRate;
+      irsAfterDeductions -= irsJovemReduction;
+    }
+    
+    // Apply first-year 50% reduction (if applicable)
+    if (isFirstYearIRS50pct) irsAfterDeductions *= 0.5;
+    
+    let incomeTax = irsAfterDeductions + solidarityTax;
     let socialSecurityInfo;
     if (useLLCManagerMinSS && !isFirstYearSSExempt) {
       const monthlyBase = TAX_DATA.socialSecurity.ias; // 1× IAS as minimum manager base
@@ -443,6 +501,7 @@
       irsDetails,
       isNHREligible,
       ssMode: useLLCManagerMinSS ? 'llc_manager_min' : 'self_employed',
+      irsJovemReduction,
     };
   }
 
@@ -454,6 +513,7 @@
     computeIRSDetails,
     computeSolidarityTax,
     computeDeducoesAColeta,
+    getIRSJovemExemption,
     computeSSAnnual,
     getMarginalTaxRate,
     computeSimplified,
