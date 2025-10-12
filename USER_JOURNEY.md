@@ -116,21 +116,22 @@ The tool doesn't just calculate taxes—it shows users **which structure puts th
 - Tech Savviness: High
 
 **Background:**
-- Moved to Portugal 6 months ago under NHR 2.0/IFICI program
+- Moved to Portugal 6 months ago, considering tax optimization
 - Working remotely for international clients
-- Completed master's degree (eligible for IRS Jovem)
+- Completed master's degree 2 years ago (eligible for IRS Jovem Year 1)
 - Currently operating as freelancer, considering LDA formation
+- **Critical decision:** Choose between NHR 2.0/IFICI or IRS Jovem (cannot have both)
 
 **Goals:**
 - Maximize take-home income while staying compliant
 - Compare structures to find the optimal setup
-- Understand how NHR 2.0 + IRS Jovem benefits affect each option
+- **Decide between NHR 20% flat rate OR IRS Jovem exemption** (mutually exclusive)
 - Determine if LDA complexity is justified by higher take-home
 
 **Pain Points:**
 - Confused by Portuguese business structure terminology
 - Uncertain about activity code classification (62020 vs general services)
-- Doesn't know if IRS Jovem can combine with NHR
+- Needs to understand NHR vs IRS Jovem tradeoff (which gives more take-home?)
 - Worried about choosing suboptimal structure and leaving money on the table
 
 **Tech Behavior:**
@@ -283,19 +284,28 @@ The tool doesn't just calculate taxes—it shows users **which structure puts th
      - **Auto-magic:** Activity type automatically selects "High-value professions"
      - Reads confirmation: "High-value (Article 151) detected from CAE code"
      - Sees link: "Verify on official INE CAE database"
-   - **Option B - Manual Selection:**
-     - If user doesn't know CAE code
-     - Clicks "What are high-value professions?" details
-     - Reviews Article 151 services list
-     - Manually selects appropriate radio button
    - ✅ Understands the coefficient concept
    - **Notices:** NHR status dropdown below is now enabled with success message
 
-2. **NHR Status Selection (Enabled after activity type):**
-   - Sees dropdown with 3 options (now enabled)
+2. **CRITICAL DECISION: NHR or IRS Jovem (MUTUALLY EXCLUSIVE):**
+   - Teresa must choose ONE path only:
+   
+   **Path A - NHR 2.0/IFICI (She chooses this):**
    - Selects "NHR 2.0 / IFICI (20% flat rate)"
-   - Reads help text: "High added value activity detected. NHR 20% rate can be applied."
-   - ✅ Confirms this matches her situation
+   - Reads help text: "✅ High-value activity detected. NHR 20% rate available."
+   - **INSTANTLY:** IRS Jovem checkbox becomes DISABLED
+   - Sees warning: "⚠️ IRS Jovem not available - you have NHR status. These benefits are mutually exclusive."
+   - ✅ Understands she cannot combine both
+   - Result: 20% flat tax on €85k → €12,750 IRS
+   
+   **Path B - IRS Jovem (Alternative she considers):**
+   - First expands "First-year benefits" section
+   - Checks "IRS Jovem" checkbox
+   - Selects "Year 1 (100% exemption)"
+   - **INSTANTLY:** NHR dropdown resets to "Standard progressive rates" and becomes DISABLED
+   - Sees warning: "⚠️ NHR not available - you selected IRS Jovem. These benefits are mutually exclusive."
+   - ✅ Understands the tradeoff
+   - Result: Progressive tax with 100% exemption → €0 IRS in Year 1
 
 3. **First-Year Benefits:**
    - Expands "First-year tax benefits" accordion
@@ -316,7 +326,8 @@ The tool doesn't just calculate taxes—it shows users **which structure puts th
 **Thoughts:**
 - "The activity code lookup is really helpful!"
 - "Not sure if I'm in Year 1 of IRS Jovem or Year 2..."
-- "Can IRS Jovem combine with NHR? The tool allows it..."
+- "Hmm, I have to choose between NHR 20% or IRS Jovem... which is better?"
+- "The tool won't let me select both - good, that prevents me from making a mistake"
 
 **Emotions:** 😐 Engaged, Slightly Confused, Cautiously Optimistic
 
@@ -324,6 +335,7 @@ The tool doesn't just calculate taxes—it shows users **which structure puts th
 - 🔴 Unclear if she qualifies for "first-year" benefits mid-year
 - 🟡 Needs clarification on IRS Jovem year counting
 - 🟢 Activity code lookup is excellent, reduces friction
+- 🟢 Mutual exclusion enforced - prevents illegal combination
 
 ---
 
@@ -531,21 +543,63 @@ The tool doesn't just calculate taxes—it shows users **which structure puts th
 
 ---
 
+#### Stage 6B: Critical Decision - NHR vs IRS Jovem Comparison (6 minutes)
+**Touchpoint:** Testing both benefit scenarios
+
+**User Actions:**
+1. **Tests IRS Jovem Scenario:**
+   - Goes back to Setup tab
+   - Unchecks NHR 2.0 (if selected), selects "Standard progressive rates"
+   - Checks "IRS Jovem" checkbox
+   - Selects "Year 1 (100% exemption)"
+   - Returns to Results
+   - Sees:
+     - Organized: €68,231 net (IRS = €0!)
+     - **Realizes:** IRS Jovem Year 1 = €0 income tax on €85k income!
+
+2. **Tests NHR Scenario:**
+   - Goes back to Setup tab
+   - Unchecks "IRS Jovem"
+   - Notices: NHR dropdown re-enables
+   - Selects "NHR 2.0 / IFICI (20% flat rate)"
+   - Returns to Results
+   - Sees:
+     - Organized: €55,481 net (IRS = €12,750 at 20% flat)
+   
+3. **Compares Results:**
+   - IRS Jovem Year 1: €68,231 net
+   - NHR 20%: €55,481 net
+   - **Difference: €12,750/year in Year 1!**
+   - **Decision:** Choose IRS Jovem for Years 1-5, reconsider in Year 6
+
+4. **Plans Long-Term:**
+   - Tests "Year 2 (75% exemption)":
+     - Organized: €65,039 net
+   - Tests "Year 6+ (no exemption)":
+     - Organized: €52,331 net
+     - NHR 20%: €55,481 net
+   - **Realizes:** NHR wins starting Year 6, but she has 5 years of IRS Jovem first
+
+**Thoughts:**
+- "IRS Jovem is WAY better in Years 1-5!"
+- "I should choose IRS Jovem now, can't get NHR anyway once I claim it"
+- "Year 1: €12,750 more than NHR - that's huge!"
+
+**Emotions:** 🤩 Excited, Empowered, Clear Decision
+
+**Final Decision:** ✅ Choose IRS Jovem (Years 1-5), accept progressive rates after
+
+---
+
 #### Stage 7: Post-Calculation Actions (5 minutes)
 **Touchpoint:** Next steps after seeing results
 
 **User Actions:**
-1. **Experiments with scenarios:**
-   - Goes back to Setup tab
-   - Changes IRS Jovem to "Year 2 (75% exemption)"
-   - Sees results update:
-     - Organized now shows €62,154 (still best)
-   - Changes to "Year 6+ (no exemption)"
-   - Sees results update:
-     - Organized shows €49,103
-     - Simplified shows €48,697
-     - LDA shows €48,039
-   - **Realizes:** LDA becomes more competitive without IRS Jovem
+1. **Experiments with income scenarios:**
+   - Tests different income levels with IRS Jovem
+   - €100k income: Still €0 tax in Year 1
+   - €50k income: Still €0 tax in Year 1
+   - **Realizes:** IRS Jovem is incredibly powerful
 
 2. **Tries to save results:**
    - Looks for "Save" or "Export" button
@@ -1456,20 +1510,29 @@ The tool doesn't just calculate taxes—it shows users **which structure puts th
 
 ### Decision Tree 1: Which Tax Structure Should I Choose?
 
-**IMPORTANT:** NHR eligibility is determined by activity type, not chosen first. Select activity type → then NHR becomes available if eligible.
+**IMPORTANT:** Activity type determines NHR eligibility. NHR and IRS Jovem are mutually exclusive.
 
 ```
 START: Self-employed professional in Portugal
 │
 ├─ Q1: What is your activity type?
-│  ├─ High-value (Article 151) → NHR 20% available
-│  └─ General services → NHR not applicable, standard progressive only
+│  ├─ High-value (Article 151) → Go to Q2
+│  └─ General services → NHR not applicable, standard progressive only → Go to Q3
 │
-├─ Q2: Do you have NHR status (original or 2.0)?
-│  ├─ YES (and activity is eligible) → Q3
-│  └─ NO → Q4
+├─ Q2: CRITICAL CHOICE - NHR or IRS Jovem? (MUTUALLY EXCLUSIVE)
+│  ├─ Under 35 with higher education AND no NHR enrollment?
+│  │  ├─ YES → CHOOSE ONE:
+│  │  │  ├─ Option A: IRS Jovem (100%/75%/50% exemptions Years 1-5)
+│  │  │  │  └─ Better for: Lower-medium income, early career, Years 1-5
+│  │  │  └─ Option B: NHR 20% flat rate (10 years)
+│  │  │     └─ Better for: High income, Years 6+, long-term residents
+│  │  └─ NO → Go to Q3
+│  │
+│  └─ Over 35 OR no higher education OR already enrolled in NHR?
+│     ├─ Have NHR? → Use NHR 20% → Go to Q3
+│     └─ Don't have NHR? → Standard progressive only → Go to Q3
 │
-├─ Q2: What is your annual income?
+├─ Q3: What is your annual income?
 │  ├─ < €60,000
 │  │  ├─ Real expenses < deemed expenses (25% or 35%)?
 │  │  │  ├─ YES → ✅ FREELANCER (SIMPLIFIED)
@@ -1528,17 +1591,22 @@ START: Self-employed professional in Portugal
 ```
 START: User under 35 years old
 │
-├─ Q1: Have you completed higher education (bachelor's degree or higher)?
-│  ├─ NO → ❌ Not eligible for IRS Jovem
-│  └─ YES → Q2
+├─ Q1: Have you EVER enrolled in NHR/IFICI? (Critical exclusion)
+│  ├─ YES → ❌ PERMANENTLY DISQUALIFIED from IRS Jovem
+│  │         (Even if you never used NHR, enrollment disqualifies you)
+│  └─ NO → Continue to Q2
 │
-├─ Q2: Are you a Portuguese tax resident?
-│  ├─ NO → ❌ Not eligible (must be resident)
+├─ Q2: Have you completed higher education (bachelor's degree or higher)?
+│  ├─ NO → ❌ Not eligible for IRS Jovem
 │  └─ YES → Q3
 │
-├─ Q3: When did you complete your degree?
+├─ Q3: Are you a Portuguese tax resident?
+│  ├─ NO → ❌ Not eligible (must be resident)
+│  └─ YES → Q4
+│
+├─ Q4: When did you complete your degree?
 │  ├─ > 10 years ago → ❌ Benefit period expired
-│  ├─ 1 year ago → Q4: What year of benefit?
+│  ├─ 1 year ago → Q5: What year of benefit?
 │  │  └─ → Select: Year 1 (100% exemption)
 │  ├─ 2 years ago → Select: Year 2 (75% exemption)
 │  ├─ 3 years ago → Select: Year 3 (50% exemption)
@@ -1546,10 +1614,53 @@ START: User under 35 years old
 │  ├─ 5 years ago → Select: Year 5 (25% exemption)
 │  └─ 6+ years ago → Select: Year 6+ (no exemption)
 │
-└─ Q4: Can IRS Jovem combine with other benefits?
-   ├─ NHR/IFICI? → ✅ YES (IRS Jovem applies to final IRS after NHR rate)
-   ├─ First-year 50% reduction? → ⚠️ POSSIBLY (consult accountant)
+└─ Q5: Can IRS Jovem combine with other benefits?
+   ├─ NHR/IFICI? → ❌ NO - MUTUALLY EXCLUSIVE (choosing IRS Jovem disqualifies from NHR)
+   ├─ First-year 50% reduction? → ✅ YES (can combine)
    └─ Social security exemption? → ✅ YES (separate benefits)
+```
+
+---
+
+### Decision Tree 2B: NHR vs IRS Jovem - Which to Choose?
+
+**FOR: Young professionals (<35) with high-value activities who are eligible for BOTH programs**
+
+```
+START: Eligible for both NHR and IRS Jovem (must choose ONE)
+│
+├─ Q1: What is your annual income level?
+│  ├─ < €50,000 → ✅ CHOOSE IRS JOVEM
+│  │  └─ Why: Year 1 = 100% exemption (€0 tax) >> 20% NHR
+│  │
+│  ├─ €50,000 - €100,000 → ✅ CHOOSE IRS JOVEM (for Years 1-5)
+│  │  └─ Why: Years 1-3 exemptions (100%/75%/50%) >> 20% NHR
+│  │     │
+│  │     └─ Calculation example (€85k income, 75% coefficient):
+│  │        ├─ IRS Jovem Year 1: €0 tax (100% exemption)
+│  │        ├─ IRS Jovem Year 2: ~€3,200 tax (75% exemption)
+│  │        ├─ IRS Jovem Year 3: ~€6,400 tax (50% exemption)
+│  │        ├─ NHR 20%: €12,750 tax (constant)
+│  │        └─ IRS Jovem wins Years 1-5, NHR might win Year 6+
+│  │
+│  └─ > €100,000 → ⚠️ DEPENDS on time horizon
+│     ├─ Planning to stay 5+ years? → Consider NHR (10-year benefit)
+│     ├─ Early career, income will grow? → Consider IRS Jovem (Years 1-3 huge savings)
+│     └─ Run both scenarios in tool to compare!
+│
+├─ Q2: How long do you plan to stay in Portugal?
+│  ├─ 1-3 years → ✅ CHOOSE IRS JOVEM
+│  │  └─ Why: Maximize exemption years (100%/75%/50%)
+│  │
+│  ├─ 5-10 years → ⚠️ DEPENDS on income
+│  │  ├─ Low-medium income → IRS Jovem better
+│  │  └─ Very high income → NHR might be better long-term
+│  │
+│  └─ > 10 years → ⚠️ CALCULATE BOTH
+│     └─ IRS Jovem expires after ~10 years, NHR is 10 years fixed
+│
+└─ RECOMMENDATION: For MOST young professionals, IRS Jovem wins in Years 1-5
+   └─ Exception: Very high income (>€200k) with 10+ year horizon might favor NHR
 ```
 
 ---

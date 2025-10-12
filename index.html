@@ -111,6 +111,9 @@
                             <option value="nhr_2_ifici" disabled>NHR 2.0 / IFICI (20% flat rate)</option>
                         </select>
                         <p id="nhr-status-note" class="help-text">Select your activity type above to see if NHR 20% flat rate is available.</p>
+                        <div id="nhr-irs-jovem-warning" class="alert alert--warning" style="display: none; margin-top: var(--space-3);">
+                            ⚠️ <strong>NHR disabled:</strong> You have selected IRS Jovem. NHR and IRS Jovem are mutually exclusive benefits - you can only use one.
+                        </div>
                     </div>
 
                     <details class="details">
@@ -137,7 +140,8 @@
                                 <span>IRS Jovem (Youth Tax Benefit)</span>
                             </label>
                             <p class="help-text" style="margin-left: 2rem; margin-top: -0.5rem;">
-                                For residents under 35 with completed higher education. Progressive income tax exemption over 5-10 years. <strong>Can combine with NHR/IFICI.</strong>
+                                For residents under 35 with completed higher education. Progressive income tax exemption over 5-10 years. 
+                                <strong>⚠️ CANNOT combine with NHR/IFICI - these benefits are mutually exclusive.</strong>
                             </p>
                         </div>
                         <div id="irs-jovem-year-selector" class="form-group" style="display: none; margin-top: var(--space-4);">
@@ -152,9 +156,13 @@
                             </select>
                             <p class="help-text">
                                 <strong>Eligibility:</strong> Under 35 years old, completed higher education (bachelor's or higher), Portuguese tax resident.<br>
+                                <strong>⚠️ EXCLUSION:</strong> Cannot have enrolled in or benefited from NHR/IFICI (even if never used).<br>
                                 <strong>Year counting:</strong> Year 1 = first tax year after completing your degree (not first job year).<br>
                                 <strong>Example:</strong> Graduated in 2023, started working 2024 → 2024 is Year 1.
                             </p>
+                            <div id="irs-jovem-nhr-warning" class="alert alert--warning" style="display: none; margin-top: var(--space-3);">
+                                ⚠️ <strong>IRS Jovem disabled:</strong> You have selected NHR status. IRS Jovem and NHR are mutually exclusive benefits - you can only use one.
+                            </div>
                         </div>
                     </details>
                 </section>
@@ -693,10 +701,23 @@
                                     <tr><td>Years 6-10</td><td>0%</td><td>No exemption (if income continues)</td></tr>
                                 </tbody>
                             </table>
-                            <p class="help-text"><strong>Eligibility:</strong> Under 35 years old, completed higher education (bachelor's degree or higher), Portuguese tax resident</p>
+                            <div class="disclaimer-box" style="margin-top: var(--space-4);">
+                                <h4>🚨 Critical Exclusion Rule</h4>
+                                <p><strong>IRS Jovem and NHR/IFICI are mutually exclusive.</strong> You CANNOT use both benefits.</p>
+                                <ul class="info-list">
+                                    <li>If you have <strong>ever enrolled</strong> in NHR/IFICI (even if never used), you are <strong>permanently disqualified</strong> from IRS Jovem</li>
+                                    <li>If you claim IRS Jovem, you <strong>cannot</strong> benefit from NHR 20% flat rate</li>
+                                    <li>You must <strong>choose one path</strong> at the start - you cannot switch between them</li>
+                                </ul>
+                                <p class="help-text"><strong>Which to choose?</strong> For young professionals, IRS Jovem is often more valuable in early years (100%/75% exemptions) than NHR's 20% flat rate, especially Years 1-3.</p>
+                            </div>
+                            <p class="help-text"><strong>Eligibility:</strong> Under 35 years old, completed higher education (bachelor's degree or higher), Portuguese tax resident, <strong>never enrolled in NHR</strong></p>
                             <p class="help-text"><strong>Income Cap:</strong> Up to €28,737.50 per year (exemption applies to this amount)</p>
-                            <p class="help-text"><strong>Combination:</strong> Can be combined with NHR/IFICI 20% flat rate</p>
-                            <p class="help-text"><strong>Source:</strong> CIRS Article 12-A (introduced 2020, updated 2023)</p>
+                            <p class="help-text"><strong>Source:</strong> CIRS Article 12-A (introduced 2020, updated 2023) | 
+                                <a href="https://www.todoscontam.pt/pt-pt/beneficios-de-irs-para-jovens" target="_blank" rel="noopener" style="color: var(--color-primary);">
+                                    Official IRS Jovem Guide
+                                </a>
+                            </p>
                         </div>
 
                         <!-- NHR / IFICI -->
@@ -710,8 +731,21 @@
                                 <li><strong>Eligible Activities:</strong> High-value professions (Article 151) primarily</li>
                                 <li><strong>Replaces:</strong> Progressive brackets (13%-48%) with flat 20%</li>
                             </ul>
+                            <div class="disclaimer-box" style="margin-top: var(--space-4);">
+                                <h4>🚨 Critical Exclusion Rule</h4>
+                                <p><strong>NHR/IFICI and IRS Jovem are mutually exclusive.</strong> You CANNOT use both benefits.</p>
+                                <ul class="info-list">
+                                    <li>Enrolling in NHR/IFICI <strong>permanently disqualifies</strong> you from IRS Jovem (even if you never use NHR)</li>
+                                    <li>Claiming IRS Jovem makes you <strong>ineligible</strong> for NHR benefits</li>
+                                    <li>This is stated in official IRS Jovem legislation: <em>"não é aplicável aos sujeitos passivos que beneficiem ou tenham beneficiado do regime dos Residentes Não Habituais"</em></li>
+                                </ul>
+                            </div>
                             <p class="help-text"><strong>Note:</strong> Solidarity tax still applies if taxable income exceeds €80,000</p>
-                            <p class="help-text"><strong>Source:</strong> CIRS Article 72 (NHR), Decree-Law 249/2023 (IFICI)</p>
+                            <p class="help-text"><strong>Source:</strong> CIRS Article 72 (NHR), Decree-Law 249/2023 (IFICI) | 
+                                <a href="https://www.reddit.com/r/PortugalExpats/comments/1ibcosb/irs_jovem_and_nhr_combination_possible/" target="_blank" rel="noopener" style="color: var(--color-primary);">
+                                    Community Discussion on Mutual Exclusion
+                                </a>
+                            </p>
                         </div>
 
                         <!-- Personal Deductions -->

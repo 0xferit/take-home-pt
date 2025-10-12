@@ -402,6 +402,21 @@ label {
   accent-color: var(--color-primary);
 }
 
+.checkbox input[type="checkbox"]:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.checkbox:has(input[type="checkbox"]:disabled) {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.checkbox:has(input[type="checkbox"]:disabled) span {
+  color: var(--color-text-muted);
+  text-decoration: line-through;
+}
+
 /* Details / Collapsible
    ========================================================================== */
 .details {
