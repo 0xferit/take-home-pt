@@ -15,26 +15,35 @@
         id: 'low',
         label: 'Low Risk',
         description: 'Designers, writers, content creators',
-        baseRate: 350,
-        variableRate: 0.0035,
+        baseRate: 280,
+        variableRate: 0.0028,
         riskMultiplier: 0.8,
       },
       medium: {
         id: 'medium',
         label: 'Medium Risk',
         description: 'IT consultants, developers, business consultants',
-        baseRate: 450,
-        variableRate: 0.0045,
+        baseRate: 360,
+        variableRate: 0.0036,
         riskMultiplier: 1.0,
       },
       high: {
         id: 'high',
         label: 'High Risk',
         description: 'Fintech, healthcare tech, financial advisors',
-        baseRate: 800,
-        variableRate: 0.0080,
+        baseRate: 640,
+        variableRate: 0.0064,
         riskMultiplier: 1.8,
       },
+    },
+    // Portugal market adjustment (12% cheaper than EU average)
+    portugalDiscount: 0.88,
+    // Economies of scale for larger businesses
+    economiesOfScale: {
+      tier1Threshold: 150000,
+      tier1Multiplier: 0.95,
+      tier2Threshold: 300000,
+      tier2Multiplier: 0.90,
     },
     // Activity code to risk tier mapping
     activityRiskMap: {
@@ -441,6 +450,28 @@
     // 3. Apply adjustment factors
     let adjustedPremium = basePremium;
     const adjustments = [];
+    
+    // Portugal market discount
+    adjustedPremium *= INSURANCE_DATA.portugalDiscount;
+    adjustments.push({ 
+      factor: 'Portugal market adjustment', 
+      multiplier: INSURANCE_DATA.portugalDiscount 
+    });
+    
+    // Economies of scale
+    if (income >= INSURANCE_DATA.economiesOfScale.tier2Threshold) {
+      adjustedPremium *= INSURANCE_DATA.economiesOfScale.tier2Multiplier;
+      adjustments.push({ 
+        factor: 'Economies of scale (>€300k)', 
+        multiplier: INSURANCE_DATA.economiesOfScale.tier2Multiplier 
+      });
+    } else if (income >= INSURANCE_DATA.economiesOfScale.tier1Threshold) {
+      adjustedPremium *= INSURANCE_DATA.economiesOfScale.tier1Multiplier;
+      adjustments.push({ 
+        factor: 'Economies of scale (>€150k)', 
+        multiplier: INSURANCE_DATA.economiesOfScale.tier1Multiplier 
+      });
+    }
     
     // USA/Canada coverage (+35%)
     if (usaCoverage) {
