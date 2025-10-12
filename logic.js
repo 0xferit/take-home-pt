@@ -296,8 +296,8 @@
     return TAX_DATA.taxBrackets2025[TAX_DATA.taxBrackets2025.length - 1].rate * 100;
   }
 
-  function getLiabilityInsurance(grossIncome = 0) {
-    return sanitizeAmount(grossIncome) * 0.01;
+  function getLiabilityInsurance(grossIncome = 0, rate = 0.01) {
+    return sanitizeAmount(grossIncome) * rate;
   }
 
   function computeExpenseTotals({
@@ -305,8 +305,9 @@
     baseExpenses = 0,
     adminFreelancer = 0,
     adminTransparent = 0,
+    insuranceRate = 0.01,
   } = {}) {
-    const liability = getLiabilityInsurance(grossIncome);
+    const liability = getLiabilityInsurance(grossIncome, insuranceRate);
     const base = sanitizeAmount(baseExpenses);
     const adminSimp = sanitizeAmount(adminFreelancer);
     const adminOrg = sanitizeAmount(adminTransparent);

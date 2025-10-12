@@ -228,6 +228,22 @@
                         <p class="help-text">Office, equipment, software, travel, etc. These apply to both setups.</p>
                     </div>
 
+                    <div class="form-group">
+                        <label for="insurance-risk-level">Professional Liability Insurance (Freelancer Only)</label>
+                        <select id="insurance-risk-level" class="input">
+                            <option value="0.006">Low Risk (0.6% of income) - Writers, designers, virtual assistants</option>
+                            <option value="0.010" selected>Medium Risk (1.0% of income) - IT specialists, consultants, project managers</option>
+                            <option value="0.015">High Risk (1.5% of income) - Financial advisors, architects, healthcare consultants</option>
+                            <option value="0.020">Very High Risk (2.0% of income) - Legal/medical consultants, construction</option>
+                            <option value="0">None (0%) - I have my own insurance or don't need it</option>
+                        </select>
+                        <p class="help-text">
+                            Freelancers need professional liability insurance due to unlimited personal liability. 
+                            Select your risk level based on your profession. 
+                            <strong>LDA structures have built-in limited liability, so insurance is optional.</strong>
+                        </p>
+                    </div>
+
                     <div class="expense-split">
                         <div class="form-group">
                             <label for="admin-freelancer">Freelancer Admin Costs</label>
@@ -235,7 +251,7 @@
                                 <span class="input-group__prefix">€</span>
                                 <input type="number" id="admin-freelancer" class="input expense-input" value="800" min="0" step="50">
                             </div>
-                            <p class="help-text">Accountant, TOC fees for freelancer setup. <strong>Note:</strong> Professional liability insurance (1% of gross income) is automatically added to Freelancer total expenses.</p>
+                            <p class="help-text">Accountant, TOC fees for freelancer setup. <strong>Note:</strong> Professional liability insurance (selected rate above) is automatically added to Freelancer total expenses.</p>
                         </div>
 
                         <div class="form-group">
@@ -868,15 +884,17 @@
                                 <p><strong>LDA (Limited Liability Company):</strong> Built-in limited liability protection. Company assets are separate from personal assets. Professional liability insurance optional (may still be required by specific clients).</p>
                                 <p><strong>Freelancer:</strong> Unlimited personal liability. Your personal assets (home, savings, etc.) are at risk in case of claims. Professional liability insurance strongly recommended.</p>
                             </div>
-                            <p class="help-text"><strong>Rate used:</strong> This calculator uses 1% of gross income as estimated insurance cost for Freelancer setups. This is empirically validated by industry data:
+                            <p class="help-text"><strong>Risk Levels Explained:</strong> Insurance costs vary by professional risk level:
                                 <ul class="info-list" style="margin-top: 0.5rem;">
-                                    <li>Industry range: 0.5% - 2% of annual turnover</li>
-                                    <li>Average premiums: €500-€1,000 for €50-100k income = ~1%</li>
-                                    <li>€100k income → ~€1,000 premium → €1-2M coverage</li>
-                                    <li>Portugal: Likely 0.8-1.2%, making 1% a conservative estimate</li>
+                                    <li><strong>Low Risk (0.6%):</strong> Writers, designers, virtual assistants, content creators, graphic designers</li>
+                                    <li><strong>Medium Risk (1.0%):</strong> IT specialists, software developers, consultants, project managers, marketing professionals</li>
+                                    <li><strong>High Risk (1.5%):</strong> Financial advisors, architects, healthcare consultants, business strategy consultants</li>
+                                    <li><strong>Very High Risk (2.0%):</strong> Legal consultants, medical consultants, construction consultants, investment advisors</li>
                                 </ul>
                             </p>
-                            <p class="help-text"><strong>Note:</strong> Actual cost varies by profession, coverage level, claims history. Consult insurance providers for personalized quotes.</p>
+                            <p class="help-text"><strong>Coverage Examples:</strong> €100k income × 1.0% = €1,000/year → typically buys €1-2M coverage. Higher risk = higher premiums but also higher coverage limits needed.</p>
+                            <p class="help-text"><strong>Industry Data:</strong> Overall range is 0.25%-5% of turnover, with most freelancers in 0.5%-2% range. These rates are empirically validated by EU/UK/US insurance industry data.</p>
+                            <p class="help-text"><strong>Note:</strong> Actual cost varies by profession, coverage level, claims history, and provider. Consult insurance brokers for personalized quotes.</p>
                         </div>
 
                         <!-- Personal Deductions -->

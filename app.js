@@ -86,6 +86,7 @@ const appState = {
     irsJovemEnabled: false,
     irsJovemYear: 1,
     liabilityInsurance: 0,
+    insuranceRate: 0.01,
     freelancerBasis: 'simplified',
     personalDeductions: {
         health: 0,
@@ -186,6 +187,16 @@ function setupEventListeners() {
         updateInputsAtGlance();
         recalc();
     });
+
+    // Insurance risk level selector
+    const insuranceRiskSelect = document.getElementById('insurance-risk-level');
+    if (insuranceRiskSelect) {
+        insuranceRiskSelect.addEventListener('change', (event) => {
+            appState.insuranceRate = parseFloat(event.target.value) || 0;
+            updateExpenseTotal();
+            recalc();
+        });
+    }
 
     // Activity profile selector
     const activityProfileSelect = document.getElementById('activity-profile');
@@ -531,6 +542,7 @@ function updateExpenseTotal() {
         baseExpenses: base,
         adminFreelancer: adminSimplified,
         adminTransparent,
+        insuranceRate: appState.insuranceRate,
     });
 
     appState.liabilityInsurance = liabilityInsurance;
@@ -621,7 +633,7 @@ function calculateAndUpdate() {
               ...commonInputs,
               baseExpenses,
               adminExpenses: adminSimplified,
-              insuranceExpenses: appState.liabilityInsurance ?? getLiabilityInsurance(appState.grossIncome),
+              insuranceExpenses: appState.liabilityInsurance ?? getLiabilityInsurance(appState.grossIncome, appState.insuranceRate),
               isNHREligible: nhrEligible,
           })
         : computeSimplified({
@@ -629,7 +641,7 @@ function calculateAndUpdate() {
               activityCoefficient: getCurrentActivityCoefficient(),
               baseExpenses,
               adminExpenses: adminSimplified,
-              insuranceExpenses: appState.liabilityInsurance ?? getLiabilityInsurance(appState.grossIncome),
+              insuranceExpenses: appState.liabilityInsurance ?? getLiabilityInsurance(appState.grossIncome, appState.insuranceRate),
               isNHREligible: nhrEligible,
           });
     const transparentResults = computeTransparent({
