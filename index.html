@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TakeHome PT – Tax Planning for Self-Employed Professionals in Portugal</title>
-    <meta name="description" content="Optimize your tax setup in Portugal. Compare Freelancer vs Single-Member Company (LDA) to maximize your take-home income.">
+    <title>TakeHome PT – Structure Optimization Planner for Portugal Professionals</title>
+    <meta name="description" content="Optimize your business structure in Portugal. Compare take-home income across Freelancer (Simplified), Freelancer (Organized), and LDA to maximize your net income.">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -12,7 +12,8 @@
         <header class="header">
             <div class="container">
                 <h1 class="header__title">TakeHome PT</h1>
-                <p class="header__subtitle">Tax optimization for self-employed professionals in Portugal</p>
+                <p class="header__subtitle">Find the business structure that maximizes your take-home income in Portugal</p>
+                <p class="header__tagline">Compare Freelancer (Simplified & Organized) vs Single-Member Company (LDA)</p>
             </div>
         </header>
 
@@ -23,6 +24,7 @@
                 <button class="tab" data-tab="expenses">Expenses</button>
                 <button class="tab" data-tab="deductions">Deductions</button>
                 <button class="tab" data-tab="results">Results</button>
+                <button class="tab" data-tab="methodology">Methodology</button>
             </div>
         </nav>
 
@@ -86,28 +88,43 @@
                         <div class="checkbox-group">
                             <label class="checkbox">
                                 <input type="checkbox" id="firstyear-ss-exempt">
-                                <span>Social Security exemption (first 12 months of activity)</span>
+                                <span>Social Security 12-month exemption</span>
                             </label>
+                            <p class="help-text" style="margin-left: 2rem; margin-top: -0.5rem;">
+                                First 12 months of activity (rolling period from activity start date). Applies to new self-employed professionals.
+                            </p>
+                            
                             <label class="checkbox">
                                 <input type="checkbox" id="firstyear-irs-50">
-                                <span>50% IRS reduction (first tax year)</span>
+                                <span>50% IRS coefficient reduction</span>
                             </label>
+                            <p class="help-text" style="margin-left: 2rem; margin-top: -0.5rem;">
+                                First <strong>calendar year</strong> of activity only. Reduces the activity coefficient (75% → 37.5% or 35% → 17.5%).
+                            </p>
+                            
                             <label class="checkbox">
                                 <input type="checkbox" id="irs-jovem">
-                                <span>IRS Jovem (under 35, progressive exemption up to 10 years)</span>
+                                <span>IRS Jovem (Youth Tax Benefit)</span>
                             </label>
+                            <p class="help-text" style="margin-left: 2rem; margin-top: -0.5rem;">
+                                For residents under 35 with completed higher education. Progressive income tax exemption over 5-10 years. <strong>Can combine with NHR/IFICI.</strong>
+                            </p>
                         </div>
                         <div id="irs-jovem-year-selector" class="form-group" style="display: none; margin-top: var(--space-4);">
                             <label for="irs-jovem-year">IRS Jovem Year</label>
                             <select id="irs-jovem-year" class="input">
-                                <option value="1">Year 1 (100% exemption)</option>
+                                <option value="1">Year 1 (100% exemption) — First tax year after completing degree</option>
                                 <option value="2">Year 2 (75% exemption)</option>
                                 <option value="3">Year 3 (50% exemption)</option>
                                 <option value="4">Year 4 (50% exemption)</option>
                                 <option value="5">Year 5 (25% exemption)</option>
-                                <option value="6">Year 6+ (no exemption)</option>
+                                <option value="6">Year 6+ (no exemption) — Benefit expired or not using</option>
                             </select>
-                            <p class="help-text">Select which year of IRS Jovem benefit you're in. Available for residents under 35 with completed higher education.</p>
+                            <p class="help-text">
+                                <strong>Eligibility:</strong> Under 35 years old, completed higher education (bachelor's or higher), Portuguese tax resident.<br>
+                                <strong>Year counting:</strong> Year 1 = first tax year after completing your degree (not first job year).<br>
+                                <strong>Example:</strong> Graduated in 2023, started working 2024 → 2024 is Year 1.
+                            </p>
                         </div>
                     </details>
                 </section>
@@ -253,10 +270,26 @@
 
                 <!-- Results Tab -->
                 <section id="results" class="tab-content">
-                    <h2>Your Results</h2>
+                    <div class="results-header">
+                        <h2>Your Results</h2>
+                        <div class="results-actions">
+                            <button id="export-pdf-btn" class="btn btn--secondary" style="display: none;">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" style="margin-right: 0.5rem;">
+                                    <path d="M8.5 1.5A1.5 1.5 0 0 0 7 0H4.5A1.5 1.5 0 0 0 3 1.5v13A1.5 1.5 0 0 0 4.5 16h7a1.5 1.5 0 0 0 1.5-1.5V4.621a1.5 1.5 0 0 0-.44-1.06L9.94 .939A1.5 1.5 0 0 0 8.878.5H8.5zM7 1.5a.5.5 0 0 1 .5-.5h1v2.5A.5.5 0 0 0 9 4h2.5v10a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 .5-.5H7z"/>
+                                </svg>
+                                Export to PDF
+                            </button>
+                            <button id="save-scenario-btn" class="btn btn--secondary" style="display: none;">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" style="margin-right: 0.5rem;">
+                                    <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1H2z"/>
+                                </svg>
+                                Save Scenario
+                            </button>
+                        </div>
+                    </div>
 
                     <div id="results-zero-state" class="zero-state">
-                        <p>👋 Enter your income and expenses to see your personalized tax comparison.</p>
+                        <p>👋 Enter your income and expenses to see which structure maximizes your take-home.</p>
                         <button class="btn btn--primary" data-tab-target="income">Get Started</button>
                     </div>
 
@@ -300,12 +333,23 @@
                             </div>
                         </div>
 
+                        <!-- Winner Indicator -->
+                        <div id="winner-banner" class="winner-banner" style="display: none;">
+                            <div class="winner-banner__icon">🏆</div>
+                            <div class="winner-banner__content">
+                                <h3 class="winner-banner__title" id="winner-title">Best Option: Freelancer (Simplified)</h3>
+                                <p class="winner-banner__subtitle" id="winner-subtitle">Maximizes your take-home income</p>
+                                <div class="winner-banner__stats" id="winner-stats"></div>
+                            </div>
+                        </div>
+
                         <!-- Recommendation -->
                         <div class="recommendation">
-                            <h3>Recommendation</h3>
+                            <h3>Why This Structure Wins</h3>
                             <p id="recommendation-text"></p>
+                            <div class="recommendation__details" id="recommendation-details" style="margin-top: 1rem;"></div>
                             <p class="recommendation__meta">
-                                Break-even point: <strong id="breakeven-expenses">€0.00</strong> in shared expenses
+                                Breakeven point: <strong id="breakeven-expenses">€0.00</strong> in shared expenses
                             </p>
                         </div>
 
@@ -464,6 +508,239 @@
                     </div>
                 </section>
 
+                <!-- Methodology Tab -->
+                <section id="methodology" class="tab-content">
+                    <h2>Methodology & Tax Tables</h2>
+                    <p class="intro-text">
+                        This tool uses official 2025 Portuguese tax law and regulations. All calculations are transparent and verifiable.
+                    </p>
+
+                    <div class="methodology-grid">
+                        <!-- IRS Progressive Brackets -->
+                        <div class="methodology-section">
+                            <h3>2025 IRS Progressive Tax Brackets</h3>
+                            <p class="help-text">Applied to taxable income (after activity coefficient and deductions)</p>
+                            <table class="tax-table">
+                                <thead>
+                                    <tr>
+                                        <th>Income Bracket</th>
+                                        <th>Tax Rate</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="irs-brackets-table">
+                                    <tr><td>Up to €8,059</td><td>13.0%</td></tr>
+                                    <tr><td>€8,060 - €12,160</td><td>16.5%</td></tr>
+                                    <tr><td>€12,161 - €17,233</td><td>22.0%</td></tr>
+                                    <tr><td>€17,234 - €22,306</td><td>25.0%</td></tr>
+                                    <tr><td>€22,307 - €28,400</td><td>32.0%</td></tr>
+                                    <tr><td>€28,401 - €41,629</td><td>35.5%</td></tr>
+                                    <tr><td>€41,630 - €44,987</td><td>43.5%</td></tr>
+                                    <tr><td>€44,988 - €83,696</td><td>45.0%</td></tr>
+                                    <tr><td>Above €83,696</td><td>48.0%</td></tr>
+                                </tbody>
+                            </table>
+                            <p class="help-text"><strong>Source:</strong> Portuguese Tax Authority (Orçamento do Estado 2025)</p>
+                        </div>
+
+                        <!-- Activity Coefficients -->
+                        <div class="methodology-section">
+                            <h3>Activity Coefficients</h3>
+                            <p class="help-text">Percentage of gross income that remains taxable under simplified regime</p>
+                            <div class="coefficient-cards">
+                                <div class="coefficient-card">
+                                    <div class="coefficient-card__value">75%</div>
+                                    <div class="coefficient-card__label">High-Value Professions</div>
+                                    <p class="help-text">Article 151 services (IT, consulting, design, etc.)</p>
+                                    <p class="help-text"><strong>Deemed expenses: 25%</strong></p>
+                                </div>
+                                <div class="coefficient-card">
+                                    <div class="coefficient-card__value">35%</div>
+                                    <div class="coefficient-card__label">General Services</div>
+                                    <p class="help-text">Other Category B professional services</p>
+                                    <p class="help-text"><strong>Deemed expenses: 65%</strong></p>
+                                </div>
+                            </div>
+                            <p class="help-text"><strong>Source:</strong> CIRS Article 31 & 151</p>
+                        </div>
+
+                        <!-- Social Security -->
+                        <div class="methodology-section">
+                            <h3>Social Security (Segurança Social)</h3>
+                            <ul class="info-list">
+                                <li><strong>Contribution Rate:</strong> 21.4% (unchanged from 2024)</li>
+                                <li><strong>Relevant Income:</strong> 70% of gross income (or net business income for organized)</li>
+                                <li><strong>Monthly Base Cap:</strong> €6,270 (12× IAS of €522.50)</li>
+                                <li><strong>Maximum Monthly Contribution:</strong> €1,342 (21.4% of €6,270)</li>
+                                <li><strong>First-Year Exemption:</strong> 12 rolling months available for new self-employed</li>
+                            </ul>
+                            <p class="help-text"><strong>Note:</strong> LDA managers typically contribute based on minimum declared salary (€522.50/month)</p>
+                            <p class="help-text"><strong>Source:</strong> Segurança Social 2025 regulations</p>
+                        </div>
+
+                        <!-- Solidarity Tax -->
+                        <div class="methodology-section">
+                            <h3>Solidarity Tax (Taxa Extraordinária)</h3>
+                            <p class="help-text">Additional tax on high incomes, applied to taxable income</p>
+                            <table class="tax-table">
+                                <thead>
+                                    <tr>
+                                        <th>Taxable Income Range</th>
+                                        <th>Rate</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>€80,000 - €250,000</td><td>2.5%</td></tr>
+                                    <tr><td>Above €250,000</td><td>5.0%</td></tr>
+                                </tbody>
+                            </table>
+                            <p class="help-text"><strong>Example:</strong> Taxable income of €120,000</p>
+                            <ul class="info-list">
+                                <li>€80,000 - €120,000 = €40,000 × 2.5% = <strong>€1,000 solidarity tax</strong></li>
+                            </ul>
+                            <p class="help-text"><strong>Source:</strong> Lei n.º 82-B/2014 (OE 2015), maintained in 2025</p>
+                        </div>
+
+                        <!-- IRS Jovem -->
+                        <div class="methodology-section">
+                            <h3>IRS Jovem (Youth Tax Benefit)</h3>
+                            <p class="help-text">Progressive income tax exemption for young professionals</p>
+                            <table class="tax-table">
+                                <thead>
+                                    <tr>
+                                        <th>Year</th>
+                                        <th>Exemption</th>
+                                        <th>Notes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Year 1</td><td>100%</td><td>First tax year after completing degree</td></tr>
+                                    <tr><td>Year 2</td><td>75%</td><td>Second tax year</td></tr>
+                                    <tr><td>Year 3</td><td>50%</td><td>Third tax year</td></tr>
+                                    <tr><td>Year 4</td><td>50%</td><td>Fourth tax year</td></tr>
+                                    <tr><td>Year 5</td><td>25%</td><td>Fifth tax year</td></tr>
+                                    <tr><td>Years 6-10</td><td>0%</td><td>No exemption (if income continues)</td></tr>
+                                </tbody>
+                            </table>
+                            <p class="help-text"><strong>Eligibility:</strong> Under 35 years old, completed higher education (bachelor's degree or higher), Portuguese tax resident</p>
+                            <p class="help-text"><strong>Income Cap:</strong> Up to €28,737.50 per year (exemption applies to this amount)</p>
+                            <p class="help-text"><strong>Combination:</strong> Can be combined with NHR/IFICI 20% flat rate</p>
+                            <p class="help-text"><strong>Source:</strong> CIRS Article 12-A (introduced 2020, updated 2023)</p>
+                        </div>
+
+                        <!-- NHR / IFICI -->
+                        <div class="methodology-section">
+                            <h3>NHR / IFICI (20% Flat Rate)</h3>
+                            <p class="help-text">Special tax regime for qualifying residents and activities</p>
+                            <ul class="info-list">
+                                <li><strong>Original NHR:</strong> Granted before 2024, 10-year benefit</li>
+                                <li><strong>NHR 2.0 / IFICI:</strong> Granted from 2024+, requires IFICI status</li>
+                                <li><strong>Flat Rate:</strong> 20% on professional income (Category B)</li>
+                                <li><strong>Eligible Activities:</strong> High-value professions (Article 151) primarily</li>
+                                <li><strong>Replaces:</strong> Progressive brackets (13%-48%) with flat 20%</li>
+                            </ul>
+                            <p class="help-text"><strong>Note:</strong> Solidarity tax still applies if taxable income exceeds €80,000</p>
+                            <p class="help-text"><strong>Source:</strong> CIRS Article 72 (NHR), Decree-Law 249/2023 (IFICI)</p>
+                        </div>
+
+                        <!-- Personal Deductions -->
+                        <div class="methodology-section">
+                            <h3>Personal Tax Deductions</h3>
+                            <ul class="info-list">
+                                <li><strong>Personal Allowance:</strong> €4,462.15 (automatic, 8.54× IAS)</li>
+                                <li><strong>Health Expenses:</strong> 15% deductible, max €1,000</li>
+                                <li><strong>Education Expenses:</strong> 30% deductible, max €800</li>
+                                <li><strong>Dependent Allowance:</strong> €600 per dependent</li>
+                            </ul>
+                            <p class="help-text"><strong>Source:</strong> CIRS Article 78 & 79</p>
+                        </div>
+
+                        <!-- Compliance Costs -->
+                        <div class="methodology-section">
+                            <h3>Typical Compliance Costs (Annual)</h3>
+                            <p class="help-text">Estimated accounting and administrative expenses</p>
+                            <table class="tax-table">
+                                <thead>
+                                    <tr>
+                                        <th>Structure</th>
+                                        <th>Typical Range</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Freelancer (Simplified)</td><td>€360 - €1,200</td></tr>
+                                    <tr><td>Freelancer (Organized)</td><td>€2,400 - €3,600</td></tr>
+                                    <tr><td>Single-Member Company (LDA)</td><td>€3,650 - €8,000</td></tr>
+                                </tbody>
+                            </table>
+                            <p class="help-text"><strong>LDA Additional Costs:</strong> Minimum manager salary (~€6,270/year) + social security (~€2,179/year) typically required</p>
+                            <p class="help-text"><strong>Note:</strong> Actual costs vary by accountant (TOC) and complexity</p>
+                        </div>
+
+                        <!-- Calculation Method -->
+                        <div class="methodology-section methodology-section--full">
+                            <h3>How We Calculate</h3>
+                            <div class="calculation-flow">
+                                <div class="flow-step">
+                                    <h4>1. Determine Taxable Income</h4>
+                                    <ul class="info-list">
+                                        <li><strong>Simplified:</strong> Gross Income × Coefficient (75% or 35%)</li>
+                                        <li><strong>Organized:</strong> Gross Income - Real Expenses</li>
+                                        <li><strong>LDA:</strong> Gross Income - Real Expenses</li>
+                                    </ul>
+                                </div>
+                                <div class="flow-step">
+                                    <h4>2. Calculate Income Tax (IRS)</h4>
+                                    <ul class="info-list">
+                                        <li><strong>Progressive:</strong> Apply 2025 tax brackets cumulatively</li>
+                                        <li><strong>NHR/IFICI:</strong> Apply 20% flat rate</li>
+                                        <li><strong>Add Solidarity Tax:</strong> If taxable income > €80,000</li>
+                                        <li><strong>Subtract Deductions:</strong> Personal allowance + expenses</li>
+                                        <li><strong>Apply Benefits:</strong> 50% first-year reduction, IRS Jovem exemption</li>
+                                    </ul>
+                                </div>
+                                <div class="flow-step">
+                                    <h4>3. Calculate Social Security</h4>
+                                    <ul class="info-list">
+                                        <li><strong>Relevant Income:</strong> 70% of gross (simplified) or net business income (organized)</li>
+                                        <li><strong>Quarterly Relevant Income:</strong> ÷ 4</li>
+                                        <li><strong>Monthly Base:</strong> Quarterly ÷ 3, capped at €6,270</li>
+                                        <li><strong>Monthly Contribution:</strong> Base × 21.4%</li>
+                                        <li><strong>Annual:</strong> Monthly × 12 (or €0 if first-year exemption)</li>
+                                    </ul>
+                                </div>
+                                <div class="flow-step">
+                                    <h4>4. Calculate Net Income</h4>
+                                    <ul class="info-list">
+                                        <li><strong>Formula:</strong> Gross Income - Expenses - IRS - Social Security</li>
+                                        <li><strong>Take-Home %:</strong> (Net Income ÷ Gross Income) × 100</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="disclaimer-box">
+                        <h4>⚖️ Important Disclaimers</h4>
+                        <ul class="info-list">
+                            <li>This tool provides <strong>estimates</strong> based on 2025 Portuguese tax law and typical scenarios.</li>
+                            <li>Results are for <strong>informational purposes only</strong> and do not constitute financial, legal, or tax advice.</li>
+                            <li><strong>Individual circumstances vary</strong>: Your actual tax situation may differ based on residency status, bilateral treaties, specific deductions, etc.</li>
+                            <li><strong>Professional consultation recommended</strong>: Always consult a certified Portuguese accountant (TOC) or tax advisor before making structural decisions.</li>
+                            <li><strong>Regulations change</strong>: Tax laws are updated annually. Verify current rates with official sources.</li>
+                            <li><strong>Not a tax filing tool</strong>: This planner helps you choose a structure, not file taxes or handle compliance.</li>
+                        </ul>
+                    </div>
+
+                    <div class="sources-section">
+                        <h4>📚 Official Sources</h4>
+                        <ul class="info-list">
+                            <li><strong>Tax Authority (AT):</strong> <a href="https://www.portaldasfinancas.gov.pt" target="_blank" rel="noopener">portaldasfinancas.gov.pt</a></li>
+                            <li><strong>Social Security:</strong> <a href="https://www.seg-social.pt" target="_blank" rel="noopener">seg-social.pt</a></li>
+                            <li><strong>IRS Code (CIRS):</strong> <a href="https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/cirs_rep/" target="_blank" rel="noopener">CIRS Full Text</a></li>
+                            <li><strong>2025 State Budget:</strong> Orçamento do Estado 2025 (Official Gazette)</li>
+                        </ul>
+                    </div>
+                </section>
+
             </div>
         </main>
 
@@ -471,8 +748,8 @@
             <div class="container">
                 <p id="app-version" class="footer__version"></p>
                 <p class="footer__disclaimer">
-                    <strong>Disclaimer:</strong> This calculator provides estimates based on 2025 Portuguese tax law. 
-                    Results are for informational purposes only. Consult a qualified tax professional before making financial decisions.
+                    <strong>Disclaimer:</strong> This is a structure optimization planner, not a tax filing tool. Results are estimates based on 2025 Portuguese tax law for informational purposes only. 
+                    Individual circumstances vary—consult a certified Portuguese accountant (TOC) or tax advisor before making structural decisions.
                 </p>
             </div>
         </footer>

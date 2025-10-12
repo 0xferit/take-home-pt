@@ -135,6 +135,42 @@ function setupEventListeners() {
         });
     }
 
+    const irsJovemCheckbox = document.getElementById('irs-jovem');
+    const irsJovemYearSelector = document.getElementById('irs-jovem-year-selector');
+    const irsJovemYear = document.getElementById('irs-jovem-year');
+    
+    if (irsJovemCheckbox && irsJovemYearSelector) {
+        irsJovemCheckbox.addEventListener('change', (event) => {
+            appState.irsJovemEnabled = event.target.checked;
+            irsJovemYearSelector.style.display = event.target.checked ? 'block' : 'none';
+            updateInputsAtGlance();
+            recalc();
+        });
+    }
+
+    if (irsJovemYear) {
+        irsJovemYear.addEventListener('change', (event) => {
+            appState.irsJovemYear = parseInt(event.target.value) || 1;
+            recalc();
+        });
+    }
+
+    // Export to PDF
+    const exportBtn = document.getElementById('export-pdf-btn');
+    if (exportBtn) {
+        exportBtn.addEventListener('click', () => {
+            window.print();
+        });
+    }
+
+    // Save scenario
+    const saveBtn = document.getElementById('save-scenario-btn');
+    if (saveBtn) {
+        saveBtn.addEventListener('click', () => {
+            saveScenario();
+        });
+    }
+
     const incomeMap = {
         'gross-income': 'grossIncome',
         'divint-income': 'divintIncome',
@@ -419,6 +455,8 @@ function calculateAndUpdate() {
         personalDeductions: appState.personalDeductions,
         isFirstYearIRS50pct: appState.isFirstYearIRS50pct,
         isFirstYearSSExempt: appState.isFirstYearSSExempt,
+        irsJovemEnabled: appState.irsJovemEnabled,
+        irsJovemYear: appState.irsJovemYear,
     };
 
     const nhrEligible = isCurrentNHREligible();
@@ -452,6 +490,8 @@ function calculateAndUpdate() {
     updatePersonalDeductions();
     updateComparisonTable(simplifiedResults, transparentResults);
     updateRecommendation(simplifiedResults, transparentResults);
+    updateWinnerBanner(simplifiedResults, transparentResults);
+    updateRecommendationDetails(simplifiedResults, transparentResults);
     updateSanityChecks();
     updateResultsVisibility();
 }
@@ -917,6 +957,140 @@ function updateSanityChecks() {
     });
 }
 
+function updateWinnerBanner(simplified, transparent) {
+    const winnerBanner = document.getElementById('winner-banner');
+    const winnerTitle = document.getElementById('winner-title');
+    const winnerSubtitle = document.getElementById('winner-subtitle');
+    const winnerStats = document.getElementById('winner-stats');
+
+    if (!winnerBanner || !winnerTitle || !winnerStats) return;
+
+    const netDiff = Math.abs(transparent.netIncome - simplified.netIncome);
+    const structureName = appState.freelancerBasis === 'organized' ? 'Freelancer (Organized)' : 'Freelancer (Simplified)';
+    
+    if (transparent.netIncome > simplified.netIncome + 500) {
+        winnerBanner.style.display = 'flex';
+        winnerTitle.textContent = '🏆 Best Option: Single-Member Company (LDA)';
+        winnerSubtitle.textContent = `You'll take home €${netDiff.toLocaleString('pt-PT', {minimumFractionDigits: 2, maximumFractionDigits: 2})} more per year`;
+        
+        winnerStats.innerHTML = `
+            <div class="winner-stat">
+                <div class="winner-stat__label">Annual Savings</div>
+                <div class="winner-stat__value">${formatCurrency(netDiff)}</div>
+            </div>
+            <div class="winner-stat">
+                <div class="winner-stat__label">Take-Home %</div>
+                <div class="winner-stat__value">${formatPercent((transparent.netIncome / appState.grossIncome) * 100)}</div>
+            </div>
+        `;
+    } else if (simplified.netIncome > transparent.netIncome + 500) {
+        winnerBanner.style.display = 'flex';
+        winnerTitle.textContent = `🏆 Best Option: ${structureName}`;
+        winnerSubtitle.textContent = `You'll take home €${netDiff.toLocaleString('pt-PT', {minimumFractionDigits: 2, maximumFractionDigits: 2})} more per year`;
+        
+        winnerStats.innerHTML = `
+            <div class="winner-stat">
+                <div class="winner-stat__label">Annual Savings</div>
+                <div class="winner-stat__value">${formatCurrency(netDiff)}</div>
+            </div>
+            <div class="winner-stat">
+                <div class="winner-stat__label">Take-Home %</div>
+                <div class="winner-stat__value">${formatPercent((simplified.netIncome / appState.grossIncome) * 100)}</div>
+            </div>
+        `;
+    } else {
+        winnerBanner.style.display = 'none';
+    }
+}
+
+function updateRecommendationDetails(simplified, transparent) {
+    const recommendationDetails = document.getElementById('recommendation-details');
+    if (!recommendationDetails) return;
+
+    const structureName = appState.freelancerBasis === 'organized' ? 'Freelancer (Organized)' : 'Freelancer (Simplified)';
+    const netDiff = transparent.netIncome - simplified.netIncome;
+    const taxDiff = transparent.incomeTax - simplified.incomeTax;
+    const ssDiff = transparent.socialSecurity - simplified.socialSecurity;
+    const costDiff = transparent.totalExpenses - simplified.totalExpenses;
+
+    let details = '<ul class="info-list">';
+
+    if (Math.abs(netDiff) > 500) {
+        if (netDiff > 0) {
+            details += `<li><strong>LDA wins</strong> by ${formatCurrency(netDiff)}/year</li>`;
+        } else {
+            details += `<li><strong>${structureName} wins</strong> by ${formatCurrency(Math.abs(netDiff))}/year</li>`;
+        }
+
+        if (Math.abs(taxDiff) > 100) {
+            if (taxDiff > 0) {
+                details += `<li>LDA pays ${formatCurrency(taxDiff)} <strong>more</strong> in income tax</li>`;
+            } else {
+                details += `<li>LDA pays ${formatCurrency(Math.abs(taxDiff))} <strong>less</strong> in income tax</li>`;
+            }
+        }
+
+        if (Math.abs(ssDiff) > 100) {
+            if (ssDiff > 0) {
+                details += `<li>LDA pays ${formatCurrency(ssDiff)} <strong>more</strong> in social security</li>`;
+            } else {
+                details += `<li>LDA pays ${formatCurrency(Math.abs(ssDiff))} <strong>less</strong> in social security</li>`;
+            }
+        }
+
+        if (Math.abs(costDiff) > 100) {
+            details += `<li>LDA has ${formatCurrency(Math.abs(costDiff))} <strong>${costDiff > 0 ? 'higher' : 'lower'}</strong> admin costs</li>`;
+        }
+
+        if (appState.freelancerBasis === 'simplified') {
+            const deemedExpenses = appState.grossIncome * (1 - getCurrentActivityCoefficient());
+            const realExpenses = appState.expenses['total-business-expenses'] || 0;
+            if (deemedExpenses > realExpenses) {
+                details += `<li>Simplified regime gives you ${formatCurrency(deemedExpenses)} in <strong>deemed expenses</strong> vs ${formatCurrency(realExpenses)} actual</li>`;
+            }
+        }
+
+        if (appState.irsJovemEnabled) {
+            const exemptionRates = {1: '100%', 2: '75%', 3: '50%', 4: '50%', 5: '25%'};
+            const rate = exemptionRates[appState.irsJovemYear] || '0%';
+            details += `<li>IRS Jovem (${rate} exemption) significantly reduces your income tax</li>`;
+        }
+
+    } else {
+        details += `<li>Both structures are very similar (difference: ${formatCurrency(Math.abs(netDiff))})</li>`;
+        details += `<li>Choose Freelancer for <strong>simplicity</strong> or LDA for <strong>limited liability</strong></li>`;
+    }
+
+    details += '</ul>';
+    recommendationDetails.innerHTML = details;
+}
+
+function saveScenario() {
+    const scenarioName = prompt('Name this scenario:', `Scenario ${new Date().toLocaleDateString()}`);
+    if (!scenarioName) return;
+
+    const scenario = {
+        name: scenarioName,
+        timestamp: new Date().toISOString(),
+        state: {...appState},
+        results: {
+            simplified: document.getElementById('summary-net-simp')?.textContent || '',
+            transparent: document.getElementById('summary-net-org')?.textContent || '',
+        }
+    };
+
+    try {
+        const savedScenarios = JSON.parse(localStorage.getItem('takehome-scenarios') || '[]');
+        savedScenarios.push(scenario);
+        // Keep only last 10 scenarios
+        if (savedScenarios.length > 10) savedScenarios.shift();
+        localStorage.setItem('takehome-scenarios', JSON.stringify(savedScenarios));
+        alert(`✅ Scenario "${scenarioName}" saved!`);
+    } catch (e) {
+        alert('❌ Failed to save scenario. Local storage may be full.');
+    }
+}
+
 function hasAnyUserInput() {
     return appState.grossIncome > 0 || appState.divintIncome > 0 || appState.capgainsIncome > 0;
 }
@@ -924,18 +1098,30 @@ function hasAnyUserInput() {
 function updateResultsVisibility() {
     const zeroState = document.getElementById('results-zero-state');
     const detail = document.getElementById('results-detail');
+    const exportBtn = document.getElementById('export-pdf-btn');
+    const saveBtn = document.getElementById('save-scenario-btn');
+    
     if (!zeroState || !detail) return;
     const hasData = hasAnyUserInput();
+    
     if (hasData) {
         zeroState.classList.remove('is-active');
         zeroState.setAttribute('hidden', 'hidden');
         detail.classList.remove('is-dimmed');
         detail.removeAttribute('aria-hidden');
+        
+        // Show action buttons
+        if (exportBtn) exportBtn.style.display = 'inline-flex';
+        if (saveBtn) saveBtn.style.display = 'inline-flex';
     } else {
         zeroState.classList.add('is-active');
         zeroState.removeAttribute('hidden');
         detail.classList.add('is-dimmed');
         detail.setAttribute('aria-hidden', 'true');
+        
+        // Hide action buttons
+        if (exportBtn) exportBtn.style.display = 'none';
+        if (saveBtn) saveBtn.style.display = 'none';
     }
 }
 
