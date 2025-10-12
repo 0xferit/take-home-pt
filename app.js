@@ -939,6 +939,8 @@ function updateResultsDisplayDual(simplified, transparent) {
     setText('simp-taxable', formatCurrency(simplified.taxableIncome));
     setText('simp-irs', formatCurrency(simplified.incomeTax));
     setText('simp-ss', formatCurrency(simplified.socialSecurity));
+    const simpTotalTaxes = simplified.incomeTax + simplified.socialSecurity;
+    setText('simp-total-taxes', formatCurrency(simpTotalTaxes));
     setText('simp-net', formatCurrency(simplified.netIncome));
     setText('simp-other-net', formatCurrency(otherNet));
     setText('simp-total-net', formatCurrency(simplified.netIncome + otherNet));
@@ -952,6 +954,8 @@ function updateResultsDisplayDual(simplified, transparent) {
     setText('org-taxable', formatCurrency(transparent.taxableIncome));
     setText('org-irs', formatCurrency(transparent.incomeTax));
     setText('org-ss', formatCurrency(transparent.socialSecurity));
+    const orgTotalTaxes = transparent.incomeTax + transparent.socialSecurity;
+    setText('org-total-taxes', formatCurrency(orgTotalTaxes));
     setText('org-net', formatCurrency(transparent.netIncome));
     setText('org-other-net', formatCurrency(otherNet));
     setText('org-total-net', formatCurrency(transparent.netIncome + otherNet));

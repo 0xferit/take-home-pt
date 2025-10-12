@@ -532,42 +532,64 @@
                             <div class="breakdown__col">
                                 <h3 id="freelancer-results-title">Freelancer (Simplified) Results</h3>
                                 <dl class="data-list">
-                                    <dt>Gross income</dt>
+                                    <!-- INCOME SECTION -->
+                                    <dt style="font-weight: 700; color: var(--color-primary); margin-top: var(--space-4); padding-top: var(--space-3); border-top: 2px solid var(--color-border);">📊 Income</dt>
+                                    <dd></dd>
+                                    
+                                    <dt style="padding-left: var(--space-3);">Gross income</dt>
                                     <dd id="simp-gross">€0.00</dd>
                                     
-                                    <dt>Coefficient</dt>
+                                    <dt style="padding-left: var(--space-3);">Coefficient (deemed expenses)</dt>
                                     <dd id="simp-coefficient">75%</dd>
                                     
-                                    <dt>Taxable income</dt>
-                                    <dd id="simp-taxable">€0.00</dd>
+                                    <dt style="padding-left: var(--space-3); font-weight: 600; background: var(--bg-elevated); padding-right: 0.5rem;">= Taxable income</dt>
+                                    <dd id="simp-taxable" style="font-weight: 600; background: var(--bg-elevated); padding-left: 0.5rem;">€0.00</dd>
                                     
-                                    <dt>Total expenses</dt>
-                                    <dd id="simp-expenses-total">€0.00</dd>
+                                    <!-- EXPENSES SECTION -->
+                                    <dt style="font-weight: 700; color: var(--color-primary); margin-top: var(--space-4); padding-top: var(--space-3); border-top: 2px solid var(--color-border);">💰 Business Expenses</dt>
+                                    <dd></dd>
                                     
-                                    <dt>
-                                        Liability insurance
-                                        <span style="display: block; font-size: 0.75rem; font-weight: normal; color: var(--color-text-muted); margin-top: 0.125rem;">
-                                            (1% of gross income)
-                                        </span>
+                                    <dt style="padding-left: var(--space-3);">Base expenses</dt>
+                                    <dd id="simp-expenses-base">€0.00</dd>
+                                    
+                                    <dt style="padding-left: var(--space-3);">Admin costs</dt>
+                                    <dd id="simp-expenses-admin">€0.00</dd>
+                                    
+                                    <dt style="padding-left: var(--space-3);">
+                                        Liability insurance (guessetimate)
                                     </dt>
                                     <dd id="simp-liability">€0.00</dd>
                                     
-                                    <dt>Tax deductions</dt>
+                                    <dt style="padding-left: var(--space-3); font-weight: 600; background: var(--bg-elevated); padding-right: 0.5rem;">= Total expenses</dt>
+                                    <dd id="simp-expenses-total" style="font-weight: 600; background: var(--bg-elevated); padding-left: 0.5rem;">€0.00</dd>
+                                    
+                                    <!-- TAXES SECTION -->
+                                    <dt style="font-weight: 700; color: var(--color-primary); margin-top: var(--space-4); padding-top: var(--space-3); border-top: 2px solid var(--color-border);">🏛️ Taxes & Contributions</dt>
+                                    <dd></dd>
+                                    
+                                    <dt style="padding-left: var(--space-3);">Tax deductions</dt>
                                     <dd id="simp-deducoes">€0.00</dd>
                                     
-                                    <dt>IRS (income tax)</dt>
+                                    <dt style="padding-left: var(--space-3);">IRS (income tax)</dt>
                                     <dd id="simp-irs">€0.00</dd>
                                     
-                                    <dt>Social Security</dt>
+                                    <dt style="padding-left: var(--space-3);">Social Security</dt>
                                     <dd id="simp-ss">€0.00</dd>
                                     
-                                    <dt>Net Category B income</dt>
+                                    <dt style="padding-left: var(--space-3); font-weight: 600; background: var(--bg-elevated); padding-right: 0.5rem;">= Total taxes</dt>
+                                    <dd id="simp-total-taxes" style="font-weight: 600; background: var(--bg-elevated); padding-left: 0.5rem;">€0.00</dd>
+                                    
+                                    <!-- NET INCOME SECTION -->
+                                    <dt style="font-weight: 700; color: var(--color-success); margin-top: var(--space-4); padding-top: var(--space-3); border-top: 2px solid var(--color-border);">💵 Net Income</dt>
+                                    <dd></dd>
+                                    
+                                    <dt style="padding-left: var(--space-3);">Net Category B income</dt>
                                     <dd id="simp-net">€0.00</dd>
                                     
-                                    <dt>Other income (net)</dt>
+                                    <dt style="padding-left: var(--space-3);">Other income (net)</dt>
                                     <dd id="simp-other-net">€0.00</dd>
                                     
-                                    <dt class="data-list__total">Total net income</dt>
+                                    <dt class="data-list__total">= TOTAL NET INCOME</dt>
                                     <dd class="data-list__total" id="simp-total-net">€0.00</dd>
                                 </dl>
                                 <p id="simp-ss-note" class="help-text"></p>
@@ -576,34 +598,59 @@
                             <div class="breakdown__col">
                                 <h3>Single-Member Company (LDA) Results</h3>
                                 <dl class="data-list">
-                                    <dt>Gross income</dt>
+                                    <!-- INCOME SECTION -->
+                                    <dt style="font-weight: 700; color: var(--color-primary); margin-top: var(--space-4); padding-top: var(--space-3); border-top: 2px solid var(--color-border);">📊 Income</dt>
+                                    <dd></dd>
+                                    
+                                    <dt style="padding-left: var(--space-3);">Gross income</dt>
                                     <dd id="org-gross">€0.00</dd>
                                     
-                                    <dt>Total expenses</dt>
-                                    <dd id="org-expenses-total">€0.00</dd>
+                                    <!-- EXPENSES SECTION -->
+                                    <dt style="font-weight: 700; color: var(--color-primary); margin-top: var(--space-4); padding-top: var(--space-3); border-top: 2px solid var(--color-border);">💰 Business Expenses</dt>
+                                    <dd></dd>
                                     
-                                    <dt>Net business income</dt>
-                                    <dd id="org-net-biz">€0.00</dd>
+                                    <dt style="padding-left: var(--space-3);">Base expenses</dt>
+                                    <dd id="org-expenses-base">€0.00</dd>
                                     
-                                    <dt>Taxable income</dt>
-                                    <dd id="org-taxable">€0.00</dd>
+                                    <dt style="padding-left: var(--space-3);">Admin costs</dt>
+                                    <dd id="org-expenses-admin">€0.00</dd>
                                     
-                                    <dt>Tax deductions</dt>
+                                    <dt style="padding-left: var(--space-3); font-weight: 600; background: var(--bg-elevated); padding-right: 0.5rem;">= Total expenses</dt>
+                                    <dd id="org-expenses-total" style="font-weight: 600; background: var(--bg-elevated); padding-left: 0.5rem;">€0.00</dd>
+                                    
+                                    <dt style="padding-left: var(--space-3); font-weight: 600; background: var(--bg-elevated); padding-right: 0.5rem; margin-top: var(--space-2);">= Net business income</dt>
+                                    <dd id="org-net-biz" style="font-weight: 600; background: var(--bg-elevated); padding-left: 0.5rem;">€0.00</dd>
+                                    
+                                    <dt style="padding-left: var(--space-3); font-weight: 600; background: var(--bg-elevated); padding-right: 0.5rem;">= Taxable income</dt>
+                                    <dd id="org-taxable" style="font-weight: 600; background: var(--bg-elevated); padding-left: 0.5rem;">€0.00</dd>
+                                    
+                                    <!-- TAXES SECTION -->
+                                    <dt style="font-weight: 700; color: var(--color-primary); margin-top: var(--space-4); padding-top: var(--space-3); border-top: 2px solid var(--color-border);">🏛️ Taxes & Contributions</dt>
+                                    <dd></dd>
+                                    
+                                    <dt style="padding-left: var(--space-3);">Tax deductions</dt>
                                     <dd id="org-deducoes">€0.00</dd>
                                     
-                                    <dt>IRS (income tax)</dt>
+                                    <dt style="padding-left: var(--space-3);">IRS (income tax)</dt>
                                     <dd id="org-irs">€0.00</dd>
                                     
-                                    <dt>Social Security</dt>
+                                    <dt style="padding-left: var(--space-3);">Social Security</dt>
                                     <dd id="org-ss">€0.00</dd>
                                     
-                                    <dt>Net Category B income</dt>
+                                    <dt style="padding-left: var(--space-3); font-weight: 600; background: var(--bg-elevated); padding-right: 0.5rem;">= Total taxes</dt>
+                                    <dd id="org-total-taxes" style="font-weight: 600; background: var(--bg-elevated); padding-left: 0.5rem;">€0.00</dd>
+                                    
+                                    <!-- NET INCOME SECTION -->
+                                    <dt style="font-weight: 700; color: var(--color-success); margin-top: var(--space-4); padding-top: var(--space-3); border-top: 2px solid var(--color-border);">💵 Net Income</dt>
+                                    <dd></dd>
+                                    
+                                    <dt style="padding-left: var(--space-3);">Net Category B income</dt>
                                     <dd id="org-net">€0.00</dd>
                                     
-                                    <dt>Other income (net)</dt>
+                                    <dt style="padding-left: var(--space-3);">Other income (net)</dt>
                                     <dd id="org-other-net">€0.00</dd>
                                     
-                                    <dt class="data-list__total">Total net income</dt>
+                                    <dt class="data-list__total">= TOTAL NET INCOME</dt>
                                     <dd class="data-list__total" id="org-total-net">€0.00</dd>
                                 </dl>
                                 <p id="org-ss-note" class="help-text"></p>
