@@ -537,6 +537,12 @@ function updateExpenseTotal() {
 
     setText('total-expenses-simp', formatCurrency(totalFreelancer));
     setText('total-expenses-org', formatCurrency(totalTransparent));
+    
+    // Show expense breakdown for transparency
+    const simpBreakdown = `Shared: ${formatCurrency(base)} + Admin: ${formatCurrency(adminSimplified)} + Insurance: ${formatCurrency(liabilityInsurance)}`;
+    const orgBreakdown = `Shared: ${formatCurrency(base)} + Admin: ${formatCurrency(adminTransparent)}`;
+    setText('expense-breakdown-simp', simpBreakdown);
+    setText('expense-breakdown-org', orgBreakdown);
 
     const totalMax = Math.max(totalFreelancer, totalTransparent);
     const warningElement = document.getElementById('expense-warning');

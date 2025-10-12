@@ -229,7 +229,7 @@
                                 <span class="input-group__prefix">€</span>
                                 <input type="number" id="admin-freelancer" class="input expense-input" value="800" min="0" step="50">
                             </div>
-                            <p class="help-text">Accountant, TOC fees for freelancer setup.</p>
+                            <p class="help-text">Accountant, TOC fees for freelancer setup. <strong>Note:</strong> Professional liability insurance (1% of gross income) is automatically added to Freelancer total expenses.</p>
                         </div>
 
                         <div class="form-group">
@@ -238,7 +238,7 @@
                                 <span class="input-group__prefix">€</span>
                                 <input type="number" id="admin-transparent" class="input expense-input" value="4800" min="0" step="50">
                             </div>
-                            <p class="help-text">Accounting, compliance, legal fees for LLC.</p>
+                            <p class="help-text">Accounting, compliance, legal fees for LLC. <strong>Note:</strong> LDA has built-in limited liability, so professional liability insurance (included in Freelancer costs) is not required.</p>
                         </div>
                     </div>
 
@@ -251,10 +251,12 @@
                         <div class="expense-summary__item">
                             <span>Freelancer total expenses:</span>
                             <strong id="total-expenses-simp">€0.00</strong>
+                            <small id="expense-breakdown-simp" style="display: block; color: var(--color-text-muted); margin-top: 0.25rem; font-weight: normal;"></small>
                         </div>
                         <div class="expense-summary__item">
                             <span>Single-Member Company (LDA) total expenses:</span>
                             <strong id="total-expenses-org">€0.00</strong>
+                            <small id="expense-breakdown-org" style="display: block; color: var(--color-text-muted); margin-top: 0.25rem; font-weight: normal;"></small>
                         </div>
                     </div>
 
@@ -415,7 +417,12 @@
                                     <dt>Total expenses</dt>
                                     <dd id="simp-expenses-total">€0.00</dd>
                                     
-                                    <dt>Liability insurance</dt>
+                                    <dt>
+                                        Liability insurance
+                                        <span style="display: block; font-size: 0.75rem; font-weight: normal; color: var(--color-text-muted); margin-top: 0.125rem;">
+                                            (1% of gross income)
+                                        </span>
+                                    </dt>
                                     <dd id="simp-liability">€0.00</dd>
                                     
                                     <dt>Tax deductions</dt>
@@ -755,6 +762,38 @@
                                     Community Discussion on Mutual Exclusion
                                 </a>
                             </p>
+                        </div>
+
+                        <!-- Professional Liability Insurance -->
+                        <div class="methodology-section">
+                            <h3>Professional Liability Insurance (Freelancers)</h3>
+                            <p class="help-text">Freelancers operating without limited liability protection typically need professional liability insurance</p>
+                            <div class="coefficient-cards">
+                                <div class="coefficient-card">
+                                    <h4>Why It's Needed</h4>
+                                    <ul class="info-list">
+                                        <li>Freelancers have unlimited personal liability</li>
+                                        <li>Protects against professional errors, negligence claims</li>
+                                        <li>Client contracts often require proof of insurance</li>
+                                        <li>Personal assets at risk without coverage</li>
+                                    </ul>
+                                </div>
+                                <div class="coefficient-card">
+                                    <h4>Cost Estimate</h4>
+                                    <ul class="info-list">
+                                        <li><strong>Rate:</strong> ~1% of annual gross income</li>
+                                        <li><strong>€50k income:</strong> ~€500/year insurance</li>
+                                        <li><strong>€100k income:</strong> ~€1,000/year insurance</li>
+                                        <li><strong>Varies by:</strong> profession, coverage limits, claims history</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="disclaimer-box" style="margin-top: var(--space-4);">
+                                <h4>LDA vs Freelancer Liability</h4>
+                                <p><strong>LDA (Limited Liability Company):</strong> Built-in limited liability protection. Company assets are separate from personal assets. Professional liability insurance optional (may still be required by specific clients).</p>
+                                <p><strong>Freelancer:</strong> Unlimited personal liability. Your personal assets (home, savings, etc.) are at risk in case of claims. Professional liability insurance strongly recommended.</p>
+                            </div>
+                            <p class="help-text"><strong>Note:</strong> This calculator includes 1% of gross income as estimated insurance cost for Freelancer setups. Actual cost varies - consult insurance providers for quotes.</p>
                         </div>
 
                         <!-- Personal Deductions -->
