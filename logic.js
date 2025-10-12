@@ -8,8 +8,9 @@
   };
 
   const INSURANCE_DATA = {
-    // Professional liability insurance risk tiers
-    // Validated against real insurance quotes (e.g., €250k revenue → €908 premium = 0.36%)
+    // Professional liability insurance risk tiers (ROUGH ESTIMATES ONLY)
+    // These are guessetimates based on industry averages and typical Portugal market rates
+    // Actual quotes may vary significantly (±20-40%) depending on insurer and specific circumstances
     riskTiers: {
       low: {
         id: 'low',
@@ -408,7 +409,11 @@
   }
 
   /**
-   * Calculate professional liability insurance premium
+   * GUESSETIMATE professional liability insurance premium (NOT a precise calculation)
+   * This is a rough estimation based on industry averages and typical market rates.
+   * Actual premiums can vary by ±20-40% depending on insurer, specific profession details,
+   * claims history, and market conditions.
+   * 
    * Formula: (BaseRate + Revenue × VariableRate) × RiskMultiplier × AdjustmentFactors
    * 
    * @param {Object} params
@@ -420,7 +425,7 @@
    * @param {string} params.claimsHistory - 'clean', 'minor', 'major'
    * @param {number} params.yearsInBusiness - Years in business (3+ gets discount)
    * @param {number} params.coverageLimit - Requested coverage limit (default: €2M)
-   * @returns {Object} Premium details with breakdown
+   * @returns {Object} Premium guessetimate with breakdown
    */
   function calculateInsurancePremium({
     revenue = 0,
@@ -512,7 +517,7 @@
     // 4. Sanity check: Premium should be 0.3% - 3% of revenue
     const premiumPercentage = income > 0 ? (adjustedPremium / income) * 100 : 0;
     const warning = premiumPercentage < 0.3 || premiumPercentage > 3.0
-      ? `Premium is ${premiumPercentage.toFixed(2)}% of revenue (expected 0.3%-3%). Review settings.`
+      ? `GUESSETIMATE: ${premiumPercentage.toFixed(2)}% of revenue (typical range 0.3%-3%). Get actual quotes for accuracy.`
       : null;
     
     return {
@@ -535,14 +540,15 @@
   }
 
   /**
-   * Simple insurance calculation using activity profile fallback
+   * Simple insurance guessetimation using activity profile fallback
    * (Used when activity code is not available)
+   * Returns a rough estimate - actual premiums may vary significantly
    */
   function calculateSimpleInsurance(revenue, activityProfile = 'services_high_value') {
     return calculateInsurancePremium({
       revenue,
       activityProfile,
-      // Use smart defaults
+      // Use conservative defaults for guessetimate
       usaCoverage: false,
       claimsHistory: 'clean',
       yearsInBusiness: 3,
