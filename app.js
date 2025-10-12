@@ -184,7 +184,10 @@ function setupEventListeners() {
         input.addEventListener('change', (event) => {
             if (!event.target.checked) return;
             appState.freelancerBasis = event.target.value === 'organized' ? 'organized' : 'simplified';
+            // Update admin expenses if suggested admin is enabled
+            applySuggestedAdminIfEnabled();
             updateFreelancerTitle();
+            updateExpenseTotal();
             recalc();
         });
     });
@@ -864,17 +867,36 @@ function updatePersonalDeductions() {
 }
 
 function calculateAndUpdate() {
-    const baseExpenses = appState.expenses['total-business-expenses'] || 0;
-    const adminSimplified = appState.expenses['admin-freelancer'] || 0;
-    const adminTransparent = appState.expenses['admin-transparent'] || 0;
-
     // Check simplified regime income limit (€200,000)
     const SIMPLIFIED_REGIME_LIMIT = 200000;
     const exceedsSimplifiedLimit = appState.grossIncome > SIMPLIFIED_REGIME_LIMIT;
     const simplifiedWarning = document.getElementById('simplified-regime-warning');
     const incomeOverLimit = document.getElementById('income-over-limit');
     
-    if (exceedsSimplifiedLimit && appState.freelancerBasis === 'simplified') {
+    // ENFORCE organized accounting when income exceeds limit
+    if (exceedsSimplifiedLimit) {
+        if (appState.freelancerBasis === 'simplified') {
+            // Automatically switch to organized
+            appState.freelancerBasis = 'organized';
+            
+            // Update the radio buttons
+            const organizedRadio = document.querySelector('input[name="freelancer-basis"][value="organized"]');
+            if (organizedRadio) {
+                organizedRadio.checked = true;
+            }
+            
+            // Update admin expenses if suggested admin is enabled
+            applySuggestedAdminIfEnabled();
+            updateFreelancerTitle();
+        }
+        
+        // Disable simplified radio button
+        const simplifiedRadio = document.querySelector('input[name="freelancer-basis"][value="simplified"]');
+        if (simplifiedRadio) {
+            simplifiedRadio.disabled = true;
+        }
+        
+        // Show warning with enforcement message
         if (simplifiedWarning) {
             simplifiedWarning.style.display = 'block';
             if (incomeOverLimit) {
@@ -882,10 +904,21 @@ function calculateAndUpdate() {
             }
         }
     } else {
+        // Re-enable simplified option when below limit
+        const simplifiedRadio = document.querySelector('input[name="freelancer-basis"][value="simplified"]');
+        if (simplifiedRadio) {
+            simplifiedRadio.disabled = false;
+        }
+        
         if (simplifiedWarning) {
             simplifiedWarning.style.display = 'none';
         }
     }
+
+    // Capture expense values AFTER enforcement (in case they were updated)
+    const baseExpenses = appState.expenses['total-business-expenses'] || 0;
+    const adminSimplified = appState.expenses['admin-freelancer'] || 0;
+    const adminTransparent = appState.expenses['admin-transparent'] || 0;
 
     const commonInputs = {
         grossIncome: appState.grossIncome,
