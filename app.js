@@ -946,6 +946,8 @@ function updateResultsDisplayDual(simplified, transparent) {
     setText('simp-expenses-admin', formatCurrency(simplified.adminExpenses || 0));
     setText('simp-expenses-total', formatCurrency(simplified.totalExpenses));
     setText('simp-liability', formatCurrency(simplified.insuranceExpenses || 0));
+    const simpGrossProfit = appState.grossIncome - simplified.totalExpenses;
+    setText('simp-gross-profit', formatCurrency(simpGrossProfit));
     setText('simp-deducoes', formatCurrency(simplified.deducoesATax || 0));
     setText('simp-taxable', formatCurrency(simplified.taxableIncome));
     setText('simp-irs', formatCurrency(simplified.incomeTax));
@@ -960,6 +962,8 @@ function updateResultsDisplayDual(simplified, transparent) {
     setText('org-expenses-base', formatCurrency(transparent.baseExpenses || 0));
     setText('org-expenses-admin', formatCurrency(transparent.adminExpenses || 0));
     setText('org-expenses-total', formatCurrency(transparent.totalExpenses));
+    const orgGrossProfit = appState.grossIncome - transparent.totalExpenses;
+    setText('org-gross-profit', formatCurrency(orgGrossProfit));
     setText('org-net-biz', formatCurrency(transparent.netBusinessIncome));
     setText('org-deducoes', formatCurrency(transparent.deducoesATax || 0));
     setText('org-taxable', formatCurrency(transparent.taxableIncome));
