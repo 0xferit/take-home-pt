@@ -245,15 +245,15 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="insurance-auto-estimate">Professional Liability Insurance (Freelancer Only)</label>
+                        <label for="insurance-auto-estimate">Professional Liability Insurance (Freelancer Only) — ROUGH GUESSETIMATE</label>
                         <div style="padding: var(--space-4); background: var(--bg-elevated); border-radius: var(--radius); border-left: 4px solid var(--color-primary);">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-3);">
                                 <div>
                                     <div style="font-size: var(--text-lg); font-weight: 600; color: var(--color-text);">
-                                        <span id="insurance-auto-estimate">€0.00</span>/year
+                                        ~<span id="insurance-auto-estimate">€0.00</span>/year
                                     </div>
                                     <div style="font-size: var(--text-sm); color: var(--color-text-muted); margin-top: 0.25rem;">
-                                        <span id="insurance-auto-percentage">0.00%</span> of revenue
+                                        ~<span id="insurance-auto-percentage">0.00%</span> of revenue (rough estimate)
                                     </div>
                                 </div>
                                 <div style="text-align: right;">
@@ -264,7 +264,7 @@
                             </div>
                             
                             <div id="insurance-based-on" style="font-size: var(--text-sm); color: var(--color-text-muted); margin-bottom: var(--space-3);">
-                                ℹ️ Auto-calculated based on: <span id="insurance-activity-label">activity type</span>, €<span id="insurance-revenue-label">0</span> revenue
+                                ℹ️ Rough guessetimate based on: <span id="insurance-activity-label">activity type</span>, €<span id="insurance-revenue-label">0</span> revenue
                             </div>
                             
                             <!-- Manual Override Option -->
@@ -336,7 +336,8 @@
                         </div>
                         <p class="help-text" style="margin-top: var(--space-3);">
                             Freelancers need professional liability insurance due to unlimited personal liability. 
-                            Estimate is auto-calculated using industry-validated formula (±10-20% accuracy). 
+                            <strong>⚠️ This is a ROUGH GUESSETIMATE only</strong> — actual premiums can vary ±20-40% or more depending on insurer, specific profession details, claims history, and market conditions. 
+                            <strong>Always get personalized quotes from insurance brokers before budgeting.</strong>
                             <strong>LDA structures have built-in limited liability, so insurance is optional.</strong>
                         </p>
                         <div id="insurance-warning" class="alert alert--warning" style="display: none; margin-top: var(--space-3);"></div>
@@ -531,42 +532,64 @@
                             <div class="breakdown__col">
                                 <h3 id="freelancer-results-title">Freelancer (Simplified) Results</h3>
                                 <dl class="data-list">
-                                    <dt>Gross income</dt>
+                                    <!-- INCOME SECTION -->
+                                    <dt style="font-weight: 700; color: var(--color-primary); margin-top: var(--space-4); padding-top: var(--space-3); border-top: 2px solid var(--color-border);">📊 Income</dt>
+                                    <dd></dd>
+                                    
+                                    <dt style="padding-left: var(--space-3);">Gross income</dt>
                                     <dd id="simp-gross">€0.00</dd>
                                     
-                                    <dt>Coefficient</dt>
+                                    <dt style="padding-left: var(--space-3);">Coefficient (deemed expenses)</dt>
                                     <dd id="simp-coefficient">75%</dd>
                                     
-                                    <dt>Taxable income</dt>
-                                    <dd id="simp-taxable">€0.00</dd>
+                                    <dt style="padding-left: var(--space-3); font-weight: 600; background: var(--bg-elevated); padding-right: 0.5rem;">= Taxable income</dt>
+                                    <dd id="simp-taxable" style="font-weight: 600; background: var(--bg-elevated); padding-left: 0.5rem;">€0.00</dd>
                                     
-                                    <dt>Total expenses</dt>
-                                    <dd id="simp-expenses-total">€0.00</dd>
+                                    <!-- EXPENSES SECTION -->
+                                    <dt style="font-weight: 700; color: var(--color-primary); margin-top: var(--space-4); padding-top: var(--space-3); border-top: 2px solid var(--color-border);">💰 Business Expenses</dt>
+                                    <dd></dd>
                                     
-                                    <dt>
-                                        Liability insurance
-                                        <span style="display: block; font-size: 0.75rem; font-weight: normal; color: var(--color-text-muted); margin-top: 0.125rem;">
-                                            (1% of gross income)
-                                        </span>
+                                    <dt style="padding-left: var(--space-3);">Base expenses</dt>
+                                    <dd id="simp-expenses-base">€0.00</dd>
+                                    
+                                    <dt style="padding-left: var(--space-3);">Admin costs</dt>
+                                    <dd id="simp-expenses-admin">€0.00</dd>
+                                    
+                                    <dt style="padding-left: var(--space-3);">
+                                        Liability insurance (guessetimate)
                                     </dt>
                                     <dd id="simp-liability">€0.00</dd>
                                     
-                                    <dt>Tax deductions</dt>
+                                    <dt style="padding-left: var(--space-3); font-weight: 600; background: var(--bg-elevated); padding-right: 0.5rem;">= Total expenses</dt>
+                                    <dd id="simp-expenses-total" style="font-weight: 600; background: var(--bg-elevated); padding-left: 0.5rem;">€0.00</dd>
+                                    
+                                    <!-- TAXES SECTION -->
+                                    <dt style="font-weight: 700; color: var(--color-primary); margin-top: var(--space-4); padding-top: var(--space-3); border-top: 2px solid var(--color-border);">🏛️ Taxes & Contributions</dt>
+                                    <dd></dd>
+                                    
+                                    <dt style="padding-left: var(--space-3);">Tax deductions</dt>
                                     <dd id="simp-deducoes">€0.00</dd>
                                     
-                                    <dt>IRS (income tax)</dt>
+                                    <dt style="padding-left: var(--space-3);">IRS (income tax)</dt>
                                     <dd id="simp-irs">€0.00</dd>
                                     
-                                    <dt>Social Security</dt>
+                                    <dt style="padding-left: var(--space-3);">Social Security</dt>
                                     <dd id="simp-ss">€0.00</dd>
                                     
-                                    <dt>Net Category B income</dt>
+                                    <dt style="padding-left: var(--space-3); font-weight: 600; background: var(--bg-elevated); padding-right: 0.5rem;">= Total taxes</dt>
+                                    <dd id="simp-total-taxes" style="font-weight: 600; background: var(--bg-elevated); padding-left: 0.5rem;">€0.00</dd>
+                                    
+                                    <!-- NET INCOME SECTION -->
+                                    <dt style="font-weight: 700; color: var(--color-success); margin-top: var(--space-4); padding-top: var(--space-3); border-top: 2px solid var(--color-border);">💵 Net Income</dt>
+                                    <dd></dd>
+                                    
+                                    <dt style="padding-left: var(--space-3);">Net Category B income</dt>
                                     <dd id="simp-net">€0.00</dd>
                                     
-                                    <dt>Other income (net)</dt>
+                                    <dt style="padding-left: var(--space-3);">Other income (net)</dt>
                                     <dd id="simp-other-net">€0.00</dd>
                                     
-                                    <dt class="data-list__total">Total net income</dt>
+                                    <dt class="data-list__total">= TOTAL NET INCOME</dt>
                                     <dd class="data-list__total" id="simp-total-net">€0.00</dd>
                                 </dl>
                                 <p id="simp-ss-note" class="help-text"></p>
@@ -575,34 +598,59 @@
                             <div class="breakdown__col">
                                 <h3>Single-Member Company (LDA) Results</h3>
                                 <dl class="data-list">
-                                    <dt>Gross income</dt>
+                                    <!-- INCOME SECTION -->
+                                    <dt style="font-weight: 700; color: var(--color-primary); margin-top: var(--space-4); padding-top: var(--space-3); border-top: 2px solid var(--color-border);">📊 Income</dt>
+                                    <dd></dd>
+                                    
+                                    <dt style="padding-left: var(--space-3);">Gross income</dt>
                                     <dd id="org-gross">€0.00</dd>
                                     
-                                    <dt>Total expenses</dt>
-                                    <dd id="org-expenses-total">€0.00</dd>
+                                    <!-- EXPENSES SECTION -->
+                                    <dt style="font-weight: 700; color: var(--color-primary); margin-top: var(--space-4); padding-top: var(--space-3); border-top: 2px solid var(--color-border);">💰 Business Expenses</dt>
+                                    <dd></dd>
                                     
-                                    <dt>Net business income</dt>
-                                    <dd id="org-net-biz">€0.00</dd>
+                                    <dt style="padding-left: var(--space-3);">Base expenses</dt>
+                                    <dd id="org-expenses-base">€0.00</dd>
                                     
-                                    <dt>Taxable income</dt>
-                                    <dd id="org-taxable">€0.00</dd>
+                                    <dt style="padding-left: var(--space-3);">Admin costs</dt>
+                                    <dd id="org-expenses-admin">€0.00</dd>
                                     
-                                    <dt>Tax deductions</dt>
+                                    <dt style="padding-left: var(--space-3); font-weight: 600; background: var(--bg-elevated); padding-right: 0.5rem;">= Total expenses</dt>
+                                    <dd id="org-expenses-total" style="font-weight: 600; background: var(--bg-elevated); padding-left: 0.5rem;">€0.00</dd>
+                                    
+                                    <dt style="padding-left: var(--space-3); font-weight: 600; background: var(--bg-elevated); padding-right: 0.5rem; margin-top: var(--space-2);">= Net business income</dt>
+                                    <dd id="org-net-biz" style="font-weight: 600; background: var(--bg-elevated); padding-left: 0.5rem;">€0.00</dd>
+                                    
+                                    <dt style="padding-left: var(--space-3); font-weight: 600; background: var(--bg-elevated); padding-right: 0.5rem;">= Taxable income</dt>
+                                    <dd id="org-taxable" style="font-weight: 600; background: var(--bg-elevated); padding-left: 0.5rem;">€0.00</dd>
+                                    
+                                    <!-- TAXES SECTION -->
+                                    <dt style="font-weight: 700; color: var(--color-primary); margin-top: var(--space-4); padding-top: var(--space-3); border-top: 2px solid var(--color-border);">🏛️ Taxes & Contributions</dt>
+                                    <dd></dd>
+                                    
+                                    <dt style="padding-left: var(--space-3);">Tax deductions</dt>
                                     <dd id="org-deducoes">€0.00</dd>
                                     
-                                    <dt>IRS (income tax)</dt>
+                                    <dt style="padding-left: var(--space-3);">IRS (income tax)</dt>
                                     <dd id="org-irs">€0.00</dd>
                                     
-                                    <dt>Social Security</dt>
+                                    <dt style="padding-left: var(--space-3);">Social Security</dt>
                                     <dd id="org-ss">€0.00</dd>
                                     
-                                    <dt>Net Category B income</dt>
+                                    <dt style="padding-left: var(--space-3); font-weight: 600; background: var(--bg-elevated); padding-right: 0.5rem;">= Total taxes</dt>
+                                    <dd id="org-total-taxes" style="font-weight: 600; background: var(--bg-elevated); padding-left: 0.5rem;">€0.00</dd>
+                                    
+                                    <!-- NET INCOME SECTION -->
+                                    <dt style="font-weight: 700; color: var(--color-success); margin-top: var(--space-4); padding-top: var(--space-3); border-top: 2px solid var(--color-border);">💵 Net Income</dt>
+                                    <dd></dd>
+                                    
+                                    <dt style="padding-left: var(--space-3);">Net Category B income</dt>
                                     <dd id="org-net">€0.00</dd>
                                     
-                                    <dt>Other income (net)</dt>
+                                    <dt style="padding-left: var(--space-3);">Other income (net)</dt>
                                     <dd id="org-other-net">€0.00</dd>
                                     
-                                    <dt class="data-list__total">Total net income</dt>
+                                    <dt class="data-list__total">= TOTAL NET INCOME</dt>
                                     <dd class="data-list__total" id="org-total-net">€0.00</dd>
                                 </dl>
                                 <p id="org-ss-note" class="help-text"></p>
@@ -967,14 +1015,27 @@
 
                         <!-- Professional Liability Insurance -->
                         <div class="methodology-section">
-                            <h3>Professional Liability Insurance (Freelancers)</h3>
+                            <h3>Professional Liability Insurance (Freelancers) — GUESSETIMATION ONLY</h3>
                             <p class="help-text">Freelancers operating without limited liability protection typically need professional liability insurance</p>
                             
-                            <h4 style="margin-top: var(--space-4);">Auto-Calculated Premium Formula</h4>
-                            <p class="help-text">This calculator uses an industry-validated formula to estimate premiums with ±10-20% accuracy:</p>
+                            <div class="disclaimer-box" style="margin-top: var(--space-3); background: #fff3cd; border-left: 4px solid #ff9800;">
+                                <h4 style="color: #856404;">⚠️ IMPORTANT: This is a ROUGH GUESSETIMATE, NOT a precise calculation</h4>
+                                <p><strong>Actual premiums can vary by ±20-40% or MORE</strong> depending on:</p>
+                                <ul class="info-list">
+                                    <li>Specific insurer pricing policies and risk models</li>
+                                    <li>Detailed profession specifics and services offered</li>
+                                    <li>Individual claims history and experience</li>
+                                    <li>Market conditions and competition in Portugal</li>
+                                    <li>Coverage details, deductibles, and policy terms</li>
+                                </ul>
+                                <p style="margin-top: var(--space-2);"><strong>⚠️ Do NOT rely on this estimate for budgeting.</strong> Always get personalized quotes from multiple insurance brokers/providers before making financial decisions.</p>
+                            </div>
+                            
+                            <h4 style="margin-top: var(--space-4);">Guessetimation Formula (For Reference Only)</h4>
+                            <p class="help-text">This calculator uses a simplified industry-average formula to provide a ballpark estimate:</p>
                             <div class="disclaimer-box" style="margin-top: var(--space-3);">
-                                <p><strong>Formula:</strong> Premium = (BaseRate + Revenue × VariableRate) × RiskMultiplier × AdjustmentFactors</p>
-                                <p style="margin-top: var(--space-2);"><strong>Validation:</strong> Tested against real insurance quotes (e.g., €250k revenue → €908 actual quote = 0.36%, our formula estimates ~0.35-0.40%)</p>
+                                <p><strong>Formula:</strong> Premium ≈ (BaseRate + Revenue × VariableRate) × RiskMultiplier × AdjustmentFactors</p>
+                                <p style="margin-top: var(--space-2);"><strong>Note:</strong> This is based on general industry averages and Portugal market data, but actual quotes will vary significantly by insurer</p>
                             </div>
                             
                             <h4 style="margin-top: var(--space-4);">Risk Tiers (Auto-Derived from Activity)</h4>
@@ -1017,10 +1078,11 @@
                             <p class="help-text" style="margin-top: var(--space-3);">You can manually override the auto-derived risk level in the advanced settings if needed.</p>
                             
                             <div class="disclaimer-box" style="margin-top: var(--space-4);">
-                                <h4>Why This Model Works</h4>
-                                <p><strong>Scaling Property:</strong> Premium percentage decreases with revenue due to fixed base rate becoming proportionally smaller. This matches real insurance pricing behavior.</p>
-                                <p><strong>Industry Benchmarks:</strong> Formula validated against PWC, Insureon, TechInsurance cost data and 20+ EU/UK insurance providers.</p>
-                                <p><strong>Actual Quote Example:</strong> €250k revenue, IT consulting → €908 actual premium (Hiscox) = 0.36% effective rate. Our formula: €450 + €250k × 0.0045 = €1,575 base × 0.9 (discount) = €1,418 (within 56% margin, refineable with adjustments).</p>
+                                <h4>Guessetimation Methodology</h4>
+                                <p><strong>Scaling Property:</strong> Premium percentage generally decreases with revenue due to fixed base costs becoming proportionally smaller. This matches typical insurance pricing patterns.</p>
+                                <p><strong>Industry Averages:</strong> Formula based on general patterns observed across multiple EU/UK insurance providers and industry research, but <strong>this is NOT a validated predictive model</strong>.</p>
+                                <p><strong>Example Reference Point:</strong> €250k revenue, IT consulting typically costs €600-€1,200/year (0.24-0.48%) based on market research, but individual quotes vary widely. <strong>Our guessetimate may be off by 20-40% or more.</strong></p>
+                                <p style="margin-top: var(--space-2); font-weight: 600; color: #d32f2f;">⚠️ ALWAYS get actual quotes from insurance providers. Do NOT use this estimate for financial planning.</p>
                             </div>
                             
                             <div class="disclaimer-box" style="margin-top: var(--space-4);">
@@ -1030,7 +1092,7 @@
                                 <p style="margin-top: var(--space-2);"><strong>Cost Comparison:</strong> Insurance at 0.5-1.5% of revenue is far more cost-effective than LDA overhead (€3,650-8,000/year fixed costs) for most freelancers.</p>
                             </div>
                             
-                            <p class="help-text" style="margin-top: var(--space-4);"><strong>Note:</strong> Estimates are indicative with ±10-20% accuracy. Actual cost varies by profession, coverage level, claims history, and provider. Always get personalized quotes from insurance brokers.</p>
+                            <p class="help-text" style="margin-top: var(--space-4);"><strong>⚠️ CRITICAL DISCLAIMER:</strong> These are ROUGH GUESSETIMATES with potential variance of ±20-40% OR MORE. Actual costs vary significantly by profession, coverage level, claims history, insurer, and market conditions. <strong>This tool CANNOT replace getting actual quotes from insurance brokers.</strong> Use for rough budgeting awareness only.</p>
                             <p class="help-text"><strong>Official Portuguese Insurance Regulation:</strong> <a href="https://www.asf.com.pt/" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">ASF - Autoridade de Supervisão de Seguros e Fundos de Pensões (Insurance Regulator)</a> | <a href="https://dre.pt/dre/legislacao-consolidada/decreto-lei/2015-67474011" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">Decree-Law 72/2008 (Insurance Contract Law)</a></p>
                             <p class="help-text"><strong>Portugal Insurance Providers:</strong> 
                                 <a href="https://www.hiscox.pt/" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">Hiscox Portugal</a>, 
