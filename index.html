@@ -107,10 +107,16 @@
                         <label for="nhr-status">NHR / Tax Status</label>
                         <select id="nhr-status" class="input">
                             <option value="standard">Standard progressive rates</option>
-                            <option value="original_nhr" disabled>Original NHR (20% flat rate)</option>
-                            <option value="nhr_2_ifici" disabled>NHR 2.0 / IFICI (20% flat rate)</option>
+                            <option value="original_nhr" disabled>Original NHR (20% flat rate on Portuguese income)</option>
+                            <option value="nhr_2_ifici" disabled>NHR 2.0 / IFICI (20% flat rate on Portuguese income)</option>
                         </select>
                         <p id="nhr-status-note" class="help-text">Select your activity type above to see if NHR 20% flat rate is available.</p>
+                        <div class="disclaimer-box" style="margin-top: var(--space-3);">
+                            <h4>⚠️ Calculator Scope: Portuguese Professional Income Only</h4>
+                            <p><strong>This calculator only calculates tax on Portuguese professional income (Category B).</strong></p>
+                            <p><strong>Original NHR (pre-2024) holders:</strong> If you have foreign income (foreign rental income, foreign dividends, foreign bank interest, foreign royalties), most of it is <strong>exempt from Portuguese tax</strong> under NHR 1.0. This calculator does NOT include those exemptions - consult a tax advisor for complete foreign income analysis.</p>
+                            <p><strong>NHR 2.0/IFICI (2024+):</strong> Different rules apply. This calculator shows Portuguese professional income at 20% flat rate only.</p>
+                        </div>
                         <div id="nhr-irs-jovem-warning" class="alert alert--warning" style="display: none; margin-top: var(--space-3);">
                             ⚠️ <strong>NHR disabled:</strong> You have selected IRS Jovem. NHR and IRS Jovem are mutually exclusive benefits - you can only use one.
                         </div>
@@ -767,12 +773,38 @@
                         <div class="methodology-section">
                             <h3>NHR / IFICI (20% Flat Rate)</h3>
                             <p class="help-text">Special tax regime for qualifying residents and activities</p>
+                            
+                            <div class="disclaimer-box" style="margin-top: var(--space-4);">
+                                <h4>⚠️ IMPORTANT: Calculator Scope Limitation</h4>
+                                <p><strong>This calculator ONLY shows Portuguese professional income (Category B) taxation.</strong></p>
+                                <p>It does NOT calculate foreign income exemptions available under NHR 1.0. If you have foreign income, your actual total tax may be significantly lower than shown here.</p>
+                            </div>
+                            
+                            <h4 style="margin-top: var(--space-5);">Original NHR (Pre-2024) - Extensive Foreign Income Exemptions</h4>
                             <ul class="info-list">
-                                <li><strong>Original NHR:</strong> Granted before 2024, 10-year benefit</li>
-                                <li><strong>NHR 2.0 / IFICI:</strong> Granted from 2024+, requires IFICI status</li>
-                                <li><strong>Flat Rate:</strong> 20% on professional income (Category B)</li>
-                                <li><strong>Eligible Activities:</strong> High-value professions (Article 151) primarily</li>
-                                <li><strong>Replaces:</strong> Progressive brackets (13%-48%) with flat 20%</li>
+                                <li><strong>Granted:</strong> Before 2024 (closed to new applicants)</li>
+                                <li><strong>Duration:</strong> 10-year benefit</li>
+                                <li><strong>Portuguese income:</strong> 20% flat rate on professional income (Category B)</li>
+                                <li><strong>Foreign income exemptions (if DTA exists):</strong>
+                                    <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
+                                        <li>✅ Foreign rental income - <strong>EXEMPT</strong></li>
+                                        <li>✅ Foreign bank interest - <strong>EXEMPT</strong></li>
+                                        <li>✅ Foreign dividends - <strong>EXEMPT</strong></li>
+                                        <li>✅ Foreign royalties - <strong>EXEMPT</strong></li>
+                                        <li>✅ Foreign real estate capital gains - <strong>EXEMPT</strong></li>
+                                        <li>❌ Foreign securities capital gains - 28% tax (not exempt)</li>
+                                        <li>⚠️ Foreign pensions - 10% flat tax (changed in 2020)</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            
+                            <h4 style="margin-top: var(--space-5);">NHR 2.0 / IFICI (2024+)</h4>
+                            <ul class="info-list">
+                                <li><strong>Granted:</strong> From 2024 onwards, requires IFICI status</li>
+                                <li><strong>Duration:</strong> 10-year benefit</li>
+                                <li><strong>Flat Rate:</strong> 20% on Portuguese professional income (Category B)</li>
+                                <li><strong>Eligible Activities:</strong> Scientific research, innovation, high-value professions (Article 151)</li>
+                                <li><strong>Foreign income:</strong> Different treatment than NHR 1.0 - consult tax advisor</li>
                             </ul>
                             <div class="disclaimer-box" style="margin-top: var(--space-4);">
                                 <h4>🚨 Critical Exclusion Rule</h4>
@@ -783,10 +815,26 @@
                                     <li>This is stated in official IRS Jovem legislation: <em>"não é aplicável aos sujeitos passivos que beneficiem ou tenham beneficiado do regime dos Residentes Não Habituais"</em></li>
                                 </ul>
                             </div>
+                            
+                            <div class="disclaimer-box" style="margin-top: var(--space-4);">
+                                <h4>📊 NHR 1.0 Foreign Income: Real-World Example</h4>
+                                <p><strong>UK expat with NHR 1.0 status and €85,000 total income:</strong></p>
+                                <ul class="info-list">
+                                    <li>Portuguese professional income: €50,000 → 20% NHR rate = €10,000 tax</li>
+                                    <li>UK rental income: €25,000 → <strong>EXEMPT</strong> = €0 tax</li>
+                                    <li>UK dividends: €8,000 → <strong>EXEMPT</strong> = €0 tax</li>
+                                    <li>UK bank interest: €2,000 → <strong>EXEMPT</strong> = €0 tax</li>
+                                    <li><strong>Total Portuguese tax: €10,000 on €85,000 income = 11.8% effective rate</strong></li>
+                                </ul>
+                                <p><strong>Note:</strong> This calculator only shows the €10,000 Portuguese professional income tax. Foreign income exemptions NOT included in calculations.</p>
+                            </div>
+                            
+                            <p class="help-text"><strong>Conditions for foreign income exemption:</strong> Must have Double Taxation Agreement (DTA) between Portugal and source country, income must be "taxable" in source country under treaty (even if not actually taxed)</p>
+                            <p class="help-text"><strong>Key DTA countries:</strong> US, UK, Germany, France, Switzerland, Canada, Australia, Singapore, UAE, Netherlands, 70+ countries total</p>
                             <p class="help-text"><strong>Note:</strong> Solidarity tax still applies if taxable income exceeds €80,000</p>
                             <p class="help-text"><strong>Source:</strong> CIRS Article 72 (NHR), Decree-Law 249/2023 (IFICI) | 
-                                <a href="https://www.reddit.com/r/PortugalExpats/comments/1ibcosb/irs_jovem_and_nhr_combination_possible/" target="_blank" rel="noopener" style="color: var(--color-primary);">
-                                    Community Discussion on Mutual Exclusion
+                                <a href="https://getnifportugal.com/nhr-for-digital-nomads/" target="_blank" rel="noopener" style="color: var(--color-primary);">
+                                    NHR Foreign Income Guide
                                 </a>
                             </p>
                         </div>
