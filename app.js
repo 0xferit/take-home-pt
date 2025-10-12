@@ -867,7 +867,7 @@ function updatePersonalDeductions() {
 }
 
 function calculateAndUpdate() {
-    // Check simplified regime income limit (€200,000)
+    // Check simplified regime income limit (€200,000 for Category B professional income only)
     const SIMPLIFIED_REGIME_LIMIT = 200000;
     const exceedsSimplifiedLimit = appState.grossIncome > SIMPLIFIED_REGIME_LIMIT;
     const simplifiedWarning = document.getElementById('simplified-regime-warning');
@@ -1428,7 +1428,7 @@ function updateSanityChecks() {
     if (totals <= 0) messages.push('Gross income is zero.');
     if (softwareIncome < 0) messages.push('Software income cannot be negative.');
     if (tradingIncome < 0) messages.push('Trading income cannot be negative.');
-    if (totals > 200000) messages.push('Gross exceeds 200k; simplified regime assumptions may not hold. Results are indicative only.');
+    if (softwareIncome > 200000) messages.push('Category B income exceeds €200k; simplified regime assumptions may not hold. Results are indicative only.');
     if (appState.activityCode && appState.activityCode.length === 5 && !isActivityCodeKnown(appState.activityCode)) {
         messages.push('Entered CAE code not found in the current mapping. Please confirm the coefficient manually.');
     }
