@@ -37,7 +37,43 @@
                     
                     <div class="form-group">
                         <label>Activity Type <span class="required">*</span></label>
-                        <p class="help-text" style="margin-bottom: var(--space-3);">Select your activity type first. This determines NHR eligibility and tax coefficient.</p>
+                        <p class="help-text" style="margin-bottom: var(--space-4);">
+                            Select your activity type to determine NHR eligibility and tax coefficient. 
+                            <strong>Know your CAE code?</strong> Enter it below to auto-select the correct type.
+                        </p>
+                        
+                        <!-- CAE Code Entry (Helper) -->
+                        <div style="margin-bottom: var(--space-5); padding: var(--space-4); background: var(--bg-elevated); border-radius: var(--radius); border-left: 4px solid var(--color-primary);">
+                            <label for="activity-code" style="font-size: var(--text-base); margin-bottom: var(--space-2);">
+                                🔍 CAE Activity Code (Recommended)
+                            </label>
+                            <input 
+                                type="text" 
+                                id="activity-code" 
+                                class="input" 
+                                list="activity-code-options"
+                                placeholder="e.g., 62010 (Computer programming)"
+                                maxlength="5"
+                                style="margin-bottom: var(--space-2);">
+                            <datalist id="activity-code-options"></datalist>
+                            <p class="help-text" style="margin-bottom: var(--space-2);">
+                                Enter your 5-digit CAE (Economic Activity Classification) code to automatically determine your activity type.
+                            </p>
+                            <p class="help-text">
+                                <strong>📚 Official Sources:</strong> 
+                                <a href="https://www.ine.pt/ine_novidades/semin/cae/CAE_REV_3.pdf" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">
+                                    INE - CAE Rev. 3
+                                </a> | 
+                                <a href="https://www.portaldasfinancas.gov.pt/pt/consultarCae.action" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">
+                                    Portal das Finanças - CAE Lookup
+                                </a>
+                            </p>
+                        </div>
+
+                        <!-- Manual Activity Type Selection -->
+                        <label style="margin-bottom: var(--space-3); display: block;">
+                            Or select activity type manually:
+                        </label>
                         <div class="radio-group">
                             <label class="radio-card" data-activity-option="services_high_value">
                                 <input type="radio" name="activity-profile" value="services_high_value" checked>
@@ -57,7 +93,13 @@
                         <details class="details">
                             <summary>What are high-value professions?</summary>
                             <p>High-value professions include software development, consulting, design, and other technical services listed in Article 151 of the Portuguese tax code.</p>
-                            <p><strong>CAE Codes:</strong> <span id="activity-summary-codes"></span></p>
+                            <p><strong>Article 151 CAE Codes:</strong> <span id="activity-summary-codes"></span></p>
+                            <p class="help-text" style="margin-top: var(--space-3);">
+                                <strong>Official Source:</strong> 
+                                <a href="https://diariodarepublica.pt/dr/legislacao-consolidada/portaria/2001-177307831" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">
+                                    Portaria Article 151 (Diário da República)
+                                </a>
+                            </p>
                         </details>
                     </div>
 
@@ -69,19 +111,6 @@
                             <option value="nhr_2_ifici" disabled>NHR 2.0 / IFICI (20% flat rate)</option>
                         </select>
                         <p id="nhr-status-note" class="help-text">Select your activity type above to see if NHR 20% flat rate is available.</p>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="activity-code">CAE Activity Code (optional)</label>
-                        <input 
-                            type="text" 
-                            id="activity-code" 
-                            class="input" 
-                            list="activity-code-options"
-                            placeholder="e.g., 62010"
-                            maxlength="5">
-                        <datalist id="activity-code-options"></datalist>
-                        <p class="help-text">Enter your 5-digit CAE code to auto-select the correct activity type.</p>
                     </div>
 
                     <details class="details">
@@ -561,7 +590,49 @@
                                     <p class="help-text"><strong>Deemed expenses: 65%</strong></p>
                                 </div>
                             </div>
-                            <p class="help-text"><strong>Source:</strong> CIRS Article 31 & 151</p>
+                            <p class="help-text"><strong>Sources:</strong> CIRS Article 31 & 151</p>
+                            <ul class="info-list" style="margin-top: var(--space-3);">
+                                <li>
+                                    <a href="https://diariodarepublica.pt/dr/legislacao-consolidada/portaria/2001-177307831" target="_blank" rel="noopener" style="color: var(--color-primary);">
+                                        Portaria n.º 1011/2001 - Article 151 Activity List (Diário da República)
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/cirs_rep/" target="_blank" rel="noopener" style="color: var(--color-primary);">
+                                        CIRS - Portuguese Income Tax Code (Full Text)
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <!-- CAE Codes -->
+                        <div class="methodology-section">
+                            <h3>CAE Codes (Economic Activity Classification)</h3>
+                            <p class="help-text">CAE codes determine your activity type and therefore your tax coefficient and NHR eligibility.</p>
+                            <ul class="info-list">
+                                <li><strong>CAE Rev. 3:</strong> Current classification system used in Portugal</li>
+                                <li><strong>5-digit codes:</strong> Identify specific professional activities</li>
+                                <li><strong>Article 151 codes:</strong> Automatically qualify as high-value professions (75% coefficient)</li>
+                                <li><strong>Other codes:</strong> Default to general services (35% coefficient)</li>
+                            </ul>
+                            <p class="help-text"><strong>Official Sources for Verification:</strong></p>
+                            <ul class="info-list" style="margin-top: var(--space-2);">
+                                <li>
+                                    <a href="https://www.ine.pt/ine_novidades/semin/cae/CAE_REV_3.pdf" target="_blank" rel="noopener" style="color: var(--color-primary);">
+                                        INE (National Statistics Institute) - CAE Rev. 3 Complete Database (PDF)
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://www.portaldasfinancas.gov.pt/pt/consultarCae.action" target="_blank" rel="noopener" style="color: var(--color-primary);">
+                                        Portal das Finanças - Official CAE Code Lookup Tool
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://www.ine.pt/xportal/xmain?xpid=INE&xpgid=ine_cont_inst&INST=6251013" target="_blank" rel="noopener" style="color: var(--color-primary);">
+                                        INE - CAE Rev. 3 Methodology and Documentation
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
 
                         <!-- Social Security -->

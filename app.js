@@ -247,6 +247,24 @@ function setupEventListeners() {
         });
     });
 
+    // CAE code lookup - auto-select activity type
+    const activityCodeField = document.getElementById('activity-code');
+    if (activityCodeField) {
+        activityCodeField.addEventListener('input', (event) => {
+            const code = normalizeActivityCode(event.target.value);
+            if (code && code.length === 5) {
+                const profile = getActivityProfileForCode(code);
+                if (profile) {
+                    setActivityProfile(profile.id, { source: 'cae', silent: false });
+                    appState.activityCode = code;
+                    updateNHROptions();
+                    updateInputsAtGlance();
+                    recalc();
+                }
+            }
+        });
+    }
+
     document.querySelectorAll('[data-tab-target]').forEach((trigger) => {
         trigger.addEventListener('click', (event) => {
             const target = event.currentTarget?.dataset?.tabTarget;

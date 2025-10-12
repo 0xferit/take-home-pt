@@ -275,14 +275,19 @@ The tool doesn't just calculate taxes—it shows users **which structure puts th
 
 **User Actions:**
 1. **Activity Type Selection (MUST BE FIRST):**
-   - Sees two radio cards: "High-value (Article 151)" vs "General professional services"
-   - Confused: "Which one am I?"
-   - Clicks "What's my activity code?" button
-   - Modal opens with activity code table
-   - Searches for "62020 - Computer consultancy activities"
-   - Sees it maps to "High-value (Article 151) - 75% taxable"
-   - Selects "High-value professions" radio
-   - Reads description: "75% of gross income remains taxable (25% deemed expenses)"
+   - Sees help text: "Enter your CAE code below, or select activity type manually"
+   - **Option A - CAE Code Entry (Recommended):**
+     - Types "62020" in CAE Activity Code field
+     - Sees autocomplete suggestions as she types
+     - Selects "62020 - Computer consultancy activities"
+     - **Auto-magic:** Activity type automatically selects "High-value professions"
+     - Reads confirmation: "High-value (Article 151) detected from CAE code"
+     - Sees link: "Verify on official INE CAE database"
+   - **Option B - Manual Selection:**
+     - If user doesn't know CAE code
+     - Clicks "What are high-value professions?" details
+     - Reviews Article 151 services list
+     - Manually selects appropriate radio button
    - ✅ Understands the coefficient concept
    - **Notices:** NHR status dropdown below is now enabled with success message
 
@@ -1161,14 +1166,21 @@ The tool doesn't just calculate taxes—it shows users **which structure puts th
    - Help text shows: "✅ High-value activity detected. NHR 20% flat rate is available"
 
 **Success Criteria:**
-- ✅ User identifies correct activity profile
+- ✅ User identifies correct activity profile (CAE or manual)
 - ✅ User understands tax coefficient implications
+- ✅ User can verify codes on official sources
 - ✅ < 2 minutes to complete
 
 **Error Scenarios:**
 - ❌ User can't find profession in list
 - ❌ Profession spans multiple codes
 - ❌ User unsure between consulting vs services
+
+**Verification Available:**
+- ✅ Official INE CAE Rev. 3 database linked
+- ✅ Portal das Finanças CAE lookup tool linked
+- ✅ Portaria Article 151 list linked (Diário da República)
+- ✅ User can always cross-check our classifications
 
 **Improvements Needed:**
 - 🎯 Add "Can't find your profession?" link to help/contact
