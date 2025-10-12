@@ -1,5 +1,6 @@
         const {
             TAX_DATA,
+            INSURANCE_DATA,
             computeDeducoesAColeta,
             computeSimplified,
             computeTransparent,
@@ -11,6 +12,9 @@
             getActivityProfileForCode,
             isActivityCodeKnown,
             isNHREligibleCode,
+            getRiskTierForActivity,
+            calculateInsurancePremium,
+            calculateSimpleInsurance,
         } = window.TakeHomeLogic;
 
 const currencyFormatter = new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' });
@@ -86,13 +90,24 @@ const appState = {
     irsJovemEnabled: false,
     irsJovemYear: 1,
     liabilityInsurance: 0,
-    insuranceRate: 0.01,
+    insuranceRate: 0.01, // Legacy, kept for compatibility
     freelancerBasis: 'simplified',
     personalDeductions: {
         health: 0,
         education: 0,
         charitable: 0,
         retirement: 0,
+    },
+    // New insurance settings
+    insurance: {
+        useManual: false,
+        manualAmount: 0,
+        riskOverride: null,
+        claimsHistory: 'clean',
+        yearsInBusiness: 3,
+        usaCoverage: false,
+        coverageLimit: 2000000,
+        calculatedPremium: null,
     },
 };
 
@@ -102,6 +117,8 @@ function initApp() {
     applySuggestedAdminIfEnabled();
     populateActivityCodeOptions();
     updateActivitySelectionDisplay();
+    updateActivityTypeRadioState(); // Initialize radio button state
+    updateCAECodeStatus(); // Initialize CAE code status display
     updateNHROptions(); // Initialize NHR dropdown state based on default activity
     updateFreelancerTitle();
     const baseField = document.getElementById('total-business-expenses');
@@ -109,6 +126,7 @@ function initApp() {
         const baseValue = Math.max(0, parseFloat(baseField.value) || DEFAULTS.bizExpenses);
         appState.expenses['total-business-expenses'] = baseValue;
     }
+    updateInsuranceDisplay(); // Initialize insurance calculation
     updateExpenseTotal();
     calculateAndUpdate();
     populateAppVersion();
@@ -133,11 +151,19 @@ function setupEventListeners() {
     activityProfileRadios.forEach((input) => {
         input.addEventListener('change', (event) => {
             if (!event.target.checked) return;
+            // Clear activity code when manually selecting activity type
+            appState.activityCode = '';
+            const codeField = document.getElementById('activity-code');
+            if (codeField) codeField.value = '';
+            
             appState.activityProfile = event.target.value;
             syncActivityRadios();
             updateActivitySelectionDisplay();
+            updateActivityTypeRadioState(); // Update disabled state
+            updateCAECodeStatus(); // Update CAE status since code was cleared
             updateNHROptions();
             updateInputsAtGlance();
+            updateInsuranceDisplay(); // Update insurance when activity changes
             recalc();
         });
     });
@@ -188,11 +214,76 @@ function setupEventListeners() {
         recalc();
     });
 
-    // Insurance risk level selector
-    const insuranceRiskSelect = document.getElementById('insurance-risk-level');
-    if (insuranceRiskSelect) {
-        insuranceRiskSelect.addEventListener('change', (event) => {
-            appState.insuranceRate = parseFloat(event.target.value) || 0;
+    // Insurance manual override toggle
+    const insuranceUseManual = document.getElementById('insurance-use-manual');
+    const insuranceManualInput = document.getElementById('insurance-manual-input');
+    if (insuranceUseManual && insuranceManualInput) {
+        insuranceUseManual.addEventListener('change', (event) => {
+            appState.insurance.useManual = event.target.checked;
+            insuranceManualInput.style.display = event.target.checked ? 'block' : 'none';
+            updateInsuranceDisplay();
+            updateExpenseTotal();
+            recalc();
+        });
+    }
+
+    // Insurance manual amount
+    const insuranceManualAmount = document.getElementById('insurance-manual-amount');
+    if (insuranceManualAmount) {
+        insuranceManualAmount.addEventListener('input', (event) => {
+            appState.insurance.manualAmount = Math.max(0, parseFloat(event.target.value) || 0);
+            updateInsuranceDisplay();
+            updateExpenseTotal();
+            recalc();
+        });
+    }
+
+    // Insurance advanced settings
+    const insuranceRiskOverride = document.getElementById('insurance-risk-override');
+    if (insuranceRiskOverride) {
+        insuranceRiskOverride.addEventListener('change', (event) => {
+            appState.insurance.riskOverride = event.target.value || null;
+            updateInsuranceDisplay();
+            updateExpenseTotal();
+            recalc();
+        });
+    }
+
+    const insuranceClaimsHistory = document.getElementById('insurance-claims-history');
+    if (insuranceClaimsHistory) {
+        insuranceClaimsHistory.addEventListener('change', (event) => {
+            appState.insurance.claimsHistory = event.target.value;
+            updateInsuranceDisplay();
+            updateExpenseTotal();
+            recalc();
+        });
+    }
+
+    const insuranceYearsBusiness = document.getElementById('insurance-years-business');
+    if (insuranceYearsBusiness) {
+        insuranceYearsBusiness.addEventListener('input', (event) => {
+            appState.insurance.yearsInBusiness = Math.max(0, parseInt(event.target.value) || 3);
+            updateInsuranceDisplay();
+            updateExpenseTotal();
+            recalc();
+        });
+    }
+
+    const insuranceUsaCoverage = document.getElementById('insurance-usa-coverage');
+    if (insuranceUsaCoverage) {
+        insuranceUsaCoverage.addEventListener('change', (event) => {
+            appState.insurance.usaCoverage = event.target.checked;
+            updateInsuranceDisplay();
+            updateExpenseTotal();
+            recalc();
+        });
+    }
+
+    const insuranceCoverageLimit = document.getElementById('insurance-coverage-limit');
+    if (insuranceCoverageLimit) {
+        insuranceCoverageLimit.addEventListener('change', (event) => {
+            appState.insurance.coverageLimit = parseInt(event.target.value) || 2000000;
+            updateInsuranceDisplay();
             updateExpenseTotal();
             recalc();
         });
@@ -317,6 +408,7 @@ function setupEventListeners() {
             const value = Math.max(0, parseFloat(event.target.value) || 0);
             event.target.value = value;
             appState[key] = value;
+            updateInsuranceDisplay(); // Update insurance when income changes
             updateExpenseTotal();
             recalc();
         });
@@ -356,19 +448,45 @@ function setupEventListeners() {
 
     // CAE code lookup - auto-select activity type
     const activityCodeField = document.getElementById('activity-code');
+    const activityCodeClearBtn = document.getElementById('activity-code-clear');
+    
     if (activityCodeField) {
         activityCodeField.addEventListener('input', (event) => {
             const code = normalizeActivityCode(event.target.value);
-            if (code && code.length === 5) {
+            
+            // If code is cleared, re-enable manual activity selection
+            if (!code || code.length === 0) {
+                appState.activityCode = '';
+                updateActivityTypeRadioState(); // Re-enable radio buttons
+                updateCAECodeStatus(); // Update status indicators
+                return;
+            }
+            
+            if (code.length === 5) {
                 const profile = getActivityProfileForCode(code);
                 if (profile) {
                     setActivityProfile(profile.id, { source: 'cae', silent: false });
                     appState.activityCode = code;
+                    updateActivityTypeRadioState(); // Disable radio buttons when code is set
+                    updateCAECodeStatus(); // Update status indicators
                     updateNHROptions();
                     updateInputsAtGlance();
+                    updateInsuranceDisplay(); // Update insurance when CAE code changes
                     recalc();
                 }
             }
+        });
+    }
+    
+    // Clear button for CAE code
+    if (activityCodeClearBtn && activityCodeField) {
+        activityCodeClearBtn.addEventListener('click', () => {
+            activityCodeField.value = '';
+            appState.activityCode = '';
+            updateActivityTypeRadioState();
+            updateCAECodeStatus();
+            updateInsuranceDisplay();
+            recalc();
         });
     }
 
@@ -437,6 +555,81 @@ function syncActivityRadios() {
         option.classList.toggle('selected', isSelected);
         if (input) input.checked = isSelected;
     });
+}
+
+function updateActivityTypeRadioState() {
+    // Disable activity type radio buttons if CAE code is set
+    const hasActivityCode = appState.activityCode && appState.activityCode.length === 5;
+    const activityRadios = document.querySelectorAll('input[name="activity-profile"]');
+    const activityCards = document.querySelectorAll('[data-activity-option]');
+    
+    activityRadios.forEach((radio) => {
+        radio.disabled = hasActivityCode;
+    });
+    
+    activityCards.forEach((card) => {
+        if (hasActivityCode) {
+            card.style.opacity = '0.6';
+            card.style.cursor = 'not-allowed';
+            card.style.pointerEvents = 'none';
+        } else {
+            card.style.opacity = '1';
+            card.style.cursor = 'pointer';
+            card.style.pointerEvents = 'auto';
+        }
+    });
+    
+    // Update the label text to indicate locked state
+    const manualLabel = document.getElementById('activity-manual-label');
+    if (manualLabel) {
+        if (hasActivityCode) {
+            manualLabel.innerHTML = '🔒 Activity type (locked - derived from CAE code above):';
+            manualLabel.style.fontWeight = '600';
+            manualLabel.style.color = 'var(--color-text-muted)';
+        } else {
+            manualLabel.textContent = 'Or select activity type manually:';
+            manualLabel.style.fontWeight = 'normal';
+            manualLabel.style.color = '';
+        }
+    }
+}
+
+function updateCAECodeStatus() {
+    const hasActivityCode = appState.activityCode && appState.activityCode.length === 5;
+    const statusElement = document.getElementById('activity-code-status');
+    const derivedTypeElement = document.getElementById('activity-code-derived-type');
+    const unlockHint = document.getElementById('activity-code-unlock-hint');
+    const clearBtn = document.getElementById('activity-code-clear');
+    const codeContainer = document.getElementById('activity-code-container');
+    
+    if (hasActivityCode) {
+        // Show status and clear button
+        if (statusElement) statusElement.style.display = 'block';
+        if (clearBtn) clearBtn.style.display = 'block';
+        if (unlockHint) unlockHint.style.display = 'inline';
+        
+        // Update derived type text
+        if (derivedTypeElement) {
+            const profile = getActivityProfileData(appState.activityProfile);
+            derivedTypeElement.textContent = profile?.label || appState.activityProfile;
+        }
+        
+        // Highlight the container
+        if (codeContainer) {
+            codeContainer.style.borderLeftColor = 'var(--color-success)';
+            codeContainer.style.borderLeftWidth = '4px';
+        }
+    } else {
+        // Hide status and clear button
+        if (statusElement) statusElement.style.display = 'none';
+        if (clearBtn) clearBtn.style.display = 'none';
+        if (unlockHint) unlockHint.style.display = 'none';
+        
+        // Reset container highlight
+        if (codeContainer) {
+            codeContainer.style.borderLeftColor = 'var(--color-primary)';
+        }
+    }
 }
 
 function populateActivityCodeOptions() {
@@ -533,19 +726,86 @@ function applySuggestedAdminIfEnabled() {
     setExpenseValue('admin-transparent', SUGGESTED_ADMIN.transparent);
 }
 
+function updateInsuranceDisplay() {
+    // Get the auto-derived risk tier (what the system thinks it should be)
+    const derivedRiskTier = getRiskTierForActivity(appState.activityCode, appState.activityProfile);
+    
+    // Calculate insurance premium using the new formula
+    const premiumResult = calculateInsurancePremium({
+        revenue: appState.grossIncome,
+        activityCode: appState.activityCode,
+        activityProfile: appState.activityProfile,
+        riskTierOverride: appState.insurance.riskOverride, // null means use auto-derived
+        usaCoverage: appState.insurance.usaCoverage,
+        claimsHistory: appState.insurance.claimsHistory,
+        yearsInBusiness: appState.insurance.yearsInBusiness,
+        coverageLimit: appState.insurance.coverageLimit,
+    });
+
+    // Store the calculated premium for use in expense calculations
+    appState.insurance.calculatedPremium = premiumResult;
+
+    // Determine which premium to display
+    const displayPremium = appState.insurance.useManual 
+        ? appState.insurance.manualAmount 
+        : premiumResult.annualPremium;
+
+    // Update display elements
+    setText('insurance-auto-estimate', formatCurrency(displayPremium));
+    setText('insurance-auto-percentage', (premiumResult.premiumPercentage || 0).toFixed(2) + '%');
+    
+    // Show risk label with indicator if it's overridden
+    const riskLabel = appState.insurance.riskOverride 
+        ? `${premiumResult.riskTier.label} (manual)` 
+        : `${premiumResult.riskTier.label} (auto)`;
+    setText('insurance-risk-label', riskLabel);
+    
+    // Update the risk override dropdown to show the current auto-derived value as hint
+    const riskOverrideSelect = document.getElementById('insurance-risk-override');
+    if (riskOverrideSelect && !appState.insurance.riskOverride) {
+        // Update the "Auto" option text to show what it will use
+        const autoOption = riskOverrideSelect.querySelector('option[value=""]');
+        if (autoOption) {
+            const tierLabel = INSURANCE_DATA.riskTiers[derivedRiskTier]?.label || 'Medium';
+            autoOption.textContent = `Auto (${tierLabel} - based on activity)`;
+        }
+    }
+    
+    // Update activity label
+    const activityLabel = appState.activityCode 
+        ? `CAE ${appState.activityCode}` 
+        : (appState.activityProfile === 'services_high_value' ? 'High-value services' : 'General services');
+    setText('insurance-activity-label', activityLabel);
+    setText('insurance-revenue-label', formatCurrency(appState.grossIncome).replace('€', '').replace(/\s/g, ''));
+
+    // Show warning if premium is outside expected range
+    const warningElement = document.getElementById('insurance-warning');
+    if (warningElement) {
+        if (premiumResult.warning && !appState.insurance.useManual) {
+            warningElement.textContent = '⚠️ ' + premiumResult.warning;
+            warningElement.style.display = 'block';
+        } else {
+            warningElement.style.display = 'none';
+        }
+    }
+}
+
 function updateExpenseTotal() {
     const base = appState.expenses['total-business-expenses'] || 0;
     const adminSimplified = appState.expenses['admin-freelancer'] || 0;
     const adminTransparent = appState.expenses['admin-transparent'] || 0;
-    const { liabilityInsurance, totalFreelancer, totalTransparent } = computeExpenseTotals({
-        grossIncome: appState.grossIncome,
-        baseExpenses: base,
-        adminFreelancer: adminSimplified,
-        adminTransparent,
-        insuranceRate: appState.insuranceRate,
-    });
+    
+    // Calculate insurance using new formula
+    updateInsuranceDisplay();
+    const liabilityInsurance = appState.insurance.useManual 
+        ? appState.insurance.manualAmount 
+        : (appState.insurance.calculatedPremium?.annualPremium || 0);
 
     appState.liabilityInsurance = liabilityInsurance;
+    
+    // Calculate totals
+    const totalFreelancer = base + adminSimplified + liabilityInsurance;
+    const totalTransparent = base + adminTransparent;
 
     setText('total-expenses-simp', formatCurrency(totalFreelancer));
     setText('total-expenses-org', formatCurrency(totalTransparent));

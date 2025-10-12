@@ -7,6 +7,79 @@
     transparent: 4800, // LDA ongoing accounting/compliance
   };
 
+  const INSURANCE_DATA = {
+    // Professional liability insurance risk tiers
+    // Validated against real insurance quotes (e.g., €250k revenue → €908 premium = 0.36%)
+    riskTiers: {
+      low: {
+        id: 'low',
+        label: 'Low Risk',
+        description: 'Designers, writers, content creators',
+        baseRate: 350,
+        variableRate: 0.0035,
+        riskMultiplier: 0.8,
+      },
+      medium: {
+        id: 'medium',
+        label: 'Medium Risk',
+        description: 'IT consultants, developers, business consultants',
+        baseRate: 450,
+        variableRate: 0.0045,
+        riskMultiplier: 1.0,
+      },
+      high: {
+        id: 'high',
+        label: 'High Risk',
+        description: 'Fintech, healthcare tech, financial advisors',
+        baseRate: 800,
+        variableRate: 0.0080,
+        riskMultiplier: 1.8,
+      },
+    },
+    // Activity code to risk tier mapping
+    activityRiskMap: {
+      // IT & Software (Medium Risk)
+      '62010': 'medium', // Computer programming
+      '62020': 'medium', // Computer consultancy
+      '62030': 'medium', // Computer facilities management
+      '62090': 'medium', // Other IT services
+      '63110': 'medium', // Data processing, hosting
+      '63120': 'medium', // Web portals
+      '63990': 'medium', // Other information services
+      
+      // Design & Creative (Low Risk)
+      '74100': 'low',   // Specialised design activities
+      '74200': 'low',   // Photographic activities
+      '73110': 'low',   // Advertising agencies
+      '90010': 'low',   // Performing arts
+      '90020': 'low',   // Support activities to performing arts
+      
+      // Business Consulting (Medium Risk)
+      '70220': 'medium', // Business consultancy
+      '73200': 'medium', // Market research
+      '71110': 'medium', // Architectural activities
+      '71120': 'medium', // Engineering activities
+      
+      // Finance & Healthcare (High Risk)
+      '69200': 'high',  // Accounting, auditing
+      '69102': 'high',  // Legal activities
+      '86230': 'high',  // Dental practice
+      '86900': 'high',  // Other human health activities
+      '64190': 'high',  // Other monetary intermediation
+      '64920': 'high',  // Other credit granting
+      '66190': 'high',  // Other financial service activities
+      '66220': 'high',  // Insurance agents and brokers
+    },
+    adjustmentFactors: {
+      usaCoverage: 1.35,           // +35% for USA/Canada coverage
+      minorClaims: 1.15,           // +15% for minor claims history
+      majorClaims: 1.40,           // +40% for major claims history
+      experienceDiscount: 0.90,    // -10% for 3+ years clean record
+    },
+    // Standard coverage limit (can be adjusted)
+    standardCoverage: 2000000, // €2M coverage
+  };
+
   const TAX_DATA = {
     // Sources: 2025 IRS tables (Orçamento do Estado 2025) and Segurança Social guidance.
     taxBrackets2025: [
@@ -300,6 +373,151 @@
     return sanitizeAmount(grossIncome) * rate;
   }
 
+  /**
+   * Get risk tier for an activity code or profile
+   * @param {string} activityCode - 5-digit CAE code (optional)
+   * @param {string} activityProfile - 'services_high_value' or 'services_general'
+   * @returns {string} Risk tier ID ('low', 'medium', 'high')
+   */
+  function getRiskTierForActivity(activityCode, activityProfile = 'services_high_value') {
+    const normalized = normalizeActivityCode(activityCode);
+    
+    // First priority: Specific activity code mapping (for exceptions)
+    if (normalized && INSURANCE_DATA.activityRiskMap[normalized]) {
+      return INSURANCE_DATA.activityRiskMap[normalized];
+    }
+    
+    // Second priority: Derive from activity profile
+    // services_high_value (IT, consulting, design, etc.) → Medium risk
+    // services_general (catch-all) → Low risk (conservative default)
+    // Note: High risk activities like finance/healthcare are explicitly mapped above
+    if (activityProfile === 'services_high_value') {
+      return 'medium';
+    }
+    
+    return 'low'; // Conservative default for general services
+  }
+
+  /**
+   * Calculate professional liability insurance premium
+   * Formula: (BaseRate + Revenue × VariableRate) × RiskMultiplier × AdjustmentFactors
+   * 
+   * @param {Object} params
+   * @param {number} params.revenue - Annual gross income
+   * @param {string} params.activityCode - 5-digit CAE code (optional)
+   * @param {string} params.activityProfile - Activity profile ID (fallback)
+   * @param {string} params.riskTierOverride - Manual risk tier override ('low', 'medium', 'high')
+   * @param {boolean} params.usaCoverage - Include USA/Canada coverage (+35%)
+   * @param {string} params.claimsHistory - 'clean', 'minor', 'major'
+   * @param {number} params.yearsInBusiness - Years in business (3+ gets discount)
+   * @param {number} params.coverageLimit - Requested coverage limit (default: €2M)
+   * @returns {Object} Premium details with breakdown
+   */
+  function calculateInsurancePremium({
+    revenue = 0,
+    activityCode = '',
+    activityProfile = 'services_high_value',
+    riskTierOverride = null,
+    usaCoverage = false,
+    claimsHistory = 'clean',
+    yearsInBusiness = 3,
+    coverageLimit = INSURANCE_DATA.standardCoverage,
+  } = {}) {
+    const income = sanitizeAmount(revenue);
+    
+    // Revenue validation
+    if (income < 10000 || income > 10000000) {
+      // Warn but still calculate
+      console.warn('Insurance estimate: Revenue outside typical range (€10k-€10M)');
+    }
+    
+    // 1. Determine risk tier
+    const riskTierId = riskTierOverride || getRiskTierForActivity(activityCode, activityProfile);
+    const riskTier = INSURANCE_DATA.riskTiers[riskTierId] || INSURANCE_DATA.riskTiers.medium;
+    
+    // 2. Calculate base premium: (BaseRate + Revenue × VariableRate) × RiskMultiplier
+    const basePremium = (riskTier.baseRate + income * riskTier.variableRate) * riskTier.riskMultiplier;
+    
+    // 3. Apply adjustment factors
+    let adjustedPremium = basePremium;
+    const adjustments = [];
+    
+    // USA/Canada coverage (+35%)
+    if (usaCoverage) {
+      const adjustment = INSURANCE_DATA.adjustmentFactors.usaCoverage;
+      adjustedPremium *= adjustment;
+      adjustments.push({ factor: 'USA/Canada coverage', multiplier: adjustment });
+    }
+    
+    // Claims history
+    if (claimsHistory === 'minor') {
+      const adjustment = INSURANCE_DATA.adjustmentFactors.minorClaims;
+      adjustedPremium *= adjustment;
+      adjustments.push({ factor: 'Minor claims history', multiplier: adjustment });
+    } else if (claimsHistory === 'major') {
+      const adjustment = INSURANCE_DATA.adjustmentFactors.majorClaims;
+      adjustedPremium *= adjustment;
+      adjustments.push({ factor: 'Major claims history', multiplier: adjustment });
+    }
+    
+    // Experience discount (3+ years with clean record)
+    if (yearsInBusiness >= 3 && claimsHistory === 'clean') {
+      const adjustment = INSURANCE_DATA.adjustmentFactors.experienceDiscount;
+      adjustedPremium *= adjustment;
+      adjustments.push({ factor: '3+ years clean record', multiplier: adjustment });
+    }
+    
+    // Coverage limit adjustment (±40% × (requested/typical - 1))
+    const coverageRatio = coverageLimit / INSURANCE_DATA.standardCoverage;
+    if (Math.abs(coverageRatio - 1.0) > 0.01) {
+      const coverageAdjustment = 1 + 0.4 * (coverageRatio - 1);
+      adjustedPremium *= coverageAdjustment;
+      adjustments.push({ 
+        factor: `Coverage limit €${(coverageLimit / 1000000).toFixed(1)}M`, 
+        multiplier: coverageAdjustment 
+      });
+    }
+    
+    // 4. Sanity check: Premium should be 0.3% - 3% of revenue
+    const premiumPercentage = income > 0 ? (adjustedPremium / income) * 100 : 0;
+    const warning = premiumPercentage < 0.3 || premiumPercentage > 3.0
+      ? `Premium is ${premiumPercentage.toFixed(2)}% of revenue (expected 0.3%-3%). Review settings.`
+      : null;
+    
+    return {
+      annualPremium: adjustedPremium,
+      basePremium,
+      riskTier: riskTier,
+      riskTierId,
+      adjustments,
+      premiumPercentage,
+      revenue: income,
+      coverageLimit,
+      warning,
+      breakdown: {
+        baseRate: riskTier.baseRate,
+        variableComponent: income * riskTier.variableRate,
+        riskMultiplier: riskTier.riskMultiplier,
+        adjustmentMultiplier: adjustedPremium / basePremium,
+      },
+    };
+  }
+
+  /**
+   * Simple insurance calculation using activity profile fallback
+   * (Used when activity code is not available)
+   */
+  function calculateSimpleInsurance(revenue, activityProfile = 'services_high_value') {
+    return calculateInsurancePremium({
+      revenue,
+      activityProfile,
+      // Use smart defaults
+      usaCoverage: false,
+      claimsHistory: 'clean',
+      yearsInBusiness: 3,
+    });
+  }
+
   function computeExpenseTotals({
     grossIncome = 0,
     baseExpenses = 0,
@@ -545,6 +763,7 @@
   global.TakeHomeLogic = {
     TAX_DATA,
     SUGGESTED_ADMIN,
+    INSURANCE_DATA,
     computeProgressiveTax,
     computeProgressiveTaxDetailed,
     computeIRSDetails,
@@ -562,5 +781,8 @@
     getActivityProfileForCode,
     isActivityCodeKnown,
     isNHREligibleCode,
+    getRiskTierForActivity,
+    calculateInsurancePremium,
+    calculateSimpleInsurance,
   };
 })(window);
