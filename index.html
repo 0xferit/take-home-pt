@@ -140,7 +140,8 @@
                                 <span>IRS Jovem (Youth Tax Benefit)</span>
                             </label>
                             <p class="help-text" style="margin-left: 2rem; margin-top: -0.5rem;">
-                                For residents under 35 with completed higher education. Progressive income tax exemption over 5-10 years. 
+                                For residents under 35 with completed higher education. Progressive income tax exemption over 10 years (new 2025 rules). 
+                                <strong>Income cap: €28,737.50</strong> (exemption applies to this amount; income above taxed normally).
                                 <strong>⚠️ CANNOT combine with NHR/IFICI - these benefits are mutually exclusive.</strong>
                             </p>
                         </div>
@@ -149,16 +150,22 @@
                             <select id="irs-jovem-year" class="input">
                                 <option value="1">Year 1 (100% exemption) — First tax year after completing degree</option>
                                 <option value="2">Year 2 (75% exemption)</option>
-                                <option value="3">Year 3 (50% exemption)</option>
-                                <option value="4">Year 4 (50% exemption)</option>
-                                <option value="5">Year 5 (25% exemption)</option>
-                                <option value="6">Year 6+ (no exemption) — Benefit expired or not using</option>
+                                <option value="3">Year 3 (75% exemption)</option>
+                                <option value="4">Year 4 (75% exemption)</option>
+                                <option value="5">Year 5 (50% exemption)</option>
+                                <option value="6">Year 6 (50% exemption)</option>
+                                <option value="7">Year 7 (50% exemption)</option>
+                                <option value="8">Year 8 (25% exemption)</option>
+                                <option value="9">Year 9 (25% exemption)</option>
+                                <option value="10">Year 10 (25% exemption)</option>
+                                <option value="11">Year 11+ (no exemption) — Benefit expired or not using</option>
                             </select>
                             <p class="help-text">
                                 <strong>Eligibility:</strong> Under 35 years old, completed higher education (bachelor's or higher), Portuguese tax resident.<br>
                                 <strong>⚠️ EXCLUSION:</strong> Cannot have enrolled in or benefited from NHR/IFICI (even if never used).<br>
+                                <strong>Income Cap:</strong> €28,737.50 (55 × IAS). Exemption applies to taxable income up to this cap only.<br>
                                 <strong>Year counting:</strong> Year 1 = first tax year after completing your degree (not first job year).<br>
-                                <strong>Example:</strong> Graduated in 2023, started working 2024 → 2024 is Year 1.
+                                <strong>Example:</strong> Graduated in 2023, started working 2024 → 2024 is Year 1. Benefit lasts until 2033 (Year 10).
                             </p>
                             <div id="irs-jovem-nhr-warning" class="alert alert--warning" style="display: none; margin-top: var(--space-3);">
                                 ⚠️ <strong>IRS Jovem disabled:</strong> You have selected NHR status. IRS Jovem and NHR are mutually exclusive benefits - you can only use one.
@@ -683,22 +690,22 @@
                         <!-- IRS Jovem -->
                         <div class="methodology-section">
                             <h3>IRS Jovem (Youth Tax Benefit)</h3>
-                            <p class="help-text">Progressive income tax exemption for young professionals</p>
+                            <p class="help-text">Progressive income tax exemption for young professionals — NEW 2025 10-year schedule</p>
                             <table class="tax-table">
                                 <thead>
                                     <tr>
-                                        <th>Year</th>
+                                        <th>Period</th>
                                         <th>Exemption</th>
+                                        <th>Taxable</th>
                                         <th>Notes</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr><td>Year 1</td><td>100%</td><td>First tax year after completing degree</td></tr>
-                                    <tr><td>Year 2</td><td>75%</td><td>Second tax year</td></tr>
-                                    <tr><td>Year 3</td><td>50%</td><td>Third tax year</td></tr>
-                                    <tr><td>Year 4</td><td>50%</td><td>Fourth tax year</td></tr>
-                                    <tr><td>Year 5</td><td>25%</td><td>Fifth tax year</td></tr>
-                                    <tr><td>Years 6-10</td><td>0%</td><td>No exemption (if income continues)</td></tr>
+                                    <tr><td>Year 1</td><td>100%</td><td>0%</td><td>First tax year after completing degree</td></tr>
+                                    <tr><td>Years 2-4</td><td>75%</td><td>25%</td><td>Second to fourth tax year</td></tr>
+                                    <tr><td>Years 5-7</td><td>50%</td><td>50%</td><td>Fifth to seventh tax year</td></tr>
+                                    <tr><td>Years 8-10</td><td>25%</td><td>75%</td><td>Eighth to tenth tax year</td></tr>
+                                    <tr><td>Year 11+</td><td>0%</td><td>100%</td><td>Benefit expired - normal taxation</td></tr>
                                 </tbody>
                             </table>
                             <div class="disclaimer-box" style="margin-top: var(--space-4);">
@@ -711,9 +718,11 @@
                                 </ul>
                                 <p class="help-text"><strong>Which to choose?</strong> For young professionals, IRS Jovem is often more valuable in early years (100%/75% exemptions) than NHR's 20% flat rate, especially Years 1-3.</p>
                             </div>
-                            <p class="help-text"><strong>Eligibility:</strong> Under 35 years old, completed higher education (bachelor's degree or higher), Portuguese tax resident, <strong>never enrolled in NHR</strong></p>
-                            <p class="help-text"><strong>Income Cap:</strong> Up to €28,737.50 per year (exemption applies to this amount)</p>
-                            <p class="help-text"><strong>Source:</strong> CIRS Article 12-A (introduced 2020, updated 2023) | 
+                            <p class="help-text"><strong>Eligibility:</strong> Under 35 years old, completed higher education (bachelor's degree or higher) OR level 4/5 vocational training, Portuguese tax resident, <strong>never enrolled in NHR</strong></p>
+                            <p class="help-text"><strong>Income Cap:</strong> €28,737.50 (55 × IAS €522.50 for 2025). Exemption applies to taxable income up to this cap; income above cap taxed at standard progressive rates.</p>
+                            <p class="help-text"><strong>Example:</strong> €40,000 gross income with 75% coefficient = €30,000 taxable. Year 1 (100% exemption): Exemption applies to €28,737.50 (under cap), remaining €1,262.50 taxed normally.</p>
+                            <p class="help-text"><strong>Duration:</strong> Extended to 10 years from 2025 (was 5 years pre-2025)</p>
+                            <p class="help-text"><strong>Source:</strong> Law 24-B/2024 (State Budget 2025), CIRS Article 2-B | 
                                 <a href="https://www.todoscontam.pt/pt-pt/beneficios-de-irs-para-jovens" target="_blank" rel="noopener" style="color: var(--color-primary);">
                                     Official IRS Jovem Guide
                                 </a>

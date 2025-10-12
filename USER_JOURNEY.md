@@ -1609,15 +1609,21 @@ START: User under 35 years old
 │  ├─ 1 year ago → Q5: What year of benefit?
 │  │  └─ → Select: Year 1 (100% exemption)
 │  ├─ 2 years ago → Select: Year 2 (75% exemption)
-│  ├─ 3 years ago → Select: Year 3 (50% exemption)
-│  ├─ 4 years ago → Select: Year 4 (50% exemption)
-│  ├─ 5 years ago → Select: Year 5 (25% exemption)
-│  └─ 6+ years ago → Select: Year 6+ (no exemption)
+│  ├─ 3 years ago → Select: Year 3 (75% exemption)
+│  ├─ 4 years ago → Select: Year 4 (75% exemption)
+│  ├─ 5 years ago → Select: Year 5 (50% exemption)
+│  ├─ 6 years ago → Select: Year 6 (50% exemption)
+│  ├─ 7 years ago → Select: Year 7 (50% exemption)
+│  ├─ 8 years ago → Select: Year 8 (25% exemption)
+│  ├─ 9 years ago → Select: Year 9 (25% exemption)
+│  ├─ 10 years ago → Select: Year 10 (25% exemption)
+│  └─ 11+ years ago → Select: Year 11+ (no exemption)
 │
 └─ Q5: Can IRS Jovem combine with other benefits?
    ├─ NHR/IFICI? → ❌ NO - MUTUALLY EXCLUSIVE (choosing IRS Jovem disqualifies from NHR)
    ├─ First-year 50% reduction? → ✅ YES (can combine)
-   └─ Social security exemption? → ✅ YES (separate benefits)
+   ├─ Social security exemption? → ✅ YES (separate benefits)
+   └─ Income cap? → €28,737.50 (55 × IAS). Exemption applies to taxable income up to cap only.
 ```
 
 ---
@@ -1633,15 +1639,16 @@ START: Eligible for both NHR and IRS Jovem (must choose ONE)
 │  ├─ < €50,000 → ✅ CHOOSE IRS JOVEM
 │  │  └─ Why: Year 1 = 100% exemption (€0 tax) >> 20% NHR
 │  │
-│  ├─ €50,000 - €100,000 → ✅ CHOOSE IRS JOVEM (for Years 1-5)
-│  │  └─ Why: Years 1-3 exemptions (100%/75%/50%) >> 20% NHR
+│  ├─ €50,000 - €100,000 → ✅ CHOOSE IRS JOVEM (for Years 1-7)
+│  │  └─ Why: Years 1-7 exemptions (100%/75%/75%/75%/50%/50%/50%) >> 20% NHR
 │  │     │
 │  │     └─ Calculation example (€85k income, 75% coefficient):
 │  │        ├─ IRS Jovem Year 1: €0 tax (100% exemption)
-│  │        ├─ IRS Jovem Year 2: ~€3,200 tax (75% exemption)
-│  │        ├─ IRS Jovem Year 3: ~€6,400 tax (50% exemption)
-│  │        ├─ NHR 20%: €12,750 tax (constant)
-│  │        └─ IRS Jovem wins Years 1-5, NHR might win Year 6+
+│  │        ├─ IRS Jovem Year 2-4: ~€3,200 tax each (75% exemption)
+│  │        ├─ IRS Jovem Year 5-7: ~€6,400 tax each (50% exemption)
+│  │        ├─ IRS Jovem Year 8-10: ~€9,600 tax each (25% exemption)
+│  │        ├─ NHR 20%: €12,750 tax (constant, all years)
+│  │        └─ IRS Jovem wins Years 1-7, NHR wins Years 8-10
 │  │
 │  └─ > €100,000 → ⚠️ DEPENDS on time horizon
 │     ├─ Planning to stay 5+ years? → Consider NHR (10-year benefit)
@@ -1649,17 +1656,19 @@ START: Eligible for both NHR and IRS Jovem (must choose ONE)
 │     └─ Run both scenarios in tool to compare!
 │
 ├─ Q2: How long do you plan to stay in Portugal?
-│  ├─ 1-3 years → ✅ CHOOSE IRS JOVEM
-│  │  └─ Why: Maximize exemption years (100%/75%/50%)
+│  ├─ 1-4 years → ✅ CHOOSE IRS JOVEM
+│  │  └─ Why: Maximize exemption years (100%/75%/75%/75%)
 │  │
 │  ├─ 5-10 years → ⚠️ DEPENDS on income
-│  │  ├─ Low-medium income → IRS Jovem better
-│  │  └─ Very high income → NHR might be better long-term
+│  │  ├─ Low-medium income (€50-100k) → IRS Jovem better (wins Years 1-7)
+│  │  └─ Very high income (>€150k) → NHR might be better long-term
 │  │
 │  └─ > 10 years → ⚠️ CALCULATE BOTH
-│     └─ IRS Jovem expires after ~10 years, NHR is 10 years fixed
+│     └─ IRS Jovem lasts exactly 10 years, NHR is 10 years fixed
+│        ├─ IRS Jovem: Years 1-7 better, Years 8-10 worse than NHR
+│        └─ NHR: Constant 20% all 10 years
 │
-└─ RECOMMENDATION: For MOST young professionals, IRS Jovem wins in Years 1-5
+└─ RECOMMENDATION: For MOST young professionals, IRS Jovem wins in Years 1-7
    └─ Exception: Very high income (>€200k) with 10+ year horizon might favor NHR
 ```
 

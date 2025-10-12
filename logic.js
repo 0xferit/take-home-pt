@@ -239,13 +239,19 @@
 
   function getIRSJovemExemption(year) {
     // IRS Jovem progressive exemption rates for residents under 35
-    // Source: Portuguese Tax Code, IRS Jovem benefit (2020+)
+    // NEW 2025 SCHEDULE: 10-year benefit (was 5 years pre-2025)
+    // Source: Law 24-B/2024 (State Budget 2025), CIRS Article 2-B
     const exemptionRates = {
-      1: 1.00,   // Year 1: 100% exemption
-      2: 0.75,   // Year 2: 75% exemption
-      3: 0.50,   // Year 3: 50% exemption
-      4: 0.50,   // Year 4: 50% exemption
-      5: 0.25,   // Year 5: 25% exemption
+      1: 1.00,    // Year 1: 100% exemption
+      2: 0.75,    // Year 2: 75% exemption
+      3: 0.75,    // Year 3: 75% exemption
+      4: 0.75,    // Year 4: 75% exemption
+      5: 0.50,    // Year 5: 50% exemption
+      6: 0.50,    // Year 6: 50% exemption
+      7: 0.50,    // Year 7: 50% exemption
+      8: 0.25,    // Year 8: 25% exemption
+      9: 0.25,    // Year 9: 25% exemption
+      10: 0.25,   // Year 10: 25% exemption
     };
     const yearNum = Number(year) || 0;
     return exemptionRates[yearNum] || 0;
@@ -338,10 +344,20 @@
     let irsAfterDeductions = Math.max(0, baseIRS - deducoes);
     
     // Apply IRS Jovem exemption (if applicable)
+    // Income cap: €28,737.50 (55 × IAS €522.50) applies to TAXABLE income after coefficient
+    // Exemption applies only to IRS on income up to cap
     let irsJovemReduction = 0;
     if (irsJovemEnabled) {
+      const IRS_JOVEM_CAP = 28737.50; // 55 × IAS for 2025
       const exemptionRate = getIRSJovemExemption(irsJovemYear);
-      irsJovemReduction = irsAfterDeductions * exemptionRate;
+      
+      // Calculate what portion of taxable income is under the cap
+      const taxableUnderCap = Math.min(taxableIncome, IRS_JOVEM_CAP);
+      const portionUnderCap = taxableIncome > 0 ? taxableUnderCap / taxableIncome : 1;
+      
+      // Apply exemption only to IRS portion corresponding to income under cap
+      const irsEligibleForExemption = irsAfterDeductions * portionUnderCap;
+      irsJovemReduction = irsEligibleForExemption * exemptionRate;
       irsAfterDeductions -= irsJovemReduction;
     }
     
@@ -395,10 +411,20 @@
     let irsAfterDeductions = Math.max(0, baseIRS - deducoes);
     
     // Apply IRS Jovem exemption (if applicable)
+    // Income cap: €28,737.50 (55 × IAS €522.50) applies to TAXABLE income
+    // Exemption applies only to IRS on income up to cap
     let irsJovemReduction = 0;
     if (irsJovemEnabled) {
+      const IRS_JOVEM_CAP = 28737.50; // 55 × IAS for 2025
       const exemptionRate = getIRSJovemExemption(irsJovemYear);
-      irsJovemReduction = irsAfterDeductions * exemptionRate;
+      
+      // Calculate what portion of taxable income is under the cap
+      const taxableUnderCap = Math.min(taxableIncome, IRS_JOVEM_CAP);
+      const portionUnderCap = taxableIncome > 0 ? taxableUnderCap / taxableIncome : 1;
+      
+      // Apply exemption only to IRS portion corresponding to income under cap
+      const irsEligibleForExemption = irsAfterDeductions * portionUnderCap;
+      irsJovemReduction = irsEligibleForExemption * exemptionRate;
       irsAfterDeductions -= irsJovemReduction;
     }
     
@@ -453,10 +479,20 @@
     let irsAfterDeductions = Math.max(0, baseIRS - deducoes);
     
     // Apply IRS Jovem exemption (if applicable)
+    // Income cap: €28,737.50 (55 × IAS €522.50) applies to TAXABLE income
+    // Exemption applies only to IRS on income up to cap
     let irsJovemReduction = 0;
     if (irsJovemEnabled) {
+      const IRS_JOVEM_CAP = 28737.50; // 55 × IAS for 2025
       const exemptionRate = getIRSJovemExemption(irsJovemYear);
-      irsJovemReduction = irsAfterDeductions * exemptionRate;
+      
+      // Calculate what portion of taxable income is under the cap
+      const taxableUnderCap = Math.min(taxableIncome, IRS_JOVEM_CAP);
+      const portionUnderCap = taxableIncome > 0 ? taxableUnderCap / taxableIncome : 1;
+      
+      // Apply exemption only to IRS portion corresponding to income under cap
+      const irsEligibleForExemption = irsAfterDeductions * portionUnderCap;
+      irsJovemReduction = irsEligibleForExemption * exemptionRate;
       irsAfterDeductions -= irsJovemReduction;
     }
     
