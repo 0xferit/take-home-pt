@@ -126,6 +126,17 @@ function initApp() {
         const baseValue = Math.max(0, parseFloat(baseField.value) || DEFAULTS.bizExpenses);
         appState.expenses['total-business-expenses'] = baseValue;
     }
+    // Initialize admin expense fields with their default values
+    const adminFreelancerField = document.getElementById('admin-freelancer');
+    if (adminFreelancerField) {
+        const adminFreelancerValue = Math.max(0, parseFloat(adminFreelancerField.value) || 0);
+        appState.expenses['admin-freelancer'] = adminFreelancerValue;
+    }
+    const adminTransparentField = document.getElementById('admin-transparent');
+    if (adminTransparentField) {
+        const adminTransparentValue = Math.max(0, parseFloat(adminTransparentField.value) || 0);
+        appState.expenses['admin-transparent'] = adminTransparentValue;
+    }
     updateInsuranceDisplay(); // Initialize insurance calculation
     updateExpenseTotal();
     calculateAndUpdate();
