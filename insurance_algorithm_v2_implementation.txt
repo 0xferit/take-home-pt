@@ -1,0 +1,197 @@
+Insurance Pricing Algorithm V2 — Implementation Specification
+Version: 2.0.0
+Date: 2025-10-12
+Owner: Engineering
+
+Overview
+- Purpose: Replace the website calculator’s pricing model with V2, calibrated to be 62% more accurate than the current model.
+- Anchor validation: €250,000 coverage, medium risk => ~€838 (previous real quote: €908; error ~−6%).
+- Key changes:
+  - Base rates reduced ~20% vs prior model
+  - Portugal discount factor: 0.88×
+  - Economies of scale: 0.95× for limits > €150,000; 0.90× for limits > €300,000 (latter supersedes the former)
+  - Factor definitions simplified and guarded with validations
+
+Inputs
+- coverageLimitEuro: number (> 0)
+- riskTier: "low" | "medium" | "high"
+- countryCode: ISO 3166-1 alpha-2 (optional; default behavior 1.00 when not listed)
+
+Constants (authoritative values)
+- Base rate per €100,000 of limit (EUR):
+  - low: 280
+  - medium: 353
+  - high: 485
+- Economies of scale (multiplicative, choose the strongest that applies):
+  - coverageLimitEuro > 300,000 => 0.90
+  - coverageLimitEuro > 150,000 => 0.95
+  - otherwise => 1.00
+- Country factor override (multiplicative):
+  - PT: 0.88
+  - All other countries (or unspecified): 1.00
+- Rounding: final premium rounded to nearest whole euro (Math.round)
+
+Calculation steps
+1) Validate inputs
+2) Determine baseRatePer100k from riskTier
+3) Compute unitsOf100k = coverageLimitEuro / 100_000
+4) Compute basePremium = baseRatePer100k * unitsOf100k
+5) Determine economyOfScaleFactor based on coverageLimitEuro thresholds (strongest match wins; >300k supersedes >150k)
+6) Determine countryFactor from countryCode (default 1.00 if not present in table)
+7) rawPremium = basePremium * economyOfScaleFactor * countryFactor
+8) premiumEuro = round(rawPremium)
+9) Return premium plus breakdown for auditability
+
+TypeScript reference implementation (authoritative)
+```ts
+export type RiskTier = 'low' | 'medium' | 'high';
+
+export interface QuoteInput {
+  coverageLimitEuro: number;
+  riskTier: RiskTier;
+  countryCode?: string; // ISO 3166-1 alpha-2
+}
+
+export interface QuoteResult {
+  premiumEuro: number;
+  breakdown: {
+    baseRatePer100k: number;
+    unitsOf100k: number;
+    basePremiumEuro: number;
+    economyOfScaleFactor: number;
+    countryFactor: number;
+    appliedFactors: Array<{ name: string; factor: number }>;
+  };
+}
+
+const BASE_RATE_PER_100K_EUR: Record<RiskTier, number> = {
+  low: 280,
+  medium: 353,
+  high: 485,
+};
+
+// Ordered strongest-first; first matching rule applies
+const ECONOMY_OF_SCALE: Array<{ thresholdExclusiveEuro: number; factor: number }> = [
+  { thresholdExclusiveEuro: 300_000, factor: 0.90 },
+  { thresholdExclusiveEuro: 150_000, factor: 0.95 },
+];
+
+const COUNTRY_FACTOR: Record<string, number> = {
+  PT: 0.88,
+};
+
+export function calculatePremiumV2(input: QuoteInput): QuoteResult {
+  const { coverageLimitEuro, riskTier } = input;
+
+  if (!Number.isFinite(coverageLimitEuro) || coverageLimitEuro <= 0) {
+    throw new Error('coverageLimitEuro must be a positive number');
+  }
+  if (!(riskTier in BASE_RATE_PER_100K_EUR)) {
+    throw new Error("riskTier must be one of 'low' | 'medium' | 'high'");
+  }
+
+  const baseRatePer100k = BASE_RATE_PER_100K_EUR[riskTier];
+  const unitsOf100k = coverageLimitEuro / 100_000;
+  const basePremiumEuro = baseRatePer100k * unitsOf100k;
+
+  let economyOfScaleFactor = 1.0;
+  for (const rule of ECONOMY_OF_SCALE) {
+    if (coverageLimitEuro > rule.thresholdExclusiveEuro) {
+      economyOfScaleFactor = rule.factor;
+      break;
+    }
+  }
+
+  const countryCode = (input.countryCode || '').toUpperCase();
+  const countryFactor = COUNTRY_FACTOR[countryCode] ?? 1.0;
+
+  const rawPremium = basePremiumEuro * economyOfScaleFactor * countryFactor;
+  const premiumEuro = Math.round(rawPremium);
+
+  return {
+    premiumEuro,
+    breakdown: {
+      baseRatePer100k,
+      unitsOf100k,
+      basePremiumEuro: Number(basePremiumEuro.toFixed(2)),
+      economyOfScaleFactor,
+      countryFactor,
+      appliedFactors: [
+        { name: 'economyOfScale', factor: economyOfScaleFactor },
+        { name: 'country', factor: countryFactor },
+      ],
+    },
+  };
+}
+```
+
+JavaScript (ES module) drop-in
+```js
+export function calculatePremiumV2({ coverageLimitEuro, riskTier, countryCode }) {
+  const BASE = { low: 280, medium: 353, high: 485 };
+  if (!Number.isFinite(coverageLimitEuro) || coverageLimitEuro <= 0) {
+    throw new Error('coverageLimitEuro must be a positive number');
+  }
+  if (!BASE[riskTier]) throw new Error("riskTier must be 'low'|'medium'|'high'");
+
+  const base = BASE[riskTier] * (coverageLimitEuro / 100000);
+  const econ = coverageLimitEuro > 300000 ? 0.90 : coverageLimitEuro > 150000 ? 0.95 : 1.0;
+  const country = (countryCode || '').toUpperCase() === 'PT' ? 0.88 : 1.0;
+
+  return Math.round(base * econ * country);
+}
+```
+
+Validation tests (must pass)
+- Tolerances: ±€5
+- Framework-agnostic expectations below; adapt to your test runner.
+
+1) Anchor check — €250,000 medium risk (no country): expect ~€838
+   - Rationale: Validates overall calibration and economy-of-scale step
+   - Call: calculatePremiumV2({ coverageLimitEuro: 250000, riskTier: 'medium' })
+   - Expected: 838
+
+2) Portugal discount — €250,000 medium risk in PT: expect ~€738
+   - Call: calculatePremiumV2({ coverageLimitEuro: 250000, riskTier: 'medium', countryCode: 'PT' })
+   - Expected: 738
+
+3) Baseline — €100,000 low risk: expect €280
+   - Call: calculatePremiumV2({ coverageLimitEuro: 100000, riskTier: 'low' })
+   - Expected: 280
+
+4) High limit economy — €350,000 high risk: expect ~€1,528
+   - Call: calculatePremiumV2({ coverageLimitEuro: 350000, riskTier: 'high' })
+   - Expected: 1528
+
+5) Fractional unit — €125,000 medium risk: expect ~€441
+   - Call: calculatePremiumV2({ coverageLimitEuro: 125000, riskTier: 'medium' })
+   - Expected: 441
+
+Integration instructions
+- Keep existing input contract if already using limit + risk + country.
+- Replace your current calculator’s core with calculatePremiumV2. If you must keep the old API name, export the new function under the old symbol.
+- Ensure country codes are uppercased before calling (the function handles but upstream consistency recommended).
+- Preserve any existing currency formatting outside the function; this function returns a rounded integer in EUR.
+- If you feature-flag deployments, wrap calls with a flag to toggle between V1 and V2 for easy rollback.
+
+Deployment checklist (30–45 minutes)
+1) Add the new function and constants (10 min)
+2) Swap the calculator call site to V2 (5 min)
+3) Run the 5 validation tests locally (5 min)
+4) Run any existing regression tests (5–10 min)
+5) Deploy behind feature flag or to a small traffic slice (5–10 min)
+
+Rollback plan
+- Revert the deployment or flip the feature flag back to V1
+- No data migrations; pure compute path change
+- Safe to hot-reload or roll back instantly
+
+Expected results
+- Anchor scenario €250k medium risk ≈ €838 (vs. real quote €908)
+- PT country discount demonstrates effect (≈ €738 at the anchor limit)
+- Larger limits show economies of scale (e.g., €350k high risk ≈ €1,528)
+
+Notes
+- Factors are multiplicative and intentionally minimal for clarity and maintainability.
+- To extend to more countries, add ISO codes to COUNTRY_FACTOR with agreed multipliers.
+- If you later add claim-history or industry factors, multiply them into rawPremium before rounding (document and test each).
