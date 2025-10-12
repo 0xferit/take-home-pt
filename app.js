@@ -65,6 +65,7 @@ function initApp() {
     applySuggestedAdminIfEnabled();
     populateActivityCodeOptions();
     updateActivitySelectionDisplay();
+    updateNHROptions(); // Initialize NHR dropdown state based on default activity
     updateFreelancerTitle();
     const baseField = document.getElementById('total-business-expenses');
     if (baseField) {
@@ -89,6 +90,21 @@ function setupEventListeners() {
             if (tabName) switchTab(tabName);
         });
     });
+    
+    // Activity profile radio buttons
+    const activityProfileRadios = document.querySelectorAll('input[name="activity-profile"]');
+    activityProfileRadios.forEach((input) => {
+        input.addEventListener('change', (event) => {
+            if (!event.target.checked) return;
+            appState.activityProfile = event.target.value;
+            syncActivityRadios();
+            updateActivitySelectionDisplay();
+            updateNHROptions();
+            updateInputsAtGlance();
+            recalc();
+        });
+    });
+    
     const freelancerBasisRadios = document.querySelectorAll('input[name="freelancer-basis"]');
     freelancerBasisRadios.forEach((input) => {
         input.addEventListener('change', (event) => {
@@ -910,21 +926,27 @@ function updateNHROptions() {
     const note = document.getElementById('nhr-status-note');
     if (!nhrSelect) return;
     const eligible = isCurrentNHREligible();
+    
+    // Enable/disable NHR options based on eligibility
     Array.from(nhrSelect.options).forEach((option) => {
         if (option.value === 'standard') return;
         option.disabled = !eligible;
     });
+    
+    // Reset to standard if currently selected NHR but not eligible
     if (!eligible && appState.nhrStatus !== 'standard') {
         appState.nhrStatus = 'standard';
         nhrSelect.value = 'standard';
     }
+    
+    // Update help text with clear messaging
     if (note) {
         note.classList.remove('status--error', 'status--success');
         if (eligible) {
-            note.textContent = 'High added value activity detected. NHR 20% rate can be applied.';
+            note.textContent = '✅ High-value activity detected. NHR 20% flat rate is available for selection.';
             note.classList.add('status--success');
         } else {
-            note.textContent = 'Select a high added value CAE/service to unlock the NHR 20% rate.';
+            note.textContent = '⚠️ NHR 20% rate only applies to High-value professions (Article 151). Select high-value activity type above to enable.';
             note.classList.add('status--error');
         }
     }

@@ -36,30 +36,21 @@
                     <h2>Your Profile & Tax Status</h2>
                     
                     <div class="form-group">
-                        <label for="nhr-status">NHR / Tax Status</label>
-                        <select id="nhr-status" class="input">
-                            <option value="standard">Standard progressive rates</option>
-                            <option value="original_nhr">Original NHR (20% flat rate)</option>
-                            <option value="nhr_2_ifici">NHR 2.0 / IFICI (20% flat rate)</option>
-                        </select>
-                        <p id="nhr-status-note" class="help-text"></p>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Activity Type</label>
+                        <label>Activity Type <span class="required">*</span></label>
+                        <p class="help-text" style="margin-bottom: var(--space-3);">Select your activity type first. This determines NHR eligibility and tax coefficient.</p>
                         <div class="radio-group">
                             <label class="radio-card" data-activity-option="services_high_value">
                                 <input type="radio" name="activity-profile" value="services_high_value" checked>
                                 <div class="radio-card__content">
-                                    <strong>High-value professions</strong>
-                                    <span>Article 151 services – 75% taxable, 25% deemed expenses</span>
+                                    <strong>High-value professions (Article 151)</strong>
+                                    <span>75% taxable, 25% deemed expenses — NHR 20% eligible</span>
                                 </div>
                             </label>
                             <label class="radio-card" data-activity-option="services_general">
                                 <input type="radio" name="activity-profile" value="services_general">
                                 <div class="radio-card__content">
                                     <strong>General professional services</strong>
-                                    <span>Category B services – 35% taxable, 65% deemed expenses</span>
+                                    <span>35% taxable, 65% deemed expenses — NHR not applicable</span>
                                 </div>
                             </label>
                         </div>
@@ -68,6 +59,16 @@
                             <p>High-value professions include software development, consulting, design, and other technical services listed in Article 151 of the Portuguese tax code.</p>
                             <p><strong>CAE Codes:</strong> <span id="activity-summary-codes"></span></p>
                         </details>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nhr-status">NHR / Tax Status</label>
+                        <select id="nhr-status" class="input">
+                            <option value="standard">Standard progressive rates</option>
+                            <option value="original_nhr" disabled>Original NHR (20% flat rate)</option>
+                            <option value="nhr_2_ifici" disabled>NHR 2.0 / IFICI (20% flat rate)</option>
+                        </select>
+                        <p id="nhr-status-note" class="help-text">Select your activity type above to see if NHR 20% flat rate is available.</p>
                     </div>
 
                     <div class="form-group">

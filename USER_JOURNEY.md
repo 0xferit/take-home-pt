@@ -274,13 +274,7 @@ The tool doesn't just calculate taxes—it shows users **which structure puts th
 **Touchpoint:** Setup tab inputs
 
 **User Actions:**
-1. **NHR Status Selection:**
-   - Sees dropdown with 3 options
-   - Selects "NHR 2.0 / IFICI (20% flat rate)"
-   - Reads help text: "For new IFICI residents after 2024..."
-   - ✅ Confirms this matches her situation
-
-2. **Activity Type Selection:**
+1. **Activity Type Selection (MUST BE FIRST):**
    - Sees two radio cards: "High-value (Article 151)" vs "General professional services"
    - Confused: "Which one am I?"
    - Clicks "What's my activity code?" button
@@ -290,6 +284,13 @@ The tool doesn't just calculate taxes—it shows users **which structure puts th
    - Selects "High-value professions" radio
    - Reads description: "75% of gross income remains taxable (25% deemed expenses)"
    - ✅ Understands the coefficient concept
+   - **Notices:** NHR status dropdown below is now enabled with success message
+
+2. **NHR Status Selection (Enabled after activity type):**
+   - Sees dropdown with 3 options (now enabled)
+   - Selects "NHR 2.0 / IFICI (20% flat rate)"
+   - Reads help text: "High added value activity detected. NHR 20% rate can be applied."
+   - ✅ Confirms this matches her situation
 
 3. **First-Year Benefits:**
    - Expands "First-year tax benefits" accordion
@@ -1121,12 +1122,18 @@ The tool doesn't just calculate taxes—it shows users **which structure puts th
 
 **Trigger:** User unsure which activity profile applies to them
 
+**CRITICAL FLOW:** Activity type MUST be selected before NHR status. The tool enforces this by:
+- Positioning Activity Type field FIRST
+- Disabling NHR 20% options until eligible activity selected
+- Showing clear help text indicating dependency
+
 **Steps:**
 
-1. **User sees activity type radio buttons**
-   - Option A: "High-value professions (Article 151) - 75% taxable"
-   - Option B: "General professional services - 35% taxable"
+1. **User sees activity type radio buttons (FIRST FIELD)**
+   - Option A: "High-value professions (Article 151) - 75% taxable — NHR 20% eligible"
+   - Option B: "General professional services - 35% taxable — NHR not applicable"
    - User feels uncertain
+   - **Notices:** NHR dropdown below is disabled with message "Select activity type above"
 
 2. **User clicks "What's my activity code?" button**
    - Modal/drawer opens
@@ -1142,9 +1149,16 @@ The tool doesn't just calculate taxes—it shows users **which structure puts th
    - Sees mapped activity profile
    - Example: "62020 - Computer consultancy → High-value (Article 151)"
 
-5. **User returns to main form**
+5. **User returns to main form and selects activity type**
    - Selects appropriate radio button with confidence
    - Sees description below confirming coefficient
+   - **INSTANTLY:** NHR dropdown below changes:
+     - If high-value selected: Options enabled, green success message appears
+     - If general selected: Options stay disabled, warning message appears
+
+6. **User can now select NHR status (if eligible)**
+   - NHR 20% options now enabled
+   - Help text shows: "✅ High-value activity detected. NHR 20% flat rate is available"
 
 **Success Criteria:**
 - ✅ User identifies correct activity profile
@@ -1430,12 +1444,18 @@ The tool doesn't just calculate taxes—it shows users **which structure puts th
 
 ### Decision Tree 1: Which Tax Structure Should I Choose?
 
+**IMPORTANT:** NHR eligibility is determined by activity type, not chosen first. Select activity type → then NHR becomes available if eligible.
+
 ```
 START: Self-employed professional in Portugal
 │
-├─ Q1: Do you have NHR status (original or 2.0)?
-│  ├─ YES → Q2
-│  └─ NO → Q3
+├─ Q1: What is your activity type?
+│  ├─ High-value (Article 151) → NHR 20% available
+│  └─ General services → NHR not applicable, standard progressive only
+│
+├─ Q2: Do you have NHR status (original or 2.0)?
+│  ├─ YES (and activity is eligible) → Q3
+│  └─ NO → Q4
 │
 ├─ Q2: What is your annual income?
 │  ├─ < €60,000
