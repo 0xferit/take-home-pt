@@ -1214,7 +1214,11 @@ function updateRecommendationDetails(simplified, transparent) {
         }
 
         if (Math.abs(costDiff) > 100) {
-            details += `<li>LDA has ${formatCurrency(Math.abs(costDiff))} <strong>${costDiff > 0 ? 'higher' : 'lower'}</strong> admin costs</li>`;
+            if (costDiff > 0) {
+                details += `<li>LDA has ${formatCurrency(Math.abs(costDiff))} <strong>higher</strong> operating expenses (admin & overhead)</li>`;
+            } else {
+                details += `<li>LDA has ${formatCurrency(Math.abs(costDiff))} <strong>lower</strong> operating expenses (admin costs minus insurance savings)</li>`;
+            }
         }
 
         if (appState.freelancerBasis === 'simplified') {
