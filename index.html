@@ -201,7 +201,7 @@
                                 <span class="input-group__prefix">€</span>
                                 <input type="number" id="divint-income" class="input" value="0" min="0" step="100">
                             </div>
-                            <p class="help-text">Taxed at 28% flat rate (Category E).</p>
+                            <p class="help-text">Portuguese bank interest, dividends, etc. Taxed at 28% flat rate (Category E). <strong>Note:</strong> If you have NHR 1.0 with foreign dividends/interest, those are typically exempt - don't include them here.</p>
                         </div>
 
                         <div class="form-group">
@@ -210,8 +210,11 @@
                                 <span class="input-group__prefix">€</span>
                                 <input type="number" id="capgains-income" class="input" value="0" min="0" step="100">
                             </div>
-                            <p class="help-text">Taxed at 28% flat rate (Category G).</p>
+                            <p class="help-text">Securities, real estate gains, etc. Taxed at 28% flat rate (Category G). <strong>Note:</strong> If you have NHR 1.0 with foreign real estate gains, those are typically exempt - don't include them here.</p>
                         </div>
+                        <p class="help-text" style="margin-top: var(--space-3); padding: var(--space-3); background: var(--color-background); border-left: 3px solid var(--color-primary);">
+                            <strong>Other income calculation:</strong> Dividends and capital gains are added to your total net income after applying the 28% flat tax rate. This is separate from your Category B professional income calculations above.
+                        </p>
                     </details>
                 </section>
 
@@ -462,8 +465,14 @@
                                     <dt>Social Security</dt>
                                     <dd id="simp-ss">€0.00</dd>
                                     
-                                    <dt class="data-list__total">Net income</dt>
-                                    <dd class="data-list__total" id="simp-net">€0.00</dd>
+                                    <dt>Net Category B income</dt>
+                                    <dd id="simp-net">€0.00</dd>
+                                    
+                                    <dt>Other income (net)</dt>
+                                    <dd id="simp-other-net">€0.00</dd>
+                                    
+                                    <dt class="data-list__total">Total net income</dt>
+                                    <dd class="data-list__total" id="simp-total-net">€0.00</dd>
                                 </dl>
                                 <p id="simp-ss-note" class="help-text"></p>
                             </div>
@@ -492,8 +501,14 @@
                                     <dt>Social Security</dt>
                                     <dd id="org-ss">€0.00</dd>
                                     
-                                    <dt class="data-list__total">Net income</dt>
-                                    <dd class="data-list__total" id="org-net">€0.00</dd>
+                                    <dt>Net Category B income</dt>
+                                    <dd id="org-net">€0.00</dd>
+                                    
+                                    <dt>Other income (net)</dt>
+                                    <dd id="org-other-net">€0.00</dd>
+                                    
+                                    <dt class="data-list__total">Total net income</dt>
+                                    <dd class="data-list__total" id="org-total-net">€0.00</dd>
                                 </dl>
                                 <p id="org-ss-note" class="help-text"></p>
                             </div>
