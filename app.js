@@ -23,6 +23,42 @@ const formatSignedCurrency = (value) => {
 const formatPercent = (value) => `${value.toFixed(1)}%`;
 const formatSignedPercent = (value) => `${value >= 0 ? '+' : '−'}${Math.abs(value).toFixed(1)}%`;
 const formatRate = (value) => `${(value * 100).toFixed(1).replace(/\.0$/, '')}%`;
+
+// Format solidarity tax with calculation breakdown
+// Shows how solidarity tax is computed based on income tiers:
+// - 2.5% on income between €80,000 and €250,000
+// - 5% on income above €250,000
+const formatSolidarityTaxBreakdown = (taxableIncome, totalSolidarityTax) => {
+    const income = Number(taxableIncome) || 0;
+    const tier1Min = 80000;
+    const tier2Min = 250000;
+    
+    // Calculate each tier
+    const tier1Amount = income > tier1Min ? Math.min(income, tier2Min) - tier1Min : 0;
+    const tier2Amount = income > tier2Min ? income - tier2Min : 0;
+    
+    const tier1Tax = tier1Amount * 0.025;
+    const tier2Tax = tier2Amount * 0.05;
+    
+    let breakdown = 'Solidarity tax: ';
+    
+    if (tier2Amount > 0) {
+        // Both tiers apply (income > €250,000)
+        breakdown += `[${formatCurrency(tier1Amount)} (€80k-€250k) × 2.5% = ${formatCurrency(tier1Tax)}] + `;
+        breakdown += `[${formatCurrency(tier2Amount)} (>€250k) × 5% = ${formatCurrency(tier2Tax)}] = `;
+        breakdown += `${formatCurrency(totalSolidarityTax)}`;
+    } else if (tier1Amount > 0) {
+        // Only tier 1 applies (€80,000 < income ≤ €250,000)
+        const incomeFormatted = formatCurrency(income).replace(/\s/g, '');
+        breakdown += `${formatCurrency(tier1Amount)} (€80k-${incomeFormatted}) × 2.5% = ${formatCurrency(totalSolidarityTax)}`;
+    } else {
+        // No solidarity tax (income ≤ €80,000)
+        breakdown += `${formatCurrency(totalSolidarityTax)} (no solidarity tax, income ≤ €80k)`;
+    }
+    
+    return breakdown;
+};
+
 const DEFAULTS = {
     softwareIncome: 170000,
     tradingIncome: 25000,
@@ -750,7 +786,8 @@ function updateCalculationBreakdown(simplified, transparent) {
         `Deductions to tax = ${formatCurrency(simplified.deducoesATax)}`,
     ];
     if (simpSolidarity > 0) {
-        simplifiedSteps.push(`Solidarity tax = ${formatCurrency(simpSolidarity)}`);
+        const solidarityBreakdown = formatSolidarityTaxBreakdown(simplified.taxableIncome, simpSolidarity);
+        simplifiedSteps.push(solidarityBreakdown);
     }
     if (simplified.irsDetails.nhrRequested && !simplified.irsDetails.nhrApplied) {
         simplifiedSteps.push(`NHR 20% requested but not applied: ${simplified.irsDetails.nhrReason || 'activity not eligible.'}`);
@@ -793,7 +830,8 @@ function updateCalculationBreakdown(simplified, transparent) {
         `Deductions to tax = ${formatCurrency(transparent.deducoesATax)}`,
     ];
     if (orgSolidarity > 0) {
-        orgSteps.push(`Solidarity tax = ${formatCurrency(orgSolidarity)}`);
+        const solidarityBreakdown = formatSolidarityTaxBreakdown(transparent.taxableIncome, orgSolidarity);
+        orgSteps.push(solidarityBreakdown);
     }
     if (transparent.irsDetails.nhrRequested && !transparent.irsDetails.nhrApplied) {
         orgSteps.push(`NHR 20% requested but not applied: ${transparent.irsDetails.nhrReason || 'activity not eligible.'}`);
