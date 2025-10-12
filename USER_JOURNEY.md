@@ -1533,6 +1533,9 @@ START: Self-employed professional in Portugal
 │     └─ Don't have NHR? → Standard progressive only → Go to Q3
 │
 ├─ Q3: What is your annual income?
+│  ├─ > €200,000 → ❌ SIMPLIFIED NOT ALLOWED (legal limit)
+│  │  └─ Must choose: FREELANCER (ORGANIZED) or LDA
+│  │
 │  ├─ < €60,000
 │  │  ├─ Real expenses < deemed expenses (25% or 35%)?
 │  │  │  ├─ YES → ✅ FREELANCER (SIMPLIFIED)

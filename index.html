@@ -356,6 +356,12 @@
                                             <span>Organized</span>
                                         </label>
                                     </div>
+                                    <p class="help-text" style="margin-top: 0.5rem; font-size: 0.875rem;">
+                                        <strong>Simplified limit:</strong> Max €200,000/year turnover
+                                    </p>
+                                </div>
+                                <div id="simplified-regime-warning" class="alert alert--warning" style="display: none; margin: var(--space-3) 0;">
+                                    ⚠️ <strong>Income exceeds simplified regime limit:</strong> Your income (€<span id="income-over-limit">0</span>) exceeds €200,000. You must use organized accounting.
                                 </div>
                                 <div class="summary-card__value" id="summary-net-simp">€0.00</div>
                                 <div class="summary-card__meta">
@@ -592,6 +598,27 @@
                                 </tbody>
                             </table>
                             <p class="help-text"><strong>Source:</strong> Portuguese Tax Authority (Orçamento do Estado 2025)</p>
+                        </div>
+
+                        <!-- Simplified Regime Limit -->
+                        <div class="methodology-section">
+                            <h3>Simplified Regime Income Limit</h3>
+                            <div class="disclaimer-box">
+                                <h4>€200,000 Annual Turnover Maximum</h4>
+                                <p><strong>Simplified regime is only available for annual turnover up to €200,000.</strong></p>
+                                <ul class="info-list">
+                                    <li>If gross income exceeds €200,000, you <strong>must</strong> switch to organized accounting</li>
+                                    <li>This is a legal requirement, not optional</li>
+                                    <li>Applies to cumulative annual invoicing (not net income)</li>
+                                    <li>Exceeding the limit requires immediate switch to organized regime</li>
+                                </ul>
+                            </div>
+                            <p class="help-text"><strong>Planning tip:</strong> If approaching €200k, consider switching to organized accounting or LDA proactively to avoid mid-year complications.</p>
+                            <p class="help-text"><strong>Source:</strong> Portuguese Tax Code (CIRS), Article 28 | 
+                                <a href="https://info.portaldasfinancas.gov.pt/" target="_blank" rel="noopener" style="color: var(--color-primary);">
+                                    Portal das Finanças
+                                </a>
+                            </p>
                         </div>
 
                         <!-- Activity Coefficients -->

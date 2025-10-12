@@ -585,6 +585,25 @@ function calculateAndUpdate() {
     const adminSimplified = appState.expenses['admin-freelancer'] || 0;
     const adminTransparent = appState.expenses['admin-transparent'] || 0;
 
+    // Check simplified regime income limit (€200,000)
+    const SIMPLIFIED_REGIME_LIMIT = 200000;
+    const exceedsSimplifiedLimit = appState.grossIncome > SIMPLIFIED_REGIME_LIMIT;
+    const simplifiedWarning = document.getElementById('simplified-regime-warning');
+    const incomeOverLimit = document.getElementById('income-over-limit');
+    
+    if (exceedsSimplifiedLimit && appState.freelancerBasis === 'simplified') {
+        if (simplifiedWarning) {
+            simplifiedWarning.style.display = 'block';
+            if (incomeOverLimit) {
+                incomeOverLimit.textContent = formatCurrency(appState.grossIncome).replace(/\s/g, '');
+            }
+        }
+    } else {
+        if (simplifiedWarning) {
+            simplifiedWarning.style.display = 'none';
+        }
+    }
+
     const commonInputs = {
         grossIncome: appState.grossIncome,
         nhrStatus: appState.nhrStatus,
