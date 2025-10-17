@@ -673,6 +673,177 @@
     };
   }
 
+  /**
+   * Compute 10-year projection for a given structure.
+   * Shows year-by-year breakdown with income growth, declining benefits, etc.
+   * 
+   * @param {Object} params
+   * @param {string} params.structure - 'simplified', 'organized', or 'transparent'
+   * @param {number} params.grossIncomeYear1 - Starting gross income
+   * @param {number} params.annualGrowthRate - Annual income growth (0.00 = 0%, 0.05 = 5%)
+   * @param {number} params.years - Number of years to project (default: 10)
+   * @param {Object} params.baseParams - All other params (nhrStatus, activityProfile, etc.)
+   * @returns {Object} { yearByYear: [], totals: {}, npv: number }
+   */
+  function computeMultiYearProjection({
+    structure = 'simplified',
+    grossIncomeYear1 = 0,
+    annualGrowthRate = 0.00,
+    years = 10,
+    baseParams = {},
+  } = {}) {
+    const results = [];
+    let cumulativeNet = 0;
+    
+    for (let year = 1; year <= years; year++) {
+      // Calculate income for this year with growth
+      const yearIncome = Math.round(grossIncomeYear1 * Math.pow(1 + annualGrowthRate, year - 1));
+      
+      // Adjust IRS Jovem year if enabled
+      const irsJovemYear = baseParams.irsJovemEnabled ? year : null;
+      
+      // First-year benefits only apply to year 1
+      const isFirstYear = year === 1;
+      const yearParams = {
+        ...baseParams,
+        grossIncome: yearIncome,
+        irsJovemYear,
+        irsJovemEnabled: baseParams.irsJovemEnabled,
+        isFirstYearIRS50pct: isFirstYear && baseParams.isFirstYearIRS50pct,
+        isFirstYearSSExempt: isFirstYear && baseParams.isFirstYearSSExempt,
+      };
+      
+      // Compute for this year based on structure
+      let yearResult;
+      if (structure === 'organized') {
+        yearResult = computeFreelancerOrganized(yearParams);
+      } else if (structure === 'transparent') {
+        yearResult = computeTransparent(yearParams);
+      } else {
+        yearResult = computeSimplified(yearParams);
+      }
+      
+      cumulativeNet += yearResult.netIncome;
+      
+      results.push({
+        year,
+        income: yearIncome,
+        netIncome: yearResult.netIncome,
+        incomeTax: yearResult.incomeTax,
+        socialSecurity: yearResult.socialSecurity,
+        totalExpenses: yearResult.totalExpenses,
+        taxableIncome: yearResult.taxableIncome,
+        cumulativeNet,
+        irsJovemReduction: yearResult.irsJovemReduction || 0,
+        effectiveRate: yearIncome > 0 ? ((yearIncome - yearResult.netIncome) / yearIncome) * 100 : 0,
+      });
+    }
+    
+    // Calculate totals
+    const totals = {
+      totalGrossIncome: results.reduce((sum, r) => sum + r.income, 0),
+      totalNetIncome: results.reduce((sum, r) => sum + r.netIncome, 0),
+      totalIncomeTax: results.reduce((sum, r) => sum + r.incomeTax, 0),
+      totalSocialSecurity: results.reduce((sum, r) => sum + r.socialSecurity, 0),
+      totalExpenses: results.reduce((sum, r) => sum + r.totalExpenses, 0),
+      totalIrsJovemSavings: results.reduce((sum, r) => sum + r.irsJovemReduction, 0),
+      averageEffectiveRate: results.reduce((sum, r) => sum + r.effectiveRate, 0) / years,
+    };
+    
+    // Calculate NPV (Net Present Value) with 3% discount rate
+    const discountRate = 0.03;
+    const npv = results.reduce((sum, r) => {
+      const discountFactor = Math.pow(1 + discountRate, r.year - 1);
+      return sum + (r.netIncome / discountFactor);
+    }, 0);
+    
+    return {
+      yearByYear: results,
+      totals,
+      npv: Math.round(npv),
+      structure,
+    };
+  }
+
+  /**
+   * Compare all three structures over 10 years.
+   * Returns projections for all structures plus comparison metrics.
+   * 
+   * @param {Object} params - Base parameters for all structures
+   * @returns {Object} { simplified, organized, transparent, winner, breakeven }
+   */
+  function compareStructuresMultiYear(params) {
+    const simplified = computeMultiYearProjection({
+      ...params,
+      structure: 'simplified',
+    });
+    
+    const organized = computeMultiYearProjection({
+      ...params,
+      structure: 'organized',
+    });
+    
+    const transparent = computeMultiYearProjection({
+      ...params,
+      structure: 'transparent',
+    });
+    
+    // Determine winner based on total net income
+    let winner = 'simplified';
+    let maxNet = simplified.totals.totalNetIncome;
+    
+    if (organized.totals.totalNetIncome > maxNet) {
+      winner = 'organized';
+      maxNet = organized.totals.totalNetIncome;
+    }
+    
+    if (transparent.totals.totalNetIncome > maxNet) {
+      winner = 'transparent';
+      maxNet = transparent.totals.totalNetIncome;
+    }
+    
+    // Find breakeven point (if any) between simplified and transparent
+    let breakevenYear = null;
+    for (let year = 1; year <= params.years; year++) {
+      const simpCum = simplified.yearByYear[year - 1].cumulativeNet;
+      const transCum = transparent.yearByYear[year - 1].cumulativeNet;
+      
+      if (year === 1) continue; // Skip year 1
+      
+      const prevSimpCum = simplified.yearByYear[year - 2].cumulativeNet;
+      const prevTransCum = transparent.yearByYear[year - 2].cumulativeNet;
+      
+      // Check if crossover happens between year-1 and year
+      if (prevSimpCum > prevTransCum && simpCum <= transCum) {
+        breakevenYear = year;
+        break;
+      } else if (prevTransCum > prevSimpCum && transCum <= simpCum) {
+        breakevenYear = year;
+        break;
+      }
+    }
+    
+    return {
+      simplified,
+      organized,
+      transparent,
+      winner,
+      breakevenYear,
+      advantage: {
+        amount: maxNet - Math.min(
+          simplified.totals.totalNetIncome,
+          organized.totals.totalNetIncome,
+          transparent.totals.totalNetIncome
+        ),
+        percentage: ((maxNet / Math.min(
+          simplified.totals.totalNetIncome,
+          organized.totals.totalNetIncome,
+          transparent.totals.totalNetIncome
+        )) - 1) * 100,
+      },
+    };
+  }
+
   // Export business logic functions (no data - data comes from DATA)
   global.TakeHomeLogic = {
     // For backward compatibility, export data references
@@ -702,5 +873,9 @@
     getRiskTierForActivity,
     calculateInsurancePremium,
     calculateSimpleInsurance,
+    
+    // Multi-year projection functions (NEW)
+    computeMultiYearProjection,
+    compareStructuresMultiYear,
   };
 })(window);
