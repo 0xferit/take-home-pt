@@ -26,6 +26,12 @@
 - **Official sources only**: Diário da República, Portal das Finanças, INE, Segurança Social
 - **Version controlled**: Every change tracked, rationale documented in commits
 
+### 5. Separation of Concerns
+- **Three-layer architecture**: Data, Logic, Presentation must be isolated
+- **No cross-contamination**: UI changes cannot break calculations, regulation updates cannot affect styling
+- **Team-safe**: Designers work on presentation, tax experts on data, developers on logic—independently
+- **Regression-proof**: Changes in one layer are guaranteed not to affect others
+
 ## UI/UX Patterns
 
 ### Information Architecture
@@ -173,9 +179,176 @@ Insurance: ~€850/year (0.50%)
   [Collapse] Customize estimate (advanced)
 ```
 
+## Architecture: Three-Layer Separation
+
+### Layer 1: Regulatory Data (`data.js` / `regulations.js`)
+**Pure data only. No logic, no presentation.**
+```javascript
+// ✅ GOOD: Pure regulatory constants
+export const TAX_BRACKETS_2025 = [
+  { min: 0, max: 8059, rate: 0.13 },
+  { min: 8060, max: 12160, rate: 0.165 },
+  // ...
+];
+
+export const SOCIAL_SECURITY_RATE = 0.214;
+export const IAS_2025 = 522.50;
+
+// ❌ BAD: Logic mixed with data
+export function computeTax(income) { /* calculation here */ }
+```
+
+**Who touches this**: Tax accountants, legal team updating regulations  
+**What changes here**: New tax year, law amendments, rate updates  
+**Who doesn't touch**: Designers, frontend developers
+
+### Layer 2: Business Logic (`logic.js`)
+**Pure functions. No data definitions, no DOM.**
+```javascript
+// ✅ GOOD: Pure calculation function
+export function computeProgressiveTax(income, brackets) {
+  return brackets.reduce((total, bracket) => {
+    const amount = Math.min(Math.max(0, income - bracket.min), 
+                             bracket.max - bracket.min);
+    return total + (amount * bracket.rate);
+  }, 0);
+}
+
+// ❌ BAD: DOM manipulation in logic
+function calculateAndDisplay(income) {
+  const tax = compute(income);
+  document.getElementById('result').textContent = tax; // NO!
+}
+
+// ❌ BAD: Data definition in logic file
+const TAX_RATE = 0.214; // Should be in data.js
+```
+
+**Who touches this**: Developers implementing calculation algorithms  
+**What changes here**: New features, calculation methods, formula improvements  
+**Who doesn't touch**: Designers, content editors
+
+### Layer 3: Presentation (`app.js`, `index.html`, `styles.css`)
+**UI only. No calculations, no data.**
+```javascript
+// ✅ GOOD: Pure presentation logic
+function updateDisplay(results) {
+  setText('net-income', formatCurrency(results.netIncome));
+  setText('tax-amount', formatCurrency(results.tax));
+}
+
+// ✅ GOOD: Event handling delegates to logic layer
+incomeInput.addEventListener('input', (e) => {
+  const results = computeSimplified({ // From logic.js
+    grossIncome: parseFloat(e.target.value),
+    // ...
+  });
+  updateDisplay(results);
+});
+
+// ❌ BAD: Calculation in presentation
+incomeInput.addEventListener('input', (e) => {
+  const tax = parseFloat(e.target.value) * 0.214; // NO!
+  setText('tax', tax);
+});
+```
+
+**Who touches this**: Designers, UX team, frontend developers  
+**What changes here**: Styling, layout, accessibility, user interactions  
+**Who doesn't touch**: Tax accountants, business logic developers
+
+## File Structure
+
+```
+take-home-pt/
+├── data.js              # Regulatory constants ONLY
+│   ├── Tax brackets
+│   ├── SS rates
+│   ├── IAS values
+│   ├── Activity codes
+│   └── Deduction limits
+│
+├── logic.js             # Pure business logic ONLY
+│   ├── computeProgressiveTax()
+│   ├── computeSocialSecurity()
+│   ├── computeSimplified()
+│   └── computeTransparent()
+│
+├── app.js               # Presentation logic ONLY
+│   ├── DOM manipulation
+│   ├── Event handlers
+│   ├── UI state management
+│   └── Display formatters
+│
+├── index.html           # Structure ONLY
+│   └── Semantic HTML, no inline logic
+│
+└── styles.css           # Styling ONLY
+    └── Visual design, no business rules
+```
+
+## Isolation Guarantees
+
+### ✅ Safe Operations (No Regression Risk)
+
+| Who | Where | Can Change | Cannot Break |
+|-----|-------|-----------|--------------|
+| Designer | `index.html`, `styles.css`, `app.js` (display only) | Layout, colors, typography | Calculations, tax rates |
+| Tax Expert | `data.js` | Rates, brackets, coefficients | UI, calculation logic |
+| Developer | `logic.js` | Algorithms, formulas | Data values, UI styling |
+
+### ❌ Dangerous Anti-Patterns
+
+```javascript
+// ❌ Data in presentation file (app.js)
+const TAX_RATE = 0.214; // Belongs in data.js
+
+// ❌ Logic in data file (data.js)
+export function calculateTax(income) { /* ... */ } // Belongs in logic.js
+
+// ❌ DOM in logic file (logic.js)
+document.getElementById('result').textContent = tax; // Belongs in app.js
+
+// ❌ Inline calculations in HTML
+<p>Tax: €<span id="tax">${income * 0.214}</span></p> // Logic belongs in logic.js
+```
+
+## Testing Benefits
+
+**With proper separation:**
+- **Data tests**: Verify regulatory constants match official sources
+- **Logic tests**: Unit test pure functions with known inputs/outputs
+- **Presentation tests**: UI/accessibility testing without touching calculations
+
+**Example: Logic unit test (isolated)**
+```javascript
+import { computeProgressiveTax } from './logic.js';
+import { TAX_BRACKETS_2025 } from './data.js';
+
+test('computes correct tax for €50k income', () => {
+  expect(computeProgressiveTax(50000, TAX_BRACKETS_2025))
+    .toBe(10567.50);
+});
+```
+
+## Migration Strategy
+
+When refactoring existing code:
+1. **Extract data first**: Move all constants to `data.js`
+2. **Purify logic**: Remove DOM manipulation from `logic.js`
+3. **Thin presentation**: `app.js` becomes pure UI orchestration
+4. **Verify isolation**: Each layer imports only from layers below
+5. **Test independently**: Unit tests for logic, integration tests for presentation
+
 ## Remember
 
 **The UI teaches by doing, not by telling.**
 
 Show the number. Show the formula. Link the source. Let users dig deeper if they want.
 Attention is the scarcest resource. Respect it.
+
+**Architecture is immutable trust.**
+
+A designer changing CSS must never risk breaking tax calculations.
+A tax expert updating rates must never risk breaking the UI.
+Separation of concerns is separation of regression risk.
