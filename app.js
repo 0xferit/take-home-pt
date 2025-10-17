@@ -1060,7 +1060,7 @@ function updateResultsDisplayMultiYear(freelancer, transparent) {
         ? 'Freelancer (Organized)' 
         : 'Freelancer (Simplified)';
     
-    // Update summary totals
+    // Update 10-year summary totals
     setText('summary-net-simp', formatCurrency(freelancerTotal));
     setText('summary-net-org', formatCurrency(transparentTotal));
     setText('summary-net-diff', formatSignedCurrency(difference));
@@ -1099,6 +1099,60 @@ function updateResultsDisplayMultiYear(freelancer, transparent) {
     applyDiffColor('summary-cost-diff', transparent.totals.totalExpenses - freelancer.totals.totalExpenses, false);
     applyDiffColor('summary-tax-diff', transparentTotalTax - freelancerTotalTax, false);
     applyDiffColor('summary-rate-diff', transparentAvgRate - freelancerAvgRate, false);
+    
+    // ALSO populate detailed Year 1 breakdown (for backward compatibility with HTML)
+    // This ensures all existing UI elements still work
+    const year1Freelancer = freelancer.yearByYear[0];
+    const year1Transparent = transparent.yearByYear[0];
+    
+    // Need to recalculate single-year results to get full detail
+    // (yearByYear only has summary fields, not all the detail)
+    const year1FreelancerDetail = appState.freelancerBasis === 'organized'
+        ? computeFreelancerOrganized({
+              grossIncome: year1Freelancer.income,
+              activityCoefficient: getCurrentActivityCoefficient(),
+              nhrStatus: appState.nhrStatus,
+              personalDeductions: appState.personalDeductions,
+              isFirstYearIRS50pct: appState.isFirstYearIRS50pct,
+              isFirstYearSSExempt: appState.isFirstYearSSExempt,
+              irsJovemEnabled: appState.irsJovemEnabled,
+              irsJovemYear: 1,
+              baseExpenses: appState.expenses['total-business-expenses'] || 0,
+              adminExpenses: appState.expenses['admin-freelancer'] || 0,
+              insuranceExpenses: appState.liabilityInsurance || 0,
+              isNHREligible: isCurrentNHREligible(),
+          })
+        : computeSimplified({
+              grossIncome: year1Freelancer.income,
+              activityCoefficient: getCurrentActivityCoefficient(),
+              nhrStatus: appState.nhrStatus,
+              personalDeductions: appState.personalDeductions,
+              isFirstYearIRS50pct: appState.isFirstYearIRS50pct,
+              isFirstYearSSExempt: appState.isFirstYearSSExempt,
+              irsJovemEnabled: appState.irsJovemEnabled,
+              irsJovemYear: 1,
+              baseExpenses: appState.expenses['total-business-expenses'] || 0,
+              adminExpenses: appState.expenses['admin-freelancer'] || 0,
+              insuranceExpenses: appState.liabilityInsurance || 0,
+              isNHREligible: isCurrentNHREligible(),
+          });
+    
+    const year1TransparentDetail = computeTransparent({
+        grossIncome: year1Transparent.income,
+        nhrStatus: appState.nhrStatus,
+        personalDeductions: appState.personalDeductions,
+        isFirstYearIRS50pct: appState.isFirstYearIRS50pct,
+        isFirstYearSSExempt: appState.isFirstYearSSExempt,
+        irsJovemEnabled: appState.irsJovemEnabled,
+        irsJovemYear: 1,
+        baseExpenses: appState.expenses['total-business-expenses'] || 0,
+        adminExpenses: appState.expenses['admin-transparent'] || 0,
+        isNHREligible: isCurrentNHREligible(),
+        useLLCManagerMinSS: true,
+    });
+    
+    // Now call the legacy display function to populate all detailed fields
+    updateResultsDisplayDual(year1FreelancerDetail, year1TransparentDetail);
     
     // Update year-by-year table (create if doesn't exist)
     updateYearByYearTable(freelancer, transparent, freelancerName);
