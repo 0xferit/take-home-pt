@@ -37,10 +37,7 @@
                     
                     <div class="form-group">
                         <label>Activity Type <span class="required">*</span></label>
-                        <p class="help-text" style="margin-bottom: var(--space-4);">
-                            Select your activity type to determine NHR eligibility and tax coefficient. 
-                            <strong>Know your CAE code?</strong> Enter it below to auto-select the correct type.
-                        </p>
+                        <p class="help-text">Determines NHR eligibility and tax coefficient. Have a CAE code? Enter it below.</p>
                         
                         <!-- CAE Code Entry (Helper) -->
                         <div id="activity-code-container" style="margin-bottom: var(--space-5); padding: var(--space-4); background: var(--bg-elevated); border-radius: var(--radius); border-left: 4px solid var(--color-primary);">
@@ -68,10 +65,7 @@
                             <p id="activity-code-status" class="help-text" style="margin-bottom: var(--space-2); display: none; color: var(--color-success); font-weight: 600;">
                                 ✓ Activity type locked to: <span id="activity-code-derived-type"></span>
                             </p>
-                            <p class="help-text" style="margin-bottom: var(--space-2);">
-                                Enter your 5-digit CAE (Economic Activity Classification) code to automatically determine your activity type.
-                                <span id="activity-code-unlock-hint" style="display: none;"><strong>Clear the code to unlock manual selection.</strong></span>
-                            </p>
+                            <p class="help-text">5-digit Economic Activity Classification code. <span id="activity-code-unlock-hint" style="display: none;">Clear to unlock manual selection.</span></p>
                             <p class="help-text">
                                 <strong>📚 Official Sources:</strong> 
                                 <a href="https://www.ine.pt/ine_novidades/semin/cae/CAE_REV_3.pdf" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">
@@ -123,7 +117,7 @@
                             <option value="original_nhr" disabled>Original NHR (20% flat rate on Portuguese income)</option>
                             <option value="nhr_2_ifici" disabled>NHR 2.0 / IFICI (20% flat rate on Portuguese income)</option>
                         </select>
-                        <p id="nhr-status-note" class="help-text">Select your activity type above to see if NHR 20% flat rate is available.</p>
+                        <p id="nhr-status-note" class="help-text"></p>
                         <div class="disclaimer-box" style="margin-top: var(--space-3);">
                             <p><strong>Scope:</strong> This calculator compares Category B professional services taxation only.</p>
                         </div>
@@ -139,27 +133,19 @@
                                 <input type="checkbox" id="firstyear-ss-exempt">
                                 <span>Social Security 12-month exemption</span>
                             </label>
-                            <p class="help-text" style="margin-left: 2rem; margin-top: -0.5rem;">
-                                First 12 months of activity (rolling period from activity start date). Applies to new self-employed professionals.
-                            </p>
+                            <p class="help-text" style="margin-left: 2rem; margin-top: -0.5rem;">First 12 months (rolling). New self-employed only.</p>
                             
                             <label class="checkbox">
                                 <input type="checkbox" id="firstyear-irs-50">
                                 <span>50% IRS coefficient reduction</span>
                             </label>
-                            <p class="help-text" style="margin-left: 2rem; margin-top: -0.5rem;">
-                                First <strong>calendar year</strong> of activity only. Reduces the activity coefficient (75% → 37.5% or 35% → 17.5%).
-                            </p>
+                            <p class="help-text" style="margin-left: 2rem; margin-top: -0.5rem;">First calendar year. Halves coefficient (75%→37.5%, 35%→17.5%).</p>
                             
                             <label class="checkbox">
                                 <input type="checkbox" id="irs-jovem">
                                 <span>IRS Jovem (Youth Tax Benefit)</span>
                             </label>
-                            <p class="help-text" style="margin-left: 2rem; margin-top: -0.5rem;">
-                                For residents under 35 with completed higher education. Progressive income tax exemption over 10 years (new 2025 rules). 
-                                <strong>Income cap: €28,737.50</strong> (exemption applies to this amount; income above taxed normally).
-                                <strong>⚠️ CANNOT combine with NHR/IFICI - these benefits are mutually exclusive.</strong>
-                            </p>
+                            <p class="help-text" style="margin-left: 2rem; margin-top: -0.5rem;">Under 35, completed higher ed. 10-year progressive exemption (2025 rules). Cap: €28,737.50. ⚠️ Mutually exclusive with NHR.</p>
                         </div>
                         <div id="irs-jovem-year-selector" class="form-group" style="display: none; margin-top: var(--space-4);">
                             <label for="irs-jovem-year">IRS Jovem Year</label>
@@ -209,7 +195,7 @@
                             <span class="input-group__prefix">€</span>
                             <input type="number" id="gross-income" class="input" value="0" min="0" step="1000">
                         </div>
-                        <p class="help-text">Your total business income before expenses (Category B).</p>
+                        <p class="help-text">Category B professional services revenue.</p>
                     </div>
 
                     <div style="margin-top: var(--space-6); padding-top: var(--space-4); border-top: 1px solid var(--color-border); display: flex; justify-content: flex-end;">
@@ -232,7 +218,7 @@
                             <span class="input-group__prefix">€</span>
                             <input type="number" id="total-business-expenses" class="input expense-input" value="0" min="0" step="100" placeholder="Auto: 5% of gross income">
                         </div>
-                        <p class="help-text">Office, equipment, software, travel, etc. These apply to both setups. <strong>Default: 5% of gross income</strong> (auto-calculated unless you enter a custom amount).</p>
+                        <p class="help-text">Office, equipment, software, travel. Applies to both structures. Default: 5% of gross (auto).</p>
                     </div>
 
                     <div class="form-group">
