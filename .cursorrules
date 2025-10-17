@@ -1,0 +1,181 @@
+# Portugal Tax Calculator - Design Principles
+
+## Core Tenets
+
+### 1. Precision
+- **Zero tolerance for ambiguity**: Every calculation must be mathematically exact
+- **Type safety**: Use explicit types, validate all inputs, sanitize all outputs
+- **Single source of truth**: Constants defined once, referenced everywhere
+- **Immutable data flows**: Pure functions with predictable outputs
+
+### 2. Conciseness  
+- **Attention is scarce**: Every word must earn its place
+- **Progressive disclosure**: Essential information first, details collapsed
+- **Remove redundancy**: If it can be inferred or linked, don't repeat it
+- **Labels > explanations**: "Category B" not "Portuguese professional services income from self-employment activities"
+
+### 3. Transparency
+- **Show your work**: All calculations visible in Results → Calculation Steps
+- **Verifiable sources**: Every claim links to official Portuguese government sources
+- **Formula visibility**: Display actual math: `(BaseRate + Revenue × VariableRate) × Multiplier`
+- **No black boxes**: If the calculator does it, the user can see it
+
+### 4. Reproducibility
+- **Methodology documentation**: Complete technical specs in Methodology tab
+- **Source code as documentation**: Clean, commented, self-explanatory functions
+- **Official sources only**: Diário da República, Portal das Finanças, INE, Segurança Social
+- **Version controlled**: Every change tracked, rationale documented in commits
+
+## UI/UX Patterns
+
+### Information Architecture
+```
+Input screens (Setup, Income, Expenses, Deductions):
+  - Minimal help text
+  - Essential labels only
+  - Smart defaults that auto-calculate
+  - Progressive disclosure for advanced options
+
+Results screen:
+  - Summary cards (what matters)
+  - Detailed breakdown (show your work)
+  - Calculation steps (full transparency)
+  - Comparison table (side-by-side)
+
+Methodology screen:
+  - Complete technical documentation
+  - Official source links for everything
+  - Formula explanations
+  - Legal references
+```
+
+### Help Text Guidelines
+```
+❌ BAD:  "Enter your 5-digit CAE (Economic Activity Classification) code to 
+          automatically determine your activity type based on the official 
+          Portuguese classification system maintained by INE."
+
+✅ GOOD: "5-digit CAE code. Auto-determines activity type."
+```
+
+### Transparency Requirements
+Every calculation must be:
+1. **Inspectable**: Results → View calculation steps
+2. **Sourced**: Link to official regulation/law
+3. **Reproducible**: Formula shown in plain text
+4. **Verifiable**: User can check against official tax tables
+
+### Code Style
+```javascript
+// ✅ GOOD: Pure, testable, transparent
+function computeProgressiveTax(income, brackets) {
+  return brackets.reduce((total, bracket) => {
+    const amount = Math.min(Math.max(0, income - bracket.min), 
+                             bracket.max - bracket.min);
+    return total + (amount * bracket.rate);
+  }, 0);
+}
+
+// ❌ BAD: Side effects, opaque, stateful
+let totalTax = 0;
+function addTax(amount) {
+  totalTax += calculateSomehow(amount); // What formula?
+}
+```
+
+## Documentation Layers
+
+### Layer 1: UI Labels (Scannable)
+- What: "Annual Gross Income"
+- Example: "€170,000"
+
+### Layer 2: Help Text (Glanceable) 
+- Context: "Category B professional services revenue"
+
+### Layer 3: Methodology (Complete)
+- Legal basis: "CIRS Article 31 - Activity Coefficients"
+- Formula: `TaxableIncome = GrossIncome × Coefficient`
+- Official source: [Link to Diário da República]
+- Worked example with actual numbers
+
+### Layer 4: Source Code (Authoritative)
+- Implementation details
+- Edge cases handled
+- Unit test coverage
+- Git history with rationale
+
+## Quality Gates
+
+Before shipping any feature, verify:
+- [ ] Calculations are mathematically correct (unit tests pass)
+- [ ] Every formula is visible in Results → Calculation Steps
+- [ ] Every claim has an official source link
+- [ ] Help text is concise (<10 words where possible)
+- [ ] Advanced options are collapsed by default
+- [ ] Methodology section documents the complete spec
+
+## Anti-Patterns to Avoid
+
+❌ **Verbose help text everywhere**
+```html
+<!-- BAD -->
+<p class="help-text">
+  This field is for entering your annual gross income from professional 
+  services activities before deducting any expenses. This is also known 
+  as Category B income in the Portuguese tax system...
+</p>
+```
+
+❌ **Explaining why we do things in the UI**
+```html
+<!-- BAD -->
+<p>We exclude investment income because it's taxed identically in both 
+   structures at 28% flat rate so including it wouldn't affect the 
+   comparison outcome...</p>
+```
+
+❌ **Hiding calculations**
+```javascript
+// BAD
+const tax = calculateTax(income); // User has no idea how
+```
+
+❌ **Unsourced claims**
+```html
+<!-- BAD -->
+<p>IRS Jovem provides a 100% exemption in Year 1</p>
+<!-- No link to verify this claim -->
+```
+
+## Examples of Excellence
+
+✅ **Concise label + transparent calculation**
+```
+Label: "Social Security"
+Help:  "21.4% on 70% of gross (simplified)"
+Results breakdown: 
+  Relevant Income: €170,000 × 70% = €119,000
+  Quarterly: €119,000 ÷ 4 = €29,750
+  Monthly: €29,750 ÷ 3 = €9,917 (capped at €6,270)
+  Contribution: €6,270 × 21.4% × 12 = €16,104/year
+```
+
+✅ **Smart defaults + optional override**
+```
+Business Expenses: €8,500 (auto: 5% of €170k)
+[User can click to override]
+```
+
+✅ **Progressive disclosure**
+```
+Insurance: ~€850/year (0.50%)
+  [Collapse] Override with actual quote
+  [Collapse] Customize estimate (advanced)
+```
+
+## Remember
+
+**The UI teaches by doing, not by telling.**
+
+Show the number. Show the formula. Link the source. Let users dig deeper if they want.
+Attention is the scarcest resource. Respect it.
