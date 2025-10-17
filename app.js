@@ -1510,16 +1510,71 @@ function updateCalculationBreakdownMultiYear(freelancer, transparent) {
     const year1Freelancer = freelancer.yearByYear[0];
     const year1Transparent = transparent.yearByYear[0];
     
-    // TODO: Implement simplified Year 1 breakdown
-    // For now, hide the breakdown section or show a note
-    const simpList = document.getElementById('calc-simp-steps');
-    const orgList = document.getElementById('calc-org-steps');
+    // Recalculate Year 1 with full detail for breakdown
+    const year1FreelancerDetail = appState.freelancerBasis === 'organized'
+        ? computeFreelancerOrganized({
+              grossIncome: year1Freelancer.income,
+              activityCoefficient: getCurrentActivityCoefficient(),
+              nhrStatus: appState.nhrStatus,
+              personalDeductions: appState.personalDeductions,
+              isFirstYearIRS50pct: appState.isFirstYearIRS50pct,
+              isFirstYearSSExempt: appState.isFirstYearSSExempt,
+              irsJovemEnabled: appState.irsJovemEnabled,
+              irsJovemYear: 1,
+              baseExpenses: appState.expenses['total-business-expenses'] || 0,
+              adminExpenses: appState.expenses['admin-freelancer'] || 0,
+              insuranceExpenses: appState.liabilityInsurance || 0,
+              isNHREligible: isCurrentNHREligible(),
+          })
+        : computeSimplified({
+              grossIncome: year1Freelancer.income,
+              activityCoefficient: getCurrentActivityCoefficient(),
+              nhrStatus: appState.nhrStatus,
+              personalDeductions: appState.personalDeductions,
+              isFirstYearIRS50pct: appState.isFirstYearIRS50pct,
+              isFirstYearSSExempt: appState.isFirstYearSSExempt,
+              irsJovemEnabled: appState.irsJovemEnabled,
+              irsJovemYear: 1,
+              baseExpenses: appState.expenses['total-business-expenses'] || 0,
+              adminExpenses: appState.expenses['admin-freelancer'] || 0,
+              insuranceExpenses: appState.liabilityInsurance || 0,
+              isNHREligible: isCurrentNHREligible(),
+          });
     
-    if (simpList) {
-        simpList.innerHTML = '<li>Year 1 breakdown: Implementation pending. See year-by-year table above for results.</li>';
-    }
-    if (orgList) {
-        orgList.innerHTML = '<li>Year 1 breakdown: Implementation pending. See year-by-year table above for results.</li>';
+    const year1TransparentDetail = computeTransparent({
+        grossIncome: year1Transparent.income,
+        nhrStatus: appState.nhrStatus,
+        personalDeductions: appState.personalDeductions,
+        isFirstYearIRS50pct: appState.isFirstYearIRS50pct,
+        isFirstYearSSExempt: appState.isFirstYearSSExempt,
+        irsJovemEnabled: appState.irsJovemEnabled,
+        irsJovemYear: 1,
+        baseExpenses: appState.expenses['total-business-expenses'] || 0,
+        adminExpenses: appState.expenses['admin-transparent'] || 0,
+        isNHREligible: isCurrentNHREligible(),
+        useLLCManagerMinSS: true,
+    });
+    
+    // Call the legacy breakdown function with Year 1 data
+    // Add a note that this is Year 1 only
+    updateCalculationBreakdown(year1FreelancerDetail, year1TransparentDetail);
+    
+    // Add a note above the breakdown
+    const simpList = document.getElementById('calc-simp-steps');
+    if (simpList && simpList.parentElement) {
+        let noteEl = document.getElementById('calc-breakdown-note');
+        if (!noteEl) {
+            noteEl = document.createElement('p');
+            noteEl.id = 'calc-breakdown-note';
+            noteEl.className = 'help-text';
+            noteEl.style.marginBottom = 'var(--space-3)';
+            noteEl.style.background = 'var(--bg-elevated)';
+            noteEl.style.padding = 'var(--space-3)';
+            noteEl.style.borderRadius = 'var(--radius)';
+            noteEl.style.borderLeft = '4px solid var(--color-primary)';
+            simpList.parentElement.insertBefore(noteEl, simpList.previousSibling);
+        }
+        noteEl.innerHTML = '<strong>📊 Year 1 Calculation Breakdown</strong> — See year-by-year table above for all 10 years.';
     }
 }
 
