@@ -1,13 +1,70 @@
+// ============================================================================
+// BUSINESS LOGIC LAYER - TakeHomePT Calculator
+// ============================================================================
+//
+// PURPOSE: Pure calculation functions for Portuguese tax and business structures.
+//          NO data definitions here - all data comes from data.js
+//
+// SEPARATION OF CONCERNS:
+//   - Data definitions: data.js
+//   - Business logic: logic.js (this file)
+//   - UI presentation: app.js
+//
+// DEPENDENCIES:
+//   - Requires data.js to be loaded first
+//   - Exposes window.TakeHomeLogic for app.js
+//
+// ============================================================================
+
 // Pure business logic for TakeHomePT — exposed via window.TakeHomeLogic
 (function (global) {
-  const SUGGESTED_ADMIN = {
+  'use strict';
+
+  // ============================================================================
+  // DATA ACCESS LAYER
+  // ============================================================================
+  // Import data from window.TakeHomeData (loaded via data.js)
+  // Error handling ensures graceful failure if data.js not loaded
+
+  const DATA = global.TakeHomeData;
+  if (!DATA) {
+    console.error('FATAL: TakeHomeData not loaded. Ensure data.js loads before logic.js in index.html.');
+    console.error('Script load order should be: data.js → logic.js → app.js');
+    return; // Exit IIFE - cannot continue without data
+  }
+
+  // Create backward-compatible aliases for gradual migration
+  // These will be removed in Step 7 after all references are updated
+  const TAX_DATA = {
+    taxBrackets2025: DATA.REGULATORY_DATA.TAX_BRACKETS_2025,
+    nhrRates: DATA.REGULATORY_DATA.NHR_RATES,
+    activityProfiles: DATA.REGULATORY_DATA.ACTIVITY_PROFILES,
+    highValueServiceCodes: DATA.REGULATORY_DATA.HIGH_VALUE_SERVICE_CODES,
+    coreServiceCodes: DATA.REGULATORY_DATA.CORE_SERVICE_CODES,
+    activityCatalog: DATA.REGULATORY_DATA.ACTIVITY_CATALOG,
+    socialSecurity: DATA.REGULATORY_DATA.SOCIAL_SECURITY,
+    personalDeductions: DATA.REGULATORY_DATA.PERSONAL_DEDUCTIONS,
+  };
+
+  const INSURANCE_DATA = DATA.INSURANCE_DATA;
+  const SUGGESTED_ADMIN = DATA.ADMIN_COSTS;
+
+  console.log('✅ Logic layer initialized with data from TakeHomeData');
+
+  // ============================================================================
+  // ORIGINAL CONSTANTS (TEMPORARY - Will be removed in Step 5)
+  // ============================================================================
+  // These are kept temporarily to ensure no breakage during migration
+  // DO NOT EDIT - These will be deleted in Step 5
+
+  const SUGGESTED_ADMIN_OLD = {
     // Annual admin/compliance midpoints (EUR)
     freelancer: 800, // simplified regime typical support
     freelancer_organized: 3000, // organized accounting with TOC
     transparent: 4800, // LDA ongoing accounting/compliance
   };
 
-  const INSURANCE_DATA = {
+  const INSURANCE_DATA_OLD = {
     // Professional liability insurance risk tiers (ROUGH ESTIMATES ONLY)
     // These are guesstimates based on industry averages and typical Portugal market rates
     // Actual quotes may vary significantly (±20-40%) depending on insurer and specific circumstances
