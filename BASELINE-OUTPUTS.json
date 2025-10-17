@@ -1,0 +1,282 @@
+{
+  "metadata": {
+    "created": "2025-10-17",
+    "purpose": "Baseline outputs for regression testing during separation of concerns refactor",
+    "git_tag": "pre-refactor-backup",
+    "git_branch": "refactor/separation-of-concerns",
+    "note": "These test cases must be run in browser and outputs verified to match after refactoring"
+  },
+  "testCases": [
+    {
+      "id": "test-1-basic-30k",
+      "name": "Basic freelancer at €30K",
+      "inputs": {
+        "grossIncome": 30000,
+        "activityProfile": "services_high_value",
+        "activityCode": "",
+        "nhrStatus": "standard",
+        "freelancerBasis": "simplified",
+        "baseExpenses": 1500,
+        "adminFreelancer": 800,
+        "adminTransparent": 4800,
+        "isFirstYearSSExempt": false,
+        "isFirstYearIRS50pct": false,
+        "irsJovemEnabled": false,
+        "personalDeductions": {
+          "health": 0,
+          "education": 0,
+          "charitable": 0,
+          "retirement": 0
+        }
+      },
+      "expectedOutputs": {
+        "freelancer": {
+          "taxableIncome": "CAPTURE_IN_BROWSER",
+          "incomeTax": "CAPTURE_IN_BROWSER",
+          "socialSecurity": "CAPTURE_IN_BROWSER",
+          "netIncome": "CAPTURE_IN_BROWSER"
+        },
+        "transparent": {
+          "taxableIncome": "CAPTURE_IN_BROWSER",
+          "incomeTax": "CAPTURE_IN_BROWSER",
+          "socialSecurity": "CAPTURE_IN_BROWSER",
+          "netIncome": "CAPTURE_IN_BROWSER"
+        }
+      }
+    },
+    {
+      "id": "test-2-nhr-60k",
+      "name": "NHR eligible at €60K",
+      "inputs": {
+        "grossIncome": 60000,
+        "activityProfile": "services_high_value",
+        "activityCode": "62010",
+        "nhrStatus": "original_nhr",
+        "freelancerBasis": "simplified",
+        "baseExpenses": 3000,
+        "adminFreelancer": 800,
+        "adminTransparent": 4800,
+        "isFirstYearSSExempt": false,
+        "isFirstYearIRS50pct": false,
+        "irsJovemEnabled": false,
+        "personalDeductions": {
+          "health": 0,
+          "education": 0,
+          "charitable": 0,
+          "retirement": 0
+        }
+      },
+      "expectedOutputs": {
+        "freelancer": {
+          "taxableIncome": "CAPTURE_IN_BROWSER",
+          "incomeTax": "CAPTURE_IN_BROWSER",
+          "socialSecurity": "CAPTURE_IN_BROWSER",
+          "netIncome": "CAPTURE_IN_BROWSER"
+        },
+        "transparent": {
+          "taxableIncome": "CAPTURE_IN_BROWSER",
+          "incomeTax": "CAPTURE_IN_BROWSER",
+          "socialSecurity": "CAPTURE_IN_BROWSER",
+          "netIncome": "CAPTURE_IN_BROWSER"
+        }
+      }
+    },
+    {
+      "id": "test-3-high-income-100k",
+      "name": "High income at €100K",
+      "inputs": {
+        "grossIncome": 100000,
+        "activityProfile": "services_high_value",
+        "activityCode": "",
+        "nhrStatus": "standard",
+        "freelancerBasis": "simplified",
+        "baseExpenses": 5000,
+        "adminFreelancer": 800,
+        "adminTransparent": 4800,
+        "isFirstYearSSExempt": false,
+        "isFirstYearIRS50pct": false,
+        "irsJovemEnabled": false,
+        "personalDeductions": {
+          "health": 1000,
+          "education": 500,
+          "charitable": 0,
+          "retirement": 0
+        }
+      },
+      "expectedOutputs": {
+        "freelancer": {
+          "taxableIncome": "CAPTURE_IN_BROWSER",
+          "incomeTax": "CAPTURE_IN_BROWSER",
+          "socialSecurity": "CAPTURE_IN_BROWSER",
+          "netIncome": "CAPTURE_IN_BROWSER"
+        },
+        "transparent": {
+          "taxableIncome": "CAPTURE_IN_BROWSER",
+          "incomeTax": "CAPTURE_IN_BROWSER",
+          "socialSecurity": "CAPTURE_IN_BROWSER",
+          "netIncome": "CAPTURE_IN_BROWSER"
+        }
+      }
+    },
+    {
+      "id": "test-4-solidarity-tax-180k",
+      "name": "Solidarity tax threshold at €180K",
+      "inputs": {
+        "grossIncome": 180000,
+        "activityProfile": "services_high_value",
+        "activityCode": "",
+        "nhrStatus": "standard",
+        "freelancerBasis": "simplified",
+        "baseExpenses": 9000,
+        "adminFreelancer": 800,
+        "adminTransparent": 4800,
+        "isFirstYearSSExempt": false,
+        "isFirstYearIRS50pct": false,
+        "irsJovemEnabled": false,
+        "personalDeductions": {
+          "health": 2000,
+          "education": 1000,
+          "charitable": 500,
+          "retirement": 1000
+        }
+      },
+      "expectedOutputs": {
+        "freelancer": {
+          "taxableIncome": "CAPTURE_IN_BROWSER",
+          "incomeTax": "CAPTURE_IN_BROWSER",
+          "socialSecurity": "CAPTURE_IN_BROWSER",
+          "netIncome": "CAPTURE_IN_BROWSER"
+        },
+        "transparent": {
+          "taxableIncome": "CAPTURE_IN_BROWSER",
+          "incomeTax": "CAPTURE_IN_BROWSER",
+          "socialSecurity": "CAPTURE_IN_BROWSER",
+          "netIncome": "CAPTURE_IN_BROWSER"
+        }
+      }
+    },
+    {
+      "id": "test-5-very-high-250k",
+      "name": "Very high income at €250K (organized required)",
+      "inputs": {
+        "grossIncome": 250000,
+        "activityProfile": "services_high_value",
+        "activityCode": "",
+        "nhrStatus": "standard",
+        "freelancerBasis": "organized",
+        "baseExpenses": 12500,
+        "adminFreelancer": 3000,
+        "adminTransparent": 4800,
+        "isFirstYearSSExempt": false,
+        "isFirstYearIRS50pct": false,
+        "irsJovemEnabled": false,
+        "personalDeductions": {
+          "health": 2000,
+          "education": 1000,
+          "charitable": 1000,
+          "retirement": 2000
+        }
+      },
+      "expectedOutputs": {
+        "freelancer": {
+          "taxableIncome": "CAPTURE_IN_BROWSER",
+          "incomeTax": "CAPTURE_IN_BROWSER",
+          "socialSecurity": "CAPTURE_IN_BROWSER",
+          "netIncome": "CAPTURE_IN_BROWSER"
+        },
+        "transparent": {
+          "taxableIncome": "CAPTURE_IN_BROWSER",
+          "incomeTax": "CAPTURE_IN_BROWSER",
+          "socialSecurity": "CAPTURE_IN_BROWSER",
+          "netIncome": "CAPTURE_IN_BROWSER"
+        }
+      }
+    },
+    {
+      "id": "test-6-irs-jovem",
+      "name": "IRS Jovem year 1 (100% exemption)",
+      "inputs": {
+        "grossIncome": 25000,
+        "activityProfile": "services_high_value",
+        "activityCode": "",
+        "nhrStatus": "standard",
+        "freelancerBasis": "simplified",
+        "baseExpenses": 1250,
+        "adminFreelancer": 800,
+        "adminTransparent": 4800,
+        "isFirstYearSSExempt": false,
+        "isFirstYearIRS50pct": false,
+        "irsJovemEnabled": true,
+        "irsJovemYear": 1,
+        "personalDeductions": {
+          "health": 0,
+          "education": 0,
+          "charitable": 0,
+          "retirement": 0
+        }
+      },
+      "expectedOutputs": {
+        "freelancer": {
+          "taxableIncome": "CAPTURE_IN_BROWSER",
+          "incomeTax": "CAPTURE_IN_BROWSER",
+          "socialSecurity": "CAPTURE_IN_BROWSER",
+          "netIncome": "CAPTURE_IN_BROWSER"
+        },
+        "transparent": {
+          "taxableIncome": "CAPTURE_IN_BROWSER",
+          "incomeTax": "CAPTURE_IN_BROWSER",
+          "socialSecurity": "CAPTURE_IN_BROWSER",
+          "netIncome": "CAPTURE_IN_BROWSER"
+        }
+      }
+    },
+    {
+      "id": "test-7-first-year-benefits",
+      "name": "First year with SS exemption and 50% IRS reduction",
+      "inputs": {
+        "grossIncome": 40000,
+        "activityProfile": "services_high_value",
+        "activityCode": "",
+        "nhrStatus": "standard",
+        "freelancerBasis": "simplified",
+        "baseExpenses": 2000,
+        "adminFreelancer": 800,
+        "adminTransparent": 4800,
+        "isFirstYearSSExempt": true,
+        "isFirstYearIRS50pct": true,
+        "irsJovemEnabled": false,
+        "personalDeductions": {
+          "health": 0,
+          "education": 0,
+          "charitable": 0,
+          "retirement": 0
+        }
+      },
+      "expectedOutputs": {
+        "freelancer": {
+          "taxableIncome": "CAPTURE_IN_BROWSER",
+          "incomeTax": "CAPTURE_IN_BROWSER",
+          "socialSecurity": "CAPTURE_IN_BROWSER",
+          "netIncome": "CAPTURE_IN_BROWSER"
+        },
+        "transparent": {
+          "taxableIncome": "CAPTURE_IN_BROWSER",
+          "incomeTax": "CAPTURE_IN_BROWSER",
+          "socialSecurity": "CAPTURE_IN_BROWSER",
+          "netIncome": "CAPTURE_IN_BROWSER"
+        }
+      }
+    }
+  ],
+  "instructions": {
+    "how_to_capture": [
+      "1. Open index.html in a browser (before refactoring)",
+      "2. For each test case, enter the inputs manually",
+      "3. Capture the four key outputs for both structures",
+      "4. Update this file with actual values",
+      "5. After refactoring, run the same tests and compare outputs",
+      "6. ALL outputs must match exactly (within €0.01 due to rounding)"
+    ],
+    "verification_command": "Manual browser testing or automated Playwright/Selenium tests"
+  }
+}
