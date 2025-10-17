@@ -1044,6 +1044,275 @@ function calculateAndUpdate() {
     updateResultsVisibility();
 }
 
+// ============================================================================
+// MULTI-YEAR DISPLAY FUNCTIONS
+// ============================================================================
+
+function updateResultsDisplayMultiYear(freelancer, transparent) {
+    // Display 10-year summary at top
+    const freelancerTotal = freelancer.totals.totalNetIncome;
+    const transparentTotal = transparent.totals.totalNetIncome;
+    const difference = transparentTotal - freelancerTotal;
+    
+    const freelancerName = appState.freelancerBasis === 'organized' 
+        ? 'Freelancer (Organized)' 
+        : 'Freelancer (Simplified)';
+    
+    // Update summary totals
+    setText('summary-net-simp', formatCurrency(freelancerTotal));
+    setText('summary-net-org', formatCurrency(transparentTotal));
+    setText('summary-net-diff', formatSignedCurrency(difference));
+    
+    setText('summary-cost-simp', formatCurrency(freelancer.totals.totalExpenses));
+    setText('summary-cost-org', formatCurrency(transparent.totals.totalExpenses));
+    setText('summary-cost-diff', formatSignedCurrency(transparent.totals.totalExpenses - freelancer.totals.totalExpenses));
+    
+    const freelancerTotalTax = freelancer.totals.totalIncomeTax + freelancer.totals.totalSocialSecurity;
+    const transparentTotalTax = transparent.totals.totalIncomeTax + transparent.totals.totalSocialSecurity;
+    
+    setText('summary-tax-simp', formatCurrency(freelancerTotalTax));
+    setText('summary-tax-org', formatCurrency(transparentTotalTax));
+    setText('summary-tax-diff', formatSignedCurrency(transparentTotalTax - freelancerTotalTax));
+    
+    const freelancerAvgRate = freelancer.totals.averageEffectiveRate;
+    const transparentAvgRate = transparent.totals.averageEffectiveRate;
+    
+    setText('summary-rate-simp', formatPercent(freelancerAvgRate));
+    setText('summary-rate-org', formatPercent(transparentAvgRate));
+    setText('summary-rate-diff', formatSignedPercent(transparentAvgRate - freelancerAvgRate));
+    
+    // Apply colors to differences
+    const applyDiffColor = (id, value, positiveIsGood = true) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (value === 0) {
+            el.style.color = 'var(--color-text)';
+            return;
+        }
+        const isGood = positiveIsGood ? value > 0 : value < 0;
+        el.style.color = isGood ? 'var(--color-success)' : 'var(--color-error)';
+    };
+    
+    applyDiffColor('summary-net-diff', difference, true);
+    applyDiffColor('summary-cost-diff', transparent.totals.totalExpenses - freelancer.totals.totalExpenses, false);
+    applyDiffColor('summary-tax-diff', transparentTotalTax - freelancerTotalTax, false);
+    applyDiffColor('summary-rate-diff', transparentAvgRate - freelancerAvgRate, false);
+    
+    // Update year-by-year table (create if doesn't exist)
+    updateYearByYearTable(freelancer, transparent, freelancerName);
+}
+
+function updateYearByYearTable(freelancer, transparent, freelancerName) {
+    // Find or create the year-by-year table container
+    let tableContainer = document.getElementById('year-by-year-table');
+    
+    if (!tableContainer) {
+        // Create new container after the summary section
+        const summarySection = document.querySelector('.comparison-summary');
+        if (summarySection && summarySection.parentNode) {
+            tableContainer = document.createElement('div');
+            tableContainer.id = 'year-by-year-table';
+            tableContainer.style.marginTop = 'var(--space-6)';
+            summarySection.parentNode.insertBefore(tableContainer, summarySection.nextSibling);
+        } else {
+            return; // Can't find where to insert
+        }
+    }
+    
+    // Build the table HTML
+    let tableHTML = `
+        <div style="background: var(--bg-elevated); padding: var(--space-5); border-radius: var(--radius); border-left: 4px solid var(--color-primary);">
+            <h3 style="margin-bottom: var(--space-4); font-size: var(--text-lg);">
+                📊 Year-by-Year Breakdown (10 Years)
+            </h3>
+            
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; font-size: var(--text-sm);">
+                    <thead>
+                        <tr style="border-bottom: 2px solid var(--color-border);">
+                            <th style="text-align: left; padding: var(--space-2);">Year</th>
+                            <th style="text-align: right; padding: var(--space-2);">Income</th>
+                            <th style="text-align: right; padding: var(--space-2);">${freelancerName} Net</th>
+                            <th style="text-align: right; padding: var(--space-2);">LDA Net</th>
+                            <th style="text-align: right; padding: var(--space-2);">Difference</th>
+                            <th style="text-align: right; padding: var(--space-2);">Cumulative</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+    `;
+    
+    // Add rows for each year
+    for (let i = 0; i < freelancer.yearByYear.length; i++) {
+        const fYear = freelancer.yearByYear[i];
+        const tYear = transparent.yearByYear[i];
+        const diff = tYear.netIncome - fYear.netIncome;
+        const cumDiff = tYear.cumulativeNet - fYear.cumulativeNet;
+        
+        const rowStyle = i % 2 === 0 ? 'background: var(--bg-elevated);' : 'background: var(--bg-base);';
+        const diffColor = diff > 0 ? 'var(--color-success)' : diff < 0 ? 'var(--color-error)' : 'var(--color-text)';
+        const cumColor = cumDiff > 0 ? 'var(--color-success)' : cumDiff < 0 ? 'var(--color-error)' : 'var(--color-text)';
+        
+        tableHTML += `
+            <tr style="${rowStyle}">
+                <td style="padding: var(--space-2); font-weight: 600;">${fYear.year}</td>
+                <td style="padding: var(--space-2); text-align: right;">${formatCurrency(fYear.income)}</td>
+                <td style="padding: var(--space-2); text-align: right;">${formatCurrency(fYear.netIncome)}</td>
+                <td style="padding: var(--space-2); text-align: right;">${formatCurrency(tYear.netIncome)}</td>
+                <td style="padding: var(--space-2); text-align: right; color: ${diffColor}; font-weight: 600;">
+                    ${formatSignedCurrency(diff)}
+                </td>
+                <td style="padding: var(--space-2); text-align: right; color: ${cumColor};">
+                    ${formatSignedCurrency(cumDiff)}
+                </td>
+            </tr>
+        `;
+    }
+    
+    tableHTML += `
+                    </tbody>
+                    <tfoot style="border-top: 2px solid var(--color-border); font-weight: 600;">
+                        <tr>
+                            <td style="padding: var(--space-3);">10-Year Total</td>
+                            <td style="padding: var(--space-3); text-align: right;">${formatCurrency(freelancer.totals.totalGrossIncome)}</td>
+                            <td style="padding: var(--space-3); text-align: right;">${formatCurrency(freelancer.totals.totalNetIncome)}</td>
+                            <td style="padding: var(--space-3); text-align: right;">${formatCurrency(transparent.totals.totalNetIncome)}</td>
+                            <td style="padding: var(--space-3); text-align: right; color: ${transparent.totals.totalNetIncome > freelancer.totals.totalNetIncome ? 'var(--color-success)' : 'var(--color-error)'};">
+                                ${formatSignedCurrency(transparent.totals.totalNetIncome - freelancer.totals.totalNetIncome)}
+                            </td>
+                            <td style="padding: var(--space-3); text-align: right;"></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            
+            <p style="margin-top: var(--space-4); font-size: var(--text-sm); color: var(--color-text-muted);">
+                💡 <strong>Cumulative</strong> shows the running total difference. 
+                <strong>Year ${freelancer.yearByYear.length}</strong> shows the final 10-year advantage.
+            </p>
+        </div>
+    `;
+    
+    tableContainer.innerHTML = tableHTML;
+}
+
+function updateComparisonTableMultiYear(freelancer, transparent) {
+    // Update comparison table with 10-year totals
+    setText('comp-simple-taxable', formatCurrency(freelancer.totals.totalGrossIncome));
+    setText('comp-organized-taxable', formatCurrency(transparent.totals.totalGrossIncome));
+    setText('comp-simple-tax', formatCurrency(freelancer.totals.totalIncomeTax));
+    setText('comp-organized-tax', formatCurrency(transparent.totals.totalIncomeTax));
+    setText('comp-simple-ss', formatCurrency(freelancer.totals.totalSocialSecurity));
+    setText('comp-organized-ss', formatCurrency(transparent.totals.totalSocialSecurity));
+    setText('comp-simple-net', formatCurrency(freelancer.totals.totalNetIncome));
+    setText('comp-organized-net', formatCurrency(transparent.totals.totalNetIncome));
+
+    const taxDiff = transparent.totals.totalIncomeTax - freelancer.totals.totalIncomeTax;
+    const ssDiff = transparent.totals.totalSocialSecurity - freelancer.totals.totalSocialSecurity;
+    const netDiff = transparent.totals.totalNetIncome - freelancer.totals.totalNetIncome;
+
+    setText('comp-taxable-diff', formatSignedCurrency(0)); // Same gross for both
+    setText('comp-tax-diff', formatSignedCurrency(taxDiff));
+    setText('comp-ss-diff', formatSignedCurrency(ssDiff));
+    setText('comp-net-diff', formatSignedCurrency(netDiff));
+
+    const styleFor = (value) => (value < 0 ? 'var(--color-success)' : value > 0 ? 'var(--color-error)' : 'var(--color-text)');
+    const taxEl = document.getElementById('comp-tax-diff');
+    const ssEl = document.getElementById('comp-ss-diff');
+    const netEl = document.getElementById('comp-net-diff');
+    if (taxEl) taxEl.style.color = styleFor(taxDiff);
+    if (ssEl) ssEl.style.color = styleFor(ssDiff);
+    if (netEl) netEl.style.color = netDiff > 0 ? 'var(--color-success)' : netDiff < 0 ? 'var(--color-error)' : 'var(--color-text)';
+}
+
+function updateRecommendationMultiYear(freelancer, transparent) {
+    const recommendationEl = document.getElementById('recommendation-text');
+    const breakevenEl = document.getElementById('breakeven-expenses');
+
+    if (!recommendationEl) return;
+
+    const netDifference = transparent.totals.totalNetIncome - freelancer.totals.totalNetIncome;
+    const freelancerName = appState.freelancerBasis === 'organized' 
+        ? 'Freelancer (Organized)' 
+        : 'Freelancer (Simplified)';
+
+    if (appState.grossIncome === 0) {
+        recommendationEl.textContent = 'Enter your income to see a personalized 10-year recommendation.';
+        if (breakevenEl) breakevenEl.textContent = formatCurrency(0);
+        return;
+    }
+
+    if (netDifference > 5000) {
+        recommendationEl.innerHTML = `<strong>Single-Member Company (LDA)</strong> is recommended. Over 10 years, you would net approximately <strong>${formatCurrency(netDifference)}</strong> more.`;
+    } else if (netDifference < -5000) {
+        recommendationEl.innerHTML = `<strong>${freelancerName}</strong> is recommended. Over 10 years, it nets <strong>${formatCurrency(Math.abs(netDifference))}</strong> more.`;
+    } else {
+        recommendationEl.innerHTML = `Both structures are similar over 10 years (difference: ${formatCurrency(Math.abs(netDifference))}). Prefer <strong>Freelancer</strong> for simplicity or <strong>LDA</strong> for limited liability.`;
+    }
+
+    // Breakeven is less meaningful in multi-year, but keep it
+    if (breakevenEl) {
+        breakevenEl.textContent = '—';
+    }
+}
+
+function updateWinnerBannerMultiYear(freelancer, transparent) {
+    const winnerBanner = document.getElementById('winner-banner');
+    const winnerTitle = document.getElementById('winner-title');
+    const winnerSubtitle = document.getElementById('winner-subtitle');
+    const winnerStats = document.getElementById('winner-stats');
+
+    if (!winnerBanner || !winnerTitle || !winnerStats) return;
+
+    const netDiff = Math.abs(transparent.totals.totalNetIncome - freelancer.totals.totalNetIncome);
+    const freelancerName = appState.freelancerBasis === 'organized' 
+        ? 'Freelancer (Organized)' 
+        : 'Freelancer (Simplified)';
+    
+    if (transparent.totals.totalNetIncome > freelancer.totals.totalNetIncome + 5000) {
+        winnerBanner.style.display = 'flex';
+        winnerTitle.textContent = '🏆 Best Option (10 Years): Single-Member Company (LDA)';
+        winnerSubtitle.textContent = `You'll take home ${formatCurrency(netDiff)} more over 10 years`;
+        
+        const totalGross = transparent.totals.totalGrossIncome;
+        const avgTakeHome = (transparent.totals.totalNetIncome / totalGross) * 100;
+        
+        winnerStats.innerHTML = `
+            <div class="winner-stat">
+                <div class="winner-stat__label">10-Year Savings</div>
+                <div class="winner-stat__value">${formatCurrency(netDiff)}</div>
+            </div>
+            <div class="winner-stat">
+                <div class="winner-stat__label">Avg Take-Home %</div>
+                <div class="winner-stat__value">${formatPercent(avgTakeHome)}</div>
+            </div>
+        `;
+    } else if (freelancer.totals.totalNetIncome > transparent.totals.totalNetIncome + 5000) {
+        winnerBanner.style.display = 'flex';
+        winnerTitle.textContent = `🏆 Best Option (10 Years): ${freelancerName}`;
+        winnerSubtitle.textContent = `You'll take home ${formatCurrency(netDiff)} more over 10 years`;
+        
+        const totalGross = freelancer.totals.totalGrossIncome;
+        const avgTakeHome = (freelancer.totals.totalNetIncome / totalGross) * 100;
+        
+        winnerStats.innerHTML = `
+            <div class="winner-stat">
+                <div class="winner-stat__label">10-Year Savings</div>
+                <div class="winner-stat__value">${formatCurrency(netDiff)}</div>
+            </div>
+            <div class="winner-stat">
+                <div class="winner-stat__label">Avg Take-Home %</div>
+                <div class="winner-stat__value">${formatPercent(avgTakeHome)}</div>
+            </div>
+        `;
+    } else {
+        winnerBanner.style.display = 'none';
+    }
+}
+
+// ============================================================================
+// LEGACY SINGLE-YEAR DISPLAY FUNCTIONS (KEPT FOR REFERENCE)
+// ============================================================================
+
 function updateResultsDisplayDual(simplified, transparent) {
     // Investment income excluded - taxed identically in both structures (28% flat)
 
