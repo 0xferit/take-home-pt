@@ -1,21 +1,53 @@
-        const {
-            TAX_DATA,
-            INSURANCE_DATA,
-            computeDeducoesAColeta,
-            computeSimplified,
-            computeTransparent,
-            computeFreelancerOrganized,
-            SUGGESTED_ADMIN,
-            computeExpenseTotals,
-            getLiabilityInsurance,
-            normalizeActivityCode,
-            getActivityProfileForCode,
-            isActivityCodeKnown,
-            isNHREligibleCode,
-            getRiskTierForActivity,
-            calculateInsurancePremium,
-            calculateSimpleInsurance,
-        } = window.TakeHomeLogic;
+// ============================================================================
+// UI PRESENTATION LAYER - TakeHomePT Calculator
+// ============================================================================
+//
+// PURPOSE: DOM manipulation, user interaction, and visual presentation.
+//          NO data definitions here - all data comes from data.js
+//          NO calculations here - all logic comes from logic.js
+//
+// SEPARATION OF CONCERNS:
+//   - Data definitions: data.js
+//   - Business logic: logic.js
+//   - UI presentation: app.js (this file)
+//
+// DEPENDENCIES:
+//   - Requires data.js and logic.js to be loaded first
+//   - Accesses: window.TakeHomeData and window.TakeHomeLogic
+//
+// ============================================================================
+
+// Import business logic functions from window.TakeHomeLogic
+const {
+    TAX_DATA,
+    INSURANCE_DATA,
+    computeDeducoesAColeta,
+    computeSimplified,
+    computeTransparent,
+    computeFreelancerOrganized,
+    SUGGESTED_ADMIN,
+    computeExpenseTotals,
+    getLiabilityInsurance,
+    normalizeActivityCode,
+    getActivityProfileForCode,
+    isActivityCodeKnown,
+    isNHREligibleCode,
+    getRiskTierForActivity,
+    calculateInsurancePremium,
+    calculateSimpleInsurance,
+} = window.TakeHomeLogic;
+
+// Import data from window.TakeHomeData (for app defaults)
+const DATA = window.TakeHomeData;
+if (!DATA) {
+    console.error('FATAL: TakeHomeData not loaded. Ensure data.js loads before app.js in index.html.');
+    console.error('Script load order should be: data.js → logic.js → app.js');
+}
+if (!window.TakeHomeLogic) {
+    console.error('FATAL: TakeHomeLogic not loaded. Ensure logic.js loads before app.js in index.html.');
+}
+
+console.log('✅ UI layer initialized with data and logic');
 
 const currencyFormatter = new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' });
 const formatCurrency = (value) => currencyFormatter.format(Number.isFinite(value) ? value : 0);
@@ -63,13 +95,9 @@ const formatSolidarityTaxBreakdown = (taxableIncome, totalSolidarityTax) => {
     return breakdown;
 };
 
-const DEFAULTS = {
-    softwareIncome: 170000,
-    tradingIncome: 25000,
-    bizExpensesPercent: 0.05, // 5% of gross income
-    tradingRate: 0.28,
-    simplifiedDeemed: 0.25,
-};
+// Get application defaults from data layer
+const DEFAULTS = DATA.DEFAULTS;
+
 const setText = (id, value) => {
     const el = document.getElementById(id);
     if (el) el.textContent = value;
