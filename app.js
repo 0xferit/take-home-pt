@@ -1040,6 +1040,8 @@ function calculateAndUpdate() {
     updateComparisonTableMultiYear(freelancerProjection, transparentProjection);
     updateRecommendationMultiYear(freelancerProjection, transparentProjection);
     updateWinnerBannerMultiYear(freelancerProjection, transparentProjection);
+    updateCalculationBreakdownMultiYear(freelancerProjection, transparentProjection);
+    updateRecommendationDetailsMultiYear(freelancerProjection, transparentProjection);
     updateSanityChecks();
     updateResultsVisibility();
 }
@@ -1447,6 +1449,26 @@ function buildIRSBreakdownLines(irsDetails) {
     });
 }
 
+function updateCalculationBreakdownMultiYear(freelancer, transparent) {
+    // Show Year 1 breakdown as an example
+    // Full 10-year breakdown would be too verbose
+    
+    const year1Freelancer = freelancer.yearByYear[0];
+    const year1Transparent = transparent.yearByYear[0];
+    
+    // TODO: Implement simplified Year 1 breakdown
+    // For now, hide the breakdown section or show a note
+    const simpList = document.getElementById('calc-simp-steps');
+    const orgList = document.getElementById('calc-org-steps');
+    
+    if (simpList) {
+        simpList.innerHTML = '<li>Year 1 breakdown: Implementation pending. See year-by-year table above for results.</li>';
+    }
+    if (orgList) {
+        orgList.innerHTML = '<li>Year 1 breakdown: Implementation pending. See year-by-year table above for results.</li>';
+    }
+}
+
 function updateCalculationBreakdown(simplified, transparent) {
     const simpList = document.getElementById('calc-simp-steps');
     const orgList = document.getElementById('calc-org-steps');
@@ -1824,6 +1846,70 @@ function updateWinnerBanner(simplified, transparent) {
     } else {
         winnerBanner.style.display = 'none';
     }
+}
+
+function updateRecommendationDetailsMultiYear(freelancer, transparent) {
+    const recommendationDetails = document.getElementById('recommendation-details');
+    if (!recommendationDetails) return;
+
+    const freelancerName = appState.freelancerBasis === 'organized' ? 'Freelancer (Organized)' : 'Freelancer (Simplified)';
+    const netDiff = transparent.totals.totalNetIncome - freelancer.totals.totalNetIncome;
+    const taxDiff = transparent.totals.totalIncomeTax - freelancer.totals.totalIncomeTax;
+    const ssDiff = transparent.totals.totalSocialSecurity - freelancer.totals.totalSocialSecurity;
+    const costDiff = transparent.totals.totalExpenses - freelancer.totals.totalExpenses;
+
+    let details = '<ul class="info-list">';
+
+    if (Math.abs(netDiff) > 5000) {
+        if (netDiff > 0) {
+            details += `<li><strong>LDA wins</strong> by ${formatCurrency(netDiff)} over 10 years</li>`;
+        } else {
+            details += `<li><strong>${freelancerName} wins</strong> by ${formatCurrency(Math.abs(netDiff))} over 10 years</li>`;
+        }
+
+        if (Math.abs(taxDiff) > 1000) {
+            if (taxDiff > 0) {
+                details += `<li>LDA pays ${formatCurrency(taxDiff)} <strong>more</strong> in total income tax (10 years)</li>`;
+            } else {
+                details += `<li>LDA pays ${formatCurrency(Math.abs(taxDiff))} <strong>less</strong> in total income tax (10 years)</li>`;
+            }
+        }
+
+        if (Math.abs(ssDiff) > 1000) {
+            if (ssDiff > 0) {
+                details += `<li>LDA pays ${formatCurrency(ssDiff)} <strong>more</strong> in total social security (10 years)</li>`;
+            } else {
+                details += `<li>LDA pays ${formatCurrency(Math.abs(ssDiff))} <strong>less</strong> in total social security (10 years)</li>`;
+            }
+        }
+
+        if (Math.abs(costDiff) > 1000) {
+            if (costDiff > 0) {
+                details += `<li>LDA has ${formatCurrency(Math.abs(costDiff))} <strong>higher</strong> total operating expenses (10 years)</li>`;
+            } else {
+                details += `<li>LDA has ${formatCurrency(Math.abs(costDiff))} <strong>lower</strong> total operating expenses (10 years)</li>`;
+            }
+        }
+
+        if (appState.multiYear.annualGrowthRate > 0) {
+            const growthPct = (appState.multiYear.annualGrowthRate * 100).toFixed(1);
+            details += `<li>Projection includes ${growthPct}% annual income growth over 10 years</li>`;
+        }
+
+        if (appState.irsJovemEnabled) {
+            const totalSavings = freelancer.totals.totalIrsJovemSavings;
+            if (totalSavings > 0) {
+                details += `<li>IRS Jovem saves you ${formatCurrency(totalSavings)} in total taxes over 10 years</li>`;
+            }
+        }
+
+    } else {
+        details += `<li>Both structures are very similar over 10 years (difference: ${formatCurrency(Math.abs(netDiff))})</li>`;
+        details += `<li>Choose Freelancer for <strong>simplicity</strong> or LDA for <strong>limited liability</strong></li>`;
+    }
+
+    details += '</ul>';
+    recommendationDetails.innerHTML = details;
 }
 
 function updateRecommendationDetails(simplified, transparent) {
