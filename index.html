@@ -217,25 +217,39 @@
 
                     <details class="details">
                         <summary>Other income sources (optional)</summary>
+                        
+                        <div class="disclaimer-box" style="margin-bottom: var(--space-4);">
+                            <h4>⚠️ Investment Income Does NOT Affect Structure Comparison</h4>
+                            <p><strong>Investment income (dividends, capital gains, interest) is taxed identically whether you're a freelancer or have an LLC.</strong></p>
+                            <ul class="info-list">
+                                <li>Category E (dividends, interest): 28% flat rate — same in both structures</li>
+                                <li>Category G (capital gains): 28% flat rate — same in both structures</li>
+                                <li>Received at personal level in both cases (not through LLC)</li>
+                                <li><strong>These cancel out in the comparison — include for total income visibility only</strong></li>
+                            </ul>
+                            <p style="margin-top: var(--space-2);"><strong>This calculator compares Category B professional services taxation only.</strong> Investment income treatment is identical regardless of structure choice.</p>
+                        </div>
+                        
                         <div class="form-group">
-                            <label for="divint-income">Dividends & Interest Income</label>
+                            <label for="divint-income">Dividends & Interest Income (Category E)</label>
                             <div class="input-group">
                                 <span class="input-group__prefix">€</span>
                                 <input type="number" id="divint-income" class="input" value="0" min="0" step="100">
                             </div>
-                            <p class="help-text">Portuguese bank interest, dividends, etc. Taxed at 28% flat rate (Category E). <strong>Note:</strong> If you have NHR 1.0 with foreign dividends/interest, those are typically exempt - don't include them here.</p>
+                            <p class="help-text">Portuguese bank interest, dividends, etc. Taxed at 28% flat rate. <strong>Note:</strong> If you have NHR 1.0 with foreign dividends/interest, those are typically exempt - don't include them here.</p>
                         </div>
 
                         <div class="form-group">
-                            <label for="capgains-income">Capital Gains Income</label>
+                            <label for="capgains-income">Capital Gains Income (Category G)</label>
                             <div class="input-group">
                                 <span class="input-group__prefix">€</span>
                                 <input type="number" id="capgains-income" class="input" value="0" min="0" step="100">
                             </div>
-                            <p class="help-text">Securities, real estate gains, etc. Taxed at 28% flat rate (Category G). <strong>Note:</strong> If you have NHR 1.0 with foreign real estate gains, those are typically exempt - don't include them here.</p>
+                            <p class="help-text">Securities, real estate gains, crypto gains, etc. Taxed at 28% flat rate. <strong>Note:</strong> If you have NHR 1.0 with foreign real estate gains, those are typically exempt - don't include them here.</p>
                         </div>
-                        <p class="help-text" style="margin-top: var(--space-3); padding: var(--space-3); background: var(--color-background); border-left: 3px solid var(--color-primary);">
-                            <strong>Other income calculation:</strong> Dividends and capital gains are added to your total net income after applying the 28% flat tax rate. This is separate from your Category B professional income calculations above.
+                        
+                        <p class="help-text" style="margin-top: var(--space-3); padding: var(--space-3); background: var(--color-background); border-left: 3px solid var(--color-success);">
+                            <strong>✓ Why this doesn't affect the comparison:</strong> Investment income flows to your personal tax return in both structures. A transparent LLC only passes through Category B professional services income. Your IBKR account, crypto, ETFs stay personal regardless of structure choice.
                         </p>
                     </details>
                     
