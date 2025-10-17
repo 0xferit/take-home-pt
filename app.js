@@ -66,7 +66,7 @@ const formatSolidarityTaxBreakdown = (taxableIncome, totalSolidarityTax) => {
 const DEFAULTS = {
     softwareIncome: 170000,
     tradingIncome: 25000,
-    bizExpenses: 25000,
+    bizExpensesPercent: 0.05, // 5% of gross income
     tradingRate: 0.28,
     simplifiedDeemed: 0.25,
 };
@@ -83,6 +83,7 @@ const appState = {
     activityCode: '',
     grossIncome: 0,
     expenses: {},
+    expensesUserModified: false, // Track if user manually set business expenses
     isFirstYearSSExempt: false,
     isFirstYearIRS50pct: false,
     irsJovemEnabled: false,
@@ -121,8 +122,14 @@ function initApp() {
     updateFreelancerTitle();
     const baseField = document.getElementById('total-business-expenses');
     if (baseField) {
-        const baseValue = Math.max(0, parseFloat(baseField.value) || DEFAULTS.bizExpenses);
-        appState.expenses['total-business-expenses'] = baseValue;
+        // Initialize to 5% of gross income if empty/zero
+        const fieldValue = parseFloat(baseField.value) || 0;
+        const autoValue = appState.grossIncome * DEFAULTS.bizExpensesPercent;
+        appState.expenses['total-business-expenses'] = fieldValue > 0 ? fieldValue : autoValue;
+        // Update field to show calculated value
+        if (fieldValue === 0 && autoValue > 0) {
+            baseField.value = Math.round(autoValue);
+        }
     }
     // Initialize admin expense fields with their default values
     const adminFreelancerField = document.getElementById('admin-freelancer');
@@ -413,7 +420,22 @@ function setupEventListeners() {
             const value = Math.max(0, parseFloat(event.target.value) || 0);
             event.target.value = value;
             appState[key] = value;
-            updateInsuranceDisplay(); // Update insurance when income changes
+            
+            if (id === 'gross-income') {
+                updateInsuranceDisplay(); // Update insurance when income changes
+                checkSimplifiedRegimeLimit(); // Check €200k limit
+                
+                // Auto-update business expenses to 5% if user hasn't manually set them
+                if (!appState.expensesUserModified) {
+                    const baseExpensesField = document.getElementById('total-business-expenses');
+                    if (baseExpensesField) {
+                        const autoValue = Math.round(value * DEFAULTS.bizExpensesPercent);
+                        baseExpensesField.value = autoValue;
+                        appState.expenses['total-business-expenses'] = autoValue;
+                    }
+                }
+            }
+            
             updateExpenseTotal();
             recalc();
         });
@@ -424,6 +446,12 @@ function setupEventListeners() {
             const value = Math.max(0, parseFloat(event.target.value) || 0);
             event.target.value = value;
             appState.expenses[event.target.id] = value;
+            
+            // Mark that user has manually set business expenses
+            if (event.target.id === 'total-business-expenses') {
+                appState.expensesUserModified = true;
+            }
+            
             updateExpenseTotal();
             recalc();
         });
@@ -1319,7 +1347,7 @@ function populateAssumptions() {
     setText('assumption-ss-max', `${formatCurrency(ssMax)} per month (max contribution)`);
     setText('assumption-admin-freelancer', formatCurrency(SUGGESTED_ADMIN.freelancer));
     setText('assumption-admin-transparency', formatCurrency(SUGGESTED_ADMIN.transparent));
-    setText('assumption-biz-expenses', formatCurrency(DEFAULTS.bizExpenses));
+    setText('assumption-biz-expenses', `${(DEFAULTS.bizExpensesPercent * 100).toFixed(0)}% of gross income`);
 }
 
 function populateAppVersion() {

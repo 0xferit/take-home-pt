@@ -9,7 +9,7 @@
 
   const INSURANCE_DATA = {
     // Professional liability insurance risk tiers (ROUGH ESTIMATES ONLY)
-    // These are guessetimates based on industry averages and typical Portugal market rates
+    // These are guesstimates based on industry averages and typical Portugal market rates
     // Actual quotes may vary significantly (±20-40%) depending on insurer and specific circumstances
     riskTiers: {
       low: {
@@ -409,7 +409,7 @@
   }
 
   /**
-   * GUESSETIMATE professional liability insurance premium (NOT a precise calculation)
+   * GUESSTIMATE professional liability insurance premium (NOT a precise calculation)
    * This is a rough estimation based on industry averages and typical market rates.
    * Actual premiums can vary by ±20-40% depending on insurer, specific profession details,
    * claims history, and market conditions.
@@ -425,7 +425,7 @@
    * @param {string} params.claimsHistory - 'clean', 'minor', 'major'
    * @param {number} params.yearsInBusiness - Years in business (3+ gets discount)
    * @param {number} params.coverageLimit - Requested coverage limit (default: €2M)
-   * @returns {Object} Premium guessetimate with breakdown
+   * @returns {Object} Premium guesstimate with breakdown
    */
   function calculateInsurancePremium({
     revenue = 0,
@@ -517,7 +517,7 @@
     // 4. Sanity check: Premium should be 0.3% - 3% of revenue
     const premiumPercentage = income > 0 ? (adjustedPremium / income) * 100 : 0;
     const warning = premiumPercentage < 0.3 || premiumPercentage > 3.0
-      ? `GUESSETIMATE: ${premiumPercentage.toFixed(2)}% of revenue (typical range 0.3%-3%). Get actual quotes for accuracy.`
+      ? `GUESSTIMATE: ${premiumPercentage.toFixed(2)}% of revenue (typical range 0.3%-3%). Get actual quotes for accuracy.`
       : null;
     
     return {
@@ -548,7 +548,7 @@
     return calculateInsurancePremium({
       revenue,
       activityProfile,
-      // Use conservative defaults for guessetimate
+      // Use conservative defaults for guesstimate
       usaCoverage: false,
       claimsHistory: 'clean',
       yearsInBusiness: 3,
