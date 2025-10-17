@@ -82,8 +82,6 @@ const appState = {
     activityProfile: ACTIVITY_DEFAULT,
     activityCode: '',
     grossIncome: 0,
-    divintIncome: 0,
-    capgainsIncome: 0,
     expenses: {},
     isFirstYearSSExempt: false,
     isFirstYearIRS50pct: false,
@@ -401,19 +399,12 @@ function setupEventListeners() {
 
     const incomeMap = {
         'gross-income': 'grossIncome',
-        'divint-income': 'divintIncome',
-        'capgains-income': 'capgainsIncome',
     };
 
     const grossField = document.getElementById('gross-income');
     if (grossField) {
         const initial = Math.max(0, parseFloat(grossField.value) || 0);
         appState.grossIncome = initial;
-    }
-    const capField = document.getElementById('capgains-income');
-    if (capField) {
-        const initial = Math.max(0, parseFloat(capField.value) || 0);
-        appState.capgainsIncome = initial;
     }
     Object.entries(incomeMap).forEach(([id, key]) => {
         const field = document.getElementById(id);
@@ -968,9 +959,7 @@ function calculateAndUpdate() {
 }
 
 function updateResultsDisplayDual(simplified, transparent) {
-    const otherIncome = (appState.divintIncome || 0) + (appState.capgainsIncome || 0);
-    const otherTax = otherIncome * 0.28;
-    const otherNet = Math.max(0, otherIncome - otherTax);
+    // Investment income excluded - taxed identically in both structures (28% flat)
 
     setText('simp-gross', formatCurrency(appState.grossIncome));
     const coefficientPercent = (simplified.coefficient * 100).toFixed(1).replace(/\.0$/, '');
@@ -985,12 +974,9 @@ function updateResultsDisplayDual(simplified, transparent) {
     setText('simp-taxable', formatCurrency(simplified.taxableIncome));
     setText('simp-irs', formatCurrency(simplified.incomeTax));
     setText('simp-ss', formatCurrency(simplified.socialSecurity));
-    setText('simp-other-tax', formatCurrency(otherTax));
-    const simpTotalTaxes = simplified.incomeTax + simplified.socialSecurity + otherTax;
+    const simpTotalTaxes = simplified.incomeTax + simplified.socialSecurity;
     setText('simp-total-taxes', formatCurrency(simpTotalTaxes));
-    setText('simp-net', formatCurrency(simplified.netIncome));
-    setText('simp-other-net', formatCurrency(otherNet));
-    setText('simp-total-net', formatCurrency(simplified.netIncome + otherNet));
+    setText('simp-total-net', formatCurrency(simplified.netIncome));
 
     setText('org-gross', formatCurrency(appState.grossIncome));
     setText('org-expenses-base', formatCurrency(transparent.baseExpenses || 0));
@@ -1003,12 +989,9 @@ function updateResultsDisplayDual(simplified, transparent) {
     setText('org-taxable', formatCurrency(transparent.taxableIncome));
     setText('org-irs', formatCurrency(transparent.incomeTax));
     setText('org-ss', formatCurrency(transparent.socialSecurity));
-    setText('org-other-tax', formatCurrency(otherTax));
-    const orgTotalTaxes = transparent.incomeTax + transparent.socialSecurity + otherTax;
+    const orgTotalTaxes = transparent.incomeTax + transparent.socialSecurity;
     setText('org-total-taxes', formatCurrency(orgTotalTaxes));
-    setText('org-net', formatCurrency(transparent.netIncome));
-    setText('org-other-net', formatCurrency(otherNet));
-    setText('org-total-net', formatCurrency(transparent.netIncome + otherNet));
+    setText('org-total-net', formatCurrency(transparent.netIncome));
 
     const simpSSNote = document.getElementById('simp-ss-note');
     const orgSSNote = document.getElementById('org-ss-note');
@@ -1039,15 +1022,15 @@ function updateResultsDisplayDual(simplified, transparent) {
         }
     }
 
-    const simpTotalTax = simplified.incomeTax + simplified.socialSecurity + otherTax;
-    const orgTotalTax = transparent.incomeTax + transparent.socialSecurity + otherTax;
+    const simpTotalTax = simplified.incomeTax + simplified.socialSecurity;
+    const orgTotalTax = transparent.incomeTax + transparent.socialSecurity;
     const simpTakeHome = appState.grossIncome > 0 ? (simplified.netIncome / appState.grossIncome) * 100 : 0;
     const orgTakeHome = appState.grossIncome > 0 ? (transparent.netIncome / appState.grossIncome) * 100 : 0;
     setText('simp-effective', formatPercent(simpTakeHome));
     setText('org-effective', formatPercent(orgTakeHome));
 
-    const summaryNetSimp = simplified.netIncome + otherNet;
-    const summaryNetOrg = transparent.netIncome + otherNet;
+    const summaryNetSimp = simplified.netIncome;
+    const summaryNetOrg = transparent.netIncome;
     const netDiff = summaryNetOrg - summaryNetSimp;
     const costDiff = transparent.totalExpenses - simplified.totalExpenses;
     const taxDiff = orgTotalTax - simpTotalTax;
@@ -1421,16 +1404,12 @@ function updateNHROptions() {
 
 function updateSanityChecks() {
     const messages = [];
-    const softwareIncome = appState.grossIncome;
-    const tradingIncome = appState.capgainsIncome;
-    const totals = softwareIncome + tradingIncome;
+    const categoryBIncome = appState.grossIncome;
 
-    if (!Number.isFinite(softwareIncome)) messages.push('Software income is not a number.');
-    if (!Number.isFinite(tradingIncome)) messages.push('Trading income is not a number.');
-    if (totals <= 0) messages.push('Gross income is zero.');
-    if (softwareIncome < 0) messages.push('Software income cannot be negative.');
-    if (tradingIncome < 0) messages.push('Trading income cannot be negative.');
-    if (softwareIncome > 200000) messages.push('Category B income exceeds €200k; simplified regime assumptions may not hold. Results are indicative only.');
+    if (!Number.isFinite(categoryBIncome)) messages.push('Professional income is not a number.');
+    if (categoryBIncome <= 0) messages.push('Gross income is zero.');
+    if (categoryBIncome < 0) messages.push('Professional income cannot be negative.');
+    if (categoryBIncome > 200000) messages.push('Category B income exceeds €200k; simplified regime assumptions may not hold. Results are indicative only.');
     if (appState.activityCode && appState.activityCode.length === 5 && !isActivityCodeKnown(appState.activityCode)) {
         messages.push('Entered CAE code not found in the current mapping. Please confirm the coefficient manually.');
     }
@@ -1585,7 +1564,7 @@ function saveScenario() {
 }
 
 function hasAnyUserInput() {
-    return appState.grossIncome > 0 || appState.divintIncome > 0 || appState.capgainsIncome > 0;
+    return appState.grossIncome > 0;
 }
 
 function updateResultsVisibility() {

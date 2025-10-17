@@ -215,44 +215,6 @@
                         <p class="help-text">Your total business income before expenses (Category B).</p>
                     </div>
 
-                    <details class="details">
-                        <summary>Other income sources (optional)</summary>
-                        
-                        <div class="disclaimer-box" style="margin-bottom: var(--space-4);">
-                            <h4>⚠️ Investment Income Does NOT Affect Structure Comparison</h4>
-                            <p><strong>Investment income (dividends, capital gains, interest) is taxed identically whether you're a freelancer or have an LLC.</strong></p>
-                            <ul class="info-list">
-                                <li>Category E (dividends, interest): 28% flat rate — same in both structures</li>
-                                <li>Category G (capital gains): 28% flat rate — same in both structures</li>
-                                <li>Received at personal level in both cases (not through LLC)</li>
-                                <li><strong>These cancel out in the comparison — include for total income visibility only</strong></li>
-                            </ul>
-                            <p style="margin-top: var(--space-2);"><strong>This calculator compares Category B professional services taxation only.</strong> Investment income treatment is identical regardless of structure choice.</p>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="divint-income">Dividends & Interest Income (Category E)</label>
-                            <div class="input-group">
-                                <span class="input-group__prefix">€</span>
-                                <input type="number" id="divint-income" class="input" value="0" min="0" step="100">
-                            </div>
-                            <p class="help-text">Portuguese bank interest, dividends, etc. Taxed at 28% flat rate. <strong>Note:</strong> If you have NHR 1.0 with foreign dividends/interest, those are typically exempt - don't include them here.</p>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="capgains-income">Capital Gains Income (Category G)</label>
-                            <div class="input-group">
-                                <span class="input-group__prefix">€</span>
-                                <input type="number" id="capgains-income" class="input" value="0" min="0" step="100">
-                            </div>
-                            <p class="help-text">Securities, real estate gains, crypto gains, etc. Taxed at 28% flat rate. <strong>Note:</strong> If you have NHR 1.0 with foreign real estate gains, those are typically exempt - don't include them here.</p>
-                        </div>
-                        
-                        <p class="help-text" style="margin-top: var(--space-3); padding: var(--space-3); background: var(--color-background); border-left: 3px solid var(--color-success);">
-                            <strong>✓ Why this doesn't affect the comparison:</strong> Investment income flows to your personal tax return in both structures. A transparent LLC only passes through Category B professional services income. Your IBKR account, crypto, ETFs stay personal regardless of structure choice.
-                        </p>
-                    </details>
-                    
                     <div style="margin-top: var(--space-6); padding-top: var(--space-4); border-top: 1px solid var(--color-border); display: flex; justify-content: flex-end;">
                         <button class="btn btn--primary" data-tab-target="expenses" style="display: inline-flex; align-items: center; gap: var(--space-2);">
                             Continue to Expenses
@@ -629,9 +591,6 @@
                                     <dt style="padding-left: var(--space-3);">Social Security</dt>
                                     <dd id="simp-ss">€0.00</dd>
                                     
-                                    <dt style="padding-left: var(--space-3);">Other income tax (28%)</dt>
-                                    <dd id="simp-other-tax">€0.00</dd>
-                                    
                                     <dt style="padding-left: var(--space-3); font-weight: 600; background: var(--bg-elevated); padding-right: 0.5rem;">= Total taxes</dt>
                                     <dd id="simp-total-taxes" style="font-weight: 600; background: var(--bg-elevated); padding-left: 0.5rem;">€0.00</dd>
                                     
@@ -639,13 +598,7 @@
                                     <dt style="font-weight: 700; color: var(--color-success); margin-top: var(--space-4); padding-top: var(--space-3); border-top: 2px solid var(--color-border);">💵 Net Income</dt>
                                     <dd></dd>
                                     
-                                    <dt style="padding-left: var(--space-3);">Net Category B income</dt>
-                                    <dd id="simp-net">€0.00</dd>
-                                    
-                                    <dt style="padding-left: var(--space-3);">Other income (net)</dt>
-                                    <dd id="simp-other-net">€0.00</dd>
-                                    
-                                    <dt class="data-list__total">= TOTAL NET INCOME</dt>
+                                    <dt class="data-list__total">NET CATEGORY B INCOME</dt>
                                     <dd class="data-list__total" id="simp-total-net">€0.00</dd>
                                 </dl>
                                 <p id="simp-ss-note" class="help-text"></p>
@@ -696,9 +649,6 @@
                                     <dt style="padding-left: var(--space-3);">Social Security</dt>
                                     <dd id="org-ss">€0.00</dd>
                                     
-                                    <dt style="padding-left: var(--space-3);">Other income tax (28%)</dt>
-                                    <dd id="org-other-tax">€0.00</dd>
-                                    
                                     <dt style="padding-left: var(--space-3); font-weight: 600; background: var(--bg-elevated); padding-right: 0.5rem;">= Total taxes</dt>
                                     <dd id="org-total-taxes" style="font-weight: 600; background: var(--bg-elevated); padding-left: 0.5rem;">€0.00</dd>
                                     
@@ -706,13 +656,7 @@
                                     <dt style="font-weight: 700; color: var(--color-success); margin-top: var(--space-4); padding-top: var(--space-3); border-top: 2px solid var(--color-border);">💵 Net Income</dt>
                                     <dd></dd>
                                     
-                                    <dt style="padding-left: var(--space-3);">Net Category B income</dt>
-                                    <dd id="org-net">€0.00</dd>
-                                    
-                                    <dt style="padding-left: var(--space-3);">Other income (net)</dt>
-                                    <dd id="org-other-net">€0.00</dd>
-                                    
-                                    <dt class="data-list__total">= TOTAL NET INCOME</dt>
+                                    <dt class="data-list__total">NET CATEGORY B INCOME</dt>
                                     <dd class="data-list__total" id="org-total-net">€0.00</dd>
                                 </dl>
                                 <p id="org-ss-note" class="help-text"></p>
@@ -840,6 +784,35 @@
                                 </tbody>
                             </table>
                             <p class="help-text"><strong>Source:</strong> <a href="https://dre.pt/web/guest/legislacao-consolidada/-/lc/108398988/diploma?did=150747299" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">Lei n.º 24-D/2024 (Orçamento do Estado 2025)</a> - IRS tax brackets updated annually by State Budget law</p>
+                        </div>
+
+                        <!-- Calculator Scope -->
+                        <div class="methodology-section">
+                            <h3>Calculator Scope: Category B Professional Services Only</h3>
+                            <div class="disclaimer-box">
+                                <h4>✓ Why Investment Income Is Excluded from This Comparison</h4>
+                                <p><strong>This calculator compares ONLY Category B professional services taxation.</strong> Investment income (dividends, capital gains, interest) is excluded because it's taxed identically regardless of structure choice:</p>
+                                <ul class="info-list">
+                                    <li><strong>Category E (dividends, interest):</strong> 28% flat rate — same whether you're a freelancer or have an LLC</li>
+                                    <li><strong>Category G (capital gains):</strong> 28% flat rate — same in both structures</li>
+                                    <li><strong>Received at personal level:</strong> Investment accounts (IBKR, crypto, ETFs) held personally in both cases</li>
+                                    <li><strong>Not passed through LLC:</strong> Transparent LLCs only pass through Category B professional services income</li>
+                                </ul>
+                                <p style="margin-top: var(--space-2);"><strong>The Math:</strong></p>
+                                <pre style="background: #f5f5f5; padding: var(--space-3); border-radius: var(--radius); font-family: monospace; font-size: 0.9rem;">
+Freelancer net = (Cat B services - taxes) + (Investments - 28%)
+LLC net        = (Cat B services - taxes) + (Investments - 28%)
+                                              ^^^^^^^^^^^^^^^^^^
+                                              IDENTICAL → CANCELS OUT</pre>
+                                <p style="margin-top: var(--space-2);"><strong>Legal Reality:</strong> <em>Sociedades de profissionais</em> (professional partnerships) are formed to perform "intellectual, scientific, artistic, or technical services." Holding investment portfolios isn't part of their statutory purpose. If an LLC received investment income, it would flow through as Category B (taxed up to 48%) instead of the beneficial 28% flat rate for personal investment income.</p>
+                                <p style="margin-top: var(--space-2);"><strong>Practical Structure:</strong></p>
+                                <ul class="info-list">
+                                    <li><strong>LLC:</strong> Invoices clients, receives service payments (Category B flow-through)</li>
+                                    <li><strong>Personal:</strong> Holds investment accounts, receives dividends/gains (Category E/G at 28%)</li>
+                                </ul>
+                                <p style="margin-top: var(--space-2);"><strong>Conclusion:</strong> This calculator focuses on the <strong>differential impact</strong> where structure choice actually matters (Category B taxation). Including investment income would add complexity without changing the comparison outcome.</p>
+                            </div>
+                            <p class="help-text"><strong>Sources:</strong> <a href="https://rauva.com/blog/fiscal-transparency" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">Rauva - Transparência Fiscal</a> | <a href="https://www.sociedadescomerciais.pt/sociedades-de-profissionais/" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">Sociedades de Profissionais</a> | <a href="https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/cirs_rep/" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">CIRS (Portuguese Income Tax Code)</a></p>
                         </div>
 
                         <!-- Simplified Regime Limit -->
