@@ -1,167 +1,43 @@
+// ============================================================================
+// BUSINESS LOGIC LAYER - TakeHomePT Calculator
+// ============================================================================
+//
+// PURPOSE: Pure calculation functions for Portuguese tax and business structures.
+//          NO data definitions here - all data comes from data.js
+//
+// SEPARATION OF CONCERNS:
+//   - Data definitions: data.js
+//   - Business logic: logic.js (this file)
+//   - UI presentation: app.js
+//
+// DEPENDENCIES:
+//   - Requires data.js to be loaded first
+//   - Exposes window.TakeHomeLogic for app.js
+//
+// ============================================================================
+
 // Pure business logic for TakeHomePT — exposed via window.TakeHomeLogic
 (function (global) {
-  const SUGGESTED_ADMIN = {
-    // Annual admin/compliance midpoints (EUR)
-    freelancer: 800, // simplified regime typical support
-    freelancer_organized: 3000, // organized accounting with TOC
-    transparent: 4800, // LDA ongoing accounting/compliance
-  };
+  'use strict';
 
-  const INSURANCE_DATA = {
-    // Professional liability insurance risk tiers (ROUGH ESTIMATES ONLY)
-    // These are guesstimates based on industry averages and typical Portugal market rates
-    // Actual quotes may vary significantly (±20-40%) depending on insurer and specific circumstances
-    riskTiers: {
-      low: {
-        id: 'low',
-        label: 'Low Risk',
-        description: 'Designers, writers, content creators',
-        baseRate: 280,
-        variableRate: 0.0028,
-        riskMultiplier: 0.8,
-      },
-      medium: {
-        id: 'medium',
-        label: 'Medium Risk',
-        description: 'IT consultants, developers, business consultants',
-        baseRate: 360,
-        variableRate: 0.0036,
-        riskMultiplier: 1.0,
-      },
-      high: {
-        id: 'high',
-        label: 'High Risk',
-        description: 'Fintech, healthcare tech, financial advisors',
-        baseRate: 640,
-        variableRate: 0.0064,
-        riskMultiplier: 1.8,
-      },
-    },
-    // Portugal market adjustment (12% cheaper than EU average)
-    portugalDiscount: 0.88,
-    // Economies of scale for larger businesses
-    economiesOfScale: {
-      tier1Threshold: 150000,
-      tier1Multiplier: 0.95,
-      tier2Threshold: 300000,
-      tier2Multiplier: 0.90,
-    },
-    // Activity code to risk tier mapping
-    activityRiskMap: {
-      // IT & Software (Medium Risk)
-      '62010': 'medium', // Computer programming
-      '62020': 'medium', // Computer consultancy
-      '62030': 'medium', // Computer facilities management
-      '62090': 'medium', // Other IT services
-      '63110': 'medium', // Data processing, hosting
-      '63120': 'medium', // Web portals
-      '63990': 'medium', // Other information services
-      
-      // Design & Creative (Low Risk)
-      '74100': 'low',   // Specialised design activities
-      '74200': 'low',   // Photographic activities
-      '73110': 'low',   // Advertising agencies
-      '90010': 'low',   // Performing arts
-      '90020': 'low',   // Support activities to performing arts
-      
-      // Business Consulting (Medium Risk)
-      '70220': 'medium', // Business consultancy
-      '73200': 'medium', // Market research
-      '71110': 'medium', // Architectural activities
-      '71120': 'medium', // Engineering activities
-      
-      // Finance & Healthcare (High Risk)
-      '69200': 'high',  // Accounting, auditing
-      '69102': 'high',  // Legal activities
-      '86230': 'high',  // Dental practice
-      '86900': 'high',  // Other human health activities
-      '64190': 'high',  // Other monetary intermediation
-      '64920': 'high',  // Other credit granting
-      '66190': 'high',  // Other financial service activities
-      '66220': 'high',  // Insurance agents and brokers
-    },
-    adjustmentFactors: {
-      usaCoverage: 1.35,           // +35% for USA/Canada coverage
-      minorClaims: 1.15,           // +15% for minor claims history
-      majorClaims: 1.40,           // +40% for major claims history
-      experienceDiscount: 0.90,    // -10% for 3+ years clean record
-    },
-    // Standard coverage limit (can be adjusted)
-    standardCoverage: 2000000, // €2M coverage
-  };
+  // ============================================================================
+  // DATA ACCESS LAYER
+  // ============================================================================
+  // Import data from window.TakeHomeData (loaded via data.js)
+  // Error handling ensures graceful failure if data.js not loaded
 
-  const TAX_DATA = {
-    // Sources: 2025 IRS tables (Orçamento do Estado 2025) and Segurança Social guidance.
-    taxBrackets2025: [
-      { max: 8059, rate: 0.13 },
-      { max: 12160, rate: 0.165 },
-      { max: 17233, rate: 0.22 },
-      { max: 22306, rate: 0.25 },
-      { max: 28400, rate: 0.32 },
-      { max: 41629, rate: 0.355 },
-      { max: 44987, rate: 0.435 },
-      { max: 83696, rate: 0.45 },
-      { max: Infinity, rate: 0.48 }
-    ],
-    nhrRates: {
-      original_nhr: 0.20,
-      nhr_2_ifici: 0.20,
-      standard: 'progressive'
-    },
-    activityProfiles: {
-      services_general: {
-        id: 'services_general',
-        label: 'General professional services',
-        coefficient: 0.35,
-        description: 'Applies to Category B services outside the high added value list. 35% of gross income remains taxable (65% deemed expenses).',
-      },
-      services_high_value: {
-        id: 'services_high_value',
-        label: 'High-value professions (Article 151)',
-        coefficient: 0.75,
-        description: 'Professional services listed in Article 151 (CIRS). 75% of gross income remains taxable (25% deemed expenses).',
-      },
-    },
-    highValueServiceCodes: [
-      '62010', '62020', '62030', '62090', '63110', '63120', '63990',
-      '70220', '71110', '71120', '71200', '72110', '72200', '73110',
-      '73200', '74100', '74900'
-    ],
-    coreServiceCodes: [
-      '69200', '69102', '69109', '86230', '86900', '74200', '73120',
-      '74909', '70210', '70220', '62020'
-    ],
-    activityCatalog: [
-      { code: '62010', label: 'Computer programming activities', profileId: 'services_high_value' },
-      { code: '62020', label: 'Computer consultancy activities', profileId: 'services_high_value' },
-      { code: '62030', label: 'Computer facilities management activities', profileId: 'services_high_value' },
-      { code: '62090', label: 'Other information technology and computer service activities', profileId: 'services_high_value' },
-      { code: '63110', label: 'Data processing, hosting and related activities', profileId: 'services_high_value' },
-      { code: '63120', label: 'Web portals', profileId: 'services_high_value' },
-      { code: '63990', label: 'Other information service activities', profileId: 'services_high_value' },
-      { code: '70220', label: 'Business and other management consultancy activities', profileId: 'services_high_value' },
-      { code: '73110', label: 'Advertising agencies', profileId: 'services_high_value' },
-      { code: '73200', label: 'Market research and public opinion polling', profileId: 'services_high_value' },
-      { code: '74100', label: 'Specialised design activities', profileId: 'services_high_value' },
-      { code: '74900', label: 'Other professional, scientific and technical activities', profileId: 'services_high_value' },
-      { code: '69200', label: 'Accounting, bookkeeping and auditing activities', profileId: 'services_general' },
-      { code: '69102', label: 'Legal activities', profileId: 'services_general' },
-      { code: '86900', label: 'Other human health activities', profileId: 'services_general' },
-      { code: '74200', label: 'Photographic activities', profileId: 'services_general' }
-    ],
-    socialSecurity: {
-      rate: 0.214,
-      relevantIncomeFactor: 0.70,
-      ias: 522.5,
-      maxBaseMultiplier: 12
-    },
-    personalDeductions: {
-      personalAllowanceMin: 4462.15, // 8.54 × IAS 2025 (522.5)
-      healthExpensesRate: 0.15,
-      healthExpensesMax: 1000,
-      dependentAllowance: 600
-    }
-  };
+  const DATA = global.TakeHomeData;
+  if (!DATA) {
+    console.error('FATAL: TakeHomeData not loaded. Ensure data.js loads before logic.js in index.html.');
+    console.error('Script load order should be: data.js → logic.js → app.js');
+    return; // Exit IIFE - cannot continue without data
+  }
+
+  console.log('✅ Logic layer initialized with data from TakeHomeData');
+
+  // ============================================================================
+  // UTILITY FUNCTIONS
+  // ============================================================================
 
   function sanitizeAmount(value) {
     return Math.max(0, Number(value) || 0);
@@ -177,13 +53,13 @@
   function getActivityProfileForCode(code) {
     const normalized = normalizeActivityCode(code);
     if (!normalized || normalized.length < 5) return null;
-    const catalogEntry = TAX_DATA.activityCatalog.find((entry) => entry.code === normalized);
-    if (catalogEntry) return TAX_DATA.activityProfiles[catalogEntry.profileId] || null;
-    if (TAX_DATA.highValueServiceCodes.includes(normalized)) {
-      return TAX_DATA.activityProfiles.services_high_value;
+    const catalogEntry = DATA.REGULATORY_DATA.ACTIVITY_CATALOG.find((entry) => entry.code === normalized);
+    if (catalogEntry) return DATA.REGULATORY_DATA.ACTIVITY_PROFILES[catalogEntry.profileId] || null;
+    if (DATA.REGULATORY_DATA.HIGH_VALUE_SERVICE_CODES.includes(normalized)) {
+      return DATA.REGULATORY_DATA.ACTIVITY_PROFILES.services_high_value;
     }
-    if (TAX_DATA.coreServiceCodes.includes(normalized)) {
-      return TAX_DATA.activityProfiles.services_general;
+    if (DATA.REGULATORY_DATA.CORE_SERVICE_CODES.includes(normalized)) {
+      return DATA.REGULATORY_DATA.ACTIVITY_PROFILES.services_general;
     }
     return null;
   }
@@ -197,14 +73,14 @@
   function isNHREligibleCode(code) {
     const normalized = normalizeActivityCode(code);
     if (!normalized || normalized.length < 5) return false;
-    return TAX_DATA.highValueServiceCodes.includes(normalized);
+    return DATA.REGULATORY_DATA.HIGH_VALUE_SERVICE_CODES.includes(normalized);
   }
 
   function computeProgressiveTax(taxableIncome) {
     const income = sanitizeAmount(taxableIncome);
     let tax = 0;
     let previousMax = 0;
-    for (const bracket of TAX_DATA.taxBrackets2025) {
+    for (const bracket of DATA.REGULATORY_DATA.TAX_BRACKETS_2025) {
       if (income <= previousMax) break;
       const taxableInThisBracket = Math.min(income, bracket.max) - previousMax;
       tax += taxableInThisBracket * bracket.rate;
@@ -219,7 +95,7 @@
     const breakdown = [];
     let totalTax = 0;
     let previousMax = 0;
-    for (const bracket of TAX_DATA.taxBrackets2025) {
+    for (const bracket of DATA.REGULATORY_DATA.TAX_BRACKETS_2025) {
       if (income <= previousMax) break;
       const upperBound = Math.min(income, bracket.max);
       const taxableInThisBracket = upperBound - previousMax;
@@ -262,7 +138,7 @@
     const income = sanitizeAmount(taxableIncome);
     const nhrRequested = nhrStatus === 'original_nhr' || nhrStatus === 'nhr_2_ifici';
     if (nhrRequested && isNHREligible) {
-      const rate = TAX_DATA.nhrRates[nhrStatus];
+      const rate = DATA.REGULATORY_DATA.NHR_RATES[nhrStatus];
       const baseIRS = income * rate;
       const solidarityTax = computeSolidarityTax(income);
       return {
@@ -306,10 +182,10 @@
       charitable = 0,
       retirement = 0
     } = personalDeductions;
-    const dependentAllowance = dependents * TAX_DATA.personalDeductions.dependentAllowance;
+    const dependentAllowance = dependents * DATA.REGULATORY_DATA.PERSONAL_DEDUCTIONS.dependentAllowance;
     const healthDeduction = Math.min(
-      sanitizeAmount(health) * TAX_DATA.personalDeductions.healthExpensesRate,
-      TAX_DATA.personalDeductions.healthExpensesMax
+      sanitizeAmount(health) * DATA.REGULATORY_DATA.PERSONAL_DEDUCTIONS.healthExpensesRate,
+      DATA.REGULATORY_DATA.PERSONAL_DEDUCTIONS.healthExpensesMax
     );
     return (
       dependentAllowance +
@@ -342,9 +218,9 @@
 
   function computeSSAnnual(grossIncome, { isFirstYearSSExempt } = {}) {
     const income = sanitizeAmount(grossIncome);
-    const rate = TAX_DATA.socialSecurity.rate;
-    const factor = TAX_DATA.socialSecurity.relevantIncomeFactor;
-    const maxMonthlyBase = TAX_DATA.socialSecurity.ias * TAX_DATA.socialSecurity.maxBaseMultiplier;
+    const rate = DATA.REGULATORY_DATA.SOCIAL_SECURITY.rate;
+    const factor = DATA.REGULATORY_DATA.SOCIAL_SECURITY.relevantIncomeFactor;
+    const maxMonthlyBase = DATA.REGULATORY_DATA.SOCIAL_SECURITY.ias * DATA.REGULATORY_DATA.SOCIAL_SECURITY.maxBaseMultiplier;
     if (isFirstYearSSExempt || income === 0) {
       return {
         annual: 0,
@@ -373,10 +249,10 @@
 
   function getMarginalTaxRate(taxableIncome) {
     const income = sanitizeAmount(taxableIncome);
-    for (const bracket of TAX_DATA.taxBrackets2025) {
+    for (const bracket of DATA.REGULATORY_DATA.TAX_BRACKETS_2025) {
       if (income <= bracket.max) return bracket.rate * 100;
     }
-    return TAX_DATA.taxBrackets2025[TAX_DATA.taxBrackets2025.length - 1].rate * 100;
+    return DATA.REGULATORY_DATA.TAX_BRACKETS_2025[DATA.REGULATORY_DATA.TAX_BRACKETS_2025.length - 1].rate * 100;
   }
 
   function getLiabilityInsurance(grossIncome = 0, rate = 0.01) {
@@ -393,8 +269,8 @@
     const normalized = normalizeActivityCode(activityCode);
     
     // First priority: Specific activity code mapping (for exceptions)
-    if (normalized && INSURANCE_DATA.activityRiskMap[normalized]) {
-      return INSURANCE_DATA.activityRiskMap[normalized];
+    if (normalized && DATA.INSURANCE_DATA.activityRiskMap[normalized]) {
+      return DATA.INSURANCE_DATA.activityRiskMap[normalized];
     }
     
     // Second priority: Derive from activity profile
@@ -435,7 +311,7 @@
     usaCoverage = false,
     claimsHistory = 'clean',
     yearsInBusiness = 3,
-    coverageLimit = INSURANCE_DATA.standardCoverage,
+    coverageLimit = DATA.INSURANCE_DATA.standardCoverage,
   } = {}) {
     const income = sanitizeAmount(revenue);
     
@@ -447,7 +323,7 @@
     
     // 1. Determine risk tier
     const riskTierId = riskTierOverride || getRiskTierForActivity(activityCode, activityProfile);
-    const riskTier = INSURANCE_DATA.riskTiers[riskTierId] || INSURANCE_DATA.riskTiers.medium;
+    const riskTier = DATA.INSURANCE_DATA.riskTiers[riskTierId] || DATA.INSURANCE_DATA.riskTiers.medium;
     
     // 2. Calculate base premium: (BaseRate + Revenue × VariableRate) × RiskMultiplier
     const basePremium = (riskTier.baseRate + income * riskTier.variableRate) * riskTier.riskMultiplier;
@@ -457,54 +333,54 @@
     const adjustments = [];
     
     // Portugal market discount
-    adjustedPremium *= INSURANCE_DATA.portugalDiscount;
+    adjustedPremium *= DATA.INSURANCE_DATA.portugalDiscount;
     adjustments.push({ 
       factor: 'Portugal market adjustment', 
-      multiplier: INSURANCE_DATA.portugalDiscount 
+      multiplier: DATA.INSURANCE_DATA.portugalDiscount 
     });
     
     // Economies of scale
-    if (income >= INSURANCE_DATA.economiesOfScale.tier2Threshold) {
-      adjustedPremium *= INSURANCE_DATA.economiesOfScale.tier2Multiplier;
+    if (income >= DATA.INSURANCE_DATA.economiesOfScale.tier2Threshold) {
+      adjustedPremium *= DATA.INSURANCE_DATA.economiesOfScale.tier2Multiplier;
       adjustments.push({ 
         factor: 'Economies of scale (>€300k)', 
-        multiplier: INSURANCE_DATA.economiesOfScale.tier2Multiplier 
+        multiplier: DATA.INSURANCE_DATA.economiesOfScale.tier2Multiplier 
       });
-    } else if (income >= INSURANCE_DATA.economiesOfScale.tier1Threshold) {
-      adjustedPremium *= INSURANCE_DATA.economiesOfScale.tier1Multiplier;
+    } else if (income >= DATA.INSURANCE_DATA.economiesOfScale.tier1Threshold) {
+      adjustedPremium *= DATA.INSURANCE_DATA.economiesOfScale.tier1Multiplier;
       adjustments.push({ 
         factor: 'Economies of scale (>€150k)', 
-        multiplier: INSURANCE_DATA.economiesOfScale.tier1Multiplier 
+        multiplier: DATA.INSURANCE_DATA.economiesOfScale.tier1Multiplier 
       });
     }
     
     // USA/Canada coverage (+35%)
     if (usaCoverage) {
-      const adjustment = INSURANCE_DATA.adjustmentFactors.usaCoverage;
+      const adjustment = DATA.INSURANCE_DATA.adjustmentFactors.usaCoverage;
       adjustedPremium *= adjustment;
       adjustments.push({ factor: 'USA/Canada coverage', multiplier: adjustment });
     }
     
     // Claims history
     if (claimsHistory === 'minor') {
-      const adjustment = INSURANCE_DATA.adjustmentFactors.minorClaims;
+      const adjustment = DATA.INSURANCE_DATA.adjustmentFactors.minorClaims;
       adjustedPremium *= adjustment;
       adjustments.push({ factor: 'Minor claims history', multiplier: adjustment });
     } else if (claimsHistory === 'major') {
-      const adjustment = INSURANCE_DATA.adjustmentFactors.majorClaims;
+      const adjustment = DATA.INSURANCE_DATA.adjustmentFactors.majorClaims;
       adjustedPremium *= adjustment;
       adjustments.push({ factor: 'Major claims history', multiplier: adjustment });
     }
     
     // Experience discount (3+ years with clean record)
     if (yearsInBusiness >= 3 && claimsHistory === 'clean') {
-      const adjustment = INSURANCE_DATA.adjustmentFactors.experienceDiscount;
+      const adjustment = DATA.INSURANCE_DATA.adjustmentFactors.experienceDiscount;
       adjustedPremium *= adjustment;
       adjustments.push({ factor: '3+ years clean record', multiplier: adjustment });
     }
     
     // Coverage limit adjustment (±40% × (requested/typical - 1))
-    const coverageRatio = coverageLimit / INSURANCE_DATA.standardCoverage;
+    const coverageRatio = coverageLimit / DATA.INSURANCE_DATA.standardCoverage;
     if (Math.abs(coverageRatio - 1.0) > 0.01) {
       const coverageAdjustment = 1 + 0.4 * (coverageRatio - 1);
       adjustedPremium *= coverageAdjustment;
@@ -758,7 +634,7 @@
     let incomeTax = irsAfterDeductions + solidarityTax;
     let socialSecurityInfo;
     if (useLLCManagerMinSS && !isFirstYearSSExempt) {
-      const monthlyBase = TAX_DATA.socialSecurity.ias; // 1× IAS as minimum manager base
+      const monthlyBase = DATA.REGULATORY_DATA.SOCIAL_SECURITY.ias; // 1× IAS as minimum manager base
       const employeeRate = 0.11;
       const employerRate = 0.2375;
       const monthlyEmployee = monthlyBase * employeeRate;
@@ -770,7 +646,7 @@
         monthlyEmployee,
         monthlyEmployer,
         monthlyBaseApplied: monthlyBase,
-        monthlyCap: TAX_DATA.socialSecurity.ias * TAX_DATA.socialSecurity.maxBaseMultiplier,
+        monthlyCap: DATA.REGULATORY_DATA.SOCIAL_SECURITY.ias * DATA.REGULATORY_DATA.SOCIAL_SECURITY.maxBaseMultiplier,
         capped: false,
         mode: 'llc_manager_min',
       };
@@ -797,10 +673,15 @@
     };
   }
 
+  // Export business logic functions (no data - data comes from DATA)
   global.TakeHomeLogic = {
-    TAX_DATA,
-    SUGGESTED_ADMIN,
-    INSURANCE_DATA,
+    // For backward compatibility, export data references
+    // App.js still expects these - they now point to DATA
+    TAX_DATA: DATA.REGULATORY_DATA,
+    SUGGESTED_ADMIN: DATA.ADMIN_COSTS,
+    INSURANCE_DATA: DATA.INSURANCE_DATA,
+    
+    // Pure calculation functions
     computeProgressiveTax,
     computeProgressiveTaxDetailed,
     computeIRSDetails,
