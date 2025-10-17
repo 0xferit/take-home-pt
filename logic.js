@@ -33,22 +33,6 @@
     return; // Exit IIFE - cannot continue without data
   }
 
-  // Create backward-compatible aliases for gradual migration
-  // These will be removed in Step 7 after all references are updated
-  const TAX_DATA = {
-    taxBrackets2025: DATA.REGULATORY_DATA.TAX_BRACKETS_2025,
-    nhrRates: DATA.REGULATORY_DATA.NHR_RATES,
-    activityProfiles: DATA.REGULATORY_DATA.ACTIVITY_PROFILES,
-    highValueServiceCodes: DATA.REGULATORY_DATA.HIGH_VALUE_SERVICE_CODES,
-    coreServiceCodes: DATA.REGULATORY_DATA.CORE_SERVICE_CODES,
-    activityCatalog: DATA.REGULATORY_DATA.ACTIVITY_CATALOG,
-    socialSecurity: DATA.REGULATORY_DATA.SOCIAL_SECURITY,
-    personalDeductions: DATA.REGULATORY_DATA.PERSONAL_DEDUCTIONS,
-  };
-
-  const INSURANCE_DATA = DATA.INSURANCE_DATA;
-  const SUGGESTED_ADMIN = DATA.ADMIN_COSTS;
-
   console.log('✅ Logic layer initialized with data from TakeHomeData');
 
   // ============================================================================
@@ -69,13 +53,13 @@
   function getActivityProfileForCode(code) {
     const normalized = normalizeActivityCode(code);
     if (!normalized || normalized.length < 5) return null;
-    const catalogEntry = TAX_DATA.activityCatalog.find((entry) => entry.code === normalized);
-    if (catalogEntry) return TAX_DATA.activityProfiles[catalogEntry.profileId] || null;
-    if (TAX_DATA.highValueServiceCodes.includes(normalized)) {
-      return TAX_DATA.activityProfiles.services_high_value;
+    const catalogEntry = DATA.REGULATORY_DATA.ACTIVITY_CATALOG.find((entry) => entry.code === normalized);
+    if (catalogEntry) return DATA.REGULATORY_DATA.ACTIVITY_PROFILES[catalogEntry.profileId] || null;
+    if (DATA.REGULATORY_DATA.HIGH_VALUE_SERVICE_CODES.includes(normalized)) {
+      return DATA.REGULATORY_DATA.ACTIVITY_PROFILES.services_high_value;
     }
-    if (TAX_DATA.coreServiceCodes.includes(normalized)) {
-      return TAX_DATA.activityProfiles.services_general;
+    if (DATA.REGULATORY_DATA.CORE_SERVICE_CODES.includes(normalized)) {
+      return DATA.REGULATORY_DATA.ACTIVITY_PROFILES.services_general;
     }
     return null;
   }
@@ -89,14 +73,14 @@
   function isNHREligibleCode(code) {
     const normalized = normalizeActivityCode(code);
     if (!normalized || normalized.length < 5) return false;
-    return TAX_DATA.highValueServiceCodes.includes(normalized);
+    return DATA.REGULATORY_DATA.HIGH_VALUE_SERVICE_CODES.includes(normalized);
   }
 
   function computeProgressiveTax(taxableIncome) {
     const income = sanitizeAmount(taxableIncome);
     let tax = 0;
     let previousMax = 0;
-    for (const bracket of TAX_DATA.taxBrackets2025) {
+    for (const bracket of DATA.REGULATORY_DATA.TAX_BRACKETS_2025) {
       if (income <= previousMax) break;
       const taxableInThisBracket = Math.min(income, bracket.max) - previousMax;
       tax += taxableInThisBracket * bracket.rate;
@@ -111,7 +95,7 @@
     const breakdown = [];
     let totalTax = 0;
     let previousMax = 0;
-    for (const bracket of TAX_DATA.taxBrackets2025) {
+    for (const bracket of DATA.REGULATORY_DATA.TAX_BRACKETS_2025) {
       if (income <= previousMax) break;
       const upperBound = Math.min(income, bracket.max);
       const taxableInThisBracket = upperBound - previousMax;
@@ -154,7 +138,7 @@
     const income = sanitizeAmount(taxableIncome);
     const nhrRequested = nhrStatus === 'original_nhr' || nhrStatus === 'nhr_2_ifici';
     if (nhrRequested && isNHREligible) {
-      const rate = TAX_DATA.nhrRates[nhrStatus];
+      const rate = DATA.REGULATORY_DATA.NHR_RATES[nhrStatus];
       const baseIRS = income * rate;
       const solidarityTax = computeSolidarityTax(income);
       return {
@@ -198,10 +182,10 @@
       charitable = 0,
       retirement = 0
     } = personalDeductions;
-    const dependentAllowance = dependents * TAX_DATA.personalDeductions.dependentAllowance;
+    const dependentAllowance = dependents * DATA.REGULATORY_DATA.PERSONAL_DEDUCTIONS.dependentAllowance;
     const healthDeduction = Math.min(
-      sanitizeAmount(health) * TAX_DATA.personalDeductions.healthExpensesRate,
-      TAX_DATA.personalDeductions.healthExpensesMax
+      sanitizeAmount(health) * DATA.REGULATORY_DATA.PERSONAL_DEDUCTIONS.healthExpensesRate,
+      DATA.REGULATORY_DATA.PERSONAL_DEDUCTIONS.healthExpensesMax
     );
     return (
       dependentAllowance +
@@ -234,9 +218,9 @@
 
   function computeSSAnnual(grossIncome, { isFirstYearSSExempt } = {}) {
     const income = sanitizeAmount(grossIncome);
-    const rate = TAX_DATA.socialSecurity.rate;
-    const factor = TAX_DATA.socialSecurity.relevantIncomeFactor;
-    const maxMonthlyBase = TAX_DATA.socialSecurity.ias * TAX_DATA.socialSecurity.maxBaseMultiplier;
+    const rate = DATA.REGULATORY_DATA.SOCIAL_SECURITY.rate;
+    const factor = DATA.REGULATORY_DATA.SOCIAL_SECURITY.relevantIncomeFactor;
+    const maxMonthlyBase = DATA.REGULATORY_DATA.SOCIAL_SECURITY.ias * DATA.REGULATORY_DATA.SOCIAL_SECURITY.maxBaseMultiplier;
     if (isFirstYearSSExempt || income === 0) {
       return {
         annual: 0,
@@ -265,10 +249,10 @@
 
   function getMarginalTaxRate(taxableIncome) {
     const income = sanitizeAmount(taxableIncome);
-    for (const bracket of TAX_DATA.taxBrackets2025) {
+    for (const bracket of DATA.REGULATORY_DATA.TAX_BRACKETS_2025) {
       if (income <= bracket.max) return bracket.rate * 100;
     }
-    return TAX_DATA.taxBrackets2025[TAX_DATA.taxBrackets2025.length - 1].rate * 100;
+    return DATA.REGULATORY_DATA.TAX_BRACKETS_2025[DATA.REGULATORY_DATA.TAX_BRACKETS_2025.length - 1].rate * 100;
   }
 
   function getLiabilityInsurance(grossIncome = 0, rate = 0.01) {
@@ -285,8 +269,8 @@
     const normalized = normalizeActivityCode(activityCode);
     
     // First priority: Specific activity code mapping (for exceptions)
-    if (normalized && INSURANCE_DATA.activityRiskMap[normalized]) {
-      return INSURANCE_DATA.activityRiskMap[normalized];
+    if (normalized && DATA.INSURANCE_DATA.activityRiskMap[normalized]) {
+      return DATA.INSURANCE_DATA.activityRiskMap[normalized];
     }
     
     // Second priority: Derive from activity profile
@@ -327,7 +311,7 @@
     usaCoverage = false,
     claimsHistory = 'clean',
     yearsInBusiness = 3,
-    coverageLimit = INSURANCE_DATA.standardCoverage,
+    coverageLimit = DATA.INSURANCE_DATA.standardCoverage,
   } = {}) {
     const income = sanitizeAmount(revenue);
     
@@ -339,7 +323,7 @@
     
     // 1. Determine risk tier
     const riskTierId = riskTierOverride || getRiskTierForActivity(activityCode, activityProfile);
-    const riskTier = INSURANCE_DATA.riskTiers[riskTierId] || INSURANCE_DATA.riskTiers.medium;
+    const riskTier = DATA.INSURANCE_DATA.riskTiers[riskTierId] || DATA.INSURANCE_DATA.riskTiers.medium;
     
     // 2. Calculate base premium: (BaseRate + Revenue × VariableRate) × RiskMultiplier
     const basePremium = (riskTier.baseRate + income * riskTier.variableRate) * riskTier.riskMultiplier;
@@ -349,54 +333,54 @@
     const adjustments = [];
     
     // Portugal market discount
-    adjustedPremium *= INSURANCE_DATA.portugalDiscount;
+    adjustedPremium *= DATA.INSURANCE_DATA.portugalDiscount;
     adjustments.push({ 
       factor: 'Portugal market adjustment', 
-      multiplier: INSURANCE_DATA.portugalDiscount 
+      multiplier: DATA.INSURANCE_DATA.portugalDiscount 
     });
     
     // Economies of scale
-    if (income >= INSURANCE_DATA.economiesOfScale.tier2Threshold) {
-      adjustedPremium *= INSURANCE_DATA.economiesOfScale.tier2Multiplier;
+    if (income >= DATA.INSURANCE_DATA.economiesOfScale.tier2Threshold) {
+      adjustedPremium *= DATA.INSURANCE_DATA.economiesOfScale.tier2Multiplier;
       adjustments.push({ 
         factor: 'Economies of scale (>€300k)', 
-        multiplier: INSURANCE_DATA.economiesOfScale.tier2Multiplier 
+        multiplier: DATA.INSURANCE_DATA.economiesOfScale.tier2Multiplier 
       });
-    } else if (income >= INSURANCE_DATA.economiesOfScale.tier1Threshold) {
-      adjustedPremium *= INSURANCE_DATA.economiesOfScale.tier1Multiplier;
+    } else if (income >= DATA.INSURANCE_DATA.economiesOfScale.tier1Threshold) {
+      adjustedPremium *= DATA.INSURANCE_DATA.economiesOfScale.tier1Multiplier;
       adjustments.push({ 
         factor: 'Economies of scale (>€150k)', 
-        multiplier: INSURANCE_DATA.economiesOfScale.tier1Multiplier 
+        multiplier: DATA.INSURANCE_DATA.economiesOfScale.tier1Multiplier 
       });
     }
     
     // USA/Canada coverage (+35%)
     if (usaCoverage) {
-      const adjustment = INSURANCE_DATA.adjustmentFactors.usaCoverage;
+      const adjustment = DATA.INSURANCE_DATA.adjustmentFactors.usaCoverage;
       adjustedPremium *= adjustment;
       adjustments.push({ factor: 'USA/Canada coverage', multiplier: adjustment });
     }
     
     // Claims history
     if (claimsHistory === 'minor') {
-      const adjustment = INSURANCE_DATA.adjustmentFactors.minorClaims;
+      const adjustment = DATA.INSURANCE_DATA.adjustmentFactors.minorClaims;
       adjustedPremium *= adjustment;
       adjustments.push({ factor: 'Minor claims history', multiplier: adjustment });
     } else if (claimsHistory === 'major') {
-      const adjustment = INSURANCE_DATA.adjustmentFactors.majorClaims;
+      const adjustment = DATA.INSURANCE_DATA.adjustmentFactors.majorClaims;
       adjustedPremium *= adjustment;
       adjustments.push({ factor: 'Major claims history', multiplier: adjustment });
     }
     
     // Experience discount (3+ years with clean record)
     if (yearsInBusiness >= 3 && claimsHistory === 'clean') {
-      const adjustment = INSURANCE_DATA.adjustmentFactors.experienceDiscount;
+      const adjustment = DATA.INSURANCE_DATA.adjustmentFactors.experienceDiscount;
       adjustedPremium *= adjustment;
       adjustments.push({ factor: '3+ years clean record', multiplier: adjustment });
     }
     
     // Coverage limit adjustment (±40% × (requested/typical - 1))
-    const coverageRatio = coverageLimit / INSURANCE_DATA.standardCoverage;
+    const coverageRatio = coverageLimit / DATA.INSURANCE_DATA.standardCoverage;
     if (Math.abs(coverageRatio - 1.0) > 0.01) {
       const coverageAdjustment = 1 + 0.4 * (coverageRatio - 1);
       adjustedPremium *= coverageAdjustment;
@@ -650,7 +634,7 @@
     let incomeTax = irsAfterDeductions + solidarityTax;
     let socialSecurityInfo;
     if (useLLCManagerMinSS && !isFirstYearSSExempt) {
-      const monthlyBase = TAX_DATA.socialSecurity.ias; // 1× IAS as minimum manager base
+      const monthlyBase = DATA.REGULATORY_DATA.SOCIAL_SECURITY.ias; // 1× IAS as minimum manager base
       const employeeRate = 0.11;
       const employerRate = 0.2375;
       const monthlyEmployee = monthlyBase * employeeRate;
@@ -662,7 +646,7 @@
         monthlyEmployee,
         monthlyEmployer,
         monthlyBaseApplied: monthlyBase,
-        monthlyCap: TAX_DATA.socialSecurity.ias * TAX_DATA.socialSecurity.maxBaseMultiplier,
+        monthlyCap: DATA.REGULATORY_DATA.SOCIAL_SECURITY.ias * DATA.REGULATORY_DATA.SOCIAL_SECURITY.maxBaseMultiplier,
         capped: false,
         mode: 'llc_manager_min',
       };
@@ -689,10 +673,15 @@
     };
   }
 
+  // Export business logic functions (no data - data comes from DATA)
   global.TakeHomeLogic = {
-    TAX_DATA,
-    SUGGESTED_ADMIN,
-    INSURANCE_DATA,
+    // For backward compatibility, export data references
+    // App.js still expects these - they now point to DATA
+    TAX_DATA: DATA.REGULATORY_DATA,
+    SUGGESTED_ADMIN: DATA.ADMIN_COSTS,
+    INSURANCE_DATA: DATA.INSURANCE_DATA,
+    
+    // Pure calculation functions
     computeProgressiveTax,
     computeProgressiveTaxDetailed,
     computeIRSDetails,
