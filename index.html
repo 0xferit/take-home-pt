@@ -916,15 +916,27 @@
                         <!-- Social Security -->
                         <div class="methodology-section">
                             <h3>Social Security (Segurança Social)</h3>
+                            
+                            <h4 style="margin-top: var(--space-4);">Freelancers (Self-Employed)</h4>
                             <ul class="info-list">
                                 <li><strong>Contribution Rate:</strong> 21.4% (unchanged from 2024)</li>
-                                <li><strong>Relevant Income:</strong> 70% of gross income (or net business income for organized)</li>
+                                <li><strong>Relevant Income:</strong> 70% of gross income (simplified) or net business income (organized)</li>
                                 <li><strong>Monthly Base Cap:</strong> €6,270 (12× IAS of €522.50)</li>
                                 <li><strong>Maximum Monthly Contribution:</strong> €1,342 (21.4% of €6,270)</li>
                                 <li><strong>First-Year Exemption:</strong> 12 rolling months available for new self-employed</li>
                             </ul>
-                            <p class="help-text"><strong>Note:</strong> LDA managers typically contribute based on minimum declared salary (€522.50/month = 1× IAS 2025)</p>
-                            <p class="help-text"><strong>Source:</strong> <a href="https://www.seg-social.pt/trabalhadores-independentes" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">Segurança Social - Trabalhadores Independentes</a> | <a href="https://dre.pt/web/guest/legislacao-consolidada/-/lc/124968575/diploma" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">Código dos Regimes Contributivos do Sistema Previdencial de Segurança Social</a> | <a href="https://www.seg-social.pt/ias" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">IAS 2025: €522.50 (Official Value)</a></p>
+                            
+                            <h4 style="margin-top: var(--space-4);">Single-Member Company (LDA) - Manager Contributions</h4>
+                            <ul class="info-list">
+                                <li><strong>Employee Contribution:</strong> 11% of declared salary</li>
+                                <li><strong>Employer Contribution:</strong> 23.75% of declared salary</li>
+                                <li><strong>Total Combined Rate:</strong> 34.75% (11% + 23.75%)</li>
+                                <li><strong>Minimum Base:</strong> Typically 1× IAS (€522.50/month = €6,270/year)</li>
+                                <li><strong>Example:</strong> €522.50 base × 34.75% = €181.57/month = €2,179/year minimum</li>
+                            </ul>
+                            <p class="help-text"><strong>Important:</strong> LDA managers pay significantly higher SS rate (34.75%) vs freelancers (21.4%), but on a lower base (minimum wage) vs freelancers (70% of actual income)</p>
+                            
+                            <p class="help-text" style="margin-top: var(--space-3);"><strong>Source:</strong> <a href="https://www.seg-social.pt/trabalhadores-independentes" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">Segurança Social - Trabalhadores Independentes</a> | <a href="https://dre.pt/web/guest/legislacao-consolidada/-/lc/124968575/diploma" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">Código dos Regimes Contributivos do Sistema Previdencial de Segurança Social</a> | <a href="https://www.seg-social.pt/ias" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">IAS 2025: €522.50 (Official Value)</a></p>
                         </div>
 
                         <!-- Solidarity Tax -->
@@ -1208,12 +1220,21 @@
                                 </div>
                                 <div class="flow-step">
                                     <h4>3. Calculate Social Security</h4>
+                                    <p class="help-text"><strong>For Freelancers:</strong></p>
                                     <ul class="info-list">
                                         <li><strong>Relevant Income:</strong> 70% of gross (simplified) or net business income (organized)</li>
                                         <li><strong>Quarterly Relevant Income:</strong> ÷ 4</li>
                                         <li><strong>Monthly Base:</strong> Quarterly ÷ 3, capped at €6,270</li>
                                         <li><strong>Monthly Contribution:</strong> Base × 21.4%</li>
                                         <li><strong>Annual:</strong> Monthly × 12 (or €0 if first-year exemption)</li>
+                                    </ul>
+                                    <p class="help-text"><strong>For LDA Managers:</strong></p>
+                                    <ul class="info-list">
+                                        <li><strong>Base Salary:</strong> Minimum 1× IAS (€522.50/month)</li>
+                                        <li><strong>Employee Share:</strong> Base × 11%</li>
+                                        <li><strong>Employer Share:</strong> Base × 23.75%</li>
+                                        <li><strong>Total Contribution:</strong> Base × 34.75%</li>
+                                        <li><strong>Annual:</strong> Monthly × 12 = €2,179/year minimum</li>
                                     </ul>
                                 </div>
                                 <div class="flow-step">
