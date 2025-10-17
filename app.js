@@ -35,6 +35,9 @@ const {
     getRiskTierForActivity,
     calculateInsurancePremium,
     calculateSimpleInsurance,
+    // Multi-year projection functions (NEW)
+    computeMultiYearProjection,
+    compareStructuresMultiYear,
 } = window.TakeHomeLogic;
 
 // Import data from window.TakeHomeData (for app defaults)
@@ -135,6 +138,11 @@ const appState = {
         usaCoverage: false,
         coverageLimit: 2000000,
         calculatedPremium: null,
+    },
+    // Multi-year projection settings (NEW)
+    multiYear: {
+        annualGrowthRate: 0.00,  // 0% default (conservative)
+        years: 10,                // 10-year projection
     },
 };
 
@@ -441,6 +449,18 @@ function setupEventListeners() {
         const initial = Math.max(0, parseFloat(grossField.value) || 0);
         appState.grossIncome = initial;
     }
+    
+    // Income growth rate field
+    const growthRateField = document.getElementById('income-growth-rate');
+    if (growthRateField) {
+        growthRateField.addEventListener('input', (event) => {
+            const value = Math.max(0, Math.min(20, parseFloat(event.target.value) || 0));
+            event.target.value = value;
+            appState.multiYear.annualGrowthRate = value / 100; // Convert percentage to decimal
+            recalc();
+        });
+    }
+    
     Object.entries(incomeMap).forEach(([id, key]) => {
         const field = document.getElementById(id);
         if (!field) return;
@@ -967,49 +987,59 @@ function calculateAndUpdate() {
     const adminSimplified = appState.expenses['admin-freelancer'] || 0;
     const adminTransparent = appState.expenses['admin-transparent'] || 0;
 
-    const commonInputs = {
-        grossIncome: appState.grossIncome,
+    const nhrEligible = isCurrentNHREligible();
+
+    // Build base parameters for multi-year projection
+    const baseParams = {
+        activityCoefficient: getCurrentActivityCoefficient(),
+        activityProfile: appState.activityProfile,
         nhrStatus: appState.nhrStatus,
         personalDeductions: appState.personalDeductions,
         isFirstYearIRS50pct: appState.isFirstYearIRS50pct,
         isFirstYearSSExempt: appState.isFirstYearSSExempt,
         irsJovemEnabled: appState.irsJovemEnabled,
-        irsJovemYear: appState.irsJovemYear,
-    };
-
-    const nhrEligible = isCurrentNHREligible();
-
-    const simplifiedResults = appState.freelancerBasis === 'organized'
-        ? computeFreelancerOrganized({
-              ...commonInputs,
-              baseExpenses,
-              adminExpenses: adminSimplified,
-              insuranceExpenses: appState.liabilityInsurance ?? getLiabilityInsurance(appState.grossIncome, appState.insuranceRate),
-              isNHREligible: nhrEligible,
-          })
-        : computeSimplified({
-              ...commonInputs,
-              activityCoefficient: getCurrentActivityCoefficient(),
-              baseExpenses,
-              adminExpenses: adminSimplified,
-              insuranceExpenses: appState.liabilityInsurance ?? getLiabilityInsurance(appState.grossIncome, appState.insuranceRate),
-              isNHREligible: nhrEligible,
-          });
-    const transparentResults = computeTransparent({
-        ...commonInputs,
         baseExpenses,
-        adminExpenses: adminTransparent,
+        adminExpenses: adminSimplified,
+        insuranceExpenses: appState.liabilityInsurance ?? getLiabilityInsurance(appState.grossIncome, appState.insuranceRate),
         isNHREligible: nhrEligible,
         useLLCManagerMinSS: true,
+        dependentsCount: 0,
+    };
+
+    // Compute 10-year projections for all structures
+    const multiYearComparison = compareStructuresMultiYear({
+        grossIncomeYear1: appState.grossIncome,
+        annualGrowthRate: appState.multiYear.annualGrowthRate,
+        years: appState.multiYear.years,
+        baseParams: {
+            ...baseParams,
+            adminExpenses: adminSimplified,  // For simplified/organized
+        },
     });
 
-    updateResultsDisplayDual(simplifiedResults, transparentResults);
-    updateCalculationBreakdown(simplifiedResults, transparentResults);
+    // Also need transparent with different admin expenses
+    const transparentProjection = computeMultiYearProjection({
+        structure: 'transparent',
+        grossIncomeYear1: appState.grossIncome,
+        annualGrowthRate: appState.multiYear.annualGrowthRate,
+        years: appState.multiYear.years,
+        baseParams: {
+            ...baseParams,
+            adminExpenses: adminTransparent,  // For transparent
+        },
+    });
+
+    // Determine which freelancer structure to use (simplified or organized)
+    const freelancerProjection = appState.freelancerBasis === 'organized'
+        ? multiYearComparison.organized
+        : multiYearComparison.simplified;
+
+    // Update displays with multi-year results
+    updateResultsDisplayMultiYear(freelancerProjection, transparentProjection);
     updatePersonalDeductions();
-    updateComparisonTable(simplifiedResults, transparentResults);
-    updateRecommendation(simplifiedResults, transparentResults);
-    updateWinnerBanner(simplifiedResults, transparentResults);
-    updateRecommendationDetails(simplifiedResults, transparentResults);
+    updateComparisonTableMultiYear(freelancerProjection, transparentProjection);
+    updateRecommendationMultiYear(freelancerProjection, transparentProjection);
+    updateWinnerBannerMultiYear(freelancerProjection, transparentProjection);
     updateSanityChecks();
     updateResultsVisibility();
 }
