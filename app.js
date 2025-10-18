@@ -1062,6 +1062,16 @@ function calculateAndUpdate() {
 // ============================================================================
 
 function updateResultsDisplayMultiYear(freelancer, transparent) {
+    // Validate inputs
+    if (!freelancer || !freelancer.yearByYear || !freelancer.totals) {
+        console.error('Invalid freelancer projection data');
+        return;
+    }
+    if (!transparent || !transparent.yearByYear || !transparent.totals) {
+        console.error('Invalid transparent projection data');
+        return;
+    }
+    
     // Display 10-year summary at top
     const freelancerTotal = freelancer.totals.totalNetIncome;
     const transparentTotal = transparent.totals.totalNetIncome;
