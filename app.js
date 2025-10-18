@@ -1837,43 +1837,29 @@ function populateAssumptions() {
 function populateAppVersion() {
     const versionEl = document.getElementById('app-version');
     if (!versionEl) return;
+
+    // Version format: YYYY.MM.DD.{commit_hash}
+    const dateVersion = DATA?.VERSION || '2025.10.17';
     
-    // Immediate display: Show data layer version (always available)
-    const dataVersion = DATA?.VERSION || '2025.1';
-    const dataUpdated = DATA?.LAST_UPDATED || '2025-10-17';
-    versionEl.textContent = `TakeHome PT v${dataVersion} (Data: ${dataUpdated})`;
-    
-    // Then try to enhance with git commit info (non-blocking)
-    const fallback = () => {
-        const lastModified = new Date(document.lastModified || Date.now());
-        versionEl.textContent = `TakeHome PT v${dataVersion} · Updated ${lastModified.toISOString().slice(0, 10)}`;
-    };
-    
-    if (typeof window.fetch !== 'function') {
-        return; // Keep data version display
-    }
-    
+    // Static fallback (shown immediately)
+    versionEl.textContent = `TakeHome PT v${dateVersion}`;
+
+    // Auto-fetch commit hash from GitHub API
     const owner = '0xferit';
     const repo = 'take-home-pt';
     const branch = 'main';
-    const url = `https://api.github.com/repos/${owner}/${repo}/commits/${branch}`;
-    fetch(url, {
-        headers: {
-            Accept: 'application/vnd.github+json'
-        }
-    })
+    const apiUrl = `https://api.github.com/repos/${owner}/${repo}/commits/${branch}`;
+
+    fetch(apiUrl)
         .then((response) => {
-            if (!response.ok) throw new Error(`status ${response.status}`);
+            if (!response.ok) throw new Error(`GitHub API: ${response.status}`);
             return response.json();
         })
         .then((data) => {
-            const sha = (data?.sha || '').slice(0, 7);
-            const isoDate = data?.commit?.committer?.date;
-            let stamp = '';
-            if (isoDate) {
-                const date = new Date(isoDate);
-                if (!Number.isNaN(date.valueOf())) {
-                    const datePart = date.toISOString().slice(0, 10);
+            const shortHash = data.sha.substring(0, 7);
+            const commitDate = new Date(data.commit.committer.date);
+            const formattedDate = commitDate.toISOString().split('T')[0];
+            const commitMsg = data.commit.message.split('\n')[0];
                     const timePart = date.toISOString().slice(11, 16);
                     stamp = `${datePart} ${timePart} UTC`;
                 }
