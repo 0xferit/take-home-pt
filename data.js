@@ -45,7 +45,7 @@
   // Version format: YYYY.MM.DD (date-based, update with each code change)
   // Full version at runtime: YYYY.MM.DD.{commit_hash} (e.g., 2025.10.17.c432057)
   // Commit hash is auto-fetched by app.js - updates with every commit
-    VERSION: '2025.10.25',  // Update this date when making changes
+    VERSION: '2025.10.26',  // Update this date when making changes
   
   // Legacy field (kept for compatibility)
   LAST_UPDATED: '2025-10-17',
@@ -54,16 +54,18 @@
     // Source: Orçamento do Estado 2025, Segurança Social 2025, CIRS Article 151
     REGULATORY_DATA: {
       // IRS (Income Tax) Progressive Brackets for 2025
+      // Source: Lei n.º 55-A/2025, Article 68.º of Código do IRS
+      // Official: https://diariodarepublica.pt/dr/detalhe/lei/55-a-2025-925904929
       TAX_BRACKETS_2025: [
-        { max: 8059, rate: 0.13 },
-        { max: 12160, rate: 0.165 },
-        { max: 17233, rate: 0.22 },
-        { max: 22306, rate: 0.25 },
-        { max: 28400, rate: 0.32 },
-        { max: 41629, rate: 0.355 },
-        { max: 44987, rate: 0.435 },
-        { max: 83696, rate: 0.45 },
-        { max: Infinity, rate: 0.48 }
+        { max: 8059, rate: 0.125 },      // 12.50%
+        { max: 12160, rate: 0.16 },      // 16.00%
+        { max: 17233, rate: 0.215 },     // 21.50%
+        { max: 22306, rate: 0.244 },     // 24.40%
+        { max: 28400, rate: 0.314 },     // 31.40%
+        { max: 41629, rate: 0.349 },     // 34.90%
+        { max: 44987, rate: 0.431 },     // 43.10%
+        { max: 83696, rate: 0.446 },     // 44.60%
+        { max: Infinity, rate: 0.48 }    // 48.00%
       ],
 
       // NHR (Non-Habitual Resident) Tax Rates
@@ -129,17 +131,28 @@
       ],
 
       // Social Security Parameters
+      // Source: Lei n.º 110/2009 (Código dos Regimes Contributivos)
+      // Article 168.º (21.4% self-employed), Article 53.º (34.75% total LLC)
+      // Official: https://diariodarepublica.pt/dr/legislacao-consolidada/lei/2009-34514575
       SOCIAL_SECURITY: {
-        rate: 0.214,                    // 21.4% contribution rate
+        rate: 0.214,                    // 21.4% contribution rate (self-employed)
         relevantIncomeFactor: 0.70,     // 70% of quarterly income is "relevant"
         ias: 522.5,                     // IAS 2025 (Indexante de Apoios Sociais)
+        rmmg: 870,                      // RMMG 2025 (Minimum Monthly Wage)
         maxBaseMultiplier: 12,          // Maximum base = 12 × IAS
         employeeRate: 0.11,             // Employee contribution (for LLC managers)
         employerRate: 0.2375,           // Employer contribution (for LLC managers)
       },
 
       // IAS Reference Value 2025
+      // Source: Portaria n.º 6-B/2025, Article 2.º
+      // Official: https://diariodarepublica.pt/dr/detalhe/portaria/6-b-2025-902111932
       IAS_2025: 522.5,
+      
+      // RMMG (Minimum Monthly Wage) 2025
+      // Source: Decreto-Lei n.º 112/2024, Article 3.º  
+      // Official: https://diariodarepublica.pt/dr/detalhe/decreto-lei/112-2024-900706889
+      RMMG_2025: 870,
 
       // Personal Tax Deductions
       PERSONAL_DEDUCTIONS: {

@@ -44,7 +44,7 @@
                     
                     <div class="form-group">
                         <label>Activity Type <span class="required">*</span></label>
-                        <p class="help-text">Determines NHR eligibility and tax coefficient. Have a CAE code? Enter it below.</p>
+                        <p class="help-text">Sets tax coefficient & NHR eligibility. Enter CAE below.</p>
                         
                         <!-- CAE Code Entry (Helper) -->
                         <div id="activity-code-container" class="cae-container">
@@ -72,7 +72,7 @@
                             <p id="activity-code-status" class="help-text" class="cae-status">
                                 ✓ Activity type locked to: <span id="activity-code-derived-type"></span>
                             </p>
-                            <p class="help-text">5-digit Economic Activity Classification code. <span id="activity-code-unlock-hint" class="hidden">Clear to unlock manual selection.</span></p>
+                            <p class="help-text">5-digit activity code from INE database. <span id="activity-code-unlock-hint" class="hidden">Clear to unlock manual selection.</span></p>
                             <p class="help-text">
                                 <strong>📚 Official Sources:</strong> 
                                 <a href="https://www.ine.pt/ine_novidades/semin/cae/CAE_REV_3.pdf" target="_blank" rel="noopener" class="link--primary">
@@ -152,7 +152,7 @@
                                 <input type="checkbox" id="irs-jovem">
                                 <span>IRS Jovem (Youth Tax Benefit)</span>
                             </label>
-                            <p class="help-text" class="checkbox__help">Under 35, completed higher ed. 10-year progressive exemption (2025 rules). Cap: €28,737.50. ⚠️ Mutually exclusive with NHR.</p>
+                            <p class="help-text" class="checkbox__help">Under 35, higher ed. 10-year exemption, cap €28,737. Excludes NHR.</p>
                         </div>
                         <div id="irs-jovem-year-selector" class="form-group" class="hidden mt-4">
                             <label for="irs-jovem-year">IRS Jovem Year</label>
@@ -202,7 +202,7 @@
                             <span class="input-group__prefix">€</span>
                             <input type="number" id="gross-income" class="input" value="0" min="0" step="1000" aria-label="Annual gross income in euros" aria-describedby="gross-income-help">
                         </div>
-                        <p class="help-text">Category B professional services revenue for year 1.</p>
+                        <p class="help-text">Professional services revenue (year 1).</p>
                     </div>
 
                     <div class="form-group">
@@ -211,7 +211,7 @@
                             <input type="number" id="income-growth-rate" class="input" value="0" min="0" max="20" step="0.5" aria-label="Expected annual income growth rate percentage" aria-describedby="income-growth-help">
                             <span class="input-group__suffix">% per year</span>
                         </div>
-                        <p class="help-text">Conservative: 0-3%, Moderate: 5%, Optimistic: 7-10%. This shows how your income grows over 10 years.</p>
+                        <p class="help-text">Annual growth over 10 years. Conservative: 0-3%, Moderate: 5%, Optimistic: 7-10%.</p>
                     </div>
 
                     <div class="nav-footer">
@@ -234,7 +234,7 @@
                             <span class="input-group__prefix">€</span>
                             <input type="number" id="total-business-expenses" class="input expense-input" value="0" min="0" step="100" placeholder="Auto: 5% of gross income" aria-label="Total business expenses in euros" aria-describedby="business-expenses-help">
                         </div>
-                        <p class="help-text">Office, equipment, software, travel. Applies to both structures. Default: 5% of gross (auto).</p>
+                        <p class="help-text">Office, equipment, software, travel. Auto: 5% gross.</p>
                     </div>
 
                     <div class="form-group">
@@ -328,10 +328,8 @@
                             </details>
                         </div>
                         <p class="help-text" class="mt-3">
-                            Freelancers need professional liability insurance due to unlimited personal liability. 
-                            <strong>⚠️ This is a ROUGH GUESSTIMATE only</strong> — actual premiums can vary ±20-40% or more depending on insurer, specific profession details, claims history, and market conditions. 
-                            <strong>Always get personalized quotes from insurance brokers before budgeting.</strong>
-                            <strong>LDA structures have built-in limited liability, so insurance is optional.</strong>
+                            Freelancers need insurance (unlimited liability). LDAs have built-in protection.
+                            <strong>⚠️ ROUGH ESTIMATE:</strong> ±20-40%+ variance. Get real quotes from brokers.
                         </p>
                         <div id="insurance-warning" class="alert alert--warning" class="hidden mt-3"></div>
                     </div>
@@ -343,7 +341,7 @@
                                 <span class="input-group__prefix">€</span>
                                 <input type="number" id="admin-freelancer" class="input expense-input" value="800" min="0" step="50">
                             </div>
-                            <p class="help-text">Accountant, TOC fees for freelancer setup. <strong>Note:</strong> Professional liability insurance (selected rate above) is automatically added to Freelancer total expenses.</p>
+                            <p class="help-text">TOC/accountant fees. Insurance auto-added from above estimate.</p>
                         </div>
 
                         <div class="form-group">
@@ -352,7 +350,7 @@
                                 <span class="input-group__prefix">€</span>
                                 <input type="number" id="admin-transparent" class="input expense-input" value="4800" min="0" step="50">
                             </div>
-                            <p class="help-text">Accounting, compliance, legal fees for LLC. <strong>Note:</strong> LDA has built-in limited liability, so professional liability insurance (included in Freelancer costs) is not required.</p>
+                            <p class="help-text">Accounting, compliance, legal. Limited liability built-in (no insurance).</p>
                         </div>
                     </div>
 
@@ -787,7 +785,7 @@
                                     <tr><td>Above €83,696</td><td>48.0%</td></tr>
                                 </tbody>
                             </table>
-                            <p class="help-text"><strong>Source:</strong> <a href="https://dre.pt/web/guest/legislacao-consolidada/-/lc/108398988/diploma?did=150747299" target="_blank" rel="noopener" class="link--primary">Lei n.º 24-D/2024 (Orçamento do Estado 2025)</a> - IRS tax brackets updated annually by State Budget law</p>
+                            <p class="help-text"><strong>Source:</strong> <a href="https://diariodarepublica.pt/dr/detalhe/lei/55-a-2025-925904929" target="_blank" rel="noopener" class="link--primary">Lei n.º 55-A/2025, Article 68.º CIRS</a> - IRS progressive brackets for 2025</p>
                         </div>
 
                         <!-- Calculator Scope -->
@@ -833,7 +831,7 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
                                     <li>Exceeding the limit requires immediate switch to organized regime</li>
                                 </ul>
                             </div>
-                            <p class="help-text"><strong>Planning tip:</strong> If approaching €200k, consider switching to organized accounting or LDA proactively to avoid mid-year complications.</p>
+                            <p class="help-text"><strong>Tip:</strong> Near €200k? Switch to organized/LDA before exceeding limit.</p>
                             <p class="help-text"><strong>Source:</strong> <a href="https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/cirs_rep/index_cirs.htm#a28" target="_blank" rel="noopener" class="link--primary">CIRS Article 28 (Regime simplificado)</a> | 
                                 <a href="https://www.portaldasfinancas.gov.pt" target="_blank" rel="noopener" class="text--primary">
                                     Portal das Finanças
@@ -927,7 +925,7 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
                             </ul>
                             <p class="help-text"><strong>Important:</strong> LDA managers pay significantly higher SS rate (34.75%) vs freelancers (21.4%), but on a lower base (minimum wage) vs freelancers (70% of actual income)</p>
                             
-                            <p class="help-text" class="mt-3"><strong>Source:</strong> <a href="https://www.seg-social.pt/trabalhadores-independentes" target="_blank" rel="noopener" class="link--primary">Segurança Social - Trabalhadores Independentes</a> | <a href="https://dre.pt/web/guest/legislacao-consolidada/-/lc/124968575/diploma" target="_blank" rel="noopener" class="link--primary">Código dos Regimes Contributivos do Sistema Previdencial de Segurança Social</a> | <a href="https://www.seg-social.pt/ias" target="_blank" rel="noopener" class="link--primary">IAS 2025: €522.50 (Official Value)</a></p>
+                            <p class="help-text" class="mt-3"><strong>Source:</strong> <a href="https://diariodarepublica.pt/dr/legislacao-consolidada/lei/2009-34514575" target="_blank" rel="noopener" class="link--primary">Lei 110/2009, Art. 168º (21.4%) & Art. 53º (34.75%)</a> | <a href="https://diariodarepublica.pt/dr/detalhe/portaria/6-b-2025-902111932" target="_blank" rel="noopener" class="link--primary">IAS 2025: €522.50 (Portaria 6-B/2025)</a> | <a href="https://diariodarepublica.pt/dr/detalhe/decreto-lei/112-2024-900706889" target="_blank" rel="noopener" class="link--primary">RMMG 2025: €870 (DL 112/2024)</a></p>
                         </div>
 
                         <!-- Solidarity Tax -->
@@ -984,9 +982,9 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
                                 </ul>
                                 <p class="help-text"><strong>Which to choose?</strong> For young professionals, IRS Jovem is often more valuable in early years (100%/75% exemptions) than NHR's 20% flat rate, especially Years 1-3.</p>
                             </div>
-                            <p class="help-text"><strong>Eligibility:</strong> Under 35 years old, completed higher education (bachelor's degree or higher) OR level 4/5 vocational training, Portuguese tax resident, <strong>never enrolled in NHR</strong></p>
-                            <p class="help-text"><strong>Income Cap:</strong> €28,737.50 (55 × <a href="https://www.seg-social.pt/ias" target="_blank" rel="noopener" class="link--primary">IAS €522.50</a> for 2025). Exemption applies to taxable income up to this cap; income above cap taxed at standard progressive rates.</p>
-                            <p class="help-text"><strong>Example:</strong> €40,000 gross income with 75% coefficient = €30,000 taxable. Year 1 (100% exemption): Exemption applies to €28,737.50 (under cap), remaining €1,262.50 taxed normally.</p>
+                            <p class="help-text"><strong>Eligibility:</strong> Age <35, bachelor's+ OR vocational 4/5, PT resident, never used NHR.</p>
+                            <p class="help-text"><strong>Cap:</strong> €28,737.50 (55×IAS). Exemption to cap; excess taxed at standard rates.</p>
+                            <p class="help-text"><strong>Example:</strong> €40k gross, 75% coef = €30k taxable. Y1: €28,737 exempt, €1,263 taxed.</p>
                             <p class="help-text"><strong>Duration:</strong> Extended to 10 years from 2025 (was 5 years pre-2025)</p>
                             <p class="help-text"><strong>Source:</strong> <a href="https://dre.pt/dre/legislacao-consolidada/lei/2024-926649154" target="_blank" rel="noopener" class="link--primary">Lei n.º 24-D/2024 (State Budget 2025), Article 200</a> | <a href="https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/cirs_rep/index_cirs.htm#a2b" target="_blank" rel="noopener" class="link--primary">CIRS Article 2-B (IRS Jovem)</a> | 
                                 <a href="https://www.seg-social.pt/irs-jovem" target="_blank" rel="noopener" class="text--primary">
@@ -1055,7 +1053,7 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
                                 <p><strong>Note:</strong> This calculator only shows the €10,000 Portuguese professional income tax. Foreign income exemptions NOT included in calculations.</p>
                             </div>
                             
-                            <p class="help-text"><strong>Conditions for foreign income exemption:</strong> Must have Double Taxation Agreement (DTA) between Portugal and source country, income must be "taxable" in source country under treaty (even if not actually taxed)</p>
+                            <p class="help-text"><strong>Foreign income:</strong> Requires DTA with source country; income must be treaty-taxable there.</p>
                             <p class="help-text"><strong>Key DTA countries:</strong> US, UK, Germany, France, Switzerland, Canada, Australia, Singapore, UAE, Netherlands, 70+ countries total</p>
                             <p class="help-text"><strong>Note:</strong> Solidarity tax still applies if taxable income exceeds €80,000</p>
                             <p class="help-text"><strong>Source:</strong> <a href="https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/cirs_rep/index_cirs.htm#a72" target="_blank" rel="noopener" class="link--primary">CIRS Article 72 (NHR regime)</a> | <a href="https://dre.pt/dre/legislacao-consolidada/decreto-lei/2023-820857532" target="_blank" rel="noopener" class="link--primary">Decree-Law 249/2023 (IFICI)</a> | 
@@ -1121,7 +1119,7 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
                             </ul>
                             
                             <h4 class="mt-4">Activity Code → Risk Tier Mapping</h4>
-                            <p class="help-text">Risk tier is automatically derived from your activity:</p>
+                            <p class="help-text">Auto-derived from activity type:</p>
                             <ul class="info-list" class="mt-05">
                                 <li><strong>High-value services</strong> (CAE 62xxx IT, 70220 consulting, 74100 design) → <strong>Medium Risk</strong></li>
                                 <li><strong>General services</strong> (catch-all) → <strong>Low Risk</strong> (conservative default)</li>
@@ -1144,7 +1142,7 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
                                 <p class="mt-2"><strong>Cost Comparison:</strong> Insurance at 0.5-1.5% of revenue is far more cost-effective than LDA overhead (€3,650-8,000/year fixed costs) for most freelancers.</p>
                             </div>
                             
-                            <p class="help-text" class="mt-4"><strong>⚠️ CRITICAL DISCLAIMER:</strong> These are ROUGH GUESSTIMATES with potential variance of ±20-40% OR MORE. Actual costs vary significantly by profession, coverage level, claims history, insurer, and market conditions. <strong>This tool CANNOT replace getting actual quotes from insurance brokers.</strong> Use for rough budgeting awareness only.</p>
+                            <p class="help-text" class="mt-4"><strong>⚠️ ROUGH ESTIMATES:</strong> ±20-40%+ variance. Actual costs vary by profession, coverage, claims, insurer. Get real quotes. For budgeting only.</p>
                             <p class="help-text"><strong>Official Portuguese Insurance Regulation:</strong> <a href="https://www.asf.com.pt/" target="_blank" rel="noopener" class="link--primary">ASF - Autoridade de Supervisão de Seguros e Fundos de Pensões (Insurance Regulator)</a> | <a href="https://dre.pt/dre/legislacao-consolidada/decreto-lei/2015-67474011" target="_blank" rel="noopener" class="link--primary">Decree-Law 72/2008 (Insurance Contract Law)</a></p>
                             <p class="help-text"><strong>Portugal Insurance Providers:</strong> 
                                 <a href="https://www.hiscox.pt/" target="_blank" rel="noopener" class="link--primary">Hiscox Portugal</a>, 
@@ -1267,7 +1265,7 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
 
         <footer class="footer">
             <div class="container">
-                <p id="app-version" class="footer__version">TakeHome PT v2025.10.25</p>
+                <p id="app-version" class="footer__version">TakeHome PT v2025.10.26</p>
                 <p class="footer__disclaimer">
                     <strong>Disclaimer:</strong> This is a structure optimization planner, not a tax filing tool. Results are estimates based on 2025 Portuguese tax law for informational purposes only. 
                     Individual circumstances vary—consult a certified Portuguese accountant (TOC) or tax advisor before making structural decisions.
