@@ -72,15 +72,16 @@
                             <p id="activity-code-status" class="help-text" class="cae-status">
                                 ✓ Activity type locked to: <span id="activity-code-derived-type"></span>
                             </p>
-                            <p class="help-text">5-digit activity code from INE database. <span id="activity-code-unlock-hint" class="hidden">Clear to unlock manual selection.</span></p>
+                            <p class="help-text">5-digit activity code (CAE Rev. 4, effective Jan 2025). <span id="activity-code-unlock-hint" class="hidden">Clear to unlock manual selection.</span></p>
                             <p class="help-text">
-                                <strong>📚 Official Sources:</strong> 
-                                <a href="https://www.ine.pt/ine_novidades/semin/cae/CAE_REV_3.pdf" target="_blank" rel="noopener" class="link--primary">
-                                    INE - CAE Rev. 3 Complete Database (PDF)
+                                <strong>📚 Find Your Code:</strong> 
+                                <a href="https://www.gov.pt/servicos/abrir-atividade-nas-financas" target="_blank" rel="noopener" class="link--primary">
+                                    Portal das Finanças (Interactive Search)
                                 </a> | 
-                                <a href="https://www.portaldasfinancas.gov.pt" target="_blank" rel="noopener" class="link--primary">
-                                    Portal das Finanças
-                                </a> (search "CAE" or "atividade")
+                                <a href="http://www.sicae.pt/consulta.aspx" target="_blank" rel="noopener" class="link--primary">
+                                    SICAE (Verify Companies)
+                                </a> | 
+                                Need help? Email: <a href="mailto:info@ine.pt" class="link--primary">info@ine.pt</a> or call +351 21 844 06 95
                             </p>
                         </div>
 
@@ -106,12 +107,15 @@
                         </div>
                         <details class="details">
                             <summary>What are high-value professions?</summary>
-                            <p>High-value professions include software development, consulting, design, and other technical services listed in Article 151 of the Portuguese tax code.</p>
-                            <p><strong>Article 151 CAE Codes:</strong> <span id="activity-summary-codes"></span></p>
+                            <p>Professional services (CIRS codes) listed in Article 151 of CIRS: software, consulting, design, engineering, etc.</p>
+                            <p><strong>Article 151 CIRS Codes:</strong> <span id="activity-summary-codes"></span></p>
                             <p class="help-text" class="mt-3">
+                                <strong>CIRS vs CAE:</strong> Freelancers providing <em>services only</em> use CIRS codes. Business activities use CAE codes.
+                            </p>
+                            <p class="help-text">
                                 <strong>Official Source:</strong> 
                                 <a href="https://diariodarepublica.pt/dr/legislacao-consolidada/portaria/2001-177307831" target="_blank" rel="noopener" class="link--primary">
-                                    Portaria Article 151 (Diário da República)
+                                    Portaria 1011/2001, Article 151 (DRE)
                                 </a>
                             </p>
                         </details>
@@ -875,29 +879,42 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
                         <!-- CAE Codes -->
                         <div class="methodology-section">
                             <h3>CAE Codes (Economic Activity Classification)</h3>
-                            <p class="help-text">CAE codes determine your activity type and therefore your tax coefficient and NHR eligibility.</p>
+                            <p class="help-text">CAE codes determine your activity type, tax coefficient, and NHR eligibility.</p>
                             <ul class="info-list">
-                                <li><strong>CAE Rev. 3:</strong> Current classification system used in Portugal</li>
+                                <li><strong>CAE Rev. 4:</strong> Official classification (effective Jan 1, 2025, replaces Rev. 3)</li>
                                 <li><strong>5-digit codes:</strong> Identify specific professional activities</li>
-                                <li><strong>Article 151 codes:</strong> Automatically qualify as high-value professions (75% coefficient)</li>
-                                <li><strong>Other codes:</strong> Default to general services (35% coefficient)</li>
+                                <li><strong>Article 151 (CIRS codes):</strong> Service providers → 75% coefficient</li>
+                                <li><strong>Other CAE codes:</strong> Business activities → 35% coefficient</li>
                             </ul>
-                            <p class="help-text"><strong>Official Sources for Verification:</strong></p>
+                            <p class="help-text"><strong>📋 Official CAE/CIRS Resources:</strong></p>
                             <ul class="info-list" class="mt-2">
                                 <li>
-                                    <a href="https://www.ine.pt/ine_novidades/semin/cae/CAE_REV_3.pdf" target="_blank" rel="noopener" class="text--primary">
-                                        INE (National Statistics Institute) - CAE Rev. 3 Complete Database (PDF)
-                                    </a>
+                                    <a href="https://www.gov.pt/servicos/abrir-atividade-nas-financas" target="_blank" rel="noopener" class="link--primary">
+                                        Portal das Finanças - Activity Registration
+                                    </a> (Interactive CAE/CIRS search tool)
                                 </li>
                                 <li>
-                                    <a href="https://www.portaldasfinancas.gov.pt" target="_blank" rel="noopener" class="text--primary">
-                                        Portal das Finanças
-                                    </a> - Search for "CAE" or consult your tax advisor for your official activity code
+                                    <a href="http://www.sicae.pt/consulta.aspx" target="_blank" rel="noopener" class="link--primary">
+                                        SICAE - CAE Company Lookup
+                                    </a> (Verify registered codes for companies)
                                 </li>
                                 <li>
-                                    <a href="https://www.ine.pt/xportal/xmain?xpid=INE&xpgid=ine_cont_inst&INST=6251013" target="_blank" rel="noopener" class="text--primary">
-                                        INE - CAE Rev. 3 Methodology and Documentation
-                                    </a>
+                                    <a href="https://diariodarepublica.pt/dr/detalhe/decreto-lei/9-2025-907026813" target="_blank" rel="noopener" class="link--primary">
+                                        DRE: Decreto-Lei 9/2025
+                                    </a> (Official CAE Rev. 4 publication)
+                                </li>
+                                <li>
+                                    <a href="http://smi.ine.pt/Categoria/Parent/5497?lang=PT" target="_blank" rel="noopener" class="link--primary">
+                                        INE: CAE Rev. 4 Complete Classification
+                                    </a> (Full code list & equivalence tables)
+                                </li>
+                                <li>
+                                    <a href="https://diariodarepublica.pt/dr/legislacao-consolidada/portaria/2001-177307831" target="_blank" rel="noopener" class="link--primary">
+                                        DRE: Portaria 1011/2001
+                                    </a> (Article 151 CIRS professional service codes)
+                                </li>
+                                <li>
+                                    <strong>Need help choosing?</strong> Email: <a href="mailto:info@ine.pt" class="link--primary">info@ine.pt</a> | Phone: +351 21 844 06 95 (INE support)
                                 </li>
                             </ul>
                         </div>
@@ -1265,7 +1282,7 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
 
         <footer class="footer">
             <div class="container">
-                <p id="app-version" class="footer__version">TakeHome PT v2025.10.26</p>
+                <p id="app-version" class="footer__version">TakeHome PT v2025.10.27</p>
                 <p class="footer__disclaimer">
                     <strong>Disclaimer:</strong> This is a structure optimization planner, not a tax filing tool. Results are estimates based on 2025 Portuguese tax law for informational purposes only. 
                     Individual circumstances vary—consult a certified Portuguese accountant (TOC) or tax advisor before making structural decisions.
