@@ -692,12 +692,17 @@
     years = 10,
     baseParams = {},
   } = {}) {
+    // Validate inputs
+    const income = sanitizeAmount(grossIncomeYear1);
+    const growth = Math.max(0, Math.min(0.50, Number(annualGrowthRate) || 0)); // Cap at 50%
+    const numYears = Math.max(1, Math.min(20, Math.floor(Number(years)) || 10)); // 1-20 years
+    
     const results = [];
     let cumulativeNet = 0;
     
-    for (let year = 1; year <= years; year++) {
+    for (let year = 1; year <= numYears; year++) {
       // Calculate income for this year with growth
-      const yearIncome = Math.round(grossIncomeYear1 * Math.pow(1 + annualGrowthRate, year - 1));
+      const yearIncome = Math.round(income * Math.pow(1 + growth, year - 1));
       
       // Adjust IRS Jovem year if enabled
       const irsJovemYear = baseParams.irsJovemEnabled ? year : null;
