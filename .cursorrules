@@ -342,50 +342,50 @@ When refactoring existing code:
 
 ## Version Management
 
-### Automatic Version Bumping with Git Commit Hash
+### Date-Based Versioning with Automatic Commit Hash
 
-**Version Format:** `v{MAJOR}.{BUILD_HASH}`
-- **MAJOR** = Manual major version (e.g., `2025.2`, `2025.3`) - only for significant releases
-- **BUILD_HASH** = Automatic git commit short hash (e.g., `a1b2c3d`) - updates with every commit
+**Version Format:** `YYYY.MM.DD.{commit_hash}`
+- **YYYY.MM.DD** = Date of last code change (manual update in data.js)
+- **{commit_hash}** = Automatic git commit short hash (auto-fetched at runtime)
 
-**Example:** `v2025.2.a1b2c3d` (major version 2025.2, build a1b2c3d)
+**Example:** `2025.10.17.c432057` (changed on Oct 17, 2025, commit c432057)
 
-**Key Advantage:** 🎯 **You can't forget to bump the version** - it happens automatically with every commit!
+**Key Advantage:** 🎯 **Simple and obvious** - version = date + commit hash
 
 ### Two-Tier Versioning System
 
-#### Tier 1: Major Version (Manual, Rare)
+#### Tier 1: Date Version (Manual, Every Change)
 **Location:** `data.js` → `VERSION`  
-**When to bump:**
-- ✅ Significant feature releases (e.g., multi-year projection)
-- ✅ Breaking changes (e.g., API changes, data structure changes)
-- ✅ Annual updates (e.g., new tax year)
-- ✅ Major refactors (e.g., separation of concerns)
+**Format:** `YYYY.MM.DD`
+**When to bump:** Every time you make a code change (any file)
 
 **How to bump:**
 ```javascript
-// In data.js:
-VERSION: '2025.3',           // Increment for major releases
-LAST_UPDATED: '2025-10-17',  // Update the date
+// In data.js - update to today's date:
+VERSION: '2025.10.18',  // Change the date when you make changes
 ```
 
-**Frequency:** Monthly or quarterly (not every commit)
+**Rule:** If you touch code today, version should be today's date.
 
-#### Tier 2: Build Version (Automatic, Every Commit)
-**Location:** Auto-generated from git commit hash at runtime  
+**Frequency:** Every code change (use today's date)
+
+#### Tier 2: Commit Hash (Automatic, Every Commit)
+**Location:** Auto-fetched from GitHub API at runtime  
+**Format:** 7-character git hash (e.g., `c432057`)
 **When to bump:** Automatically with every commit  
-**How to bump:** Just commit! The version is auto-fetched from GitHub API
+**How to bump:** Just commit! Hash updates automatically
 
-**Frequency:** Every single commit
+**Frequency:** Every single commit (no manual action)
 
 ### Displayed Version
 
-Users see: **`TakeHome PT v2025.2.a1b2c3d (2025-10-17)`**
+Users see: **`TakeHome PT v2025.10.17.c432057`**
 
 Breakdown:
-- `2025.2` = Major version (manual)
-- `a1b2c3d` = Build identifier (automatic commit hash)
-- `(2025-10-17)` = Commit date (automatic)
+- `2025.10.17` = Date version (manual, set in data.js)
+- `c432057` = Commit hash (automatic, fetched from GitHub)
+
+On hover: Shows commit date and message
 
 ### Why This Matters
 
@@ -412,37 +412,40 @@ Breakdown:
 
 ### Developer Workflow
 
-**Every Commit:**
+**Every Code Change:**
 ```bash
-# Just commit normally - version bumps automatically
+# 1. Update VERSION in data.js to today's date
+# In data.js: VERSION: '2025.10.18'  (if today is Oct 18)
+
+# 2. Commit and push
 git commit -m "fix: correct tax calculation"
 git push
 
-# Version is now: v2025.2.{new_commit_hash}
-# No manual version update needed!
+# Version is now: 2025.10.18.{new_commit_hash}
 ```
 
-**Major Release:**
+**Multiple changes same day:**
 ```bash
-# Bump major version in data.js
-# In data.js: VERSION: '2025.3'
-
-git commit -m "chore: bump major version to 2025.3"
+# Date stays the same, only commit hash changes
+# VERSION: '2025.10.18' (already set)
+git commit -m "fix: another fix"
 git push
 
-# Version is now: v2025.3.{new_commit_hash}
+# Version is now: 2025.10.18.{different_hash}
 ```
 
 ### Checklist Before Every Push
 
-**Automatic (No Action Needed):**
-- [x] Build version will auto-update from commit hash
+**CRITICAL - Always Required:**
+- [ ] Updated `VERSION` in `data.js` to today's date (YYYY.MM.DD)?
+- [ ] Version date matches actual date of change?
 
-**Manual (Only for Major Releases):**
-- [ ] Significant feature/breaking change?
-- [ ] If yes: Bump `VERSION` in `data.js`
-- [ ] If yes: Update `LAST_UPDATED` in `data.js`
+**Automatic (No Action Needed):**
+- [x] Commit hash will auto-append to version
+
+**Verification:**
 - [ ] Test in browser with hard refresh
+- [ ] Check footer shows: `v{today}.{hash}`
 
 ## Remember
 
