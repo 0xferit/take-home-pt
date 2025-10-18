@@ -669,9 +669,48 @@
                             </div>
                         </div>
 
+                        <!-- 10-Year Summary Cards -->
+                        <div class="mt-6 mb-4">
+                            <h3 class="text--h4 mb-3">10-Year Summary</h3>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-4);">
+                                <!-- Freelancer Card -->
+                                <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 12px; padding: var(--space-4); border: 2px solid var(--color-border);">
+                                    <div class="text--small text--opacity-70 text--semibold mb-2">FREELANCER (SIMPLIFIED)</div>
+                                    <div style="font-size: 1.75rem; font-weight: 700; color: var(--color-text); margin-bottom: var(--space-2);" id="summary-freelancer-total">€0.00</div>
+                                    <div class="text--small text--opacity-80 mb-1">
+                                        <span class="text--semibold">Annual Average:</span> 
+                                        <span id="summary-freelancer-avg" class="text--semibold">€0.00</span>
+                                    </div>
+                                    <div class="text--xs text--opacity-70">10-year net income</div>
+                                </div>
+
+                                <!-- LDA Card -->
+                                <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 12px; padding: var(--space-4); border: 2px solid var(--color-border);">
+                                    <div class="text--small text--opacity-70 text--semibold mb-2">SINGLE-MEMBER COMPANY (LDA)</div>
+                                    <div style="font-size: 1.75rem; font-weight: 700; color: var(--color-text); margin-bottom: var(--space-2);" id="summary-lda-total">€0.00</div>
+                                    <div class="text--small text--opacity-80 mb-1">
+                                        <span class="text--semibold">Annual Average:</span> 
+                                        <span id="summary-lda-avg" class="text--semibold">€0.00</span>
+                                    </div>
+                                    <div class="text--xs text--opacity-70">10-year net income</div>
+                                </div>
+
+                                <!-- Difference Card -->
+                                <div style="background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); border-radius: 12px; padding: var(--space-4); border: 2px solid var(--color-success);">
+                                    <div class="text--small text--opacity-70 text--semibold mb-2">10-YEAR DIFFERENCE</div>
+                                    <div style="font-size: 1.75rem; font-weight: 700; margin-bottom: var(--space-2);" id="summary-diff-total">€0.00</div>
+                                    <div class="text--small text--opacity-80 mb-1">
+                                        <span class="text--semibold">Per Year:</span> 
+                                        <span id="summary-diff-avg" class="text--semibold">€0.00</span>
+                                    </div>
+                                    <div class="text--xs" id="summary-winner-text">Winner: TBD</div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Comparison Table -->
                         <details class="details" open>
-                            <summary>Detailed comparison <span class="text--small text--opacity-80 text--normal-weight">(10-year cumulative totals)</span></summary>
+                            <summary>Detailed breakdown <span class="text--small text--opacity-80 text--normal-weight">(10-year cumulative totals)</span></summary>
                             <div class="comparison-table">
                                 <table>
                                     <thead>

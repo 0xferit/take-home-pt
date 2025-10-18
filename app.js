@@ -1278,18 +1278,61 @@ function updateComparisonTableMultiYear(freelancer, transparent) {
     const freelancerTotalTaxable = freelancer.yearByYear.reduce((sum, year) => sum + year.taxableIncome, 0);
     const transparentTotalTaxable = transparent.yearByYear.reduce((sum, year) => sum + year.taxableIncome, 0);
     
+    // Update summary cards (10-year totals and annual averages)
+    const freelancerTotal = freelancer.totals.totalNetIncome;
+    const ldaTotal = transparent.totals.totalNetIncome;
+    const difference = ldaTotal - freelancerTotal;
+    const yearsCount = freelancer.yearByYear.length;
+    
+    setText('summary-freelancer-total', formatCurrency(freelancerTotal));
+    setText('summary-freelancer-avg', formatCurrency(freelancerTotal / yearsCount));
+    setText('summary-lda-total', formatCurrency(ldaTotal));
+    setText('summary-lda-avg', formatCurrency(ldaTotal / yearsCount));
+    setText('summary-diff-total', formatSignedCurrency(difference));
+    setText('summary-diff-avg', formatSignedCurrency(difference / yearsCount));
+    
+    // Update winner text and card styling
+    const diffCard = document.querySelector('#summary-diff-total')?.parentElement;
+    const winnerText = document.getElementById('summary-winner-text');
+    
+    if (difference > 0) {
+        if (winnerText) winnerText.textContent = '🏆 LDA wins by this amount';
+        if (diffCard) {
+            diffCard.style.background = 'linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%)';
+            diffCard.style.borderColor = 'var(--color-success)';
+        }
+        const diffEl = document.getElementById('summary-diff-total');
+        if (diffEl) diffEl.style.color = 'var(--color-success)';
+    } else if (difference < 0) {
+        if (winnerText) winnerText.textContent = '🏆 Freelancer wins by this amount';
+        if (diffCard) {
+            diffCard.style.background = 'linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%)';
+            diffCard.style.borderColor = 'var(--color-primary)';
+        }
+        const diffEl = document.getElementById('summary-diff-total');
+        if (diffEl) diffEl.style.color = 'var(--color-primary)';
+    } else {
+        if (winnerText) winnerText.textContent = '⚖️ Identical net income';
+        if (diffCard) {
+            diffCard.style.background = 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)';
+            diffCard.style.borderColor = 'var(--color-border)';
+        }
+        const diffEl = document.getElementById('summary-diff-total');
+        if (diffEl) diffEl.style.color = 'var(--color-text)';
+    }
+    
     setText('comp-simple-taxable', formatCurrency(freelancerTotalTaxable));
     setText('comp-organized-taxable', formatCurrency(transparentTotalTaxable));
     setText('comp-simple-tax', formatCurrency(freelancer.totals.totalIncomeTax));
     setText('comp-organized-tax', formatCurrency(transparent.totals.totalIncomeTax));
     setText('comp-simple-ss', formatCurrency(freelancer.totals.totalSocialSecurity));
     setText('comp-organized-ss', formatCurrency(transparent.totals.totalSocialSecurity));
-    setText('comp-simple-net', formatCurrency(freelancer.totals.totalNetIncome));
-    setText('comp-organized-net', formatCurrency(transparent.totals.totalNetIncome));
+    setText('comp-simple-net', formatCurrency(freelancerTotal));
+    setText('comp-organized-net', formatCurrency(ldaTotal));
 
     const taxDiff = transparent.totals.totalIncomeTax - freelancer.totals.totalIncomeTax;
     const ssDiff = transparent.totals.totalSocialSecurity - freelancer.totals.totalSocialSecurity;
-    const netDiff = transparent.totals.totalNetIncome - freelancer.totals.totalNetIncome;
+    const netDiff = difference;
 
     const taxableDiffMultiYear = transparentTotalTaxable - freelancerTotalTaxable;
     setText('comp-taxable-diff', formatSignedCurrency(taxableDiffMultiYear));
