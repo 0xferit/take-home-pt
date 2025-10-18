@@ -1,0 +1,12 @@
+{
+  "name": "take-home-pt-test",
+  "version": "1.0.0",
+  "description": "Testing for TakeHome PT Calculator",
+  "scripts": {
+    "test": "node test-calculator.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.1",
+    "playwright": "^1.56.1"
+  }
+}
