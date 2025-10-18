@@ -23,7 +23,7 @@
                 <button class="tab" data-tab="income">Income</button>
                 <button class="tab" data-tab="expenses">Expenses</button>
                 <button class="tab" data-tab="deductions">Deductions</button>
-                <button class="tab" data-tab="results">Results</button>
+                <button class="tab" data-tab="results">Results <span id="results-ready-indicator" style="display: none; color: var(--color-success); font-weight: bold;">✓</span></button>
                 <button class="tab" data-tab="methodology">Methodology</button>
             </div>
         </nav>
@@ -442,6 +442,11 @@
 
                 <!-- Results Tab -->
                 <section id="results" class="tab-content">
+                    <div class="results-notice" style="background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-primary) 100%); border-left: 4px solid var(--color-primary); padding: var(--space-4); margin-bottom: var(--space-6); border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                        <p style="margin: 0; font-weight: 600; color: white; font-size: var(--text-base); line-height: 1.6;">
+                            📊 <strong>Results update automatically</strong> as you change inputs. Use tabs above to adjust Setup, Income, Expenses, or Deductions.
+                        </p>
+                    </div>
                     <div class="results-header">
                         <h2>Your Results</h2>
                         <div class="results-actions">
