@@ -236,6 +236,17 @@ body {
   animation: fadeIn 0.3s ease-in;
 }
 
+/* Visual cue that Results are ready to view */
+#results-ready-indicator {
+  margin-left: 0.25rem;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;

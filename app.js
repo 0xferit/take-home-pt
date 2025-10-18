@@ -2149,9 +2149,15 @@ function updateResultsVisibility() {
     const detail = document.getElementById('results-detail');
     const exportBtn = document.getElementById('export-pdf-btn');
     const saveBtn = document.getElementById('save-scenario-btn');
+    const resultsIndicator = document.getElementById('results-ready-indicator');
     
     if (!zeroState || !detail) return;
     const hasData = hasAnyUserInput();
+    
+    // Show visual indicator on Results tab when data is ready
+    if (resultsIndicator) {
+        resultsIndicator.style.display = hasData ? 'inline' : 'none';
+    }
     
     if (hasData) {
         zeroState.classList.remove('is-active');
