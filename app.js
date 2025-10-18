@@ -989,8 +989,8 @@ function calculateAndUpdate() {
 
     const nhrEligible = isCurrentNHREligible();
 
-    // Build base parameters for multi-year projection
-    const baseParams = {
+    // Build common parameters (shared by all structures)
+    const commonParams = {
         activityCoefficient: getCurrentActivityCoefficient(),
         activityProfile: appState.activityProfile,
         nhrStatus: appState.nhrStatus,
@@ -999,40 +999,36 @@ function calculateAndUpdate() {
         isFirstYearSSExempt: appState.isFirstYearSSExempt,
         irsJovemEnabled: appState.irsJovemEnabled,
         baseExpenses,
-        adminExpenses: adminSimplified,
         insuranceExpenses: appState.liabilityInsurance ?? getLiabilityInsurance(appState.grossIncome, appState.insuranceRate),
         isNHREligible: nhrEligible,
-        useLLCManagerMinSS: true,
         dependentsCount: 0,
     };
 
-    // Compute 10-year projections for all structures
-    const multiYearComparison = compareStructuresMultiYear({
+    // Compute freelancer projection (simplified or organized based on user selection)
+    const freelancerStructure = appState.freelancerBasis === 'organized' ? 'organized' : 'simplified';
+    const freelancerProjection = computeMultiYearProjection({
+        structure: freelancerStructure,
         grossIncomeYear1: appState.grossIncome,
         annualGrowthRate: appState.multiYear.annualGrowthRate,
         years: appState.multiYear.years,
         baseParams: {
-            ...baseParams,
-            adminExpenses: adminSimplified,  // For simplified/organized
+            ...commonParams,
+            adminExpenses: adminSimplified,  // Freelancer admin costs
         },
     });
 
-    // Also need transparent with different admin expenses
+    // Compute transparent (LDA) projection with different admin expenses
     const transparentProjection = computeMultiYearProjection({
         structure: 'transparent',
         grossIncomeYear1: appState.grossIncome,
         annualGrowthRate: appState.multiYear.annualGrowthRate,
         years: appState.multiYear.years,
         baseParams: {
-            ...baseParams,
-            adminExpenses: adminTransparent,  // For transparent
+            ...commonParams,
+            adminExpenses: adminTransparent,  // LDA admin costs
+            useLLCManagerMinSS: true,          // LDA-specific SS calculation
         },
     });
-
-    // Determine which freelancer structure to use (simplified or organized)
-    const freelancerProjection = appState.freelancerBasis === 'organized'
-        ? multiYearComparison.organized
-        : multiYearComparison.simplified;
 
     // Update displays with multi-year results
     updateResultsDisplayMultiYear(freelancerProjection, transparentProjection);
