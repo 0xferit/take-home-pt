@@ -38,9 +38,9 @@
   // ============================================================================
 
   const TakeHomeData = {
-    // Metadata
-    VERSION: '2025.1',
-    LAST_UPDATED: '2025-10-17',
+    // Metadata  
+  VERSION: '2025.2',
+  LAST_UPDATED: '2025-10-17',
 
     // Portuguese Tax & Regulatory Data
     // Source: Orçamento do Estado 2025, Segurança Social 2025, CIRS Article 151

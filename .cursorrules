@@ -340,6 +340,65 @@ When refactoring existing code:
 4. **Verify isolation**: Each layer imports only from layers below
 5. **Test independently**: Unit tests for logic, integration tests for presentation
 
+## Version Management
+
+### CRITICAL: Always Bump Version After Changes
+
+**RULE:** Any change to code, data, or logic MUST bump the version number.
+
+**Version Format:** `YYYY.X` (e.g., `2025.1`, `2025.2`, `2025.3`)
+- **YYYY** = Current year
+- **X** = Sequential increment starting from 1 each year
+
+**Location:** `data.js` → `VERSION` and `LAST_UPDATED`
+
+### When to Bump
+
+✅ **Always bump for:**
+- Bug fixes (any severity)
+- Feature additions
+- Data updates (tax rates, regulations)
+- Logic changes (calculations, formulas)
+- UI changes (layout, styling, text)
+- Documentation updates (if user-facing)
+
+❌ **Don't bump for:**
+- Internal comments only
+- Development/testing files
+- README/internal docs (non-user-facing)
+
+### How to Bump
+
+```javascript
+// In data.js, update both fields:
+VERSION: '2025.3',           // Increment the number
+LAST_UPDATED: '2025-10-17',  // Update the date
+```
+
+**Commit Message:** Include version in commit message
+```bash
+# Good examples:
+git commit -m "fix(critical): correct property names (v2025.2)"
+git commit -m "feat(multi-year): add 10-year projection (v2025.2)"
+git commit -m "chore: bump version to 2025.3"
+```
+
+### Why This Matters
+
+1. **Audit Trail**: Users can see exactly which version they're using
+2. **Bug Reports**: "I found an issue on v2025.2" is actionable
+3. **Deployment Tracking**: Netlify/production version matches code
+4. **Cache Busting**: Version change forces browser refresh
+5. **Compliance**: Regulatory tools require version tracking
+
+### Checklist Before Every Push
+
+- [ ] Code/data changes made?
+- [ ] Version bumped in `data.js`?
+- [ ] `LAST_UPDATED` set to today?
+- [ ] Version mentioned in commit message?
+- [ ] Tested in browser with hard refresh?
+
 ## Remember
 
 **The UI teaches by doing, not by telling.**
@@ -352,3 +411,7 @@ Attention is the scarcest resource. Respect it.
 A designer changing CSS must never risk breaking tax calculations.
 A tax expert updating rates must never risk breaking the UI.
 Separation of concerns is separation of regression risk.
+
+**Versions are accountability.**
+
+Every change gets a version. Every version tells a story. Never push unversioned changes.
