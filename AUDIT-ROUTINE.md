@@ -636,11 +636,21 @@ Pick one scenario (e.g., €60k, simplified), and manually calculate using:
 ## IX. Reporting Template
 
 ### Executive Summary
-- **Version Audited:** v2025.X.{commit_hash}
+
+**CRITICAL:** Always include the exact version number from the calculator footer.
+
+- **Version Audited:** v[YYYY.MM.DD.commit_hash] ← **Copy from footer at bottom of calculator page**
 - **Audit Date:** YYYY-MM-DD
 - **Overall Score:** XX/100
 - **Pass/Fail:** [PASS/FAIL]
 - **Recommendation:** [Ready for production / Needs fixes / Major rework required]
+
+**Example:**
+- **Version Audited:** v2025.10.18.cdd91a7
+- **Audit Date:** 2025-10-18
+- **Overall Score:** 92/100
+- **Pass/Fail:** PASS
+- **Recommendation:** Ready for production with minor UX improvements
 
 ---
 
@@ -733,6 +743,9 @@ Pick one scenario (e.g., €60k, simplified), and manually calculate using:
 ## X. Audit Execution Checklist
 
 **Before Starting:**
+- [ ] **Record the version number** from calculator footer (bottom of page)
+  - Format: v2025.10.18.abc123d (year.month.day.commithash)
+  - **Include this version in your audit report header**
 - [ ] Review latest Portuguese tax regulations (OE 2025)
 - [ ] Confirm IAS, RMMG, tax brackets for 2025
 - [ ] Have official source documents ready
@@ -748,11 +761,13 @@ Pick one scenario (e.g., €60k, simplified), and manually calculate using:
 - [ ] Test with screen reader
 
 **After Audit:**
+- [ ] **Include version number in report header** (from calculator footer)
 - [ ] Complete scoring rubric (Section VIII)
-- [ ] Write executive summary
+- [ ] Write executive summary with version
 - [ ] List all issues (critical first)
 - [ ] Provide actionable recommendations
 - [ ] Rate overall: Pass/Fail
+- [ ] Verify version number is prominently displayed in report
 
 ---
 
@@ -797,11 +812,19 @@ Pick one scenario (e.g., €60k, simplified), and manually calculate using:
 
 **For AI Auditors:**
 1. Access the calculator at https://take-home-pt.netlify.app/
-2. Work through each section (I-VII) systematically
-3. Test all scenarios in Section VII
-4. Complete the scoring rubric (Section VIII)
-5. Generate a report using template (Section IX)
-6. Provide clear pass/fail determination
+2. **FIRST: Record the version number from footer** (e.g., v2025.10.18.cdd91a7)
+3. **Include version in all audit reports** (Executive Summary section)
+4. Work through each section (I-VII) systematically
+5. Test all scenarios in Section VII
+6. Complete the scoring rubric (Section VIII)
+7. Generate a report using template (Section IX) **with version number**
+8. Provide clear pass/fail determination
+
+**Why version matters:**
+- Enables exact bug reproduction (`git checkout abc123d`)
+- Links audit findings to specific code state
+- Tracks improvements over time
+- Essential for professional audit trail
 
 **For Human Auditors:**
 1. Print this routine or keep it open in a second window
