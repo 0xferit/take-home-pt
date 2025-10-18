@@ -851,9 +851,9 @@
 
   // Export business logic functions (no data - data comes from DATA)
   global.TakeHomeLogic = {
-    // For backward compatibility, export data references
-    // App.js still expects these - they now point to DATA
-    TAX_DATA: DATA.REGULATORY_DATA,
+    // For backward compatibility, export data references with original structure
+    // App.js expects camelCase property names
+    TAX_DATA: DATA.REGULATORY_DATA,  // Note: This has UPPER_CASE properties now
     SUGGESTED_ADMIN: DATA.ADMIN_COSTS,
     INSURANCE_DATA: DATA.INSURANCE_DATA,
     
