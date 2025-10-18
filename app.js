@@ -1811,14 +1811,22 @@ function populateAssumptions() {
 function populateAppVersion() {
     const versionEl = document.getElementById('app-version');
     if (!versionEl) return;
+    
+    // Immediate display: Show data layer version (always available)
+    const dataVersion = DATA?.VERSION || '2025.1';
+    const dataUpdated = DATA?.LAST_UPDATED || '2025-10-17';
+    versionEl.textContent = `TakeHome PT v${dataVersion} (Data: ${dataUpdated})`;
+    
+    // Then try to enhance with git commit info (non-blocking)
     const fallback = () => {
         const lastModified = new Date(document.lastModified || Date.now());
-        versionEl.textContent = `Last updated ${lastModified.toISOString().slice(0, 10)}`;
+        versionEl.textContent = `TakeHome PT v${dataVersion} · Updated ${lastModified.toISOString().slice(0, 10)}`;
     };
+    
     if (typeof window.fetch !== 'function') {
-        fallback();
-        return;
+        return; // Keep data version display
     }
+    
     const owner = '0xferit';
     const repo = 'take-home-pt';
     const branch = 'main';
@@ -1845,16 +1853,14 @@ function populateAppVersion() {
                 }
             }
             if (sha && stamp) {
-                versionEl.textContent = `Version ${sha} · ${stamp}`;
+                versionEl.textContent = `TakeHome PT v${dataVersion} · ${sha} · ${stamp}`;
             } else if (sha) {
-                versionEl.textContent = `Version ${sha}`;
-            } else if (stamp) {
-                versionEl.textContent = `Last updated ${stamp}`;
-            } else {
-                fallback();
+                versionEl.textContent = `TakeHome PT v${dataVersion} · ${sha}`;
             }
         })
-        .catch(() => fallback());
+        .catch(() => {
+            // Keep the data version display on fetch error (don't replace with fallback)
+        });
 }
 
 function updateNHROptions() {
