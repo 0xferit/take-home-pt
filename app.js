@@ -717,7 +717,7 @@ function populateActivityCodeOptions() {
     const datalist = document.getElementById('activity-code-options');
     if (!datalist) return;
     datalist.innerHTML = '';
-    (TAX_DATA.activityCatalog || []).forEach((entry) => {
+    (TAX_DATA.ACTIVITY_CATALOG || []).forEach((entry) => {
         const option = document.createElement('option');
         option.value = entry.code;
         option.textContent = `${entry.code} — ${entry.label}`;
@@ -726,7 +726,7 @@ function populateActivityCodeOptions() {
 }
 
 function getActivityProfileData(profileId = ACTIVITY_DEFAULT) {
-    return TAX_DATA.activityProfiles[profileId] || TAX_DATA.activityProfiles[ACTIVITY_DEFAULT];
+    return TAX_DATA.ACTIVITY_PROFILES[profileId] || TAX_DATA.ACTIVITY_PROFILES[ACTIVITY_DEFAULT];
 }
 
 function isCurrentNHREligible() {
@@ -791,7 +791,7 @@ function updateInputsAtGlance() {
 function updateActivitySelectionDisplay() {
     const codeListElement = document.getElementById('activity-summary-codes');
     if (codeListElement) {
-        codeListElement.textContent = TAX_DATA.highValueServiceCodes.join(', ');
+        codeListElement.textContent = TAX_DATA.HIGH_VALUE_SERVICE_CODES.join(', ');
     }
     updateNHROptions();
     updateInputsAtGlance();
@@ -924,7 +924,7 @@ function computeDeducoesToTax() {
 }
 
 function updatePersonalDeductions() {
-    const { personalAllowanceMin, healthExpensesRate, healthExpensesMax } = TAX_DATA.personalDeductions;
+    const { personalAllowanceMin, healthExpensesRate, healthExpensesMax } = TAX_DATA.PERSONAL_DEDUCTIONS;
     const healthDeduction = Math.min(appState.personalDeductions.health * healthExpensesRate, healthExpensesMax);
     const total = computeDeducoesToTax();
 
@@ -1607,9 +1607,9 @@ function updateCalculationBreakdown(simplified, transparent) {
     if (!simpList || !orgList || !simpIRSList || !orgIRSList) return;
 
     const grossIncome = appState.grossIncome;
-    const ssFactor = TAX_DATA.socialSecurity.relevantIncomeFactor;
-    const ssRate = TAX_DATA.socialSecurity.rate;
-    const ssCap = TAX_DATA.socialSecurity.ias * TAX_DATA.socialSecurity.maxBaseMultiplier;
+    const ssFactor = TAX_DATA.SOCIAL_SECURITY.relevantIncomeFactor;
+    const ssRate = TAX_DATA.SOCIAL_SECURITY.rate;
+    const ssCap = TAX_DATA.SOCIAL_SECURITY.ias * TAX_DATA.SOCIAL_SECURITY.maxBaseMultiplier;
 
     const coefficientPercent = formatRate(simplified.coefficient);
     const simpCashLine = `Cash expenses = shared ${formatCurrency(simplified.baseExpenses)} + admin ${formatCurrency(simplified.adminExpenses)} + liability ${formatCurrency(simplified.insuranceExpenses || 0)} = ${formatCurrency(simplified.totalExpenses)}`;
@@ -1813,14 +1813,14 @@ function populateAssumptions() {
     const highValueProfile = getActivityProfileData('services_high_value');
     const generalPercent = (generalProfile.coefficient * 100).toFixed(1).replace(/\.0$/, '');
     const highValuePercent = (highValueProfile.coefficient * 100).toFixed(1).replace(/\.0$/, '');
-    setText('assumption-nhr-rate', formatPercent(TAX_DATA.nhrRates.original_nhr * 100));
+    setText('assumption-nhr-rate', formatPercent(TAX_DATA.NHR_RATES.original_nhr * 100));
     setText('assumption-trading-rate', formatPercent(DEFAULTS.tradingRate * 100));
     setText('assumption-simplified-coef', `${highValuePercent}% taxable (high value assumed)`);
-    const codes = TAX_DATA.highValueServiceCodes.join(', ');
+    const codes = TAX_DATA.HIGH_VALUE_SERVICE_CODES.join(', ');
     setText('assumption-highvalue-codes', codes);
-    setText('assumption-ss-rate', formatPercent(TAX_DATA.socialSecurity.rate * 100));
-    setText('assumption-ss-coef', formatPercent(TAX_DATA.socialSecurity.relevantIncomeFactor * 100));
-    const ssCap = TAX_DATA.socialSecurity.ias * TAX_DATA.socialSecurity.maxBaseMultiplier;
+    setText('assumption-ss-rate', formatPercent(TAX_DATA.SOCIAL_SECURITY.rate * 100));
+    setText('assumption-ss-coef', formatPercent(TAX_DATA.SOCIAL_SECURITY.relevantIncomeFactor * 100));
+    const ssCap = TAX_DATA.SOCIAL_SECURITY.ias * TAX_DATA.SOCIAL_SECURITY.maxBaseMultiplier;
     setText('assumption-ss-cap', `${formatCurrency(ssCap)} per month (base cap, not payable)`);
     const ssMax = ssCap * TAX_DATA.socialSecurity.rate;
     setText('assumption-ss-max', `${formatCurrency(ssMax)} per month (max contribution)`);
