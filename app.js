@@ -831,8 +831,8 @@ function updateInsuranceDisplay() {
         ? appState.insurance.manualAmount 
         : premiumResult.annualPremium;
 
-    // Update display elements
-    setText('insurance-auto-estimate', formatCurrency(displayPremium));
+    // Update display elements (round premium to nearest euro - it's an estimate)
+    setText('insurance-auto-estimate', formatCurrency(Math.round(displayPremium)));
     setText('insurance-auto-percentage', (premiumResult.premiumPercentage || 0).toFixed(2) + '%');
     
     // Show risk label with indicator if it's overridden
