@@ -22,3 +22,6 @@ test-results/
 # Temporary files
 *.tmp
 *.temp
+
+# npm artifacts (frontend-only project)
+package-lock.json
