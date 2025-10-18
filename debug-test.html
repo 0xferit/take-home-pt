@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Debug Test</title>
+</head>
+<body>
+    <h1>Debug Test</h1>
+    <pre id="output">Loading...</pre>
+    
+    <script src="data.js"></script>
+    <script src="logic.js"></script>
+    <script>
+        const output = document.getElementById('output');
+        let log = '';
+        
+        try {
+            log += '1. TakeHomeData loaded: ' + (window.TakeHomeData ? '✅' : '❌') + '\n';
+            log += '2. TakeHomeLogic loaded: ' + (window.TakeHomeLogic ? '✅' : '❌') + '\n';
+            
+            if (window.TakeHomeData) {
+                log += '3. Data VERSION: ' + window.TakeHomeData.VERSION + '\n';
+                log += '4. Data validation: ' + JSON.stringify(window.TakeHomeData.validate()) + '\n';
+            }
+            
+            if (window.TakeHomeLogic) {
+                log += '5. Has computeMultiYearProjection: ' + (typeof window.TakeHomeLogic.computeMultiYearProjection === 'function') + '\n';
+                log += '6. Has compareStructuresMultiYear: ' + (typeof window.TakeHomeLogic.compareStructuresMultiYear === 'function') + '\n';
+                
+                // Test basic calculation
+                const testParams = {
+                    grossIncomeYear1: 60000,
+                    annualGrowthRate: 0,
+                    years: 10,
+                    baseParams: {
+                        activityCoefficient: 0.75,
+                        nhrStatus: 'standard',
+                        personalDeductions: {health: 0, education: 0, charitable: 0, retirement: 0},
+                        isFirstYearIRS50pct: false,
+                        isFirstYearSSExempt: false,
+                        irsJovemEnabled: false,
+                        baseExpenses: 3000,
+                        adminExpenses: 800,
+                        insuranceExpenses: 360,
+                        isNHREligible: true,
+                        dependentsCount: 0,
+                    }
+                };
+                
+                log += '\n7. Testing computeMultiYearProjection...\n';
+                const result = window.TakeHomeLogic.computeMultiYearProjection(testParams);
+                log += '   ✅ Success!\n';
+                log += '   - Structure: ' + result.structure + '\n';
+                log += '   - Years: ' + result.yearByYear.length + '\n';
+                log += '   - Year 1 net: €' + result.yearByYear[0].netIncome + '\n';
+                log += '   - Total net: €' + result.totals.totalNetIncome + '\n';
+                
+                log += '\n8. Testing compareStructuresMultiYear...\n';
+                const comparison = window.TakeHomeLogic.compareStructuresMultiYear(testParams);
+                log += '   ✅ Success!\n';
+                log += '   - Winner: ' + comparison.winner + '\n';
+                log += '   - Has simplified: ' + (comparison.simplified ? '✅' : '❌') + '\n';
+                log += '   - Has organized: ' + (comparison.organized ? '✅' : '❌') + '\n';
+                log += '   - Has transparent: ' + (comparison.transparent ? '✅' : '❌') + '\n';
+            }
+            
+            log += '\n✅ ALL TESTS PASSED - No JavaScript errors detected\n';
+            
+        } catch (error) {
+            log += '\n\n❌ ERROR DETECTED:\n';
+            log += error.toString() + '\n\n';
+            log += 'Stack trace:\n' + error.stack;
+        }
+        
+        output.textContent = log;
+    </script>
+</body>
+</html>

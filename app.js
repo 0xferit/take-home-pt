@@ -1030,16 +1030,31 @@ function calculateAndUpdate() {
         },
     });
 
+    // Validate projections before updating display
+    if (!freelancerProjection || !freelancerProjection.yearByYear || !freelancerProjection.totals) {
+        console.error('Freelancer projection failed:', freelancerProjection);
+        return;
+    }
+    if (!transparentProjection || !transparentProjection.yearByYear || !transparentProjection.totals) {
+        console.error('Transparent projection failed:', transparentProjection);
+        return;
+    }
+
     // Update displays with multi-year results
-    updateResultsDisplayMultiYear(freelancerProjection, transparentProjection);
-    updatePersonalDeductions();
-    updateComparisonTableMultiYear(freelancerProjection, transparentProjection);
-    updateRecommendationMultiYear(freelancerProjection, transparentProjection);
-    updateWinnerBannerMultiYear(freelancerProjection, transparentProjection);
-    updateCalculationBreakdownMultiYear(freelancerProjection, transparentProjection);
-    updateRecommendationDetailsMultiYear(freelancerProjection, transparentProjection);
-    updateSanityChecks();
-    updateResultsVisibility();
+    try {
+        updateResultsDisplayMultiYear(freelancerProjection, transparentProjection);
+        updatePersonalDeductions();
+        updateComparisonTableMultiYear(freelancerProjection, transparentProjection);
+        updateRecommendationMultiYear(freelancerProjection, transparentProjection);
+        updateWinnerBannerMultiYear(freelancerProjection, transparentProjection);
+        updateCalculationBreakdownMultiYear(freelancerProjection, transparentProjection);
+        updateRecommendationDetailsMultiYear(freelancerProjection, transparentProjection);
+        updateSanityChecks();
+        updateResultsVisibility();
+    } catch (error) {
+        console.error('Error updating display:', error);
+        console.error('Stack:', error.stack);
+    }
 }
 
 // ============================================================================
