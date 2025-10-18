@@ -1860,18 +1860,17 @@ function populateAppVersion() {
             const commitDate = new Date(data.commit.committer.date);
             const formattedDate = commitDate.toISOString().split('T')[0];
             const commitMsg = data.commit.message.split('\n')[0];
-                    const timePart = date.toISOString().slice(11, 16);
-                    stamp = `${datePart} ${timePart} UTC`;
-                }
-            }
-            if (sha && stamp) {
-                versionEl.textContent = `TakeHome PT v${dataVersion} · ${sha} · ${stamp}`;
-            } else if (sha) {
-                versionEl.textContent = `TakeHome PT v${dataVersion} · ${sha}`;
-            }
+
+            // Full version: YYYY.MM.DD.{hash}
+            const fullVersion = `${dateVersion}.${shortHash}`;
+            versionEl.textContent = `TakeHome PT v${fullVersion}`;
+            versionEl.title = `${formattedDate} | ${commitMsg}`;
+            
+            console.log(`✅ Version: v${fullVersion} | Date: ${formattedDate} | Commit: ${commitMsg}`);
         })
-        .catch(() => {
-            // Keep the data version display on fetch error (don't replace with fallback)
+        .catch((error) => {
+            console.log('Could not fetch commit hash:', error.message);
+            // Keep the static version already displayed
         });
 }
 
