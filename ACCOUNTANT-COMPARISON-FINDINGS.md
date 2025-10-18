@@ -244,25 +244,43 @@ NET INCOME:            €84,786.14 ✅
 >
 > Hi [Accountant Name],
 >
-> Thank you for the analysis. I've cross-checked the calculations with official sources and found two potential issues:
+> Thank you for the detailed analysis in the spreadsheet. I really appreciate the time you put into this.
+>
+> To better understand the tax implications of different structures, I built a calculator that cross-checks calculations against the official 2025 tax legislation. When comparing my calculator's results with your spreadsheet, I found two potential discrepancies I'd like you to review:
 >
 > **1. Social Security (€751.14 difference)**
-> Your formula: €150,000 × 70% × 21.4% × 75% = €16,852.50
-> Issue: Missing 12 × IAS monthly cap (€6,270) per Lei 110/2009, Art. 168º
-> Correct: €16,101.36 (monthly capped calculation)
+> - Your formula: €150,000 × 70% × 21.4% × 75% = €16,852.50
+> - My concern: This doesn't seem to apply the 12 × IAS monthly cap (€6,270) per Lei 110/2009, Art. 168º
+> - My calculator: €16,101.36 (using quarterly/monthly calculation with cap applied)
 >
 > **2. Solidarity Tax (€812.50 difference)**
-> Your calculation: €22,500 IRS only
-> Issue: Missing solidarity tax on income >€80k per Lei 82-B/2014, Art. 191
-> Correct: €23,312.50 (€22,500 base + €812.50 solidarity)
+> - Your calculation: €22,500 IRS only
+> - My concern: Solidarity tax on income >€80k per Lei 82-B/2014, Art. 191 may be missing
+> - My calculator: €23,312.50 (€22,500 base IRS + €812.50 solidarity on the €32,500 above threshold)
 >
-> Could you please review these points? I want to ensure we're fully compliant.
+> **Could you please review these points?** I want to ensure we're fully compliant, and I may be misunderstanding something.
 >
-> Sources:
-> - Lei 110/2009: https://diariodarepublica.pt/dr/legislacao-consolidada/lei/2009-34514575
-> - Lei 82-B/2014: https://dre.pt/dre/legislacao-consolidada/lei/2014-58476020
+> **Calculator Access:**
+> I've made the calculator publicly available at: https://take-home-pt.netlify.app/
+> 
+> You're very welcome to use it to cross-check calculations. It includes:
+> - All 2025 tax brackets, IAS, RMMG values
+> - Social Security with cap calculations
+> - NHR, IRS Jovem, and solidarity tax
+> - Detailed breakdown showing formulas
+> - Links to all official sources (Diário da República)
 >
-> Thanks,
+> I'd genuinely appreciate it if you could review the calculator and let me know if you spot any errors in my methodology. I've done my best to implement everything correctly per Portuguese law, but a professional review would be invaluable.
+>
+> **Official Sources Referenced:**
+> - Lei 110/2009 (SS): https://diariodarepublica.pt/dr/legislacao-consolidada/lei/2009-34514575
+> - Lei 82-B/2014 (Solidarity): https://dre.pt/dre/legislacao-consolidada/lei/2014-58476020
+> - Lei 55-A/2025 (IRS 2025): https://diariodarepublica.pt/dr/detalhe/lei/55-a-2025-925904929
+> - Portaria 6-B/2025 (IAS): https://diariodarepublica.pt/dr/detalhe/portaria/6-b-2025-902111932
+>
+> Thanks for your help with this. Looking forward to your thoughts.
+>
+> Best regards,
 > Ferit
 
 ### 3. Next Steps
