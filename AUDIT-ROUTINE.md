@@ -342,11 +342,18 @@ UI components (icons)     → 3.0:1
 
 **Automated Test:**
 ```bash
-# Run contrast checker (included in repo)
-node check-contrast.js
+# Run Lighthouse accessibility audit
+npx lighthouse https://take-home-pt.netlify.app --only-categories=accessibility
 
-# Expected output:
-✅ ALL TESTS PASS - WCAG AA COMPLIANT!
+# Expected score: 100/100
+# Zero failures allowed - contract requirement
+
+# Verify via Chrome DevTools:
+# 1. Open DevTools (F12)
+# 2. Lighthouse tab
+# 3. Select "Accessibility"
+# 4. Click "Analyze page load"
+# 5. Confirm score: 100/100
 ```
 
 **Other Accessibility Requirements:**
