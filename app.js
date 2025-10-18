@@ -1274,8 +1274,12 @@ function updateYearByYearTable(freelancer, transparent, freelancerName) {
 
 function updateComparisonTableMultiYear(freelancer, transparent) {
     // Update comparison table with 10-year totals
-    setText('comp-simple-taxable', formatCurrency(freelancer.totals.totalGrossIncome));
-    setText('comp-organized-taxable', formatCurrency(transparent.totals.totalGrossIncome));
+    // Calculate total taxable income over 10 years
+    const freelancerTotalTaxable = freelancer.yearByYear.reduce((sum, year) => sum + year.taxableIncome, 0);
+    const transparentTotalTaxable = transparent.yearByYear.reduce((sum, year) => sum + year.taxableIncome, 0);
+    
+    setText('comp-simple-taxable', formatCurrency(freelancerTotalTaxable));
+    setText('comp-organized-taxable', formatCurrency(transparentTotalTaxable));
     setText('comp-simple-tax', formatCurrency(freelancer.totals.totalIncomeTax));
     setText('comp-organized-tax', formatCurrency(transparent.totals.totalIncomeTax));
     setText('comp-simple-ss', formatCurrency(freelancer.totals.totalSocialSecurity));
@@ -1287,7 +1291,8 @@ function updateComparisonTableMultiYear(freelancer, transparent) {
     const ssDiff = transparent.totals.totalSocialSecurity - freelancer.totals.totalSocialSecurity;
     const netDiff = transparent.totals.totalNetIncome - freelancer.totals.totalNetIncome;
 
-    setText('comp-taxable-diff', formatSignedCurrency(0)); // Same gross for both
+    const taxableDiffMultiYear = transparentTotalTaxable - freelancerTotalTaxable;
+    setText('comp-taxable-diff', formatSignedCurrency(taxableDiffMultiYear));
     setText('comp-tax-diff', formatSignedCurrency(taxDiff));
     setText('comp-ss-diff', formatSignedCurrency(ssDiff));
     setText('comp-net-diff', formatSignedCurrency(netDiff));
