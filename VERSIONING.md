@@ -1,14 +1,14 @@
-# Automatic Versioning with Git Commit Hash
+# Date-Based Versioning with Automatic Commit Hash
 
 ## Overview
 
-**New versioning system:** Every commit automatically gets a unique version number!
+**New versioning system:** Version = Date + Commit Hash
 
-**Format:** `v{MAJOR}.{BUILD_HASH}`
+**Format:** `YYYY.MM.DD.{commit_hash}`
 
-**Example:** `v2025.2.822d28d`
-- `2025.2` = Major version (manual)
-- `822d28d` = Build identifier (automatic git commit hash)
+**Example:** `2025.10.17.012482f`
+- `2025.10.17` = Date of last code change (manual)
+- `012482f` = Commit hash (automatic)
 
 ---
 
@@ -16,27 +16,28 @@
 
 ### 1. Two-Tier Versioning
 
-#### Tier 1: Major Version (Manual, Rare)
+#### Tier 1: Date Version (Manual, Every Change)
 **File:** `data.js`
 ```javascript
-VERSION: '2025.2',           // Bump for major releases
-LAST_UPDATED: '2025-10-17',
+VERSION: '2025.10.17',  // Update to today's date when making changes
 ```
 
-**When to bump:**
-- ✅ Major features (e.g., multi-year projection)
-- ✅ Breaking changes (e.g., API changes)
-- ✅ Annual updates (e.g., tax year 2026)
-- ✅ Significant refactors
+**When to bump:** Every time you change code (any file)
 
-**Frequency:** Monthly or quarterly (not every commit)
+**Rule:** If you change code today, VERSION must be today's date.
 
-#### Tier 2: Build Version (Automatic, Every Commit)
+**Format:** `YYYY.MM.DD` (ISO 8601 date format)
+
+**Frequency:** Every code change (use today's date)
+
+#### Tier 2: Commit Hash (Automatic, Every Commit)
 **Source:** Git commit hash (first 7 characters)
 
 **When to bump:** Automatically with every commit
 
-**Frequency:** Every single commit
+**How:** Fetched from GitHub API at runtime
+
+**Frequency:** Every single commit (no manual action)
 
 ### 2. Runtime Version Detection
 
@@ -44,17 +45,20 @@ LAST_UPDATED: '2025-10-17',
 
 ```javascript
 function populateAppVersion() {
+    const dateVersion = DATA?.VERSION || '2025.10.17';
+    
     // 1. Show static fallback immediately
-    versionEl.textContent = `TakeHome PT v2025.2`;
+    versionEl.textContent = `TakeHome PT v${dateVersion}`;
     
     // 2. Fetch latest commit from GitHub API
     fetch('https://api.github.com/repos/0xferit/take-home-pt/commits/main')
         .then(response => response.json())
         .then(data => {
-            const shortHash = data.sha.substring(0, 7);  // e.g., "822d28d"
-            const fullVersion = `v2025.2.${shortHash}`;  // e.g., "v2025.2.822d28d"
+            const shortHash = data.sha.substring(0, 7);  // e.g., "012482f"
+            const fullVersion = `${dateVersion}.${shortHash}`;  // e.g., "2025.10.17.012482f"
             
-            versionEl.textContent = `TakeHome PT ${fullVersion} (${date})`;
+            versionEl.textContent = `TakeHome PT v${fullVersion}`;
+            versionEl.title = `${commitDate} | ${commitMsg}`;
         });
 }
 ```
@@ -85,31 +89,32 @@ Netlify deployment version = exact commit hash
 
 ## Developer Workflow
 
-### Every Regular Commit
+### Every Code Change
 ```bash
-# Just commit normally - version bumps automatically!
+# 1. Update VERSION in data.js to today's date
+# In data.js: VERSION: '2025.10.18'  (if today is Oct 18, 2025)
+
+# 2. Commit and push
 git commit -m "fix: correct tax calculation"
 git push
 
-# Version is now: v2025.2.{new_commit_hash}
-# ✅ No manual version update needed!
+# Version becomes: 2025.10.18.{new_commit_hash}
 ```
 
-**Result:** Version automatically becomes `v2025.2.a1b2c3d` (new hash)
+**Result:** Version shows when code was last changed + unique commit
 
-### Major Release
+### Multiple Changes Same Day
 ```bash
-# 1. Bump major version in data.js
-# Change VERSION: '2025.2' to VERSION: '2025.3'
+# Date stays the same, only commit hash changes
+# VERSION: '2025.10.18' (already set earlier today)
 
-# 2. Commit and push
-git commit -m "chore: bump major version to 2025.3"
+git commit -m "fix: another fix"
 git push
 
-# Version is now: v2025.3.{new_commit_hash}
+# Version becomes: 2025.10.18.{different_commit_hash}
 ```
 
-**Frequency:** Only when shipping major features/changes
+**Rule:** One date per day, many commits allowed
 
 ---
 
@@ -117,19 +122,19 @@ git push
 
 ### In Footer
 ```
-TakeHome PT v2025.2.822d28d (2025-10-17)
+TakeHome PT v2025.10.17.012482f
 ```
 
-**Hover tooltip:** Shows commit message
+**Hover tooltip:** Shows commit date and message
 
 ### In Console
 ```
-✅ Version: v2025.2.822d28d | Commit: 822d28d | Date: 2025-10-17
+✅ Version: v2025.10.17.012482f | Date: 2025-10-17 | Commit: feat: change to...
 ```
 
 ### Fallback (Offline/API Failure)
 ```
-TakeHome PT v2025.2
+TakeHome PT v2025.10.17
 ```
 
 ---
