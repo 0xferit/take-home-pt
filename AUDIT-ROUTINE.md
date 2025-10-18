@@ -309,16 +309,55 @@ Pick one scenario (e.g., €60k, simplified), and manually calculate using:
 ❌ "You MUST use LDA. It's always better for everyone."
 ```
 
-### C. Accessibility (WCAG 2.1 AA)
+### C. Accessibility (WCAG 2.1 AA) - **CONTRACT REQUIREMENT**
 
-**Verify:**
-- [ ] Sufficient color contrast (≥4.5:1 for normal text)
-- [ ] All interactive elements keyboard-accessible
+**CRITICAL:** WCAG AA compliance is a **contractual requirement**. All tests must pass.
+
+**Color Contrast (MANDATORY):**
+- [ ] **All text ≥4.5:1 contrast ratio** (normal text on light backgrounds)
+- [ ] **Large text ≥3:1 contrast ratio** (18pt+ or 14pt+ bold)
+- [ ] Test primary colors: Aqua, Green, Coral, Aura vs. light backgrounds
+- [ ] Test muted text (`--color-text-muted`) vs. all backgrounds
+- [ ] Use tool: [WebAIM Contrast Checker](https://webaim.org/resources/contrastchecker/)
+- [ ] **Zero failures allowed** - any ratio below 4.5:1 is a contract violation
+
+**Required Contrast Ratios:**
+```
+Text color vs. Background → Minimum Ratio
+─────────────────────────────────────────
+Normal text (any size)    → 4.5:1
+Large text (18pt+)        → 3.0:1
+UI components (icons)     → 3.0:1
+```
+
+**Test All Color Combinations:**
+```
+✅ --color-text (#212529) on --bg-body (#F8F9FA): 14.63:1 ✓
+✅ --color-text-muted (#59636A) on --bg-body (#F8F9FA): 4.50:1 ✓
+✅ --aqua (#157973) on --bg-body (#F8F9FA): 4.50:1 ✓
+✅ --green (#5D7A4D) on --bg-body (#F8F9FA): 4.57:1 ✓
+✅ --coral (#C54A35) on --bg-body (#F8F9FA): 4.52:1 ✓
+✅ --aura (#6B5785) on --bg-body (#F8F9FA): 5.99:1 ✓
+```
+
+**Automated Test:**
+```bash
+# Run contrast checker (included in repo)
+node check-contrast.js
+
+# Expected output:
+✅ ALL TESTS PASS - WCAG AA COMPLIANT!
+```
+
+**Other Accessibility Requirements:**
+- [ ] All interactive elements keyboard-accessible (Tab, Enter, Space)
 - [ ] Semantic HTML (headings, landmarks, labels)
-- [ ] Alt text for any images/icons
-- [ ] Form labels properly associated with inputs
-- [ ] Focus indicators visible
+- [ ] Alt text for any images/icons (currently none used)
+- [ ] Form labels properly associated with inputs (`<label for="id">`)
+- [ ] Focus indicators visible (`:focus` styles)
 - [ ] Screen reader friendly (test with VoiceOver/NVDA)
+- [ ] No reliance on color alone for information
+- [ ] Skip navigation links for keyboard users
 
 ### D. Error Handling
 

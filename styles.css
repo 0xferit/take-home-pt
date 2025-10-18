@@ -5,10 +5,10 @@
 /* Root Variables
    ========================================================================== */
 :root {
-  /* Cool Nature-Inspired Harmony Palette */
-  --aqua: #2DBFB8;
-  --aura: #9B87B5;
-  --green: #86A873;
+  /* Cool Nature-Inspired Harmony Palette (WCAG AA Compliant) */
+  --aqua: #157973;          /* Darkened for 4.5:1 contrast on #F8F9FA */
+  --aura: #6B5785;          /* Darkened from #9B87B5 for 4.5:1 contrast */
+  --green: #5D7A4D;         /* Darkened from #86A873 for 4.5:1 contrast */
   --dusk: #4A6B8A;
   --neutral-50: #F8F9FA;
   --neutral-100: #F1F3F5;
@@ -16,12 +16,12 @@
   --neutral-300: #DEE2E6;
   --neutral-400: #CED4DA;
   --neutral-500: #ADB5BD;
-  --neutral-600: #6C757D;
+  --neutral-600: #59636A;   /* Darkened for 4.5:1 contrast on #F8F9FA */
   --neutral-700: #495057;
   --neutral-800: #343A40;
   --neutral-900: #212529;
   --butter: #F4E4C1;
-  --coral: #E8725D;
+  --coral: #C54A35;         /* Darkened from #E8725D for 4.5:1 contrast */
 
   /* Semantic Colors */
   --color-primary: var(--aqua);
