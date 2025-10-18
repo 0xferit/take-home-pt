@@ -1457,6 +1457,495 @@ label {
   display: block;
 }
 
+/* Utility Classes - Clean Separation of Concerns
+   ========================================================================== */
+
+/* Header Notice Banner */
+.header-notice {
+  background: linear-gradient(135deg, rgba(21, 121, 115, 0.95) 0%, rgba(107, 87, 133, 0.95) 100%);
+  color: white;
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius);
+  margin-bottom: var(--space-4);
+  text-align: center;
+  box-shadow: var(--shadow-md);
+}
+
+.header-notice__text {
+  margin: 0;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+/* Links */
+.link--primary {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+/* Text Utilities */
+.text--success {
+  color: var(--color-success);
+}
+
+.text--muted {
+  color: var(--color-text-muted);
+}
+
+.text--primary {
+  color: var(--color-primary);
+}
+
+.text--bold {
+  font-weight: bold;
+}
+
+.text--semibold {
+  font-weight: 600;
+}
+
+.text--heavy {
+  font-weight: 700;
+}
+
+.text--small {
+  font-size: var(--text-sm);
+}
+
+.text--875 {
+  font-size: 0.875rem;
+}
+
+.text--xs {
+  font-size: var(--text-xs);
+}
+
+.text--base {
+  font-size: var(--text-base);
+}
+
+.text--normal-weight {
+  font-weight: normal;
+}
+
+.text--opacity-70 {
+  opacity: 0.7;
+}
+
+.text--opacity-80 {
+  opacity: 0.8;
+}
+
+/* Line height */
+.lh-15 {
+  line-height: 1.5;
+}
+
+/* Display Utilities */
+.hidden {
+  display: none !important;
+}
+
+.block {
+  display: block;
+}
+
+.inline-flex {
+  display: inline-flex;
+}
+
+/* Activity Code Container */
+.cae-container {
+  margin-bottom: var(--space-5);
+  padding: var(--space-4);
+  background: var(--bg-elevated);
+  border-radius: var(--radius);
+  border-left: 4px solid var(--color-primary);
+}
+
+.cae-label {
+  font-size: var(--text-base);
+  margin-bottom: var(--space-2);
+}
+
+.cae-input-wrapper {
+  position: relative;
+}
+
+.cae-input {
+  margin-bottom: var(--space-2);
+  padding-right: 2.5rem;
+}
+
+.cae-clear-btn {
+  position: absolute;
+  right: 0.5rem;
+  top: 0.5rem;
+  background: transparent;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 0.25rem 0.5rem;
+  display: none;
+}
+
+.cae-status {
+  margin-bottom: var(--space-2);
+  display: none;
+  color: var(--color-success);
+  font-weight: 600;
+}
+
+.cae-unlock-hint {
+  display: none;
+}
+
+/* Winner/Success table styles */
+.table-section-header--winner {
+  font-weight: 700;
+  color: var(--color-success);
+  margin-top: var(--space-4);
+  padding-top: var(--space-3);
+  border-top: 2px solid var(--color-border);
+}
+
+.table-indent-with-bg--winner {
+  padding-left: var(--space-3);
+  font-weight: 600;
+  color: var(--color-success);
+  background: var(--bg-elevated);
+  padding-right: 0.5rem;
+  margin-top: var(--space-2);
+}
+
+.table-subsection-header--winner {
+  font-weight: 600;
+  color: var(--color-success);
+  background: var(--bg-elevated);
+  padding-left: 0.5rem;
+}
+
+/* Warning/Alert styles */
+.warning-box {
+  margin-top: var(--space-3);
+  background: #fff3cd;
+  border-left: 4px solid #ff9800;
+}
+
+.warning-text {
+  color: #856404;
+}
+
+.error-text {
+  margin-top: var(--space-2);
+  font-weight: 600;
+  color: #d32f2f;
+}
+
+/* Code block */
+.code-block {
+  background: #f5f5f5;
+  padding: var(--space-3);
+  border-radius: var(--radius);
+  font-family: monospace;
+  font-size: 0.9rem;
+}
+
+/* Activity Manual Label */
+.activity-manual-label {
+  margin-bottom: var(--space-3);
+  display: block;
+}
+
+/* Highlight Boxes */
+.highlight-box {
+  padding: var(--space-4);
+  background: var(--bg-elevated);
+  border-radius: var(--radius);
+  border-left: 4px solid var(--color-primary);
+}
+
+.highlight-box--info {
+  border-left-color: var(--color-info);
+}
+
+/* Disclaimer Box */
+.disclaimer-box {
+  margin-top: var(--space-3);
+}
+
+/* Checkbox with Inline Help */
+.checkbox__help {
+  margin-left: 2rem;
+  margin-top: -0.5rem;
+}
+
+/* Navigation Footer */
+.nav-footer {
+  margin-top: var(--space-6);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-with-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.btn-icon {
+  flex-shrink: 0;
+}
+
+/* Insurance Estimate Card */
+.insurance-card {
+  padding: var(--space-4);
+  background: var(--bg-elevated);
+  border-radius: var(--radius);
+  border-left: 4px solid var(--color-primary);
+}
+
+.insurance-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-3);
+}
+
+.insurance-amount {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.insurance-percentage {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin-top: 0.25rem;
+}
+
+.insurance-risk {
+  text-align: right;
+}
+
+.insurance-risk-label {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.insurance-based-on {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-3);
+}
+
+.insurance-details-section {
+  margin-top: var(--space-3);
+}
+
+.insurance-override-section {
+  display: none;
+  margin-top: var(--space-3);
+}
+
+.insurance-form-group {
+  margin-bottom: var(--space-3);
+}
+
+.insurance-label {
+  font-size: var(--text-sm);
+  display: block;
+  margin-bottom: var(--space-2);
+}
+
+.insurance-input {
+  font-size: var(--text-sm);
+}
+
+.insurance-checkbox-label {
+  margin-bottom: var(--space-3);
+}
+
+.insurance-checkbox-text {
+  font-size: var(--text-sm);
+}
+
+.insurance-warning {
+  margin-top: var(--space-3);
+}
+
+/* Expense Breakdown */
+.expense-breakdown {
+  display: block;
+  color: var(--color-text-muted);
+  margin-top: 0.25rem;
+  font-weight: normal;
+}
+
+.expense-warning {
+  display: none;
+}
+
+.expense-error {
+  display: none;
+}
+
+/* Spacing Utilities */
+.mt-05 {
+  margin-top: 0.5rem;
+}
+
+.mt-1 {
+  margin-top: 1rem;
+}
+
+.mt-2 {
+  margin-top: var(--space-2);
+}
+
+.mt-3 {
+  margin-top: var(--space-3);
+}
+
+.mt-4 {
+  margin-top: var(--space-4);
+}
+
+.mt-5 {
+  margin-top: var(--space-5);
+}
+
+.mt-6 {
+  margin-top: var(--space-6);
+}
+
+.mb-2 {
+  margin-bottom: var(--space-2);
+}
+
+.mb-3 {
+  margin-bottom: var(--space-3);
+}
+
+.mb-5 {
+  margin-bottom: var(--space-5);
+}
+
+.ml-15 {
+  margin-left: 1.5rem;
+}
+
+.mr-05 {
+  margin-right: 0.5rem;
+}
+
+.pl-3 {
+  padding-left: var(--space-3);
+}
+
+.pr-05 {
+  padding-right: 0.5rem;
+}
+
+.pt-3 {
+  padding-top: var(--space-3);
+}
+
+.pt-4 {
+  padding-top: var(--space-4);
+}
+
+.pr-25 {
+  padding-right: 2.5rem;
+}
+
+/* Details Summary */
+.details-summary {
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+/* Table Cell Utilities */
+.td-right-align {
+  text-align: right;
+}
+
+.td-small-text {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+/* Results Ready Indicator */
+#results-ready-indicator {
+  display: none;
+  color: var(--color-success);
+  font-weight: bold;
+}
+
+/* Table Styling Classes */
+.table-section-header {
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-top: var(--space-4);
+  padding-top: var(--space-3);
+  border-top: 2px solid var(--color-border);
+}
+
+.table-subsection-header {
+  font-weight: 600;
+  background: var(--bg-elevated);
+  padding-left: 0.5rem;
+}
+
+.table-indent {
+  padding-left: var(--space-3);
+}
+
+.table-indent-with-bg {
+  padding-left: var(--space-3);
+  font-weight: 600;
+  background: var(--bg-elevated);
+  padding-right: 0.5rem;
+}
+
+/* Flex Utilities */
+.flex {
+  display: flex;
+}
+
+.flex-end {
+  justify-content: flex-end;
+}
+
+.flex-between {
+  justify-content: space-between;
+}
+
+.flex-center {
+  align-items: center;
+}
+
+.gap-2 {
+  gap: var(--space-2);
+}
+
+.gap-3 {
+  gap: var(--space-3);
+}
+
+/* Border Utilities */
+.border-top {
+  border-top: 1px solid var(--color-border);
+}
+
+.border-top-2 {
+  border-top: 2px solid var(--color-border);
+}
+
 /* Print Styles for PDF Export
    ========================================================================== */
 @media print {

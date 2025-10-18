@@ -12,8 +12,8 @@
         <header class="header">
             <div class="container">
                 <!-- Legal Update Notice -->
-                <div style="background: linear-gradient(135deg, rgba(21, 121, 115, 0.95) 0%, rgba(107, 87, 133, 0.95) 100%); color: white; padding: var(--space-3) var(--space-5); border-radius: var(--radius); margin-bottom: var(--space-4); text-align: center; box-shadow: var(--shadow-md);">
-                    <p style="margin: 0; font-size: var(--text-sm); font-weight: 600; line-height: 1.5;">
+                <div class="header-notice">
+                    <p class="header-notice__text">
                         📅 <strong>Tax Year 2025</strong> | Last Updated: <strong>October 2025</strong> | Based on OE 2025 & CIRS 2025
                     </p>
                 </div>
@@ -30,7 +30,7 @@
                 <button class="tab" data-tab="income" aria-label="Income: Enter your annual income">Income</button>
                 <button class="tab" data-tab="expenses" aria-label="Expenses: Enter business expenses">Expenses</button>
                 <button class="tab" data-tab="deductions" aria-label="Deductions: Configure tax deductions">Deductions</button>
-                <button class="tab" data-tab="results" aria-label="Results: View calculated comparisons">Results <span id="results-ready-indicator" style="display: none; color: var(--color-success); font-weight: bold;" aria-hidden="true">✓</span></button>
+                <button class="tab" data-tab="results" aria-label="Results: View calculated comparisons">Results <span id="results-ready-indicator" class="hidden text--success text--bold" aria-hidden="true">✓</span></button>
                 <button class="tab" data-tab="methodology" aria-label="Methodology: View calculation details and legal sources">Methodology</button>
             </div>
         </nav>
@@ -47,11 +47,11 @@
                         <p class="help-text">Determines NHR eligibility and tax coefficient. Have a CAE code? Enter it below.</p>
                         
                         <!-- CAE Code Entry (Helper) -->
-                        <div id="activity-code-container" style="margin-bottom: var(--space-5); padding: var(--space-4); background: var(--bg-elevated); border-radius: var(--radius); border-left: 4px solid var(--color-primary);">
-                            <label for="activity-code" style="font-size: var(--text-base); margin-bottom: var(--space-2);">
+                        <div id="activity-code-container" class="cae-container">
+                            <label for="activity-code" class="cae-label">
                                 🔍 CAE Activity Code (Recommended)
                             </label>
-                            <div style="position: relative;">
+                            <div class="cae-input-wrapper">
                                 <input 
                                     type="text" 
                                     id="activity-code" 
@@ -59,33 +59,33 @@
                                     list="activity-code-options"
                                     placeholder="e.g., 62010 (Computer programming)"
                                     maxlength="5"
-                                    style="margin-bottom: var(--space-2); padding-right: 2.5rem;">
+                                    class="cae-input">
                                 <button 
                                     id="activity-code-clear" 
                                     type="button"
-                                    style="position: absolute; right: 0.5rem; top: 0.5rem; background: transparent; border: none; color: var(--color-text-muted); cursor: pointer; font-size: 1.2rem; padding: 0.25rem 0.5rem; display: none;"
+                                    class="cae-clear-btn"
                                     title="Clear CAE code to manually select activity type">
                                     ✕
                                 </button>
                             </div>
                             <datalist id="activity-code-options"></datalist>
-                            <p id="activity-code-status" class="help-text" style="margin-bottom: var(--space-2); display: none; color: var(--color-success); font-weight: 600;">
+                            <p id="activity-code-status" class="help-text" class="cae-status">
                                 ✓ Activity type locked to: <span id="activity-code-derived-type"></span>
                             </p>
-                            <p class="help-text">5-digit Economic Activity Classification code. <span id="activity-code-unlock-hint" style="display: none;">Clear to unlock manual selection.</span></p>
+                            <p class="help-text">5-digit Economic Activity Classification code. <span id="activity-code-unlock-hint" class="hidden">Clear to unlock manual selection.</span></p>
                             <p class="help-text">
                                 <strong>📚 Official Sources:</strong> 
-                                <a href="https://www.ine.pt/ine_novidades/semin/cae/CAE_REV_3.pdf" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">
+                                <a href="https://www.ine.pt/ine_novidades/semin/cae/CAE_REV_3.pdf" target="_blank" rel="noopener" class="link--primary">
                                     INE - CAE Rev. 3 Complete Database (PDF)
                                 </a> | 
-                                <a href="https://www.portaldasfinancas.gov.pt" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">
+                                <a href="https://www.portaldasfinancas.gov.pt" target="_blank" rel="noopener" class="link--primary">
                                     Portal das Finanças
                                 </a> (search "CAE" or "atividade")
                             </p>
                         </div>
 
                         <!-- Manual Activity Type Selection -->
-                        <label id="activity-manual-label" style="margin-bottom: var(--space-3); display: block;">
+                        <label id="activity-manual-label" class="activity-manual-label">
                             Or select activity type manually:
                         </label>
                         <div class="radio-group">
@@ -108,9 +108,9 @@
                             <summary>What are high-value professions?</summary>
                             <p>High-value professions include software development, consulting, design, and other technical services listed in Article 151 of the Portuguese tax code.</p>
                             <p><strong>Article 151 CAE Codes:</strong> <span id="activity-summary-codes"></span></p>
-                            <p class="help-text" style="margin-top: var(--space-3);">
+                            <p class="help-text" class="mt-3">
                                 <strong>Official Source:</strong> 
-                                <a href="https://diariodarepublica.pt/dr/legislacao-consolidada/portaria/2001-177307831" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">
+                                <a href="https://diariodarepublica.pt/dr/legislacao-consolidada/portaria/2001-177307831" target="_blank" rel="noopener" class="link--primary">
                                     Portaria Article 151 (Diário da República)
                                 </a>
                             </p>
@@ -125,10 +125,10 @@
                             <option value="nhr_2_ifici" disabled>NHR 2.0 / IFICI (20% flat rate on Portuguese income)</option>
                         </select>
                         <p id="nhr-status-note" class="help-text"></p>
-                        <div class="disclaimer-box" style="margin-top: var(--space-3);">
+                        <div class="disclaimer-box" class="mt-3">
                             <p><strong>Scope:</strong> This calculator compares Category B professional services taxation only.</p>
                         </div>
-                        <div id="nhr-irs-jovem-warning" class="alert alert--warning" style="display: none; margin-top: var(--space-3);">
+                        <div id="nhr-irs-jovem-warning" class="alert alert--warning" class="hidden mt-3">
                             ⚠️ <strong>NHR disabled:</strong> You have selected IRS Jovem. NHR and IRS Jovem are mutually exclusive benefits - you can only use one.
                         </div>
                     </div>
@@ -140,21 +140,21 @@
                                 <input type="checkbox" id="firstyear-ss-exempt">
                                 <span>Social Security 12-month exemption</span>
                             </label>
-                            <p class="help-text" style="margin-left: 2rem; margin-top: -0.5rem;">First 12 months (rolling). New self-employed only.</p>
+                            <p class="help-text" class="checkbox__help">First 12 months (rolling). New self-employed only.</p>
                             
                             <label class="checkbox">
                                 <input type="checkbox" id="firstyear-irs-50">
                                 <span>50% IRS coefficient reduction</span>
                             </label>
-                            <p class="help-text" style="margin-left: 2rem; margin-top: -0.5rem;">First calendar year. Halves coefficient (75%→37.5%, 35%→17.5%).</p>
+                            <p class="help-text" class="checkbox__help">First calendar year. Halves coefficient (75%→37.5%, 35%→17.5%).</p>
                             
                             <label class="checkbox">
                                 <input type="checkbox" id="irs-jovem">
                                 <span>IRS Jovem (Youth Tax Benefit)</span>
                             </label>
-                            <p class="help-text" style="margin-left: 2rem; margin-top: -0.5rem;">Under 35, completed higher ed. 10-year progressive exemption (2025 rules). Cap: €28,737.50. ⚠️ Mutually exclusive with NHR.</p>
+                            <p class="help-text" class="checkbox__help">Under 35, completed higher ed. 10-year progressive exemption (2025 rules). Cap: €28,737.50. ⚠️ Mutually exclusive with NHR.</p>
                         </div>
-                        <div id="irs-jovem-year-selector" class="form-group" style="display: none; margin-top: var(--space-4);">
+                        <div id="irs-jovem-year-selector" class="form-group" class="hidden mt-4">
                             <label for="irs-jovem-year">IRS Jovem Year</label>
                             <select id="irs-jovem-year" class="input" aria-label="IRS Jovem benefit year">
                                 <option value="1">Year 1 (100% exemption) — First tax year after completing degree</option>
@@ -176,16 +176,16 @@
                                 <strong>Year counting:</strong> Year 1 = first tax year after completing your degree (not first job year).<br>
                                 <strong>Example:</strong> Graduated in 2023, started working 2024 → 2024 is Year 1. Benefit lasts until 2033 (Year 10).
                             </p>
-                            <div id="irs-jovem-nhr-warning" class="alert alert--warning" style="display: none; margin-top: var(--space-3);">
+                            <div id="irs-jovem-nhr-warning" class="alert alert--warning" class="hidden mt-3">
                                 ⚠️ <strong>IRS Jovem disabled:</strong> You have selected NHR status. IRS Jovem and NHR are mutually exclusive benefits - you can only use one.
                             </div>
                         </div>
                     </details>
                     
-                    <div style="margin-top: var(--space-6); padding-top: var(--space-4); border-top: 1px solid var(--color-border); display: flex; justify-content: flex-end;">
-                        <button class="btn btn--primary" data-tab-target="income" style="display: inline-flex; align-items: center; gap: var(--space-2);" aria-label="Proceed to Income tab">
+                    <div class="nav-footer">
+                        <button class="btn btn--primary" data-tab-target="income" class="btn-with-icon" aria-label="Proceed to Income tab">
                             Continue to Income
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink: 0;">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="btn-icon">
                                 <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                         </button>
@@ -214,10 +214,10 @@
                         <p class="help-text">Conservative: 0-3%, Moderate: 5%, Optimistic: 7-10%. This shows how your income grows over 10 years.</p>
                     </div>
 
-                    <div style="margin-top: var(--space-6); padding-top: var(--space-4); border-top: 1px solid var(--color-border); display: flex; justify-content: flex-end;">
-                        <button class="btn btn--primary" data-tab-target="expenses" style="display: inline-flex; align-items: center; gap: var(--space-2);" aria-label="Proceed to Expenses tab">
+                    <div class="nav-footer">
+                        <button class="btn btn--primary" data-tab-target="expenses" class="btn-with-icon" aria-label="Proceed to Expenses tab">
                             Continue to Expenses
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink: 0;">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="btn-icon">
                                 <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                         </button>
@@ -239,37 +239,37 @@
 
                     <div class="form-group">
                         <label for="insurance-auto-estimate">Professional Liability Insurance (Freelancer Only) — ROUGH GUESSTIMATE</label>
-                        <div style="padding: var(--space-4); background: var(--bg-elevated); border-radius: var(--radius); border-left: 4px solid var(--color-primary);">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-3);">
+                        <div class="insurance-card">
+                            <div class="insurance-header">
                                 <div>
-                                    <div style="font-size: var(--text-lg); font-weight: 600; color: var(--color-text);">
+                                    <div class="insurance-amount">
                                         ~<span id="insurance-auto-estimate">€0.00</span>/year
                                     </div>
-                                    <div style="font-size: var(--text-sm); color: var(--color-text-muted); margin-top: 0.25rem;">
+                                    <div class="insurance-percentage">
                                         ~<span id="insurance-auto-percentage">0.00%</span> of revenue (rough estimate)
                                     </div>
                                 </div>
-                                <div style="text-align: right;">
-                                    <div style="font-size: var(--text-sm); color: var(--color-text-muted);">
+                                <div class="insurance-risk">
+                                    <div class="insurance-risk-label">
                                         Risk level: <strong id="insurance-risk-label">Medium</strong>
                                     </div>
                                 </div>
                             </div>
                             
-                            <div id="insurance-based-on" style="font-size: var(--text-sm); color: var(--color-text-muted); margin-bottom: var(--space-3);">
+                            <div id="insurance-based-on" class="insurance-based-on">
                                 ℹ️ Rough guesstimate based on: <span id="insurance-activity-label">activity type</span>, €<span id="insurance-revenue-label">0</span> revenue
                             </div>
                             
                             <!-- Manual Override Option -->
-                            <details class="details" style="margin-top: var(--space-3);">
-                                <summary style="font-size: var(--text-sm); cursor: pointer;">Override with actual quote</summary>
-                                <div style="margin-top: var(--space-3);">
+                            <details class="details" class="mt-3">
+                                <summary class="details-summary">Override with actual quote</summary>
+                                <div class="mt-3">
                                     <label class="checkbox">
                                         <input type="checkbox" id="insurance-use-manual">
                                         <span>I have an actual insurance quote</span>
                                     </label>
-                                    <div id="insurance-manual-input" style="display: none; margin-top: var(--space-3);">
-                                        <label for="insurance-manual-amount" style="font-size: var(--text-sm); display: block; margin-bottom: var(--space-2);">
+                                    <div id="insurance-manual-input" class="hidden mt-3">
+                                        <label for="insurance-manual-amount" class="insurance-label">
                                             Annual premium amount:
                                         </label>
                                         <div class="input-group">
@@ -282,12 +282,12 @@
                             </details>
                             
                             <!-- Advanced Settings -->
-                            <details class="details" style="margin-top: var(--space-3);">
-                                <summary style="font-size: var(--text-sm); cursor: pointer;">⚙️ Customize estimate (advanced)</summary>
-                                <div style="margin-top: var(--space-3);">
-                                    <div class="form-group" style="margin-bottom: var(--space-3);">
-                                        <label for="insurance-risk-override" style="font-size: var(--text-sm);">Risk level override:</label>
-                                        <select id="insurance-risk-override" class="input" style="font-size: var(--text-sm);">
+                            <details class="details" class="mt-3">
+                                <summary class="details-summary">⚙️ Customize estimate (advanced)</summary>
+                                <div class="mt-3">
+                                    <div class="form-group" class="mb-3">
+                                        <label for="insurance-risk-override" class="text--small">Risk level override:</label>
+                                        <select id="insurance-risk-override" class="input" class="text--small">
                                             <option value="">Auto (based on activity code)</option>
                                             <option value="low">Low Risk - Designers, writers, content creators</option>
                                             <option value="medium">Medium Risk - IT consultants, developers, business consultants</option>
@@ -295,29 +295,29 @@
                                         </select>
                                     </div>
                                     
-                                    <div class="form-group" style="margin-bottom: var(--space-3);">
-                                        <label for="insurance-claims-history" style="font-size: var(--text-sm);">Claims history:</label>
-                                        <select id="insurance-claims-history" class="input" style="font-size: var(--text-sm);">
+                                    <div class="form-group" class="mb-3">
+                                        <label for="insurance-claims-history" class="text--small">Claims history:</label>
+                                        <select id="insurance-claims-history" class="input" class="text--small">
                                             <option value="clean" selected>Clean record (default)</option>
                                             <option value="minor">Minor claims (+15%)</option>
                                             <option value="major">Major claims (+40%)</option>
                                         </select>
                                     </div>
                                     
-                                    <div class="form-group" style="margin-bottom: var(--space-3);">
-                                        <label for="insurance-years-business" style="font-size: var(--text-sm);">Years in business:</label>
-                                        <input type="number" id="insurance-years-business" class="input" value="3" min="0" max="50" style="font-size: var(--text-sm);">
+                                    <div class="form-group" class="mb-3">
+                                        <label for="insurance-years-business" class="text--small">Years in business:</label>
+                                        <input type="number" id="insurance-years-business" class="input" value="3" min="0" max="50" class="text--small">
                                         <p class="help-text">3+ years with clean record = -10% discount</p>
                                     </div>
                                     
-                                    <label class="checkbox" style="margin-bottom: var(--space-3);">
+                                    <label class="checkbox" class="mb-3">
                                         <input type="checkbox" id="insurance-usa-coverage">
-                                        <span style="font-size: var(--text-sm);">Include USA/Canada coverage (+35%)</span>
+                                        <span class="text--small">Include USA/Canada coverage (+35%)</span>
                                     </label>
                                     
                                     <div class="form-group">
-                                        <label for="insurance-coverage-limit" style="font-size: var(--text-sm);">Coverage limit:</label>
-                                        <select id="insurance-coverage-limit" class="input" style="font-size: var(--text-sm);">
+                                        <label for="insurance-coverage-limit" class="text--small">Coverage limit:</label>
+                                        <select id="insurance-coverage-limit" class="input" class="text--small">
                                             <option value="1000000">€1M</option>
                                             <option value="2000000" selected>€2M (standard)</option>
                                             <option value="5000000">€5M</option>
@@ -327,13 +327,13 @@
                                 </div>
                             </details>
                         </div>
-                        <p class="help-text" style="margin-top: var(--space-3);">
+                        <p class="help-text" class="mt-3">
                             Freelancers need professional liability insurance due to unlimited personal liability. 
                             <strong>⚠️ This is a ROUGH GUESSTIMATE only</strong> — actual premiums can vary ±20-40% or more depending on insurer, specific profession details, claims history, and market conditions. 
                             <strong>Always get personalized quotes from insurance brokers before budgeting.</strong>
                             <strong>LDA structures have built-in limited liability, so insurance is optional.</strong>
                         </p>
-                        <div id="insurance-warning" class="alert alert--warning" style="display: none; margin-top: var(--space-3);"></div>
+                        <div id="insurance-warning" class="alert alert--warning" class="hidden mt-3"></div>
                     </div>
 
                     <div class="expense-split">
@@ -365,22 +365,22 @@
                         <div class="expense-summary__item">
                             <span>Freelancer total expenses:</span>
                             <strong id="total-expenses-simp">€0.00</strong>
-                            <small id="expense-breakdown-simp" style="display: block; color: var(--color-text-muted); margin-top: 0.25rem; font-weight: normal;"></small>
+                            <small id="expense-breakdown-simp" class="expense-breakdown"></small>
                         </div>
                         <div class="expense-summary__item">
                             <span>Single-Member Company (LDA) total expenses:</span>
                             <strong id="total-expenses-org">€0.00</strong>
-                            <small id="expense-breakdown-org" style="display: block; color: var(--color-text-muted); margin-top: 0.25rem; font-weight: normal;"></small>
+                            <small id="expense-breakdown-org" class="expense-breakdown"></small>
                         </div>
                     </div>
 
-                    <div id="expense-warning" class="alert alert--warning" style="display: none;"></div>
-                    <div id="expense-error" class="alert alert--error" style="display: none;"></div>
+                    <div id="expense-warning" class="alert alert--warning" class="hidden"></div>
+                    <div id="expense-error" class="alert alert--error" class="hidden"></div>
                     
-                    <div style="margin-top: var(--space-6); padding-top: var(--space-4); border-top: 1px solid var(--color-border); display: flex; justify-content: flex-end;">
-                        <button class="btn btn--primary" data-tab-target="deductions" style="display: inline-flex; align-items: center; gap: var(--space-2);" aria-label="Proceed to Deductions tab">
+                    <div class="nav-footer">
+                        <button class="btn btn--primary" data-tab-target="deductions" class="btn-with-icon" aria-label="Proceed to Deductions tab">
                             Continue to Deductions
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink: 0;">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="btn-icon">
                                 <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                         </button>
@@ -437,10 +437,10 @@
                         </div>
                     </div>
                     
-                    <div style="margin-top: var(--space-6); padding-top: var(--space-4); border-top: 1px solid var(--color-border); display: flex; justify-content: flex-end;">
-                        <button class="btn btn--primary" data-tab-target="results" style="display: inline-flex; align-items: center; gap: var(--space-2);" aria-label="View calculation results">
+                    <div class="nav-footer">
+                        <button class="btn btn--primary" data-tab-target="results" class="btn-with-icon" aria-label="View calculation results">
                             View Results
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink: 0;">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="btn-icon">
                                 <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                         </button>
@@ -457,14 +457,14 @@
                     <div class="results-header">
                         <h2>Your Results</h2>
                         <div class="results-actions">
-                            <button id="export-pdf-btn" class="btn btn--secondary" style="display: none;">
-                                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" style="margin-right: 0.5rem;">
+                            <button id="export-pdf-btn" class="btn btn--secondary" class="hidden">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" class="mr-05">
                                     <path d="M8.5 1.5A1.5 1.5 0 0 0 7 0H4.5A1.5 1.5 0 0 0 3 1.5v13A1.5 1.5 0 0 0 4.5 16h7a1.5 1.5 0 0 0 1.5-1.5V4.621a1.5 1.5 0 0 0-.44-1.06L9.94 .939A1.5 1.5 0 0 0 8.878.5H8.5zM7 1.5a.5.5 0 0 1 .5-.5h1v2.5A.5.5 0 0 0 9 4h2.5v10a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 .5-.5H7z"/>
                                 </svg>
                                 Export to PDF
                             </button>
-                            <button id="save-scenario-btn" class="btn btn--secondary" style="display: none;">
-                                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" style="margin-right: 0.5rem;">
+                            <button id="save-scenario-btn" class="btn btn--secondary" class="hidden">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" class="mr-05">
                                     <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1H2z"/>
                                 </svg>
                                 Save Scenario
@@ -493,11 +493,11 @@
                                             <span>Organized</span>
                                         </label>
                                     </div>
-                                    <p class="help-text" style="margin-top: 0.5rem; font-size: 0.875rem;">
+                                    <p class="help-text" class="mt-05 text--875">
                                         <strong>Simplified limit:</strong> Max €200,000/year turnover
                                     </p>
                                 </div>
-                                <div id="simplified-regime-warning" class="alert alert--warning" style="display: none; margin: var(--space-3) 0;">
+                                <div id="simplified-regime-warning" class="alert alert--warning" class="hidden mt-3 mb-3">
                                     ⚠️ <strong>Organized accounting enforced:</strong> Your Category B income (€<span id="income-over-limit">0</span>) exceeds the €200,000 simplified regime limit. The system has automatically switched to organized accounting.
                                 </div>
                                 <div class="summary-card__value" id="summary-net-simp">€0.00</div>
@@ -524,7 +524,7 @@
                         </div>
 
                         <!-- Winner Indicator -->
-                        <div id="winner-banner" class="winner-banner" style="display: none;">
+                        <div id="winner-banner" class="winner-banner" class="hidden">
                             <div class="winner-banner__icon">🏆</div>
                             <div class="winner-banner__content">
                                 <h3 class="winner-banner__title" id="winner-title">Best Option: Freelancer (Simplified)</h3>
@@ -537,7 +537,7 @@
                         <div class="recommendation">
                             <h3>Why This Structure Wins</h3>
                             <p id="recommendation-text"></p>
-                            <div class="recommendation__details" id="recommendation-details" style="margin-top: 1rem;"></div>
+                            <div class="recommendation__details" id="recommendation-details" class="mt-1"></div>
                             <p class="recommendation__meta">
                                 Breakeven point: <strong id="breakeven-expenses">€0.00</strong> in shared expenses
                             </p>
@@ -549,57 +549,57 @@
                                 <h3 id="freelancer-results-title">Freelancer (Simplified) Results</h3>
                                 <dl class="data-list">
                                     <!-- INCOME SECTION -->
-                                    <dt style="font-weight: 700; color: var(--color-primary); margin-top: var(--space-4); padding-top: var(--space-3); border-top: 2px solid var(--color-border);">📊 Income</dt>
+                                    <dt class="table-section-header">📊 Income</dt>
                                     <dd></dd>
                                     
-                                    <dt style="padding-left: var(--space-3);">Gross income</dt>
+                                    <dt class="pl-3">Gross income</dt>
                                     <dd id="simp-gross">€0.00</dd>
                                     
-                                    <dt style="padding-left: var(--space-3);">Coefficient (deemed expenses)</dt>
+                                    <dt class="pl-3">Coefficient (deemed expenses)</dt>
                                     <dd id="simp-coefficient">75%</dd>
                                     
-                                    <dt style="padding-left: var(--space-3); font-weight: 600; background: var(--bg-elevated); padding-right: 0.5rem;">= Taxable income</dt>
-                                    <dd id="simp-taxable" style="font-weight: 600; background: var(--bg-elevated); padding-left: 0.5rem;">€0.00</dd>
+                                    <dt class="table-indent-with-bg">= Taxable income</dt>
+                                    <dd id="simp-taxable" class="table-subsection-header">€0.00</dd>
                                     
                                     <!-- EXPENSES SECTION -->
-                                    <dt style="font-weight: 700; color: var(--color-primary); margin-top: var(--space-4); padding-top: var(--space-3); border-top: 2px solid var(--color-border);">💰 Business Expenses</dt>
+                                    <dt class="table-section-header">💰 Business Expenses</dt>
                                     <dd></dd>
                                     
-                                    <dt style="padding-left: var(--space-3);">Base expenses</dt>
+                                    <dt class="pl-3">Base expenses</dt>
                                     <dd id="simp-expenses-base">€0.00</dd>
                                     
-                                    <dt style="padding-left: var(--space-3);">Admin costs</dt>
+                                    <dt class="pl-3">Admin costs</dt>
                                     <dd id="simp-expenses-admin">€0.00</dd>
                                     
-                                    <dt style="padding-left: var(--space-3);">
+                                    <dt class="pl-3">
                                         Liability insurance (guesstimate)
                                     </dt>
                                     <dd id="simp-liability">€0.00</dd>
                                     
-                                    <dt style="padding-left: var(--space-3); font-weight: 600; background: var(--bg-elevated); padding-right: 0.5rem;">= Total expenses</dt>
-                                    <dd id="simp-expenses-total" style="font-weight: 600; background: var(--bg-elevated); padding-left: 0.5rem;">€0.00</dd>
+                                    <dt class="table-indent-with-bg">= Total expenses</dt>
+                                    <dd id="simp-expenses-total" class="table-subsection-header">€0.00</dd>
                                     
-                                    <dt style="padding-left: var(--space-3); font-weight: 600; color: var(--color-success); background: var(--bg-elevated); padding-right: 0.5rem; margin-top: var(--space-2);">💰 Gross profit</dt>
-                                    <dd id="simp-gross-profit" style="font-weight: 600; color: var(--color-success); background: var(--bg-elevated); padding-left: 0.5rem;">€0.00</dd>
+                                    <dt class="table-indent-with-bg--winner">💰 Gross profit</dt>
+                                    <dd id="simp-gross-profit" class="table-subsection-header--winner">€0.00</dd>
                                     
                                     <!-- TAXES SECTION -->
-                                    <dt style="font-weight: 700; color: var(--color-primary); margin-top: var(--space-4); padding-top: var(--space-3); border-top: 2px solid var(--color-border);">🏛️ Taxes & Contributions</dt>
+                                    <dt class="table-section-header">🏛️ Taxes & Contributions</dt>
                                     <dd></dd>
                                     
-                                    <dt style="padding-left: var(--space-3);">Tax deductions</dt>
+                                    <dt class="pl-3">Tax deductions</dt>
                                     <dd id="simp-deducoes">€0.00</dd>
                                     
-                                    <dt style="padding-left: var(--space-3);">IRS (income tax)</dt>
+                                    <dt class="pl-3">IRS (income tax)</dt>
                                     <dd id="simp-irs">€0.00</dd>
                                     
-                                    <dt style="padding-left: var(--space-3);">Social Security</dt>
+                                    <dt class="pl-3">Social Security</dt>
                                     <dd id="simp-ss">€0.00</dd>
                                     
-                                    <dt style="padding-left: var(--space-3); font-weight: 600; background: var(--bg-elevated); padding-right: 0.5rem;">= Total taxes</dt>
-                                    <dd id="simp-total-taxes" style="font-weight: 600; background: var(--bg-elevated); padding-left: 0.5rem;">€0.00</dd>
+                                    <dt class="table-indent-with-bg">= Total taxes</dt>
+                                    <dd id="simp-total-taxes" class="table-subsection-header">€0.00</dd>
                                     
                                     <!-- NET INCOME SECTION -->
-                                    <dt style="font-weight: 700; color: var(--color-success); margin-top: var(--space-4); padding-top: var(--space-3); border-top: 2px solid var(--color-border);">💵 Net Income</dt>
+                                    <dt class="table-section-header--winner">💵 Net Income</dt>
                                     <dd></dd>
                                     
                                     <dt class="data-list__total">NET CATEGORY B INCOME</dt>
@@ -612,52 +612,52 @@
                                 <h3>Single-Member Company (LDA) Results</h3>
                                 <dl class="data-list">
                                     <!-- INCOME SECTION -->
-                                    <dt style="font-weight: 700; color: var(--color-primary); margin-top: var(--space-4); padding-top: var(--space-3); border-top: 2px solid var(--color-border);">📊 Income</dt>
+                                    <dt class="table-section-header">📊 Income</dt>
                                     <dd></dd>
                                     
-                                    <dt style="padding-left: var(--space-3);">Gross income</dt>
+                                    <dt class="pl-3">Gross income</dt>
                                     <dd id="org-gross">€0.00</dd>
                                     
                                     <!-- EXPENSES SECTION -->
-                                    <dt style="font-weight: 700; color: var(--color-primary); margin-top: var(--space-4); padding-top: var(--space-3); border-top: 2px solid var(--color-border);">💰 Business Expenses</dt>
+                                    <dt class="table-section-header">💰 Business Expenses</dt>
                                     <dd></dd>
                                     
-                                    <dt style="padding-left: var(--space-3);">Base expenses</dt>
+                                    <dt class="pl-3">Base expenses</dt>
                                     <dd id="org-expenses-base">€0.00</dd>
                                     
-                                    <dt style="padding-left: var(--space-3);">Admin costs</dt>
+                                    <dt class="pl-3">Admin costs</dt>
                                     <dd id="org-expenses-admin">€0.00</dd>
                                     
-                                    <dt style="padding-left: var(--space-3); font-weight: 600; background: var(--bg-elevated); padding-right: 0.5rem;">= Total expenses</dt>
-                                    <dd id="org-expenses-total" style="font-weight: 600; background: var(--bg-elevated); padding-left: 0.5rem;">€0.00</dd>
+                                    <dt class="table-indent-with-bg">= Total expenses</dt>
+                                    <dd id="org-expenses-total" class="table-subsection-header">€0.00</dd>
                                     
-                                    <dt style="padding-left: var(--space-3); font-weight: 600; color: var(--color-success); background: var(--bg-elevated); padding-right: 0.5rem; margin-top: var(--space-2);">💰 Gross profit</dt>
-                                    <dd id="org-gross-profit" style="font-weight: 600; color: var(--color-success); background: var(--bg-elevated); padding-left: 0.5rem;">€0.00</dd>
+                                    <dt class="table-indent-with-bg--winner">💰 Gross profit</dt>
+                                    <dd id="org-gross-profit" class="table-subsection-header--winner">€0.00</dd>
                                     
-                                    <dt style="padding-left: var(--space-3); font-weight: 600; background: var(--bg-elevated); padding-right: 0.5rem; margin-top: var(--space-2);">= Net business income</dt>
-                                    <dd id="org-net-biz" style="font-weight: 600; background: var(--bg-elevated); padding-left: 0.5rem;">€0.00</dd>
+                                    <dt class="table-indent-with-bg mt-2">= Net business income</dt>
+                                    <dd id="org-net-biz" class="table-subsection-header">€0.00</dd>
                                     
-                                    <dt style="padding-left: var(--space-3); font-weight: 600; background: var(--bg-elevated); padding-right: 0.5rem;">= Taxable income</dt>
-                                    <dd id="org-taxable" style="font-weight: 600; background: var(--bg-elevated); padding-left: 0.5rem;">€0.00</dd>
+                                    <dt class="table-indent-with-bg">= Taxable income</dt>
+                                    <dd id="org-taxable" class="table-subsection-header">€0.00</dd>
                                     
                                     <!-- TAXES SECTION -->
-                                    <dt style="font-weight: 700; color: var(--color-primary); margin-top: var(--space-4); padding-top: var(--space-3); border-top: 2px solid var(--color-border);">🏛️ Taxes & Contributions</dt>
+                                    <dt class="table-section-header">🏛️ Taxes & Contributions</dt>
                                     <dd></dd>
                                     
-                                    <dt style="padding-left: var(--space-3);">Tax deductions</dt>
+                                    <dt class="pl-3">Tax deductions</dt>
                                     <dd id="org-deducoes">€0.00</dd>
                                     
-                                    <dt style="padding-left: var(--space-3);">IRS (income tax)</dt>
+                                    <dt class="pl-3">IRS (income tax)</dt>
                                     <dd id="org-irs">€0.00</dd>
                                     
-                                    <dt style="padding-left: var(--space-3);">Social Security</dt>
+                                    <dt class="pl-3">Social Security</dt>
                                     <dd id="org-ss">€0.00</dd>
                                     
-                                    <dt style="padding-left: var(--space-3); font-weight: 600; background: var(--bg-elevated); padding-right: 0.5rem;">= Total taxes</dt>
-                                    <dd id="org-total-taxes" style="font-weight: 600; background: var(--bg-elevated); padding-left: 0.5rem;">€0.00</dd>
+                                    <dt class="table-indent-with-bg">= Total taxes</dt>
+                                    <dd id="org-total-taxes" class="table-subsection-header">€0.00</dd>
                                     
                                     <!-- NET INCOME SECTION -->
-                                    <dt style="font-weight: 700; color: var(--color-success); margin-top: var(--space-4); padding-top: var(--space-3); border-top: 2px solid var(--color-border);">💵 Net Income</dt>
+                                    <dt class="table-section-header--winner">💵 Net Income</dt>
                                     <dd></dd>
                                     
                                     <dt class="data-list__total">NET CATEGORY B INCOME</dt>
@@ -669,7 +669,7 @@
 
                         <!-- Comparison Table -->
                         <details class="details" open>
-                            <summary>Detailed comparison <span style="font-size: var(--text-sm); opacity: 0.8; font-weight: normal;">(10-year cumulative totals)</span></summary>
+                            <summary>Detailed comparison <span class="text--small text--opacity-80 text--normal-weight">(10-year cumulative totals)</span></summary>
                             <div class="comparison-table">
                                 <table>
                                     <thead>
@@ -682,25 +682,25 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>Taxable income <span style="font-size: var(--text-xs); opacity: 0.7; font-weight: normal;">(10-year total)</span></td>
+                                            <td>Taxable income <span class="text--xs text--opacity-70 text--normal-weight">(10-year total)</span></td>
                                             <td id="comp-simple-taxable">€0.00</td>
                                             <td id="comp-organized-taxable">€0.00</td>
                                             <td id="comp-taxable-diff">€0.00</td>
                                         </tr>
                                         <tr>
-                                            <td>Income tax (IRS) <span style="font-size: var(--text-xs); opacity: 0.7; font-weight: normal;">(10-year total)</span></td>
+                                            <td>Income tax (IRS) <span class="text--xs text--opacity-70 text--normal-weight">(10-year total)</span></td>
                                             <td id="comp-simple-tax">€0.00</td>
                                             <td id="comp-organized-tax">€0.00</td>
                                             <td id="comp-tax-diff">€0.00</td>
                                         </tr>
                                         <tr>
-                                            <td>Social Security <span style="font-size: var(--text-xs); opacity: 0.7; font-weight: normal;">(10-year total)</span></td>
+                                            <td>Social Security <span class="text--xs text--opacity-70 text--normal-weight">(10-year total)</span></td>
                                             <td id="comp-simple-ss">€0.00</td>
                                             <td id="comp-organized-ss">€0.00</td>
                                             <td id="comp-ss-diff">€0.00</td>
                                         </tr>
                                         <tr>
-                                            <td><strong>Net income <span style="font-size: var(--text-xs); opacity: 0.7; font-weight: normal;">(10-year total)</span></strong></td>
+                                            <td><strong>Net income <span class="text--xs text--opacity-70 text--normal-weight">(10-year total)</span></strong></td>
                                             <td id="comp-simple-net">€0.00</td>
                                             <td id="comp-organized-net">€0.00</td>
                                             <td id="comp-net-diff">€0.00</td>
@@ -787,7 +787,7 @@
                                     <tr><td>Above €83,696</td><td>48.0%</td></tr>
                                 </tbody>
                             </table>
-                            <p class="help-text"><strong>Source:</strong> <a href="https://dre.pt/web/guest/legislacao-consolidada/-/lc/108398988/diploma?did=150747299" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">Lei n.º 24-D/2024 (Orçamento do Estado 2025)</a> - IRS tax brackets updated annually by State Budget law</p>
+                            <p class="help-text"><strong>Source:</strong> <a href="https://dre.pt/web/guest/legislacao-consolidada/-/lc/108398988/diploma?did=150747299" target="_blank" rel="noopener" class="link--primary">Lei n.º 24-D/2024 (Orçamento do Estado 2025)</a> - IRS tax brackets updated annually by State Budget law</p>
                         </div>
 
                         <!-- Calculator Scope -->
@@ -802,21 +802,21 @@
                                     <li><strong>Received at personal level:</strong> Investment accounts (IBKR, crypto, ETFs) held personally in both cases</li>
                                     <li><strong>Not passed through LLC:</strong> Transparent LLCs only pass through Category B professional services income</li>
                                 </ul>
-                                <p style="margin-top: var(--space-2);"><strong>The Math:</strong></p>
-                                <pre style="background: #f5f5f5; padding: var(--space-3); border-radius: var(--radius); font-family: monospace; font-size: 0.9rem;">
+                                <p class="mt-2"><strong>The Math:</strong></p>
+                                <pre class="code-block">
 Freelancer net = (Cat B services - taxes) + (Investments - 28%)
 LLC net        = (Cat B services - taxes) + (Investments - 28%)
                                               ^^^^^^^^^^^^^^^^^^
                                               IDENTICAL → CANCELS OUT</pre>
-                                <p style="margin-top: var(--space-2);"><strong>Legal Reality:</strong> <em>Sociedades de profissionais</em> (professional partnerships) are formed to perform "intellectual, scientific, artistic, or technical services." Holding investment portfolios isn't part of their statutory purpose. If an LLC received investment income, it would flow through as Category B (taxed up to 48%) instead of the beneficial 28% flat rate for personal investment income.</p>
-                                <p style="margin-top: var(--space-2);"><strong>Practical Structure:</strong></p>
+                                <p class="mt-2"><strong>Legal Reality:</strong> <em>Sociedades de profissionais</em> (professional partnerships) are formed to perform "intellectual, scientific, artistic, or technical services." Holding investment portfolios isn't part of their statutory purpose. If an LLC received investment income, it would flow through as Category B (taxed up to 48%) instead of the beneficial 28% flat rate for personal investment income.</p>
+                                <p class="mt-2"><strong>Practical Structure:</strong></p>
                                 <ul class="info-list">
                                     <li><strong>LLC:</strong> Invoices clients, receives service payments (Category B flow-through)</li>
                                     <li><strong>Personal:</strong> Holds investment accounts, receives dividends/gains (Category E/G at 28%)</li>
                                 </ul>
-                                <p style="margin-top: var(--space-2);"><strong>Conclusion:</strong> This calculator focuses on the <strong>differential impact</strong> where structure choice actually matters (Category B taxation). Including investment income would add complexity without changing the comparison outcome.</p>
+                                <p class="mt-2"><strong>Conclusion:</strong> This calculator focuses on the <strong>differential impact</strong> where structure choice actually matters (Category B taxation). Including investment income would add complexity without changing the comparison outcome.</p>
                             </div>
-                            <p class="help-text"><strong>Sources:</strong> <a href="https://rauva.com/blog/fiscal-transparency" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">Rauva - Transparência Fiscal</a> | <a href="https://www.sociedadescomerciais.pt/sociedades-de-profissionais/" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">Sociedades de Profissionais</a> | <a href="https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/cirs_rep/" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">CIRS (Portuguese Income Tax Code)</a></p>
+                            <p class="help-text"><strong>Sources:</strong> <a href="https://rauva.com/blog/fiscal-transparency" target="_blank" rel="noopener" class="link--primary">Rauva - Transparência Fiscal</a> | <a href="https://www.sociedadescomerciais.pt/sociedades-de-profissionais/" target="_blank" rel="noopener" class="link--primary">Sociedades de Profissionais</a> | <a href="https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/cirs_rep/" target="_blank" rel="noopener" class="link--primary">CIRS (Portuguese Income Tax Code)</a></p>
                         </div>
 
                         <!-- Simplified Regime Limit -->
@@ -834,8 +834,8 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
                                 </ul>
                             </div>
                             <p class="help-text"><strong>Planning tip:</strong> If approaching €200k, consider switching to organized accounting or LDA proactively to avoid mid-year complications.</p>
-                            <p class="help-text"><strong>Source:</strong> <a href="https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/cirs_rep/index_cirs.htm#a28" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">CIRS Article 28 (Regime simplificado)</a> | 
-                                <a href="https://www.portaldasfinancas.gov.pt" target="_blank" rel="noopener" style="color: var(--color-primary);">
+                            <p class="help-text"><strong>Source:</strong> <a href="https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/cirs_rep/index_cirs.htm#a28" target="_blank" rel="noopener" class="link--primary">CIRS Article 28 (Regime simplificado)</a> | 
+                                <a href="https://www.portaldasfinancas.gov.pt" target="_blank" rel="noopener" class="text--primary">
                                     Portal das Finanças
                                 </a>
                             </p>
@@ -859,15 +859,15 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
                                     <p class="help-text"><strong>Deemed expenses: 65%</strong></p>
                                 </div>
                             </div>
-                            <p class="help-text"><strong>Sources:</strong> <a href="https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/cirs_rep/index_cirs.htm#a31" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">CIRS Article 31 (Coeficientes)</a> & <a href="https://diariodarepublica.pt/dr/legislacao-consolidada/portaria/2001-177307831" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">Portaria n.º 1011/2001 (Article 151 list)</a></p>
-                            <ul class="info-list" style="margin-top: var(--space-3);">
+                            <p class="help-text"><strong>Sources:</strong> <a href="https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/cirs_rep/index_cirs.htm#a31" target="_blank" rel="noopener" class="link--primary">CIRS Article 31 (Coeficientes)</a> & <a href="https://diariodarepublica.pt/dr/legislacao-consolidada/portaria/2001-177307831" target="_blank" rel="noopener" class="link--primary">Portaria n.º 1011/2001 (Article 151 list)</a></p>
+                            <ul class="info-list" class="mt-3">
                                 <li>
-                                    <a href="https://diariodarepublica.pt/dr/legislacao-consolidada/portaria/2001-177307831" target="_blank" rel="noopener" style="color: var(--color-primary);">
+                                    <a href="https://diariodarepublica.pt/dr/legislacao-consolidada/portaria/2001-177307831" target="_blank" rel="noopener" class="text--primary">
                                         Portaria n.º 1011/2001 - Article 151 Activity List (Diário da República)
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/cirs_rep/" target="_blank" rel="noopener" style="color: var(--color-primary);">
+                                    <a href="https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/cirs_rep/" target="_blank" rel="noopener" class="text--primary">
                                         CIRS - Portuguese Income Tax Code (Full Text)
                                     </a>
                                 </li>
@@ -885,19 +885,19 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
                                 <li><strong>Other codes:</strong> Default to general services (35% coefficient)</li>
                             </ul>
                             <p class="help-text"><strong>Official Sources for Verification:</strong></p>
-                            <ul class="info-list" style="margin-top: var(--space-2);">
+                            <ul class="info-list" class="mt-2">
                                 <li>
-                                    <a href="https://www.ine.pt/ine_novidades/semin/cae/CAE_REV_3.pdf" target="_blank" rel="noopener" style="color: var(--color-primary);">
+                                    <a href="https://www.ine.pt/ine_novidades/semin/cae/CAE_REV_3.pdf" target="_blank" rel="noopener" class="text--primary">
                                         INE (National Statistics Institute) - CAE Rev. 3 Complete Database (PDF)
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="https://www.portaldasfinancas.gov.pt" target="_blank" rel="noopener" style="color: var(--color-primary);">
+                                    <a href="https://www.portaldasfinancas.gov.pt" target="_blank" rel="noopener" class="text--primary">
                                         Portal das Finanças
                                     </a> - Search for "CAE" or consult your tax advisor for your official activity code
                                 </li>
                                 <li>
-                                    <a href="https://www.ine.pt/xportal/xmain?xpid=INE&xpgid=ine_cont_inst&INST=6251013" target="_blank" rel="noopener" style="color: var(--color-primary);">
+                                    <a href="https://www.ine.pt/xportal/xmain?xpid=INE&xpgid=ine_cont_inst&INST=6251013" target="_blank" rel="noopener" class="text--primary">
                                         INE - CAE Rev. 3 Methodology and Documentation
                                     </a>
                                 </li>
@@ -908,7 +908,7 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
                         <div class="methodology-section">
                             <h3>Social Security (Segurança Social)</h3>
                             
-                            <h4 style="margin-top: var(--space-4);">Freelancers (Self-Employed)</h4>
+                            <h4 class="mt-4">Freelancers (Self-Employed)</h4>
                             <ul class="info-list">
                                 <li><strong>Contribution Rate:</strong> 21.4% (unchanged from 2024)</li>
                                 <li><strong>Relevant Income:</strong> 70% of gross income (simplified) or net business income (organized)</li>
@@ -917,7 +917,7 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
                                 <li><strong>First-Year Exemption:</strong> 12 rolling months available for new self-employed</li>
                             </ul>
                             
-                            <h4 style="margin-top: var(--space-4);">Single-Member Company (LDA) - Manager Contributions</h4>
+                            <h4 class="mt-4">Single-Member Company (LDA) - Manager Contributions</h4>
                             <ul class="info-list">
                                 <li><strong>Employee Contribution:</strong> 11% of declared salary</li>
                                 <li><strong>Employer Contribution:</strong> 23.75% of declared salary</li>
@@ -927,7 +927,7 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
                             </ul>
                             <p class="help-text"><strong>Important:</strong> LDA managers pay significantly higher SS rate (34.75%) vs freelancers (21.4%), but on a lower base (minimum wage) vs freelancers (70% of actual income)</p>
                             
-                            <p class="help-text" style="margin-top: var(--space-3);"><strong>Source:</strong> <a href="https://www.seg-social.pt/trabalhadores-independentes" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">Segurança Social - Trabalhadores Independentes</a> | <a href="https://dre.pt/web/guest/legislacao-consolidada/-/lc/124968575/diploma" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">Código dos Regimes Contributivos do Sistema Previdencial de Segurança Social</a> | <a href="https://www.seg-social.pt/ias" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">IAS 2025: €522.50 (Official Value)</a></p>
+                            <p class="help-text" class="mt-3"><strong>Source:</strong> <a href="https://www.seg-social.pt/trabalhadores-independentes" target="_blank" rel="noopener" class="link--primary">Segurança Social - Trabalhadores Independentes</a> | <a href="https://dre.pt/web/guest/legislacao-consolidada/-/lc/124968575/diploma" target="_blank" rel="noopener" class="link--primary">Código dos Regimes Contributivos do Sistema Previdencial de Segurança Social</a> | <a href="https://www.seg-social.pt/ias" target="_blank" rel="noopener" class="link--primary">IAS 2025: €522.50 (Official Value)</a></p>
                         </div>
 
                         <!-- Solidarity Tax -->
@@ -950,7 +950,7 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
                             <ul class="info-list">
                                 <li>€80,000 - €120,000 = €40,000 × 2.5% = <strong>€1,000 solidarity tax</strong></li>
                             </ul>
-                            <p class="help-text"><strong>Source:</strong> <a href="https://dre.pt/dre/legislacao-consolidada/lei/2014-58476020" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">Lei n.º 82-B/2014, Article 191 (Solidarity Tax)</a> - maintained in subsequent State Budgets through 2025</p>
+                            <p class="help-text"><strong>Source:</strong> <a href="https://dre.pt/dre/legislacao-consolidada/lei/2014-58476020" target="_blank" rel="noopener" class="link--primary">Lei n.º 82-B/2014, Article 191 (Solidarity Tax)</a> - maintained in subsequent State Budgets through 2025</p>
                         </div>
 
                         <!-- IRS Jovem -->
@@ -974,7 +974,7 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
                                     <tr><td>Year 11+</td><td>0%</td><td>100%</td><td>Benefit expired - normal taxation</td></tr>
                                 </tbody>
                             </table>
-                            <div class="disclaimer-box" style="margin-top: var(--space-4);">
+                            <div class="disclaimer-box" class="mt-4">
                                 <h4>🚨 Critical Exclusion Rule</h4>
                                 <p><strong>IRS Jovem and NHR/IFICI are mutually exclusive.</strong> You CANNOT use both benefits.</p>
                                 <ul class="info-list">
@@ -985,11 +985,11 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
                                 <p class="help-text"><strong>Which to choose?</strong> For young professionals, IRS Jovem is often more valuable in early years (100%/75% exemptions) than NHR's 20% flat rate, especially Years 1-3.</p>
                             </div>
                             <p class="help-text"><strong>Eligibility:</strong> Under 35 years old, completed higher education (bachelor's degree or higher) OR level 4/5 vocational training, Portuguese tax resident, <strong>never enrolled in NHR</strong></p>
-                            <p class="help-text"><strong>Income Cap:</strong> €28,737.50 (55 × <a href="https://www.seg-social.pt/ias" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">IAS €522.50</a> for 2025). Exemption applies to taxable income up to this cap; income above cap taxed at standard progressive rates.</p>
+                            <p class="help-text"><strong>Income Cap:</strong> €28,737.50 (55 × <a href="https://www.seg-social.pt/ias" target="_blank" rel="noopener" class="link--primary">IAS €522.50</a> for 2025). Exemption applies to taxable income up to this cap; income above cap taxed at standard progressive rates.</p>
                             <p class="help-text"><strong>Example:</strong> €40,000 gross income with 75% coefficient = €30,000 taxable. Year 1 (100% exemption): Exemption applies to €28,737.50 (under cap), remaining €1,262.50 taxed normally.</p>
                             <p class="help-text"><strong>Duration:</strong> Extended to 10 years from 2025 (was 5 years pre-2025)</p>
-                            <p class="help-text"><strong>Source:</strong> <a href="https://dre.pt/dre/legislacao-consolidada/lei/2024-926649154" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">Lei n.º 24-D/2024 (State Budget 2025), Article 200</a> | <a href="https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/cirs_rep/index_cirs.htm#a2b" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">CIRS Article 2-B (IRS Jovem)</a> | 
-                                <a href="https://www.seg-social.pt/irs-jovem" target="_blank" rel="noopener" style="color: var(--color-primary);">
+                            <p class="help-text"><strong>Source:</strong> <a href="https://dre.pt/dre/legislacao-consolidada/lei/2024-926649154" target="_blank" rel="noopener" class="link--primary">Lei n.º 24-D/2024 (State Budget 2025), Article 200</a> | <a href="https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/cirs_rep/index_cirs.htm#a2b" target="_blank" rel="noopener" class="link--primary">CIRS Article 2-B (IRS Jovem)</a> | 
+                                <a href="https://www.seg-social.pt/irs-jovem" target="_blank" rel="noopener" class="text--primary">
                                     Segurança Social - IRS Jovem Guide
                                 </a>
                             </p>
@@ -1000,19 +1000,19 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
                             <h3>NHR / IFICI (20% Flat Rate)</h3>
                             <p class="help-text">Special tax regime for qualifying residents and activities</p>
                             
-                            <div class="disclaimer-box" style="margin-top: var(--space-4);">
+                            <div class="disclaimer-box" class="mt-4">
                                 <h4>⚠️ IMPORTANT: Calculator Scope Limitation</h4>
                                 <p><strong>This calculator ONLY shows Portuguese professional income (Category B) taxation.</strong></p>
                                 <p>It does NOT calculate foreign income exemptions available under NHR 1.0. If you have foreign income, your actual total tax may be significantly lower than shown here.</p>
                             </div>
                             
-                            <h4 style="margin-top: var(--space-5);">Original NHR (Pre-2024) - Extensive Foreign Income Exemptions</h4>
+                            <h4 class="mt-5">Original NHR (Pre-2024) - Extensive Foreign Income Exemptions</h4>
                             <ul class="info-list">
                                 <li><strong>Granted:</strong> Before 2024 (closed to new applicants)</li>
                                 <li><strong>Duration:</strong> 10-year benefit</li>
                                 <li><strong>Portuguese income:</strong> 20% flat rate on professional income (Category B)</li>
                                 <li><strong>Foreign income exemptions (if DTA exists):</strong>
-                                    <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
+                                    <ul class="mt-05 ml-15">
                                         <li>✅ Foreign rental income - <strong>EXEMPT</strong></li>
                                         <li>✅ Foreign bank interest - <strong>EXEMPT</strong></li>
                                         <li>✅ Foreign dividends - <strong>EXEMPT</strong></li>
@@ -1024,7 +1024,7 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
                                 </li>
                             </ul>
                             
-                            <h4 style="margin-top: var(--space-5);">NHR 2.0 / IFICI (2024+)</h4>
+                            <h4 class="mt-5">NHR 2.0 / IFICI (2024+)</h4>
                             <ul class="info-list">
                                 <li><strong>Granted:</strong> From 2024 onwards, requires IFICI status</li>
                                 <li><strong>Duration:</strong> 10-year benefit</li>
@@ -1032,7 +1032,7 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
                                 <li><strong>Eligible Activities:</strong> Scientific research, innovation, high-value professions (Article 151)</li>
                                 <li><strong>Foreign income:</strong> Different treatment than NHR 1.0 - consult tax advisor</li>
                             </ul>
-                            <div class="disclaimer-box" style="margin-top: var(--space-4);">
+                            <div class="disclaimer-box" class="mt-4">
                                 <h4>🚨 Critical Exclusion Rule</h4>
                                 <p><strong>NHR/IFICI and IRS Jovem are mutually exclusive.</strong> You CANNOT use both benefits.</p>
                                 <ul class="info-list">
@@ -1042,7 +1042,7 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
                                 </ul>
                             </div>
                             
-                            <div class="disclaimer-box" style="margin-top: var(--space-4);">
+                            <div class="disclaimer-box" class="mt-4">
                                 <h4>📊 NHR 1.0 Foreign Income: Real-World Example</h4>
                                 <p><strong>UK expat with NHR 1.0 status and €85,000 total income:</strong></p>
                                 <ul class="info-list">
@@ -1058,8 +1058,8 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
                             <p class="help-text"><strong>Conditions for foreign income exemption:</strong> Must have Double Taxation Agreement (DTA) between Portugal and source country, income must be "taxable" in source country under treaty (even if not actually taxed)</p>
                             <p class="help-text"><strong>Key DTA countries:</strong> US, UK, Germany, France, Switzerland, Canada, Australia, Singapore, UAE, Netherlands, 70+ countries total</p>
                             <p class="help-text"><strong>Note:</strong> Solidarity tax still applies if taxable income exceeds €80,000</p>
-                            <p class="help-text"><strong>Source:</strong> <a href="https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/cirs_rep/index_cirs.htm#a72" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">CIRS Article 72 (NHR regime)</a> | <a href="https://dre.pt/dre/legislacao-consolidada/decreto-lei/2023-820857532" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">Decree-Law 249/2023 (IFICI)</a> | 
-                                <a href="https://www.portaldasfinancas.gov.pt/pt/menu/nao-residentes/residentes-nao-habituais/informacao-sobre-rnh.jsp" target="_blank" rel="noopener" style="color: var(--color-primary);">
+                            <p class="help-text"><strong>Source:</strong> <a href="https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/cirs_rep/index_cirs.htm#a72" target="_blank" rel="noopener" class="link--primary">CIRS Article 72 (NHR regime)</a> | <a href="https://dre.pt/dre/legislacao-consolidada/decreto-lei/2023-820857532" target="_blank" rel="noopener" class="link--primary">Decree-Law 249/2023 (IFICI)</a> | 
+                                <a href="https://www.portaldasfinancas.gov.pt/pt/menu/nao-residentes/residentes-nao-habituais/informacao-sobre-rnh.jsp" target="_blank" rel="noopener" class="text--primary">
                                     Portal das Finanças - NHR Information
                                 </a>
                             </p>
@@ -1070,8 +1070,8 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
                             <h3>Professional Liability Insurance (Freelancers) — GUESSETIMATION ONLY</h3>
                             <p class="help-text">Freelancers operating without limited liability protection typically need professional liability insurance</p>
                             
-                            <div class="disclaimer-box" style="margin-top: var(--space-3); background: #fff3cd; border-left: 4px solid #ff9800;">
-                                <h4 style="color: #856404;">⚠️ IMPORTANT: This is a ROUGH GUESSTIMATE, NOT a precise calculation</h4>
+                            <div class="disclaimer-box" class="warning-box mt-3">
+                                <h4 class="warning-text">⚠️ IMPORTANT: This is a ROUGH GUESSTIMATE, NOT a precise calculation</h4>
                                 <p><strong>Actual premiums can vary by ±20-40% or MORE</strong> depending on:</p>
                                 <ul class="info-list">
                                     <li>Specific insurer pricing policies and risk models</li>
@@ -1080,39 +1080,39 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
                                     <li>Market conditions and competition in Portugal</li>
                                     <li>Coverage details, deductibles, and policy terms</li>
                                 </ul>
-                                <p style="margin-top: var(--space-2);"><strong>⚠️ Do NOT rely on this estimate for budgeting.</strong> Always get personalized quotes from multiple insurance brokers/providers before making financial decisions.</p>
+                                <p class="mt-2"><strong>⚠️ Do NOT rely on this estimate for budgeting.</strong> Always get personalized quotes from multiple insurance brokers/providers before making financial decisions.</p>
                             </div>
                             
-                            <h4 style="margin-top: var(--space-4);">Guessetimation Formula (For Reference Only)</h4>
+                            <h4 class="mt-4">Guessetimation Formula (For Reference Only)</h4>
                             <p class="help-text">This calculator uses a simplified industry-average formula to provide a ballpark estimate:</p>
-                            <div class="disclaimer-box" style="margin-top: var(--space-3);">
+                            <div class="disclaimer-box" class="mt-3">
                                 <p><strong>Formula:</strong> Premium ≈ (BaseRate + Revenue × VariableRate) × RiskMultiplier × AdjustmentFactors</p>
-                                <p style="margin-top: var(--space-2);"><strong>Note:</strong> This is based on general industry averages and Portugal market data, but actual quotes will vary significantly by insurer</p>
+                                <p class="mt-2"><strong>Note:</strong> This is based on general industry averages and Portugal market data, but actual quotes will vary significantly by insurer</p>
                             </div>
                             
-                            <h4 style="margin-top: var(--space-4);">Risk Tiers (Auto-Derived from Activity)</h4>
+                            <h4 class="mt-4">Risk Tiers (Auto-Derived from Activity)</h4>
                             <div class="coefficient-cards">
                                 <div class="coefficient-card">
-                                    <div class="coefficient-card__value" style="font-size: 1rem;">Low Risk</div>
+                                    <div class="coefficient-card__value" class="text--base">Low Risk</div>
                                     <div class="coefficient-card__label">Designers, writers, content creators</div>
-                                    <p class="help-text" style="font-size: 0.875rem;">Base: €350 + 0.35% revenue × 0.8 multiplier</p>
+                                    <p class="help-text" class="text--875">Base: €350 + 0.35% revenue × 0.8 multiplier</p>
                                     <p class="help-text"><strong>Example:</strong> €100k → ~€640/year (0.64%)</p>
                                 </div>
                                 <div class="coefficient-card">
-                                    <div class="coefficient-card__value" style="font-size: 1rem;">Medium Risk</div>
+                                    <div class="coefficient-card__value" class="text--base">Medium Risk</div>
                                     <div class="coefficient-card__label">IT, developers, business consultants</div>
-                                    <p class="help-text" style="font-size: 0.875rem;">Base: €450 + 0.45% revenue × 1.0 multiplier</p>
+                                    <p class="help-text" class="text--875">Base: €450 + 0.45% revenue × 1.0 multiplier</p>
                                     <p class="help-text"><strong>Example:</strong> €100k → ~€900/year (0.90%)</p>
                                 </div>
                                 <div class="coefficient-card">
-                                    <div class="coefficient-card__value" style="font-size: 1rem;">High Risk</div>
+                                    <div class="coefficient-card__value" class="text--base">High Risk</div>
                                     <div class="coefficient-card__label">Finance, healthcare tech, financial advisors</div>
-                                    <p class="help-text" style="font-size: 0.875rem;">Base: €800 + 0.80% revenue × 1.8 multiplier</p>
+                                    <p class="help-text" class="text--875">Base: €800 + 0.80% revenue × 1.8 multiplier</p>
                                     <p class="help-text"><strong>Example:</strong> €100k → ~€2,240/year (2.24%)</p>
                                 </div>
                             </div>
                             
-                            <h4 style="margin-top: var(--space-4);">Adjustment Factors (Optional)</h4>
+                            <h4 class="mt-4">Adjustment Factors (Optional)</h4>
                             <ul class="info-list">
                                 <li><strong>USA/Canada Coverage:</strong> +35% (higher litigation risk)</li>
                                 <li><strong>Claims History:</strong> Minor +15%, Major +40%</li>
@@ -1120,50 +1120,50 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
                                 <li><strong>Coverage Limit:</strong> ±40% × (requested/€2M - 1)</li>
                             </ul>
                             
-                            <h4 style="margin-top: var(--space-4);">Activity Code → Risk Tier Mapping</h4>
+                            <h4 class="mt-4">Activity Code → Risk Tier Mapping</h4>
                             <p class="help-text">Risk tier is automatically derived from your activity:</p>
-                            <ul class="info-list" style="margin-top: 0.5rem;">
+                            <ul class="info-list" class="mt-05">
                                 <li><strong>High-value services</strong> (CAE 62xxx IT, 70220 consulting, 74100 design) → <strong>Medium Risk</strong></li>
                                 <li><strong>General services</strong> (catch-all) → <strong>Low Risk</strong> (conservative default)</li>
                                 <li><strong>Finance/Healthcare</strong> (CAE 69200 accounting, 69102 legal, 86xxx health) → <strong>High Risk</strong> (explicit override)</li>
                             </ul>
-                            <p class="help-text" style="margin-top: var(--space-3);">You can manually override the auto-derived risk level in the advanced settings if needed.</p>
+                            <p class="help-text" class="mt-3">You can manually override the auto-derived risk level in the advanced settings if needed.</p>
                             
-                            <div class="disclaimer-box" style="margin-top: var(--space-4);">
+                            <div class="disclaimer-box" class="mt-4">
                                 <h4>Guessetimation Methodology</h4>
                                 <p><strong>Scaling Property:</strong> Premium percentage generally decreases with revenue due to fixed base costs becoming proportionally smaller. This matches typical insurance pricing patterns.</p>
                                 <p><strong>Industry Averages:</strong> Formula based on general patterns observed across multiple EU/UK insurance providers and industry research, but <strong>this is NOT a validated predictive model</strong>.</p>
                                 <p><strong>Example Reference Point:</strong> €250k revenue, IT consulting typically costs €600-€1,200/year (0.24-0.48%) based on market research, but individual quotes vary widely. <strong>Our guesstimate may be off by 20-40% or more.</strong></p>
-                                <p style="margin-top: var(--space-2); font-weight: 600; color: #d32f2f;">⚠️ ALWAYS get actual quotes from insurance providers. Do NOT use this estimate for financial planning.</p>
+                                <p class="error-text mt-2">⚠️ ALWAYS get actual quotes from insurance providers. Do NOT use this estimate for financial planning.</p>
                             </div>
                             
-                            <div class="disclaimer-box" style="margin-top: var(--space-4);">
+                            <div class="disclaimer-box" class="mt-4">
                                 <h4>LDA vs Freelancer Liability</h4>
                                 <p><strong>LDA (Limited Liability Company):</strong> Built-in limited liability protection. Company assets are separate from personal assets. Professional liability insurance optional (may still be required by specific clients).</p>
                                 <p><strong>Freelancer:</strong> Unlimited personal liability. Your personal assets (home, savings, etc.) are at risk in case of claims. Professional liability insurance strongly recommended.</p>
-                                <p style="margin-top: var(--space-2);"><strong>Cost Comparison:</strong> Insurance at 0.5-1.5% of revenue is far more cost-effective than LDA overhead (€3,650-8,000/year fixed costs) for most freelancers.</p>
+                                <p class="mt-2"><strong>Cost Comparison:</strong> Insurance at 0.5-1.5% of revenue is far more cost-effective than LDA overhead (€3,650-8,000/year fixed costs) for most freelancers.</p>
                             </div>
                             
-                            <p class="help-text" style="margin-top: var(--space-4);"><strong>⚠️ CRITICAL DISCLAIMER:</strong> These are ROUGH GUESSTIMATES with potential variance of ±20-40% OR MORE. Actual costs vary significantly by profession, coverage level, claims history, insurer, and market conditions. <strong>This tool CANNOT replace getting actual quotes from insurance brokers.</strong> Use for rough budgeting awareness only.</p>
-                            <p class="help-text"><strong>Official Portuguese Insurance Regulation:</strong> <a href="https://www.asf.com.pt/" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">ASF - Autoridade de Supervisão de Seguros e Fundos de Pensões (Insurance Regulator)</a> | <a href="https://dre.pt/dre/legislacao-consolidada/decreto-lei/2015-67474011" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">Decree-Law 72/2008 (Insurance Contract Law)</a></p>
+                            <p class="help-text" class="mt-4"><strong>⚠️ CRITICAL DISCLAIMER:</strong> These are ROUGH GUESSTIMATES with potential variance of ±20-40% OR MORE. Actual costs vary significantly by profession, coverage level, claims history, insurer, and market conditions. <strong>This tool CANNOT replace getting actual quotes from insurance brokers.</strong> Use for rough budgeting awareness only.</p>
+                            <p class="help-text"><strong>Official Portuguese Insurance Regulation:</strong> <a href="https://www.asf.com.pt/" target="_blank" rel="noopener" class="link--primary">ASF - Autoridade de Supervisão de Seguros e Fundos de Pensões (Insurance Regulator)</a> | <a href="https://dre.pt/dre/legislacao-consolidada/decreto-lei/2015-67474011" target="_blank" rel="noopener" class="link--primary">Decree-Law 72/2008 (Insurance Contract Law)</a></p>
                             <p class="help-text"><strong>Portugal Insurance Providers:</strong> 
-                                <a href="https://www.hiscox.pt/" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">Hiscox Portugal</a>, 
-                                <a href="https://www.axa.pt/" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">AXA</a>, 
-                                <a href="https://www.zurich.pt/" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">Zurich</a>
+                                <a href="https://www.hiscox.pt/" target="_blank" rel="noopener" class="link--primary">Hiscox Portugal</a>, 
+                                <a href="https://www.axa.pt/" target="_blank" rel="noopener" class="link--primary">AXA</a>, 
+                                <a href="https://www.zurich.pt/" target="_blank" rel="noopener" class="link--primary">Zurich</a>
                             </p>
-                            <p class="help-text"><strong>Industry Research Sources:</strong> Validation data sourced from <a href="https://www.rauva.com/blog/professional-liability-insurance-quick-guide" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">Rauva Insurance Guide</a>, Insureon market research, and comparative data from 20+ EU/UK insurance providers (2023-2024)</p>
+                            <p class="help-text"><strong>Industry Research Sources:</strong> Validation data sourced from <a href="https://www.rauva.com/blog/professional-liability-insurance-quick-guide" target="_blank" rel="noopener" class="link--primary">Rauva Insurance Guide</a>, Insureon market research, and comparative data from 20+ EU/UK insurance providers (2023-2024)</p>
                         </div>
 
                         <!-- Personal Deductions -->
                         <div class="methodology-section">
                             <h3>Personal Tax Deductions</h3>
                             <ul class="info-list">
-                                <li><strong>Personal Allowance:</strong> €4,462.15 (automatic, 8.54× <a href="https://www.seg-social.pt/ias" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">IAS</a>)</li>
+                                <li><strong>Personal Allowance:</strong> €4,462.15 (automatic, 8.54× <a href="https://www.seg-social.pt/ias" target="_blank" rel="noopener" class="link--primary">IAS</a>)</li>
                                 <li><strong>Health Expenses:</strong> 15% deductible, max €1,000</li>
                                 <li><strong>Education Expenses:</strong> 30% deductible, max €800</li>
                                 <li><strong>Dependent Allowance:</strong> €600 per dependent</li>
                             </ul>
-                            <p class="help-text"><strong>Source:</strong> <a href="https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/cirs_rep/index_cirs.htm#a78" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">CIRS Article 78 (Personal deductions)</a> & <a href="https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/cirs_rep/index_cirs.htm#a79" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">Article 79 (Deduction limits)</a></p>
+                            <p class="help-text"><strong>Source:</strong> <a href="https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/cirs_rep/index_cirs.htm#a78" target="_blank" rel="noopener" class="link--primary">CIRS Article 78 (Personal deductions)</a> & <a href="https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/cirs_rep/index_cirs.htm#a79" target="_blank" rel="noopener" class="link--primary">Article 79 (Deduction limits)</a></p>
                         </div>
 
                         <!-- Compliance Costs -->
@@ -1257,7 +1257,7 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
                             <li><strong>Tax Authority (AT):</strong> <a href="https://www.portaldasfinancas.gov.pt" target="_blank" rel="noopener">portaldasfinancas.gov.pt</a></li>
                             <li><strong>Social Security:</strong> <a href="https://www.seg-social.pt" target="_blank" rel="noopener">seg-social.pt</a></li>
                             <li><strong>IRS Code (CIRS):</strong> <a href="https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/cirs_rep/" target="_blank" rel="noopener">CIRS Full Text</a></li>
-                            <li><strong>2025 State Budget:</strong> <a href="https://dre.pt/dre/legislacao-consolidada/lei/2024-926649154" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: underline;">Lei n.º 24-D/2024 - Orçamento do Estado 2025 (Official Gazette)</a></li>
+                            <li><strong>2025 State Budget:</strong> <a href="https://dre.pt/dre/legislacao-consolidada/lei/2024-926649154" target="_blank" rel="noopener" class="link--primary">Lei n.º 24-D/2024 - Orçamento do Estado 2025 (Official Gazette)</a></li>
                         </ul>
                     </div>
                 </section>
@@ -1267,7 +1267,7 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
 
         <footer class="footer">
             <div class="container">
-                <p id="app-version" class="footer__version">TakeHome PT v2025.10.23</p>
+                <p id="app-version" class="footer__version">TakeHome PT v2025.10.24</p>
                 <p class="footer__disclaimer">
                     <strong>Disclaimer:</strong> This is a structure optimization planner, not a tax filing tool. Results are estimates based on 2025 Portuguese tax law for informational purposes only. 
                     Individual circumstances vary—consult a certified Portuguese accountant (TOC) or tax advisor before making structural decisions.
