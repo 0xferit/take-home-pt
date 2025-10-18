@@ -1836,13 +1836,15 @@ function populateAssumptions() {
 
 function populateAppVersion() {
     const versionEl = document.getElementById('app-version');
-    if (!versionEl) return;
-
-    // Version format: YYYY.MM.DD.{commit_hash}
-    const dateVersion = DATA?.VERSION || '2025.10.17';
+    const resultsVersionEl = document.getElementById('results-version-stamp');
     
-    // Static fallback (shown immediately)
-    versionEl.textContent = `TakeHome PT v${dateVersion}`;
+    // Version format: YYYY.MM.DD.{commit_hash}
+    const dateVersion = DATA?.VERSION || '2025.10.18';
+    
+    // Static fallback (shown immediately in both places)
+    const staticVersion = `TakeHome PT v${dateVersion}`;
+    if (versionEl) versionEl.textContent = staticVersion;
+    if (resultsVersionEl) resultsVersionEl.textContent = `Calculator version: v${dateVersion}`;
 
     // Auto-fetch commit hash from GitHub API
     const owner = '0xferit';
@@ -1863,8 +1865,16 @@ function populateAppVersion() {
 
             // Full version: YYYY.MM.DD.{hash}
             const fullVersion = `${dateVersion}.${shortHash}`;
-            versionEl.textContent = `TakeHome PT v${fullVersion}`;
-            versionEl.title = `${formattedDate} | ${commitMsg}`;
+            
+            // Update both footer and results section
+            if (versionEl) {
+                versionEl.textContent = `TakeHome PT v${fullVersion}`;
+                versionEl.title = `${formattedDate} | ${commitMsg}`;
+            }
+            if (resultsVersionEl) {
+                resultsVersionEl.textContent = `Calculator version: v${fullVersion} (tested ${formattedDate})`;
+                resultsVersionEl.title = commitMsg;
+            }
             
             console.log(`✅ Version: v${fullVersion} | Date: ${formattedDate} | Commit: ${commitMsg}`);
         })
