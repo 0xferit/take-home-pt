@@ -45,7 +45,7 @@
   // Version format: YYYY.MM.DD (date-based, update with each code change)
   // Full version at runtime: YYYY.MM.DD.{commit_hash} (e.g., 2025.10.17.c432057)
   // Commit hash is auto-fetched by app.js - updates with every commit
-  VERSION: '2025.10.17',  // Update this date when making changes
+  VERSION: '2025.10.18',  // Update this date when making changes
   
   // Legacy field (kept for compatibility)
   LAST_UPDATED: '2025-10-17',
