@@ -273,12 +273,13 @@
     },
 
     // Administrative & Compliance Costs
-    // Source: Market averages for Portugal 2024-2025
-    // NOTE: These are midpoint estimates - actual costs vary by provider
+    // Source: Professional accountant estimates (Portugal 2024-2025)
+    // Updated 2025-10-27 based on accountant review
+    // NOTE: These are professional estimates - actual costs vary by provider
     ADMIN_COSTS: {
-      freelancer: 800,                // Simplified regime typical support (EUR/year)
+      freelancer: 1200,               // Simplified regime typical support (EUR/year)
       freelancer_organized: 3000,     // Organized accounting with TOC (EUR/year)
-      transparent: 4800,              // LDA ongoing accounting/compliance (EUR/year)
+      transparent: 2400,              // LDA ongoing accounting/compliance (EUR/year)
     },
 
     // Application Defaults
