@@ -11,20 +11,27 @@
     <div class="app">
         <header class="header">
             <div class="container">
+                <!-- Legal Update Notice -->
+                <div style="background: linear-gradient(135deg, rgba(21, 121, 115, 0.95) 0%, rgba(107, 87, 133, 0.95) 100%); color: white; padding: var(--space-3) var(--space-5); border-radius: var(--radius); margin-bottom: var(--space-4); text-align: center; box-shadow: var(--shadow-md);">
+                    <p style="margin: 0; font-size: var(--text-sm); font-weight: 600; line-height: 1.5;">
+                        📅 <strong>Tax Year 2025</strong> | Last Updated: <strong>October 2025</strong> | Based on OE 2025 & CIRS 2025
+                    </p>
+                </div>
+                
                 <h1 class="header__title">TakeHome PT</h1>
                 <p class="header__subtitle">Find the business structure that maximizes your take-home income in Portugal</p>
                 <p class="header__tagline">Compare Freelancer (Simplified & Organized) vs Single-Member Company (LDA)</p>
             </div>
         </header>
 
-        <nav class="tabs">
+        <nav class="tabs" role="navigation" aria-label="Main navigation">
             <div class="container">
-                <button class="tab active" data-tab="setup">Setup</button>
-                <button class="tab" data-tab="income">Income</button>
-                <button class="tab" data-tab="expenses">Expenses</button>
-                <button class="tab" data-tab="deductions">Deductions</button>
-                <button class="tab" data-tab="results">Results <span id="results-ready-indicator" style="display: none; color: var(--color-success); font-weight: bold;">✓</span></button>
-                <button class="tab" data-tab="methodology">Methodology</button>
+                <button class="tab active" data-tab="setup" aria-label="Setup: Configure your profile and tax status">Setup</button>
+                <button class="tab" data-tab="income" aria-label="Income: Enter your annual income">Income</button>
+                <button class="tab" data-tab="expenses" aria-label="Expenses: Enter business expenses">Expenses</button>
+                <button class="tab" data-tab="deductions" aria-label="Deductions: Configure tax deductions">Deductions</button>
+                <button class="tab" data-tab="results" aria-label="Results: View calculated comparisons">Results <span id="results-ready-indicator" style="display: none; color: var(--color-success); font-weight: bold;" aria-hidden="true">✓</span></button>
+                <button class="tab" data-tab="methodology" aria-label="Methodology: View calculation details and legal sources">Methodology</button>
             </div>
         </nav>
 
@@ -112,7 +119,7 @@
 
                     <div class="form-group">
                         <label for="nhr-status">NHR / Tax Status</label>
-                        <select id="nhr-status" class="input">
+                        <select id="nhr-status" class="input" aria-label="Non-Habitual Resident tax status">
                             <option value="standard">Standard progressive rates</option>
                             <option value="original_nhr" disabled>Original NHR (20% flat rate on Portuguese income)</option>
                             <option value="nhr_2_ifici" disabled>NHR 2.0 / IFICI (20% flat rate on Portuguese income)</option>
@@ -149,7 +156,7 @@
                         </div>
                         <div id="irs-jovem-year-selector" class="form-group" style="display: none; margin-top: var(--space-4);">
                             <label for="irs-jovem-year">IRS Jovem Year</label>
-                            <select id="irs-jovem-year" class="input">
+                            <select id="irs-jovem-year" class="input" aria-label="IRS Jovem benefit year">
                                 <option value="1">Year 1 (100% exemption) — First tax year after completing degree</option>
                                 <option value="2">Year 2 (75% exemption)</option>
                                 <option value="3">Year 3 (75% exemption)</option>
@@ -176,7 +183,7 @@
                     </details>
                     
                     <div style="margin-top: var(--space-6); padding-top: var(--space-4); border-top: 1px solid var(--color-border); display: flex; justify-content: flex-end;">
-                        <button class="btn btn--primary" data-tab-target="income" style="display: inline-flex; align-items: center; gap: var(--space-2);">
+                        <button class="btn btn--primary" data-tab-target="income" style="display: inline-flex; align-items: center; gap: var(--space-2);" aria-label="Proceed to Income tab">
                             Continue to Income
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink: 0;">
                                 <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -186,14 +193,14 @@
                 </section>
 
                 <!-- Income Tab -->
-                <section id="income" class="tab-content">
-                    <h2>Your Income</h2>
+                <section id="income" class="tab-content" role="region" aria-labelledby="income-heading">
+                    <h2 id="income-heading">Your Income</h2>
                     
                     <div class="form-group">
                         <label for="gross-income">Annual Gross Income from Services (Year 1)</label>
                         <div class="input-group">
                             <span class="input-group__prefix">€</span>
-                            <input type="number" id="gross-income" class="input" value="0" min="0" step="1000">
+                            <input type="number" id="gross-income" class="input" value="0" min="0" step="1000" aria-label="Annual gross income in euros" aria-describedby="gross-income-help">
                         </div>
                         <p class="help-text">Category B professional services revenue for year 1.</p>
                     </div>
@@ -201,14 +208,14 @@
                     <div class="form-group">
                         <label for="income-growth-rate">Expected Annual Income Growth</label>
                         <div class="input-group">
-                            <input type="number" id="income-growth-rate" class="input" value="0" min="0" max="20" step="0.5">
+                            <input type="number" id="income-growth-rate" class="input" value="0" min="0" max="20" step="0.5" aria-label="Expected annual income growth rate percentage" aria-describedby="income-growth-help">
                             <span class="input-group__suffix">% per year</span>
                         </div>
                         <p class="help-text">Conservative: 0-3%, Moderate: 5%, Optimistic: 7-10%. This shows how your income grows over 10 years.</p>
                     </div>
 
                     <div style="margin-top: var(--space-6); padding-top: var(--space-4); border-top: 1px solid var(--color-border); display: flex; justify-content: flex-end;">
-                        <button class="btn btn--primary" data-tab-target="expenses" style="display: inline-flex; align-items: center; gap: var(--space-2);">
+                        <button class="btn btn--primary" data-tab-target="expenses" style="display: inline-flex; align-items: center; gap: var(--space-2);" aria-label="Proceed to Expenses tab">
                             Continue to Expenses
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink: 0;">
                                 <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -218,14 +225,14 @@
                 </section>
 
                 <!-- Expenses Tab -->
-                <section id="expenses" class="tab-content">
-                    <h2>Your Business Expenses</h2>
+                <section id="expenses" class="tab-content" role="region" aria-labelledby="expenses-heading">
+                    <h2 id="expenses-heading">Your Business Expenses</h2>
 
                     <div class="form-group">
                         <label for="total-business-expenses">Shared Business Expenses</label>
                         <div class="input-group">
                             <span class="input-group__prefix">€</span>
-                            <input type="number" id="total-business-expenses" class="input expense-input" value="0" min="0" step="100" placeholder="Auto: 5% of gross income">
+                            <input type="number" id="total-business-expenses" class="input expense-input" value="0" min="0" step="100" placeholder="Auto: 5% of gross income" aria-label="Total business expenses in euros" aria-describedby="business-expenses-help">
                         </div>
                         <p class="help-text">Office, equipment, software, travel. Applies to both structures. Default: 5% of gross (auto).</p>
                     </div>
@@ -371,7 +378,7 @@
                     <div id="expense-error" class="alert alert--error" style="display: none;"></div>
                     
                     <div style="margin-top: var(--space-6); padding-top: var(--space-4); border-top: 1px solid var(--color-border); display: flex; justify-content: flex-end;">
-                        <button class="btn btn--primary" data-tab-target="deductions" style="display: inline-flex; align-items: center; gap: var(--space-2);">
+                        <button class="btn btn--primary" data-tab-target="deductions" style="display: inline-flex; align-items: center; gap: var(--space-2);" aria-label="Proceed to Deductions tab">
                             Continue to Deductions
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink: 0;">
                                 <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -381,8 +388,8 @@
                 </section>
 
                 <!-- Deductions Tab -->
-                <section id="deductions" class="tab-content">
-                    <h2>Personal Tax Deductions</h2>
+                <section id="deductions" class="tab-content" role="region" aria-labelledby="deductions-heading">
+                    <h2 id="deductions-heading">Personal Tax Deductions</h2>
                     
                     <p class="intro-text">These deductions reduce your final IRS bill. They apply to both setups.</p>
 
@@ -390,7 +397,7 @@
                         <label for="health-expenses">Health Expenses</label>
                         <div class="input-group">
                             <span class="input-group__prefix">€</span>
-                            <input type="number" id="health-expenses" class="input" value="0" min="0" step="10">
+                            <input type="number" id="health-expenses" class="input" value="0" min="0" step="10" aria-label="Health expenses for tax deduction in euros">
                         </div>
                         <p class="help-text">15% deductible, max €<span id="health-deduction-display">0.00</span>.</p>
                     </div>
@@ -399,7 +406,7 @@
                         <label for="education-expenses">Education Expenses</label>
                         <div class="input-group">
                             <span class="input-group__prefix">€</span>
-                            <input type="number" id="education-expenses" class="input" value="0" min="0" step="10">
+                            <input type="number" id="education-expenses" class="input" value="0" min="0" step="10" aria-label="Education expenses for tax deduction in euros">
                         </div>
                     </div>
 
@@ -431,7 +438,7 @@
                     </div>
                     
                     <div style="margin-top: var(--space-6); padding-top: var(--space-4); border-top: 1px solid var(--color-border); display: flex; justify-content: flex-end;">
-                        <button class="btn btn--primary" data-tab-target="results" style="display: inline-flex; align-items: center; gap: var(--space-2);">
+                        <button class="btn btn--primary" data-tab-target="results" style="display: inline-flex; align-items: center; gap: var(--space-2);" aria-label="View calculation results">
                             View Results
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink: 0;">
                                 <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -441,7 +448,7 @@
                 </section>
 
                 <!-- Results Tab -->
-                <section id="results" class="tab-content">
+                <section id="results" class="tab-content" role="region" aria-label="Calculation results and structure comparison">
                     <div class="results-notice" style="background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-primary) 100%); border-left: 4px solid var(--color-primary); padding: var(--space-4); margin-bottom: var(--space-6); border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                         <p style="margin: 0; font-weight: 600; color: white; font-size: var(--text-base); line-height: 1.6;">
                             📊 <strong>Results update automatically</strong> as you change inputs. Use tabs above to adjust Setup, Income, Expenses, or Deductions.
@@ -750,8 +757,8 @@
                 </section>
 
                 <!-- Methodology Tab -->
-                <section id="methodology" class="tab-content">
-                    <h2>Methodology & Tax Tables</h2>
+                <section id="methodology" class="tab-content" role="region" aria-labelledby="methodology-heading">
+                    <h2 id="methodology-heading">Methodology & Tax Tables</h2>
                     <p class="intro-text">
                         This tool uses official 2025 Portuguese tax law and regulations. All calculations are transparent and verifiable.
                     </p>
@@ -1260,7 +1267,7 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
 
         <footer class="footer">
             <div class="container">
-                <p id="app-version" class="footer__version">TakeHome PT v2025.10.21</p>
+                <p id="app-version" class="footer__version">TakeHome PT v2025.10.22</p>
                 <p class="footer__disclaimer">
                     <strong>Disclaimer:</strong> This is a structure optimization planner, not a tax filing tool. Results are estimates based on 2025 Portuguese tax law for informational purposes only. 
                     Individual circumstances vary—consult a certified Portuguese accountant (TOC) or tax advisor before making structural decisions.

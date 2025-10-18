@@ -217,6 +217,12 @@ body {
   color: var(--color-text);
 }
 
+.tab:focus {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+  background: rgba(21, 121, 115, 0.05);
+}
+
 .tab.active {
   color: var(--color-primary);
 }
@@ -297,9 +303,10 @@ label {
 }
 
 .input:focus {
-  outline: none;
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(45, 191, 184, 0.1);
+  box-shadow: 0 0 0 3px rgba(21, 121, 115, 0.15);
 }
 
 .input:hover:not(:focus) {
@@ -368,6 +375,11 @@ label {
   accent-color: var(--color-primary);
 }
 
+.radio-card input[type="radio"]:focus {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
 .radio-card__content {
   display: flex;
   flex-direction: column;
@@ -411,6 +423,11 @@ label {
   width: 1.125rem;
   height: 1.125rem;
   accent-color: var(--color-primary);
+}
+
+.checkbox input[type="checkbox"]:focus {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 .checkbox input[type="checkbox"]:disabled {
@@ -599,6 +616,12 @@ label {
   background: var(--color-primary-dark);
   box-shadow: var(--shadow-md);
   transform: translateY(-1px);
+}
+
+.btn--primary:focus {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(21, 121, 115, 0.2);
 }
 
 .btn--secondary {
