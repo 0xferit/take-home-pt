@@ -847,7 +847,7 @@ function updateInsuranceDisplay() {
         // Update the "Auto" option text to show what it will use
         const autoOption = riskOverrideSelect.querySelector('option[value=""]');
         if (autoOption) {
-            const tierLabel = INSURANCE_DATA.riskTiers[derivedRiskTier]?.label || 'Medium';
+            const tierLabel = INSURANCE_DATA?.riskTiers?.[derivedRiskTier]?.label || 'Medium';
             autoOption.textContent = `Auto (${tierLabel} - based on activity)`;
         }
     }
