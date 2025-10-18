@@ -38,9 +38,18 @@
   // ============================================================================
 
   const TakeHomeData = {
-    // Metadata  
-  VERSION: '2025.2',
-  LAST_UPDATED: '2025-10-17',
+    // ============================================================================
+    // DATA LAYER METADATA
+    // ============================================================================
+    
+    // Major version (manual, only for significant releases/milestones)
+    // Bump this when: major features, breaking changes, annual updates
+    VERSION: '2025.2',
+    LAST_UPDATED: '2025-10-17',
+    
+    // Build version (automatic): Git commit hash fetched at runtime by app.js
+    // Format: v{VERSION}.{SHORT_HASH} (e.g., v2025.2.c03f9a3)
+    // No manual updates needed - automatically unique per commit!
 
     // Portuguese Tax & Regulatory Data
     // Source: Orçamento do Estado 2025, Segurança Social 2025, CIRS Article 151
