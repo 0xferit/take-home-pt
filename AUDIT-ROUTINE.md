@@ -1,898 +1,675 @@
-# TakeHome PT - Comprehensive Audit Routine
+# TakeHome PT Calculator - Comprehensive Audit Routine V2.0
 
-**Target:** [TakeHome PT - Structure Optimization Planner for Portugal Professionals](https://take-home-pt.netlify.app/)
+## ⚠️ CRITICAL: Primary Source Verification Required
 
-**Purpose:** Exhaustive regulatory, computational, and user experience audit for compliance with Portuguese tax law and world-class financial calculator standards.
+**This routine was updated after audits scored 93-95/100 while missing CRITICAL data errors:**
+- 8 out of 9 tax brackets were WRONG (off by 0.4-0.5%)
+- CAE references were OUTDATED (Rev. 3 vs Rev. 4)
+- Government sources were INADEQUATE (generic PDFs vs actionable tools)
 
-**Auditor Role:** You are an expert in Portuguese tax law, regulatory compliance, computational accuracy, and financial tool UX/UI design.
-
----
-
-## Mission Statement
-
-Conduct a **comprehensive audit** of the TakeHome PT calculator, evaluating:
-1. **Computational accuracy** against 2025 Portuguese tax regulations
-2. **Compliance** with the Four Tenets (Precision, Conciseness, Transparency, Reproducibility)
-3. **User experience** quality, clarity, and accessibility
-4. **Documentation** completeness and source verification
-5. **Multi-year projection** accuracy and methodology
-6. **Edge case handling** and error states
+**DO NOT TRUST SECONDARY SOURCES. VERIFY EVERYTHING AGAINST OFFICIAL GOVERNMENT PUBLICATIONS.**
 
 ---
 
-## I. Computational Accuracy
+## Access Information
 
-### A. Core Calculation Verification
-
-Test all three regime structures against official Portuguese tax regulations:
-
-#### Structure 1: Freelancer (Simplified Regime)
-**Legal Basis:** CIRS Article 31 (Activity Coefficients)
-
-**Test Scenarios:**
-1. **Low Income:** €30,000/year
-   - Activity: IT Services (coefficient 0.75)
-   - Expected: Taxable income = €30,000 × 0.75 = €22,500
-   - Verify: IRS progressive tax on €22,500
-   - Verify: Social Security = 21.4% on (€30,000 × 70% ÷ 4 ÷ 3, capped at monthly max)
-
-2. **Medium Income:** €60,000/year
-   - Activity: Consulting (coefficient 0.75)
-   - Expected: Full calculation with all brackets
-   - Verify: Solidarity tax (if applicable)
-
-3. **High Income:** €100,000/year
-   - Activity: High-value services (coefficient 0.75)
-   - Expected: Multiple tax brackets engaged
-   - Verify: Social Security cap at 12× IAS
-
-4. **Very High Income:** €180,000/year
-   - Activity: Professional services (coefficient 0.75)
-   - Expected: Top marginal rate (48%) engaged
-   - Verify: Solidarity tax (2.5% or 5%)
-
-5. **Extreme Income:** €250,000/year
-   - Activity: Professional services (coefficient 0.75)
-   - Expected: Maximum solidarity tax (5% on amount > €250k)
-
-#### Structure 2: Freelancer (Organized Regime)
-**Legal Basis:** CIRS Article 31 + Deductible Expenses
-
-**Test Scenarios:**
-- Same income levels as above, but with:
-  - Business expenses: 5% of gross income
-  - Admin costs: €800/year
-  - Insurance: €360/year
-- Verify: Actual expenses deducted instead of coefficient
-
-#### Structure 3: Transparent Company (LDA)
-**Legal Basis:** CIRS Category B + CIRC Article 6
-
-**Test Scenarios:**
-- Same income levels with:
-  - Manager minimum wage: €16,185/year (2× RMMG)
-  - Business expenses: 5% of gross income
-  - Admin costs: €2,000/year
-  - No insurance (covered by company)
-- Verify: Manager SS = 34.75% on minimum wage
-- Verify: Remaining income flows through as Category B
-
-### B. Tax Components to Verify
-
-#### 1. IRS (Income Tax)
-- **Progressive Brackets 2025:**
-  ```
-  €0 - €8,059:       13.0%
-  €8,060 - €12,160:  16.5%
-  €12,161 - €17,232: 22.0%
-  €17,233 - €22,297: 25.0%
-  €22,298 - €28,635: 32.0%
-  €28,636 - €41,629: 35.5%
-  €41,630 - €44,998: 43.5%
-  €44,999 - €83,696: 45.0%
-  €83,697+:          48.0%
-  ```
-- **Source:** [Orçamento do Estado 2025](https://info.portaldasfinancas.gov.pt/)
-
-#### 2. Solidarity Tax
-- **2.5%** on taxable income **€85,447 - €253,388**
-- **5.0%** on taxable income **> €253,388**
-- **Source:** Lei n.º 27-A/2020
-
-#### 3. Social Security (Trabalhadores Independentes)
-- **Rate:** 21.4%
-- **Base:** 70% of gross income (relevant income factor)
-- **Quarterly base:** Gross income × 70% ÷ 4
-- **Monthly base:** Quarterly ÷ 3
-- **Cap:** 12× IAS (12 × €522.50 = €6,270/month in 2025)
-- **Source:** [Segurança Social 2025](https://www.seg-social.pt/)
-
-#### 4. Personal Deductions
-- **Health expenses:** 15% deductible, max €1,000
-- **Education expenses:** 30% deductible, max €800
-- **Retirement contributions:** 20% deductible, max €2,500 (single) / €5,000 (married)
-- **Charitable donations:** 25% deductible
-- **Source:** CIRS Article 78-B
-
-#### 5. IRS Jovem (Youth Tax Exemption)
-- **Eligibility:** Age 18-26 (first job) or 18-30 (with higher ed)
-- **Schedule:**
-  ```
-  Year 1-2: 100% exemption
-  Year 3-4:  75% exemption
-  Year 5-7:  50% exemption
-  Year 8-10: 25% exemption
-  ```
-- **Cap:** €25,000 per year (2× IAS × 14 × 1.265)
-- **Source:** CIRS Article 2-B
-
-#### 6. NHR (Non-Habitual Resident)
-- **Rate:** 20% flat (for high-value scientific/technical services)
-- **Mutual exclusivity:** Cannot combine with IRS Jovem
-- **Source:** CIRS Article 72
-
-### C. Multi-Year Projection (10 Years)
-
-**Verify:**
-1. **Annual Growth:** Income compounds correctly at specified rate (0%, 3%, 5%, 7%)
-2. **IRS Jovem Progression:** Exemption % changes correctly by year (100% → 75% → 50% → 25% → 0%)
-3. **Cumulative Tracking:** Net income accumulates correctly year-over-year
-4. **NPV Calculation:** 3% discount rate applied correctly
-5. **First-Year Benefits:** 50% IRS discount and SS exemption only apply to Year 1
-
-**Test Scenarios:**
-- €60k starting, 0% growth, no special regimes
-- €60k starting, 5% growth, IRS Jovem enabled
-- €100k starting, 3% growth, NHR enabled
-- €180k starting, 7% growth, all deductions maximized
-
-### D. Edge Cases & Boundary Conditions
-
-**Test:**
-1. **Zero income:** Should show €0 across all fields (no crashes)
-2. **Minimum income:** €10,000 - verify minimum SS contribution
-3. **Bracket boundaries:** Test income exactly at bracket limits (€8,059, €12,160, etc.)
-4. **SS cap boundary:** Income where monthly SS hits cap (€107,314 gross)
-5. **Solidarity tax threshold:** €85,447 and €253,388 exactly
-6. **IRS Jovem cap:** €25,000 exempt amount boundary
-7. **Negative expenses:** Should not be possible (input validation)
-8. **Expenses > Income:** Should not be possible or show warning
-9. **Invalid activity codes:** Should default gracefully
-10. **Extreme values:** €10,000,000+ income (should not crash)
+**Live Calculator:** https://take-home-pt.netlify.app  
+**Repository:** (if provided by client)  
+**Audit Frequency:** After each major legislative change (minimum: annually before tax season)
 
 ---
 
-## II. Four Tenets Compliance
+## Phase 1: Pre-Audit Preparation (MANDATORY)
 
-### 1. Precision
+### Step 1.1: Gather Official 2025 Portuguese Government Sources
 
-**Verify:**
-- [ ] All tax brackets match official 2025 values exactly
-- [ ] IAS value = €522.50 (2025)
-- [ ] RMMG = €8,092.50 × 2 = €16,185 for manager minimum
-- [ ] Social Security rate = 21.4% (not 21.5%, not 21%)
-- [ ] Activity coefficients match CIRS Article 31 exactly
-- [ ] All calculations use correct order of operations
-- [ ] Rounding is consistent and documented (e.g., round to nearest €1)
-- [ ] No magic numbers in code (all constants in `data.js`)
+Before testing the calculator, you MUST obtain and verify these PRIMARY SOURCES:
 
-**Pass Criteria:**
-- 100% accuracy on all official values
-- Zero undocumented constants
-- All calculations within €1 of manual verification
+**REQUIRED DOCUMENTS (Download/Bookmark ALL):**
 
-### 2. Conciseness
+1. **IRS Progressive Tax Brackets 2025**
+   - Source: Lei n.º 55-A/2025, Article 68.º of Código do IRS
+   - Link: https://diariodarepublica.pt/dr/detalhe/lei/55-a-2025-925904929
+   - **VERIFY:** All 9 bracket rates and thresholds
+   - **FORMAT:** Create verification table with exact percentages
 
-**Verify:**
-- [ ] Field labels are ≤10 words where possible
-- [ ] Help text is ≤15 words for most fields
-- [ ] No verbose explanations in input sections
-- [ ] Progressive disclosure used (collapsed details, expandable sections)
-- [ ] Summary cards show only essential info
-- [ ] No redundant information repeated
+2. **IAS 2025 Value**
+   - Source: Portaria n.º 6-B/2025, Article 2.º
+   - Link: https://diariodarepublica.pt/dr/detalhe/portaria/6-b-2025-902111932
+   - **VERIFY:** Exact value (€522.50 for 2025)
 
-**Count Examples:**
-```
-✅ GOOD: "Annual Gross Income" (3 words)
-✅ GOOD: "Category B professional services revenue" (5 words)
-❌ BAD:  "Enter your total annual gross income from self-employment..." (9+ words)
+3. **RMMG 2025 (Minimum Wage)**
+   - Source: Decreto-Lei n.º 112/2024, Article 3.º
+   - Link: https://diariodarepublica.pt/dr/detalhe/decreto-lei/112-2024-900706889
+   - **VERIFY:** Exact value (€870 for 2025)
 
-✅ GOOD: "5-digit CAE code. Auto-determines activity type." (6 words)
-❌ BAD:  "Enter your 5-digit CAE code to automatically determine..." (15+ words)
-```
+4. **Social Security Rates**
+   - Source: Lei n.º 110/2009, Article 168.º & Article 53.º
+   - Link: https://diariodarepublica.pt/dr/legislacao-consolidada/lei/2009-34514575
+   - **VERIFY:** 21.4% (self-employed), 34.75% (LLC total: 23.75% employer + 11% employee)
 
-**Pass Criteria:**
-- 80%+ of labels ≤10 words
-- 80%+ of help texts ≤15 words
-- Zero paragraph-length explanations in input sections
+5. **CAE Classification Current Version**
+   - Source: Decreto-Lei n.º 9/2025 (CAE Rev. 4, effective Jan 1, 2025)
+   - Link: https://diariodarepublica.pt/dr/detalhe/decreto-lei/9-2025-907026813
+   - **VERIFY:** Calculator uses CAE Rev. 4, not outdated Rev. 3
 
-### 3. Transparency
+6. **Article 151 Professional Services (CIRS Codes)**
+   - Source: Portaria n.º 1011/2001
+   - Link: https://diariodarepublica.pt/dr/legislacao-consolidada/portaria/2001-177307831
+   - **VERIFY:** High-value profession codes list
 
-**Verify:**
-- [ ] Every result shows the calculation formula
-- [ ] "Calculation Breakdown" section exists and is complete
-- [ ] Every tax rate links to official source
-- [ ] Every coefficient links to CIRS article
-- [ ] Formula display shows actual numbers used
-- [ ] No "black box" calculations
-- [ ] Step-by-step breakdown visible for all regimes
+7. **IRS Jovem Schedule**
+   - Source: Lei n.º 24-D/2024 (State Budget 2025), Article 200 & CIRS Article 2-B
+   - Link: https://dre.pt/dre/legislacao-consolidada/lei/2024-926649154
+   - **VERIFY:** 10-year progressive exemption schedule, €28,737.50 cap
 
-**Example - IRS Calculation Transparency:**
-```
-IRS Calculation:
-1. Taxable Income: €60,000 × 75% = €45,000
-2. Tax by bracket:
-   - €0-€8,059 @ 13%:     €1,047.67
-   - €8,060-€12,160 @ 16.5%: €676.65
-   - €12,161-€17,232 @ 22%: €1,115.72
-   - €17,233-€22,297 @ 25%: €1,266.00
-   ... (all brackets shown)
-3. Subtotal: €12,345.67
-4. Deductions: -€500 (health)
-5. Final IRS: €11,845.67
+8. **Solidarity Tax Thresholds**
+   - Source: Lei n.º 82-B/2014, Article 191
+   - Link: https://dre.pt/dre/legislacao-consolidada/lei/2014-58476020
+   - **VERIFY:** Tier 1 (€80k-€250k @ 2.5%), Tier 2 (>€250k @ 5%)
 
-Source: [Tabela de IRS 2025] (clickable link)
-```
-
-**Pass Criteria:**
-- 100% of calculations have visible formulas
-- 100% of regulatory values have source links
-- Step-by-step breakdown shows every intermediate value
-
-### 4. Reproducibility
-
-**Verify:**
-- [ ] Methodology section exists and is complete
-- [ ] Every formula is documented with legal reference
-- [ ] Source links go to official government sites (.gov.pt)
-- [ ] Version number visible (format: `v2025.X.{commit_hash}`)
-- [ ] Commit hash allows exact code reproduction
-- [ ] No proprietary/undocumented methods
-- [ ] A qualified accountant could reproduce results manually
-
-**Test - Manual Reproduction:**
-Pick one scenario (e.g., €60k, simplified), and manually calculate using:
-- Calculator's displayed methodology
-- Official tax tables from links provided
-- Verify results match within €1
-
-**Pass Criteria:**
-- Manual calculation matches calculator within €1
-- All sources link to official Portuguese government sites
-- Version + commit hash enables exact code verification
+**⚠️ CHECKPOINT:** Do you have ALL 8 primary sources open? If NO, STOP and gather them first.
 
 ---
 
-## III. UI/UX & Accessibility
+### Step 1.2: Create Verification Spreadsheet
 
-### A. User Interface Quality
+Create a spreadsheet with these columns:
+- **Constant/Rate Name**
+- **Official Value (from Primary Source)**
+- **Calculator Value (to be tested)**
+- **Match? (Yes/No)**
+- **Source Article/Law**
+- **Date Verified**
 
-**Input Section:**
-- [ ] Logical flow (Setup → Income → Expenses → Deductions → Results)
-- [ ] Smart defaults pre-populated
-- [ ] Input validation prevents invalid values
-- [ ] Real-time calculation updates (no submit button)
-- [ ] Clear error messages for invalid inputs
-- [ ] Responsive design (mobile, tablet, desktop)
+**Example Row:**
+| Constant | Official Value | Calculator | Match | Source | Date |
+|----------|----------------|------------|-------|--------|------|
+| IRS Bracket 1 | 12.5% (€0-8,059) | [TEST] | [Y/N] | Lei 55-A/2025 Art 68º | 2025-XX-XX |
 
-**Results Section:**
-- [ ] Summary cards clearly show winner
-- [ ] Color coding: Green = good, Red = bad, consistent
-- [ ] Comparison table side-by-side (Freelancer vs LDA)
-- [ ] Year-by-year table for 10-year projection
-- [ ] Export/save functionality works
-- [ ] Print-friendly layout
+---
 
-**Methodology Section:**
-- [ ] Collapsible/expandable sections
-- [ ] Complete documentation of all formulas
-- [ ] Links to all official sources
-- [ ] Worked examples with real numbers
-- [ ] Legal references (CIRS articles, OE 2025)
+## Phase 2: Data Accuracy Verification (CRITICAL - DO THIS FIRST)
 
-### B. Decision Support Elements
+### Test 2.1: Tax Bracket Rates (ZERO TOLERANCE FOR ERRORS)
 
-**Verify:**
-- [ ] "Winner" tag clearly identifies best structure
-- [ ] Breakeven analysis shown (if applicable)
-- [ ] Warnings for mutually exclusive options (NHR + IRS Jovem)
-- [ ] Recommendations are actionable (e.g., "Choose LDA if income > €X")
-- [ ] All advice is qualified (e.g., "consult a tax professional")
-- [ ] No absolute guarantees or legal advice
+**Procedure:**
+1. Open calculator's `data.js` or equivalent constants file
+2. Locate `TAX_BRACKETS_2025` array or equivalent
+3. Compare EACH rate against Lei 55-A/2025, Article 68.º
 
-**Example - Good Recommendation:**
+**Expected Values (2025):**
 ```
-✅ "Based on €100k income, LDA saves €2,500/year vs Freelancer Simplified.
-    Breakeven point: Year 3.
-    Note: Consult a tax advisor for your specific situation."
-
-❌ "You MUST use LDA. It's always better for everyone."
+Bracket 1:  €0 - €8,059        → 12.5%  (NOT 13.0%)
+Bracket 2:  €8,059 - €12,160   → 16.0%  (NOT 16.5%)
+Bracket 3:  €12,160 - €17,233  → 21.5%  (NOT 22.0%)
+Bracket 4:  €17,233 - €22,306  → 24.4%  (NOT 25.0%)
+Bracket 5:  €22,306 - €28,400  → 31.4%  (NOT 32.0%)
+Bracket 6:  €28,400 - €41,629  → 34.9%  (NOT 35.5%)
+Bracket 7:  €41,629 - €44,987  → 43.1%  (NOT 43.5%)
+Bracket 8:  €44,987 - €83,696  → 44.6%  (NOT 45.0%)
+Bracket 9:  >€83,696           → 48.0%
 ```
 
-### C. Accessibility (WCAG 2.1 AA) - **CONTRACT REQUIREMENT**
+**✅ PASS CRITERIA:** All 9 rates match EXACTLY. Even 0.1% difference = FAIL.
 
-**CRITICAL:** WCAG AA compliance is a **contractual requirement**. All tests must pass.
+**❌ FAIL ACTION:** Flag as CRITICAL blocker. Calculator produces legally incorrect results.
 
-**Color Contrast (MANDATORY):**
-- [ ] **All text ≥4.5:1 contrast ratio** (normal text on light backgrounds)
-- [ ] **Large text ≥3:1 contrast ratio** (18pt+ or 14pt+ bold)
-- [ ] Test primary colors: Aqua, Green, Coral, Aura vs. light backgrounds
-- [ ] Test muted text (`--color-text-muted`) vs. all backgrounds
-- [ ] Use tool: [WebAIM Contrast Checker](https://webaim.org/resources/contrastchecker/)
-- [ ] **Zero failures allowed** - any ratio below 4.5:1 is a contract violation
+---
 
-**Required Contrast Ratios:**
-```
-Text color vs. Background → Minimum Ratio
-─────────────────────────────────────────
-Normal text (any size)    → 4.5:1
-Large text (18pt+)        → 3.0:1
-UI components (icons)     → 3.0:1
-```
+### Test 2.2: Core Constants Verification
 
-**Test All Color Combinations:**
-```
-✅ --color-text (#212529) on --bg-body (#F8F9FA): 14.63:1 ✓
-✅ --color-text-muted (#59636A) on --bg-body (#F8F9FA): 4.50:1 ✓
-✅ --aqua (#157973) on --bg-body (#F8F9FA): 4.50:1 ✓
-✅ --green (#5D7A4D) on --bg-body (#F8F9FA): 4.57:1 ✓
-✅ --coral (#C54A35) on --bg-body (#F8F9FA): 4.52:1 ✓
-✅ --aura (#6B5785) on --bg-body (#F8F9FA): 5.99:1 ✓
-```
+For EACH constant below, verify against primary source:
 
-**Automated Test:**
+| Constant | Expected 2025 Value | Primary Source |
+|----------|---------------------|----------------|
+| IAS_2025 | €522.50 | Portaria 6-B/2025, Art. 2º |
+| RMMG_2025 | €870.00 | Decreto-Lei 112/2024, Art. 3º |
+| SS_Rate_SelfEmployed | 21.4% | Lei 110/2009, Art. 168º |
+| SS_Rate_Employer | 23.75% | Lei 110/2009, Art. 53º |
+| SS_Rate_Employee | 11% | Lei 110/2009, Art. 53º |
+| IRS_Jovem_Cap | €28,737.50 | CIRS Art. 2-B |
+| Solidarity_Tier1_Min | €80,000 | Lei 82-B/2014, Art. 191 |
+| Solidarity_Tier1_Max | €250,000 | Lei 82-B/2014, Art. 191 |
+| Solidarity_Tier1_Rate | 2.5% | Lei 82-B/2014, Art. 191 |
+| Solidarity_Tier2_Min | €250,000 | Lei 82-B/2014, Art. 191 |
+| Solidarity_Tier2_Rate | 5% | Lei 82-B/2014, Art. 191 |
+
+**✅ PASS CRITERIA:** 100% match on all constants.
+
+**❌ FAIL ACTION:** Each mismatch is a CRITICAL error.
+
+---
+
+### Test 2.3: IRS Jovem 10-Year Schedule Verification
+
+Verify the progressive exemption schedule:
+
+| Year | Expected Exemption % | Calculator Value | Match? |
+|------|---------------------|------------------|--------|
+| 1 | 100% | [TEST] | [Y/N] |
+| 2 | 75% | [TEST] | [Y/N] |
+| 3 | 50% | [TEST] | [Y/N] |
+| 4 | 50% | [TEST] | [Y/N] |
+| 5 | 25% | [TEST] | [Y/N] |
+| 6-10 | 25% | [TEST] | [Y/N] |
+
+**Source:** Lei 24-D/2024, Article 200
+
+**✅ PASS CRITERIA:** All years match official schedule.
+
+---
+
+### Test 2.4: CAE Classification Version Check
+
+**Critical Update:** CAE Rev. 4 became mandatory January 1, 2025.
+
+**Procedure:**
+1. Search calculator for "CAE Rev"
+2. Check all references to INE classification system
+
+**✅ PASS CRITERIA:** 
+- All references say "CAE Rev. 4" or "CAE Rev. 4 (2025)"
+- NO references to "CAE Rev. 3" unless explicitly historical
+- Decreto-Lei 9/2025 is cited as current legal basis
+
+**❌ FAIL CRITERIA:**
+- Any reference to "CAE Rev. 3" as current
+- No mention of Rev. 4
+- Outdated INE links to Rev. 3 materials
+
+---
+
+## Phase 3: Government Source Link Verification
+
+### Test 3.1: Link Quality Assessment
+
+For EVERY government link in the calculator, verify:
+
+**Criteria:**
+1. **Primary Source?** Link goes to Diário da República or official .gov.pt page
+2. **Specific?** Link points to exact article/portaria, not homepage
+3. **Actionable?** Users can actually DO something (search, verify, register)
+4. **Current?** Not pointing to outdated years/versions
+
+**Examples:**
+
+**✅ GOOD LINKS:**
+- https://diariodarepublica.pt/dr/detalhe/portaria/6-b-2025-902111932
+- https://www.gov.pt/servicos/abrir-atividade-nas-financas
+- http://www.sicae.pt/consulta.aspx
+
+**❌ BAD LINKS:**
+- Generic PDFs with no context
+- "About" pages with no specific data
+- Broken/404 links
+- Links to private tax blogs
+
+**Scoring:**
+- Count total government links in calculator
+- Count how many meet ALL 4 criteria
+- **PASS:** ≥80% of links are "GOOD"
+- **FAIL:** <80% are "GOOD"
+
+---
+
+### Test 3.2: CAE/CIRS Resource Usability
+
+**User Task:** "I'm a freelance web designer. How do I find my CAE/CIRS code?"
+
+**Evaluate calculator's guidance:**
+
+**✅ MUST INCLUDE:**
+1. Portal das Finanças interactive search tool
+2. SICAE lookup (for verification)
+3. INE support contact (email/phone)
+4. Explanation of CIRS vs CAE distinction
+5. Link to Article 151 list (Portaria 1011/2001)
+
+**❌ NOT SUFFICIENT:**
+- Only generic INE PDF links
+- Only "consult your accountant"
+- Dead links or 404 errors
+
+**PASS CRITERIA:** Calculator provides ≥3 actionable pathways to find CAE/CIRS code.
+
+---
+
+## Phase 4: Computational Accuracy Testing
+
+**IMPORTANT:** Only proceed to this phase AFTER passing Phase 2 (Data Accuracy). 
+If Phase 2 failed, calculations will be wrong regardless of logic.
+
+### Test 4.1: Standard Scenarios (Cross-Check with Manual Calculation)
+
+For EACH scenario below, calculate manually using official tax tables, then compare:
+
+**Scenario 1: Freelancer, Simplified, No Benefits**
+- Income: €50,000
+- Activity: Article 151 (75% coefficient)
+- Expenses: €2,500
+- Deductions: Standard
+- Expected: [Calculate using Lei 55-A/2025 rates]
+
+**Scenario 2: Freelancer, IRS Jovem Year 1**
+- Income: €30,000
+- Activity: Article 151 (75% coefficient)
+- Year: 1 (100% exemption)
+- Expected: Exempt up to €28,737.50 cap
+
+**Scenario 3: LDA, High Income, Solidarity Tax**
+- Income: €150,000
+- Structure: LDA
+- Expected: Standard progressive + solidarity tier 1
+
+**Scenario 4: Simplified Regime Limit Edge Case**
+- Income: €200,000
+- Regime: Simplified
+- Expected: Warning/auto-switch behavior
+
+**Scenario 5: Multi-Year Projection**
+- Income: €60,000 year 1
+- Growth: 5% annually
+- Years: 10
+- Expected: Verify Year 10 calculations
+
+**✅ PASS CRITERIA:** Calculator results within €10 of manual calculation for all scenarios.
+
+**❌ FAIL CRITERIA:** Any result differs by >€10 OR wrong direction (e.g., shows loss instead of profit).
+
+---
+
+### Test 4.2: Edge Cases & Boundary Conditions
+
+Test these specific edge cases:
+
+1. **Zero Income:** Does calculator handle €0 without errors?
+2. **Bracket Boundaries:** Test income at exact bracket limits (€8,059, €12,160, etc.)
+3. **Solidarity Tax Threshold:** Test €79,999 vs €80,001
+4. **IRS Jovem Cap:** Test €28,737 vs €28,738 taxable income
+5. **Simplified Limit:** Test €199,999 vs €200,001
+6. **Negative Values:** Does calculator reject negative inputs?
+7. **Extreme Income:** Test €10M+ (should not crash)
+
+**✅ PASS CRITERIA:** All edge cases handled correctly with appropriate warnings/errors.
+
+---
+
+## Phase 5: Reference & Documentation Quality
+
+### Test 5.1: Source Attribution Audit
+
+For EACH number, formula, or constant displayed to users:
+
+**Check:**
+1. Is there a cited source?
+2. Is the source primary (DRE/official) or secondary (blog)?
+3. Is there a direct link to the source?
+4. Is the article/law number specified?
+
+**Sample Checklist:**
+- [ ] Tax brackets show Lei 55-A/2025 citation
+- [ ] IAS value links to Portaria 6-B/2025
+- [ ] SS rates cite Lei 110/2009 with article numbers
+- [ ] IRS Jovem cites CIRS Article 2-B
+- [ ] Coefficient values cite CIRS Article 31
+
+**PASS CRITERIA:** ≥90% of displayed constants have proper primary source citations.
+
+---
+
+### Test 5.2: Text Brevity (10-Word Rule)
+
+**Rule:** Help text should be ≤15 words. Labels should be ≤10 words.
+
+**Procedure:**
+1. Count words in all `<p class="help-text">` elements
+2. Count words in all `<label>` elements
+3. Flag any exceeding limits
+
+**✅ PASS CRITERIA:** 
+- ≥80% of help texts ≤15 words
+- ≥90% of labels ≤10 words
+
+**Rationale:** Conciseness is a core tenet (audit requirement).
+
+---
+
+## Phase 6: Accessibility & WCAG Compliance
+
+### Test 6.1: Automated Lighthouse Audit
+
+**Procedure:**
 ```bash
-# Run Lighthouse accessibility audit
-npx lighthouse https://take-home-pt.netlify.app --only-categories=accessibility
-
-# Expected score: 100/100
-# Zero failures allowed - contract requirement
-
-# Verify via Chrome DevTools:
-# 1. Open DevTools (F12)
-# 2. Lighthouse tab
-# 3. Select "Accessibility"
-# 4. Click "Analyze page load"
-# 5. Confirm score: 100/100
+npx lighthouse https://take-home-pt.netlify.app --only-categories=accessibility --output=json --output-path=./lighthouse-audit.json
 ```
 
-**Other Accessibility Requirements:**
-- [ ] All interactive elements keyboard-accessible (Tab, Enter, Space)
-- [ ] Semantic HTML (headings, landmarks, labels)
-- [ ] Alt text for any images/icons (currently none used)
-- [ ] Form labels properly associated with inputs (`<label for="id">`)
-- [ ] Focus indicators visible (`:focus` styles)
-- [ ] Screen reader friendly (test with VoiceOver/NVDA)
-- [ ] No reliance on color alone for information
-- [ ] Skip navigation links for keyboard users
+**✅ PASS CRITERIA:** Score = 100/100 (WCAG 2.1 Level AA)
 
-### D. Error Handling
+**Zero tolerance:** Any score <100 = FAIL
 
-**Test:**
-- [ ] Invalid income (negative, letters) → Clear error message
-- [ ] Expenses > Income → Warning or prevention
-- [ ] Missing required fields → Highlighted with message
-- [ ] API failures (GitHub version fetch) → Graceful fallback
-- [ ] Offline mode → Static version shown
-- [ ] JavaScript disabled → Basic HTML fallback or message
-
-### E. Performance
-
-**Verify:**
-- [ ] Initial load < 2 seconds (good connection)
-- [ ] Calculations instant (< 100ms)
-- [ ] No UI lag when typing
-- [ ] Multi-year projection completes < 1 second
-- [ ] No memory leaks (test extended use)
+**Common Issues to Check:**
+- Color contrast (4.5:1 for normal text, 3:1 for large text 18pt+)
+- Focus indicators on all interactive elements
+- ARIA labels on all inputs/buttons
+- Semantic HTML (proper heading hierarchy)
+- Keyboard navigation (no mouse-only functions)
 
 ---
 
-## IV. Regulatory Compliance
+### Test 6.2: Manual Accessibility Checks
 
-### A. Legal Accuracy
-
-**Cross-reference with official sources:**
-
-1. **Tax Brackets:** [Portal das Finanças - Tabelas de Retenção 2025](https://info.portaldasfinancas.gov.pt/)
-2. **IAS Value:** [Portaria n.º 32/2025](https://dre.pt/) - €522.50
-3. **RMMG:** [Decreto-Lei n.º 109/2024](https://dre.pt/) - €820 × 14 = €11,480/year
-4. **Social Security:** [Segurança Social - Trabalhadores Independentes](https://www.seg-social.pt/)
-5. **Activity Coefficients:** CIRS Article 31
-6. **IRS Jovem:** CIRS Article 2-B (Lei n.º 26/2024)
-7. **NHR:** CIRS Article 72
-
-**Verify:**
-- [ ] All values match official 2025 publications
-- [ ] Recent law changes incorporated (check OE 2025)
-- [ ] Deprecated rules not used (e.g., old NHR rates)
-
-### B. Mutual Exclusivities
-
-**Verify correct handling:**
-- [ ] NHR + IRS Jovem → Warning shown, prevents both
-- [ ] Simplified + Organized → Radio buttons, only one selectable
-- [ ] First-year benefits → Only apply to Year 1 in multi-year
-
-### C. Disclaimers
-
-**Verify:**
-- [ ] Clear disclaimer: "Educational tool, not legal advice"
-- [ ] Recommendation to consult tax professional
-- [ ] Version number visible for reference
-- [ ] Data sources and date of last update shown
-- [ ] Liability limitation stated
+1. **Keyboard Navigation:** Tab through entire calculator without mouse
+2. **Screen Reader:** Test with NVDA/JAWS/VoiceOver
+3. **High Contrast Mode:** Verify readability in Windows High Contrast
+4. **Zoom:** Test at 200% zoom (WCAG requirement)
 
 ---
 
-## V. Multi-Year Projection (Specific)
+## Phase 7: UI/UX & Four Tenets Compliance
 
-### A. Computational Logic
+### Test 7.1: Four Tenets Verification
 
-**Verify for each year 1-10:**
-1. **Income Growth:**
-   ```
-   Year N Income = Year 1 Income × (1 + growth_rate)^(N-1)
-   Example: €60k @ 5% growth
-     Year 1: €60,000
-     Year 2: €63,000
-     Year 3: €66,150
-     ...
-     Year 10: €93,053
-   ```
+**1. Precision**
+- [ ] All formulas are unambiguous
+- [ ] No "magic numbers" (all constants defined)
+- [ ] Single official source for each value
 
-2. **IRS Jovem Progression:**
-   ```
-   Year 1-2:  100% exemption (up to €25k cap)
-   Year 3-4:   75% exemption (up to €25k cap)
-   Year 5-7:   50% exemption (up to €25k cap)
-   Year 8-10:  25% exemption (up to €25k cap)
-   ```
-   Verify: Exemption applies BEFORE personal deductions
+**2. Conciseness**
+- [ ] Labels ≤10 words
+- [ ] Help text ≤15 words
+- [ ] Progressive disclosure (detail hidden until requested)
 
-3. **First-Year Benefits:**
-   - 50% IRS discount: Only Year 1
-   - SS exemption: Only Year 1
-   - Verify: Not applied to Years 2-10
+**3. Transparency**
+- [ ] Every result shows formula
+- [ ] Step-by-step breakdown visible
+- [ ] Source links for all constants
 
-4. **Cumulative Net Income:**
-   ```
-   Cumulative Year N = Sum of Net Income (Year 1 to N)
-   ```
-   Verify: Adds correctly, no rounding errors
+**4. Reproducibility**
+- [ ] Manual calculation possible from methodology
+- [ ] All inputs and assumptions documented
+- [ ] Version number visible
 
-5. **NPV (Net Present Value):**
-   ```
-   NPV = Σ (Net Income Year N) / (1.03)^(N-1)
-   ```
-   Using 3% discount rate, verify calculation
-
-### B. Display & Comparison
-
-**Verify:**
-- [ ] Year-by-year table shows all 10 years
-- [ ] Columns: Year, Income, Net, Tax, SS, Cumulative
-- [ ] Comparison: Freelancer vs LDA side-by-side
-- [ ] Winner determination: Based on 10-year cumulative net
-- [ ] Breakeven year shown (if structures cross over)
-- [ ] Total savings displayed clearly
-
-### C. Edge Cases (Multi-Year)
-
-**Test:**
-- [ ] 0% growth rate → Flat income all 10 years
-- [ ] 20% growth rate → Income doubles in ~4 years
-- [ ] IRS Jovem enabled → Exemption decreases correctly
-- [ ] Income exceeds IRS Jovem cap mid-way → Partial exemption
-- [ ] NHR + high growth → 20% flat rate all 10 years
-- [ ] Switch regimes mid-way → (Not supported, should be clear)
+**PASS CRITERIA:** All 4 tenets score ≥9/10
 
 ---
 
-## VI. Technical Quality
+### Test 7.2: Insurance Estimate Presentation
 
-### A. Code Architecture
+**Check:**
+- [ ] Premium amounts shown as INTEGERS (no decimals)
+- [ ] Clear "ROUGH ESTIMATE" disclaimer
+- [ ] Variance range stated (±20-40%)
+- [ ] Directs users to get real quotes
 
-**Verify separation of concerns:**
-- [ ] `data.js` - Pure data only (no logic, no DOM)
-- [ ] `logic.js` - Pure functions only (no data, no DOM)
-- [ ] `app.js` - Presentation only (no calculations, no data definitions)
-- [ ] Script load order: data.js → logic.js → app.js
-
-**Code Quality:**
-- [ ] No inline calculations in HTML
-- [ ] No magic numbers (all constants in data.js)
-- [ ] Functions are pure and testable
-- [ ] Variable names are descriptive
-- [ ] Comments explain "why" not "what"
-
-### B. Version Control
-
-**Verify:**
-- [ ] Version format: `v2025.X.{commit_hash}` (e.g., `v2025.2.b02afbf`)
-- [ ] Version visible in footer
-- [ ] Commit hash links to exact code state
-- [ ] `VERSION` and `LAST_UPDATED` in data.js
-- [ ] Git history shows clear commit messages (Conventional Commits)
-
-### C. Security & Privacy
-
-**Verify:**
-- [ ] No user data stored server-side
-- [ ] Local storage only (optional, user-controlled)
-- [ ] No external tracking/analytics (or clearly disclosed)
-- [ ] HTTPS only (Netlify)
-- [ ] No sensitive data in URLs
-- [ ] XSS protection (sanitized inputs)
+**Rationale:** Decimals imply false precision for estimates.
 
 ---
 
-## VII. Test Scenarios (Concrete Examples)
+## Phase 8: Version Control & Traceability
 
-### Scenario 1: Junior Developer
-**Input:**
-- Gross Income: €30,000
-- Activity: IT Services (CAE 62010, coefficient 0.75)
-- No special regimes (no NHR, no IRS Jovem)
-- No dependents, no deductions
-- First year: No benefits
+### Test 8.1: Version Number Verification
 
-**Expected Output (Simplified):**
-- Taxable Income: €30,000 × 0.75 = €22,500
-- IRS: ~€3,750 (progressive calculation)
-- SS: ~€3,780 (21.4% on capped monthly base)
-- Total Expenses: €800 (admin)
-- Net Income: ~€21,670
+**Check:**
+1. Footer displays version (format: vYYYY.MM.DD.commithash)
+2. Version increments with each code change
+3. Git commit hash displayed (if using git)
+4. "Last Updated" date visible
 
-**Verify:** Calculator matches within €10
+**✅ PASS CRITERIA:** Version visible and matches latest deployment.
 
 ---
 
-### Scenario 2: Mid-Career Consultant
-**Input:**
-- Gross Income: €60,000
-- Activity: Consulting (coefficient 0.75)
-- NHR: Eligible (20% flat)
-- Personal Deductions: €500 health, €300 education
-- 10-year projection: 5% annual growth
+### Test 8.2: Changelog/Audit Trail
 
-**Expected Output (Organized, Year 1):**
-- Taxable Income: €60,000 - €3,000 (expenses) = €57,000
-- IRS @ 20% NHR: €11,400
-- Less deductions: -€800 × 15% (health) -€300 × 30% (education)
-- SS: ~€6,270 (capped)
-- Net Income: ~€41,500
-
-**Expected (Year 10):**
-- Income: €60,000 × 1.05^9 = €93,053
-- IRS @ 20%: €18,611
-- Net Income: ~€64,000
-- Cumulative 10-year net: ~€510,000
-
-**Verify:** All year-by-year values, cumulative matches
+**Check:**
+1. Is there documentation of changes since last audit?
+2. Are legislative updates tracked?
+3. Is there a process for annual updates?
 
 ---
 
-### Scenario 3: Senior Professional with IRS Jovem
-**Input:**
-- Gross Income: €100,000
-- Activity: High-value services (coefficient 0.75)
-- IRS Jovem: Enabled (Year 3, so 50% exemption on first €25k)
-- Personal Deductions: Max all (health €1,000, retirement €2,500)
-- First Year: 50% IRS discount, SS exempt
+## Phase 9: Final Scoring & Reporting
 
-**Expected Output (Simplified, Year 1):**
-- Taxable Income: €100,000 × 0.75 = €75,000
-- IRS before Jovem: ~€20,000
-- IRS Jovem (50% on €25k): ~€5,000 reduction
-- 50% first-year discount: Another 50% off
-- Final IRS: ~€7,500
-- SS: €0 (first-year exempt)
-- Net Income: ~€90,500 (Year 1 bonus)
+### Scoring Rubric
 
-**Expected (Year 2):**
-- IRS Jovem still 50%, but no first-year discount
-- SS: ~€6,270 (capped, now paying)
-- Net Income: ~€76,000
+| Category | Weight | Score (0-10) | Weighted |
+|----------|--------|--------------|----------|
+| **Data Accuracy (Phase 2)** | 40% | [SCORE] | [CALC] |
+| **Government Sources (Phase 3)** | 15% | [SCORE] | [CALC] |
+| **Computational Accuracy (Phase 4)** | 20% | [SCORE] | [CALC] |
+| **Documentation Quality (Phase 5)** | 10% | [SCORE] | [CALC] |
+| **Accessibility (Phase 6)** | 10% | [SCORE] | [CALC] |
+| **Four Tenets (Phase 7)** | 5% | [SCORE] | [CALC] |
+| **TOTAL** | 100% | | **/100** |
 
-**Verify:** First-year benefits only apply once, IRS Jovem persists
+### Critical Failures (Auto-Fail Entire Audit)
 
----
+**ANY of these = OVERALL FAIL, regardless of other scores:**
+- ❌ Wrong tax bracket rates (Phase 2.1)
+- ❌ Wrong IAS, RMMG, or SS rates (Phase 2.2)
+- ❌ Outdated CAE version (Phase 2.4)
+- ❌ Lighthouse Accessibility <100 (Phase 6.1)
+- ❌ No version number displayed (Phase 8.1)
 
-### Scenario 4: High Earner Comparison
-**Input:**
-- Gross Income: €180,000
-- Activity: Professional services (coefficient 0.75)
-- Compare: Freelancer Simplified vs LDA
-- 10-year projection: 3% growth
-
-**Expected (Freelancer Simplified, Year 1):**
-- Taxable: €135,000
-- IRS: ~€52,000 (top brackets + solidarity 2.5%)
-- SS: ~€6,270 (capped)
-- Net: ~€119,000
-
-**Expected (LDA, Year 1):**
-- Manager wage: €16,185 @ 34.75% SS = ~€5,624 SS
-- Remaining: €180k - €16,185 - €5,624 - €2,000 (admin) = €156,191 flows through
-- IRS on Category B: ~€62,000 (higher tax, but more deductions)
-- Net: ~€107,000
-
-**Winner:** Freelancer Simplified (saves ~€12,000/year)
-
-**Verify:** Comparison table shows Freelancer wins, correct reasoning displayed
+**Rationale:** These are LEGAL/REGULATORY compliance issues, not UX preferences.
 
 ---
 
-## VIII. Scoring Rubric
+## Audit Report Template
 
-### Computational Accuracy (40 points)
-- [ ] All tax brackets correct (10 pts)
-- [ ] Social Security calculated correctly (10 pts)
-- [ ] Multi-year projections accurate (10 pts)
-- [ ] Edge cases handled (5 pts)
-- [ ] All test scenarios match expected (5 pts)
+```markdown
+# TakeHome PT Calculator Audit Report
 
-**Pass:** ≥36/40 (90%)
+**Auditor:** [Name]
+**Date:** [YYYY-MM-DD]
+**Version Audited:** [vYYYY.MM.DD.hash]
+**Audit Routine Version:** 2.0
 
----
-
-### Four Tenets Compliance (30 points)
-- [ ] Precision: 100% regulatory accuracy (10 pts)
-- [ ] Conciseness: 80%+ labels/help texts ≤10-15 words (5 pts)
-- [ ] Transparency: All formulas visible + sources linked (10 pts)
-- [ ] Reproducibility: Complete methodology, version control (5 pts)
-
-**Pass:** ≥27/30 (90%)
-
----
-
-### UI/UX Quality (20 points)
-- [ ] Intuitive navigation and flow (5 pts)
-- [ ] Clear decision support (winner, recommendations) (5 pts)
-- [ ] Accessibility (WCAG 2.1 AA) (5 pts)
-- [ ] Error handling and validation (5 pts)
-
-**Pass:** ≥16/20 (80%)
-
----
-
-### Documentation & Compliance (10 points)
-- [ ] Methodology section complete (3 pts)
-- [ ] All sources link to official .gov.pt sites (3 pts)
-- [ ] Version control and traceability (2 pts)
-- [ ] Disclaimers and legal compliance (2 pts)
-
-**Pass:** ≥8/10 (80%)
-
----
-
-### Overall Score: /100
-
-**Rating:**
-- **95-100:** World-class, audit-ready
-- **90-94:** Excellent, minor improvements
-- **85-89:** Good, some gaps to address
-- **80-84:** Acceptable, notable issues
-- **<80:** Needs significant work
-
-**Pass Threshold:** ≥85/100
-
----
-
-## IX. Reporting Template
-
-### Executive Summary
-
-**CRITICAL:** Always include the exact version number from the calculator footer.
-
-- **Version Audited:** v[YYYY.MM.DD.commit_hash] ← **Copy from footer at bottom of calculator page**
-- **Audit Date:** YYYY-MM-DD
-- **Overall Score:** XX/100
+## Executive Summary
+- **Overall Score:** [X]/100
 - **Pass/Fail:** [PASS/FAIL]
-- **Recommendation:** [Ready for production / Needs fixes / Major rework required]
+- **Critical Issues Found:** [Count]
+- **Recommendation:** [Production Ready / Requires Fixes / Major Issues]
 
-**Example:**
-- **Version Audited:** v2025.10.18.cdd91a7
-- **Audit Date:** 2025-10-18
-- **Overall Score:** 92/100
-- **Pass/Fail:** PASS
-- **Recommendation:** Ready for production with minor UX improvements
+## Phase 2: Data Accuracy (40 points)
+**Score: [X]/10 → [Weighted]**
 
----
+### Tax Brackets Verification
+- Bracket 1 (12.5%): [✅ PASS / ❌ FAIL - Found: X%]
+- Bracket 2 (16.0%): [✅ PASS / ❌ FAIL - Found: X%]
+- [Continue for all 9 brackets]
 
-### Findings
+**Primary Source Verified:** Lei 55-A/2025, Article 68º
+**Link:** https://diariodarepublica.pt/dr/detalhe/lei/55-a-2025-925904929
+**Date Accessed:** [YYYY-MM-DD]
 
-#### 1. Computational Accuracy
-**Score:** XX/40
+### Core Constants
+- IAS 2025: [✅ €522.50 / ❌ FAIL - Found: €X]
+- RMMG 2025: [✅ €870 / ❌ FAIL - Found: €X]
+- [Continue for all constants]
 
-**Correct:**
-- [List what calculations are accurate]
-
-**Errors Found:**
-- [List any calculation discrepancies with expected vs actual]
-
-**Edge Cases:**
-- [List any edge case failures]
+**Issues Found:** [List any discrepancies]
 
 ---
 
-#### 2. Four Tenets Compliance
-**Score:** XX/30
+## Phase 3: Government Sources (15 points)
+**Score: [X]/10 → [Weighted]**
 
-**Precision:**
-- [Assessment of regulatory accuracy]
+**Link Quality:**
+- Total links audited: [N]
+- Primary sources: [N]
+- Actionable tools: [N]
+- Broken/outdated: [N]
 
-**Conciseness:**
-- [Count of verbose labels/help texts]
+**CAE Rev. 4 Status:** [✅ CURRENT / ❌ OUTDATED]
 
-**Transparency:**
-- [Assessment of formula visibility and source linking]
-
-**Reproducibility:**
-- [Assessment of methodology completeness]
+**Issues Found:** [List inadequate sources]
 
 ---
 
-#### 3. UI/UX Quality
-**Score:** XX/20
+## Phase 4: Computational Accuracy (20 points)
+**Score: [X]/10 → [Weighted]**
 
-**Strengths:**
-- [List UI/UX strengths]
+**Scenario Testing:**
+| Scenario | Expected | Calculator | Difference | Pass? |
+|----------|----------|------------|------------|-------|
+| Freelancer €50k | €X | €Y | €Z | [Y/N] |
+| IRS Jovem Y1 | €X | €Y | €Z | [Y/N] |
+| [Continue for all scenarios]
 
-**Issues:**
-- [List usability problems, accessibility failures, etc.]
+**Edge Cases:** [X]/7 passed
 
----
-
-#### 4. Documentation & Compliance
-**Score:** XX/10
-
-**Complete:**
-- [What's well documented]
-
-**Missing:**
-- [What needs better documentation]
+**Issues Found:** [List calculation errors]
 
 ---
 
-### Critical Issues (Must Fix)
-1. [Any calculation errors that affect results]
-2. [Any missing regulatory compliance]
-3. [Any accessibility blockers]
+## Phase 5: Documentation (10 points)
+**Score: [X]/10 → [Weighted]**
+
+**Source Citations:** [X]% of constants properly cited
+**Text Brevity:** [X]% help texts ≤15 words
+
+**Issues Found:** [List documentation gaps]
 
 ---
 
-### Minor Issues (Should Fix)
-1. [UI polish items]
-2. [Documentation gaps]
-3. [Performance optimizations]
+## Phase 6: Accessibility (10 points)
+**Score: [X]/10 → [Weighted]**
+
+**Lighthouse Score:** [X]/100
+**Manual Tests:** [X]/4 passed
+
+**Issues Found:** [List WCAG violations]
 
 ---
 
-### Recommendations
-1. [Prioritized list of improvements]
-2. [Suggestions for enhancements]
-3. [Future feature considerations]
+## Phase 7: Four Tenets (5 points)
+**Score: [X]/10 → [Weighted]**
+
+- Precision: [X]/10
+- Conciseness: [X]/10
+- Transparency: [X]/10
+- Reproducibility: [X]/10
 
 ---
 
-### Conclusion
-[Overall assessment: Is the tool ready for professional use? Does it meet world-class standards? What's the confidence level for accuracy?]
+## Critical Issues (MUST FIX)
+1. [Issue description + severity + fix required]
+2. [Issue description + severity + fix required]
+
+## Minor Issues (SHOULD FIX)
+1. [Issue description + recommendation]
+2. [Issue description + recommendation]
+
+## Recommendations
+1. [Specific actionable recommendation]
+2. [Specific actionable recommendation]
+
+## Conclusion
+[Summary paragraph on production readiness]
 
 ---
 
-**Auditor Signature:** ___________________  
-**Date:** ___________________
+**Auditor Signature:** _________________
+**Date:** [YYYY-MM-DD]
+**Next Audit Due:** [YYYY-MM-DD]
+```
 
 ---
 
-## X. Audit Execution Checklist
+## Appendix A: Auditor Checklist (Print This)
 
-**Before Starting:**
-- [ ] **Record the version number** from calculator footer (bottom of page)
-  - Format: v2025.10.18.abc123d (year.month.day.commithash)
-  - **Include this version in your audit report header**
-- [ ] Review latest Portuguese tax regulations (OE 2025)
-- [ ] Confirm IAS, RMMG, tax brackets for 2025
-- [ ] Have official source documents ready
-- [ ] Prepare calculator (spreadsheet) for manual verification
+**Before starting audit:**
+- [ ] Downloaded all 8 primary source documents
+- [ ] Created verification spreadsheet
+- [ ] Opened calculator in browser
+- [ ] Opened calculator source code (if available)
+- [ ] Noted version number being audited
 
-**During Audit:**
-- [ ] Test all scenarios in order (Section VII)
-- [ ] Document every discrepancy immediately
-- [ ] Screenshot any UI issues
-- [ ] Note any unclear documentation
-- [ ] Test on multiple browsers (Chrome, Firefox, Safari)
-- [ ] Test on mobile device
-- [ ] Test with screen reader
+**Phase 2 - Data Accuracy:**
+- [ ] Verified all 9 tax bracket rates
+- [ ] Verified IAS 2025
+- [ ] Verified RMMG 2025
+- [ ] Verified SS rates
+- [ ] Verified IRS Jovem schedule
+- [ ] Verified solidarity tax thresholds
+- [ ] Checked CAE version (Rev. 4)
 
-**After Audit:**
-- [ ] **Include version number in report header** (from calculator footer)
-- [ ] Complete scoring rubric (Section VIII)
-- [ ] Write executive summary with version
-- [ ] List all issues (critical first)
-- [ ] Provide actionable recommendations
-- [ ] Rate overall: Pass/Fail
-- [ ] Verify version number is prominently displayed in report
+**Phase 3 - Government Sources:**
+- [ ] Audited all government links
+- [ ] Verified CAE/CIRS resource quality
+- [ ] Checked for actionable tools
 
----
+**Phase 4 - Computational:**
+- [ ] Tested 5 standard scenarios
+- [ ] Tested 7 edge cases
+- [ ] Compared to manual calculations
 
-## XI. Quick Reference - Expected Values 2025
+**Phase 5 - Documentation:**
+- [ ] Checked source citations
+- [ ] Measured text brevity
+- [ ] Verified methodology section
 
-| Constant | Value | Source |
-|----------|-------|--------|
-| IAS | €522.50 | Portaria n.º 32/2025 |
-| RMMG (monthly) | €820 | DL 109/2024 |
-| RMMG (annual) | €11,480 | DL 109/2024 |
-| Manager min (LDA) | €16,185 | 2× RMMG annual |
-| SS Rate (self-employed) | 21.4% | SS 2025 |
-| SS Relevant Income Factor | 70% | SS 2025 |
-| SS Monthly Cap | €6,270 | 12× IAS |
-| Top IRS Bracket | 48% | OE 2025 |
-| Solidarity Tax Threshold 1 | €85,447 | Lei 27-A/2020 |
-| Solidarity Tax Threshold 2 | €253,388 | Lei 27-A/2020 |
-| IRS Jovem Max Exemption | €25,000 | CIRS Art 2-B |
-| NHR High-Value Rate | 20% | CIRS Art 72 |
+**Phase 6 - Accessibility:**
+- [ ] Ran Lighthouse audit
+- [ ] Tested keyboard navigation
+- [ ] Tested screen reader
 
----
+**Phase 7 - Four Tenets:**
+- [ ] Scored Precision
+- [ ] Scored Conciseness
+- [ ] Scored Transparency
+- [ ] Scored Reproducibility
 
-## XII. Official Sources (Must Link)
+**Phase 8 - Version Control:**
+- [ ] Verified version display
+- [ ] Checked changelog
 
-**Primary Sources:**
-1. [Portal das Finanças](https://info.portaldasfinancas.gov.pt/) - Tax tables, IRS
-2. [Segurança Social](https://www.seg-social.pt/) - SS rates, contributions
-3. [Diário da República](https://dre.pt/) - Official legal publications
-4. [INE - Instituto Nacional de Estatística](https://www.ine.pt/) - IAS, economic data
-5. [CIRS - Código do IRS](https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/) - Tax code
-
-**Specific Legislation:**
-- Orçamento do Estado 2025 (OE 2025) - Tax brackets
-- Lei n.º 27-A/2020 - Solidarity tax
-- Lei n.º 26/2024 - IRS Jovem update
-- Portaria n.º 32/2025 - IAS value
-- Decreto-Lei n.º 109/2024 - RMMG value
+**Final:**
+- [ ] Calculated total score
+- [ ] Checked for critical failures
+- [ ] Completed audit report
+- [ ] Submitted to client
 
 ---
 
-## Usage Instructions
+## Appendix B: Annual Update Checklist
 
-**For AI Auditors:**
-1. Access the calculator at https://take-home-pt.netlify.app/
-2. **FIRST: Record the version number from footer** (e.g., v2025.10.18.cdd91a7)
-3. **Include version in all audit reports** (Executive Summary section)
-4. Work through each section (I-VII) systematically
-5. Test all scenarios in Section VII
-6. Complete the scoring rubric (Section VIII)
-7. Generate a report using template (Section IX) **with version number**
-8. Provide clear pass/fail determination
+**Every January (before tax season):**
+- [ ] Check for new State Budget law (Orçamento do Estado)
+- [ ] Verify IRS brackets updated
+- [ ] Verify IAS value updated
+- [ ] Verify RMMG updated
+- [ ] Check for Social Security rate changes
+- [ ] Check for CAE classification updates
+- [ ] Update all Diário da República links to current year
+- [ ] Re-run full audit routine
 
-**Why version matters:**
-- Enables exact bug reproduction (`git checkout abc123d`)
-- Links audit findings to specific code state
-- Tracks improvements over time
-- Essential for professional audit trail
-
-**For Human Auditors:**
-1. Print this routine or keep it open in a second window
-2. Have a spreadsheet ready for manual calculations
-3. Official source documents ready for cross-reference
-4. Test methodically, document everything
-5. Focus on critical issues first
-6. Be thorough but efficient
-
-**For Developers:**
-1. Use this as a regression test checklist
-2. Before each release, run key scenarios
-3. Verify version number updated
-4. Check no new calculation errors introduced
-5. Confirm all sources still link correctly
+**Legislative Trigger Events:**
+- [ ] New State Budget published → Full data verification
+- [ ] CAE revision announced → Update references
+- [ ] Social Security reform → Verify rates
+- [ ] IRS Jovem changes → Update schedule
 
 ---
 
-**Last Updated:** 2025-10-17  
-**Version:** 1.0  
-**Maintained By:** TakeHome PT Development Team
+## Version History
+
+**v2.0 (2025-10-27)** - Complete rewrite after critical errors found
+- Added mandatory Phase 2 (Data Accuracy First)
+- Required primary source verification for ALL constants
+- Added CAE Rev. 4 check
+- Added critical failure criteria (auto-fail)
+- Increased Data Accuracy weight to 40%
+- Added detailed government source quality assessment
+
+**v1.0 (2025-10-17)** - Original version
+- Basic functionality testing
+- Lighthouse accessibility check
+- Light reference verification
+- **INSUFFICIENT** - Missed 8 wrong tax rates
 
 ---
 
-**This audit routine ensures world-class quality, regulatory compliance, and user trust.**
+**END OF AUDIT ROUTINE V2.0**
