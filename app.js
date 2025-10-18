@@ -471,7 +471,7 @@ function setupEventListeners() {
             
             if (id === 'gross-income') {
                 updateInsuranceDisplay(); // Update insurance when income changes
-                checkSimplifiedRegimeLimit(); // Check €200k limit
+                // Note: Simplified regime limit check happens in calculateAndUpdate()
                 
                 // Auto-update business expenses to 5% if user hasn't manually set them
                 if (!appState.expensesUserModified) {
