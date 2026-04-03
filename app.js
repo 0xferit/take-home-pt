@@ -218,6 +218,7 @@ function initApp() {
     updateInsuranceDisplay(); // Initialize insurance calculation
     updateExpenseTotal();
     calculateAndUpdate();
+    setupSectionObserver();
     populateAppVersion();
 }
 
@@ -576,12 +577,50 @@ function setupEventListeners() {
 }
 
 function switchTab(tabName) {
-    document.querySelectorAll('.tab').forEach((tab) => tab.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach((content) => content.classList.remove('active'));
-    const tabButton = document.querySelector(`[data-tab="${tabName}"]`);
     const tabContent = document.getElementById(tabName);
-    if (tabButton) tabButton.classList.add('active');
-    if (tabContent) tabContent.classList.add('active');
+    if (!tabContent) return;
+
+    setActiveNavigation(tabName);
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    tabContent.scrollIntoView({
+        behavior: reducedMotion ? 'auto' : 'smooth',
+        block: 'start',
+    });
+}
+
+function setActiveNavigation(tabName) {
+    document.querySelectorAll('.tab').forEach((tab) => {
+        const isActive = tab.dataset.tab === tabName;
+        tab.classList.toggle('active', isActive);
+        if (isActive) {
+            tab.setAttribute('aria-current', 'page');
+        } else {
+            tab.removeAttribute('aria-current');
+        }
+    });
+}
+
+function setupSectionObserver() {
+    const sections = Array.from(document.querySelectorAll('.workspace-section'));
+    if (!sections.length) return;
+
+    setActiveNavigation(sections[0].id);
+
+    if (!('IntersectionObserver' in window)) return;
+
+    const observer = new IntersectionObserver((entries) => {
+        const visibleSections = entries
+            .filter((entry) => entry.isIntersecting)
+            .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+
+        if (!visibleSections.length) return;
+        setActiveNavigation(visibleSections[0].target.id);
+    }, {
+        rootMargin: '-16% 0px -60% 0px',
+        threshold: [0.15, 0.3, 0.6, 0.9],
+    });
+
+    sections.forEach((section) => observer.observe(section));
 }
 
 function updateFreelancerTitle() {
@@ -2175,6 +2214,7 @@ function hasAnyUserInput() {
 function updateResultsVisibility() {
     const zeroState = document.getElementById('results-zero-state');
     const detail = document.getElementById('results-detail');
+    const railDetail = document.getElementById('results-rail-detail');
     const exportBtn = document.getElementById('export-pdf-btn');
     const saveBtn = document.getElementById('save-scenario-btn');
     const resultsIndicator = document.getElementById('results-ready-indicator');
@@ -2184,7 +2224,8 @@ function updateResultsVisibility() {
     
     // Show visual indicator on Results tab when data is ready
     if (resultsIndicator) {
-        resultsIndicator.style.display = hasData ? 'inline' : 'none';
+        resultsIndicator.style.display = hasData ? 'inline-flex' : 'none';
+        resultsIndicator.setAttribute('aria-hidden', hasData ? 'false' : 'true');
     }
     
     if (hasData) {
@@ -2192,6 +2233,10 @@ function updateResultsVisibility() {
         zeroState.setAttribute('hidden', 'hidden');
         detail.classList.remove('is-dimmed');
         detail.removeAttribute('aria-hidden');
+        if (railDetail) {
+            railDetail.classList.remove('is-dimmed');
+            railDetail.removeAttribute('aria-hidden');
+        }
         
         // Show action buttons
         if (exportBtn) exportBtn.style.display = 'inline-flex';
@@ -2201,6 +2246,10 @@ function updateResultsVisibility() {
         zeroState.removeAttribute('hidden');
         detail.classList.add('is-dimmed');
         detail.setAttribute('aria-hidden', 'true');
+        if (railDetail) {
+            railDetail.classList.add('is-dimmed');
+            railDetail.setAttribute('aria-hidden', 'true');
+        }
         
         // Hide action buttons
         if (exportBtn) exportBtn.style.display = 'none';
