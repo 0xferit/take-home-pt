@@ -146,6 +146,43 @@ const appState = {
     },
 };
 
+function syncBenefitExclusionUI() {
+    const nhrSelect = document.getElementById('nhr-status');
+    const irsJovemCheckbox = document.getElementById('irs-jovem');
+    const irsJovemYearSelector = document.getElementById('irs-jovem-year-selector');
+    const nhrWarning = document.getElementById('nhr-irs-jovem-warning');
+    const irsJovemWarning = document.getElementById('irs-jovem-nhr-warning');
+
+    let nhrSelected = appState.nhrStatus !== 'standard';
+
+    // IRS Jovem selection always forces the calculator back to standard tax status.
+    if (appState.irsJovemEnabled && nhrSelected) {
+        appState.nhrStatus = 'standard';
+        nhrSelected = false;
+        if (nhrSelect) {
+            nhrSelect.value = 'standard';
+        }
+    }
+
+    if (irsJovemCheckbox) {
+        irsJovemCheckbox.disabled = nhrSelected;
+        if (nhrSelected) {
+            irsJovemCheckbox.checked = false;
+            appState.irsJovemEnabled = false;
+        }
+    }
+
+    if (irsJovemYearSelector) {
+        irsJovemYearSelector.classList.toggle('hidden', !appState.irsJovemEnabled);
+    }
+    if (nhrWarning) {
+        nhrWarning.classList.toggle('hidden', !appState.irsJovemEnabled);
+    }
+    if (irsJovemWarning) {
+        irsJovemWarning.classList.toggle('hidden', !nhrSelected);
+    }
+}
+
 function initApp() {
     setupEventListeners();
     populateAssumptions();
@@ -236,35 +273,9 @@ function setupEventListeners() {
 
     document.getElementById('nhr-status').addEventListener('change', (event) => {
         appState.nhrStatus = event.target.value;
-        
-        // Mutual exclusion: Disable IRS Jovem if NHR selected
-        const irsJovemCheckbox = document.getElementById('irs-jovem');
-        const irsJovemWarning = document.getElementById('irs-jovem-nhr-warning');
-        
-        if (event.target.value !== 'standard') {
-            // NHR selected - disable IRS Jovem
-            if (irsJovemCheckbox) {
-                irsJovemCheckbox.disabled = true;
-                irsJovemCheckbox.checked = false;
-                appState.irsJovemEnabled = false;
-            }
-            if (irsJovemWarning) {
-                irsJovemWarning.style.display = 'block';
-            }
-            const irsJovemYearSelector = document.getElementById('irs-jovem-year-selector');
-            if (irsJovemYearSelector) {
-                irsJovemYearSelector.style.display = 'none';
-            }
-        } else {
-            // Standard selected - enable IRS Jovem
-            if (irsJovemCheckbox) {
-                irsJovemCheckbox.disabled = false;
-            }
-            if (irsJovemWarning) {
-                irsJovemWarning.style.display = 'none';
-            }
-        }
-        
+
+        syncBenefitExclusionUI();
+        updateNHROptions();
         updateInputsAtGlance();
         recalc();
     });
@@ -380,38 +391,16 @@ function setupEventListeners() {
     if (irsJovemCheckbox && irsJovemYearSelector) {
         irsJovemCheckbox.addEventListener('change', (event) => {
             appState.irsJovemEnabled = event.target.checked;
-            irsJovemYearSelector.style.display = event.target.checked ? 'block' : 'none';
-            
-            // Mutual exclusion: Disable NHR if IRS Jovem selected
-            const nhrSelect = document.getElementById('nhr-status');
-            const nhrWarning = document.getElementById('nhr-irs-jovem-warning');
-            
+
             if (event.target.checked) {
-                // IRS Jovem selected - disable NHR, force standard
+                appState.nhrStatus = 'standard';
+                const nhrSelect = document.getElementById('nhr-status');
                 if (nhrSelect) {
-                    // Disable NHR options
-                    Array.from(nhrSelect.options).forEach((option) => {
-                        if (option.value !== 'standard') {
-                            option.disabled = true;
-                        }
-                    });
-                    // Force standard if NHR was selected
-                    if (nhrSelect.value !== 'standard') {
-                        nhrSelect.value = 'standard';
-                        appState.nhrStatus = 'standard';
-                    }
+                    nhrSelect.value = 'standard';
                 }
-                if (nhrWarning) {
-                    nhrWarning.style.display = 'block';
-                }
-            } else {
-                // IRS Jovem unchecked - re-enable NHR based on activity eligibility
-                if (nhrWarning) {
-                    nhrWarning.style.display = 'none';
-                }
-                updateNHROptions(); // This will enable NHR options if activity is eligible
             }
-            
+
+            updateNHROptions();
             updateInputsAtGlance();
             recalc();
         });
@@ -1922,15 +1911,16 @@ function updateNHROptions() {
     const note = document.getElementById('nhr-status-note');
     if (!nhrSelect) return;
     const eligible = isCurrentNHREligible();
+    const lockedByIrsJovem = appState.irsJovemEnabled;
     
     // Enable/disable NHR options based on eligibility
     Array.from(nhrSelect.options).forEach((option) => {
         if (option.value === 'standard') return;
-        option.disabled = !eligible;
+        option.disabled = !eligible || lockedByIrsJovem;
     });
     
-    // Reset to standard if currently selected NHR but not eligible
-    if (!eligible && appState.nhrStatus !== 'standard') {
+    // Reset to standard if NHR cannot currently be used.
+    if ((!eligible || lockedByIrsJovem) && appState.nhrStatus !== 'standard') {
         appState.nhrStatus = 'standard';
         nhrSelect.value = 'standard';
     }
@@ -1938,7 +1928,10 @@ function updateNHROptions() {
     // Update help text with clear messaging
     if (note) {
         note.classList.remove('status--error', 'status--success');
-        if (eligible) {
+        if (lockedByIrsJovem) {
+            note.textContent = '⚠️ NHR / IFICI is unavailable while IRS Jovem is selected. These benefits are mutually exclusive.';
+            note.classList.add('status--error');
+        } else if (eligible) {
             note.textContent = '✅ High-value activity detected. NHR 20% flat rate is available for selection.';
             note.classList.add('status--success');
         } else {
@@ -1946,6 +1939,8 @@ function updateNHROptions() {
             note.classList.add('status--error');
         }
     }
+
+    syncBenefitExclusionUI();
 }
 
 function updateSanityChecks() {

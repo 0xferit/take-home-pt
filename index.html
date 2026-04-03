@@ -69,7 +69,7 @@
                                 </button>
                             </div>
                             <datalist id="activity-code-options"></datalist>
-                            <p id="activity-code-status" class="help-text" class="cae-status">
+                            <p id="activity-code-status" class="help-text cae-status">
                                 ✓ Activity type locked to: <span id="activity-code-derived-type"></span>
                             </p>
                             <p class="help-text">5-digit activity code (CAE Rev. 4, effective Jan 2025). <span id="activity-code-unlock-hint" class="hidden">Clear to unlock manual selection.</span></p>
@@ -109,7 +109,7 @@
                             <summary>What are high-value professions?</summary>
                             <p>Professional services (CIRS codes) listed in Article 151 of CIRS: software, consulting, design, engineering, etc.</p>
                             <p><strong>Article 151 CIRS Codes:</strong> <span id="activity-summary-codes"></span></p>
-                            <p class="help-text" class="mt-3">
+                            <p class="help-text mt-3">
                                 <strong>CIRS vs CAE:</strong> Freelancers providing <em>services only</em> use CIRS codes. Business activities use CAE codes.
                             </p>
                             <p class="help-text">
@@ -129,10 +129,10 @@
                             <option value="nhr_2_ifici" disabled>NHR 2.0 / IFICI (20% flat rate on Portuguese income)</option>
                         </select>
                         <p id="nhr-status-note" class="help-text"></p>
-                        <div class="disclaimer-box" class="mt-3">
+                        <div class="disclaimer-box mt-3">
                             <p><strong>Scope:</strong> This calculator compares Category B professional services taxation only.</p>
                         </div>
-                        <div id="nhr-irs-jovem-warning" class="alert alert--warning" class="hidden mt-3">
+                        <div id="nhr-irs-jovem-warning" class="alert alert--warning hidden mt-3">
                             ⚠️ <strong>NHR disabled:</strong> You have selected IRS Jovem. NHR and IRS Jovem are mutually exclusive benefits - you can only use one.
                         </div>
                     </div>
@@ -144,21 +144,21 @@
                                 <input type="checkbox" id="firstyear-ss-exempt">
                                 <span>Social Security 12-month exemption</span>
                             </label>
-                            <p class="help-text" class="checkbox__help">First 12 months (rolling). New self-employed only.</p>
+                            <p class="help-text checkbox__help">First 12 months (rolling). New self-employed only.</p>
                             
                             <label class="checkbox">
                                 <input type="checkbox" id="firstyear-irs-50">
                                 <span>50% IRS coefficient reduction</span>
                             </label>
-                            <p class="help-text" class="checkbox__help">First calendar year. Halves coefficient (75%→37.5%, 35%→17.5%).</p>
+                            <p class="help-text checkbox__help">First calendar year. Halves coefficient (75%→37.5%, 35%→17.5%).</p>
                             
                             <label class="checkbox">
                                 <input type="checkbox" id="irs-jovem">
                                 <span>IRS Jovem (Youth Tax Benefit)</span>
                             </label>
-                            <p class="help-text" class="checkbox__help">Under 35. 10-year exemption schedule, cap €28,737.50. Excludes NHR/IFICI.</p>
+                            <p class="help-text checkbox__help">Under 35. 10-year exemption schedule, cap €28,737.50. Excludes NHR/IFICI.</p>
                         </div>
-                        <div id="irs-jovem-year-selector" class="form-group" class="hidden mt-4">
+                        <div id="irs-jovem-year-selector" class="form-group hidden mt-4">
                             <label for="irs-jovem-year">IRS Jovem Year</label>
                             <select id="irs-jovem-year" class="input" aria-label="IRS Jovem benefit year">
                                 <option value="1">Year 1 (100% exemption) — First tax year with non-dependent Category A/B income</option>
@@ -180,14 +180,14 @@
                                 <strong>Year counting:</strong> Year 1 = first tax year with Category A or B income as a non-dependent taxpayer.<br>
                                 <strong>Example:</strong> First non-dependent work income in 2024 → 2024 is Year 1. Benefit runs through 2033 (Year 10).
                             </p>
-                            <div id="irs-jovem-nhr-warning" class="alert alert--warning" class="hidden mt-3">
-                                ⚠️ <strong>IRS Jovem disabled:</strong> You have selected NHR status. IRS Jovem and NHR are mutually exclusive benefits - you can only use one.
-                            </div>
+                        </div>
+                        <div id="irs-jovem-nhr-warning" class="alert alert--warning hidden mt-3">
+                            ⚠️ <strong>IRS Jovem disabled:</strong> You have selected NHR status. IRS Jovem and NHR are mutually exclusive benefits - you can only use one.
                         </div>
                     </details>
                     
                     <div class="nav-footer">
-                        <button class="btn btn--primary" data-tab-target="income" class="btn-with-icon" aria-label="Proceed to Income tab">
+                        <button class="btn btn--primary btn-with-icon" data-tab-target="income" aria-label="Proceed to Income tab">
                             Continue to Income
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="btn-icon">
                                 <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -219,7 +219,7 @@
                     </div>
 
                     <div class="nav-footer">
-                        <button class="btn btn--primary" data-tab-target="expenses" class="btn-with-icon" aria-label="Proceed to Expenses tab">
+                        <button class="btn btn--primary btn-with-icon" data-tab-target="expenses" aria-label="Proceed to Expenses tab">
                             Continue to Expenses
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="btn-icon">
                                 <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -265,7 +265,7 @@
                             </div>
                             
                             <!-- Manual Override Option -->
-                            <details class="details" class="mt-3">
+                            <details class="details mt-3">
                                 <summary class="details-summary">Override with actual quote</summary>
                                 <div class="mt-3">
                                     <label class="checkbox">
@@ -286,12 +286,12 @@
                             </details>
                             
                             <!-- Advanced Settings -->
-                            <details class="details" class="mt-3">
+                            <details class="details mt-3">
                                 <summary class="details-summary">⚙️ Customize estimate (advanced)</summary>
                                 <div class="mt-3">
-                                    <div class="form-group" class="mb-3">
+                                    <div class="form-group mb-3">
                                         <label for="insurance-risk-override" class="text--small">Risk level override:</label>
-                                        <select id="insurance-risk-override" class="input" class="text--small">
+                                        <select id="insurance-risk-override" class="input text--small">
                                             <option value="">Auto (based on activity code)</option>
                                             <option value="low">Low Risk - Designers, writers, content creators</option>
                                             <option value="medium">Medium Risk - IT consultants, developers, business consultants</option>
@@ -299,29 +299,29 @@
                                         </select>
                                     </div>
                                     
-                                    <div class="form-group" class="mb-3">
+                                    <div class="form-group mb-3">
                                         <label for="insurance-claims-history" class="text--small">Claims history:</label>
-                                        <select id="insurance-claims-history" class="input" class="text--small">
+                                        <select id="insurance-claims-history" class="input text--small">
                                             <option value="clean" selected>Clean record (default)</option>
                                             <option value="minor">Minor claims (+15%)</option>
                                             <option value="major">Major claims (+40%)</option>
                                         </select>
                                     </div>
                                     
-                                    <div class="form-group" class="mb-3">
+                                    <div class="form-group mb-3">
                                         <label for="insurance-years-business" class="text--small">Years in business:</label>
-                                        <input type="number" id="insurance-years-business" class="input" value="3" min="0" max="50" class="text--small">
+                                        <input type="number" id="insurance-years-business" class="input text--small" value="3" min="0" max="50">
                                         <p class="help-text">3+ years with clean record = -10% discount</p>
                                     </div>
                                     
-                                    <label class="checkbox" class="mb-3">
+                                    <label class="checkbox mb-3">
                                         <input type="checkbox" id="insurance-usa-coverage">
                                         <span class="text--small">Include USA/Canada coverage (+35%)</span>
                                     </label>
                                     
                                     <div class="form-group">
                                         <label for="insurance-coverage-limit" class="text--small">Coverage limit:</label>
-                                        <select id="insurance-coverage-limit" class="input" class="text--small">
+                                        <select id="insurance-coverage-limit" class="input text--small">
                                             <option value="1000000">€1M</option>
                                             <option value="2000000" selected>€2M (standard)</option>
                                             <option value="5000000">€5M</option>
@@ -331,11 +331,11 @@
                                 </div>
                             </details>
                         </div>
-                        <p class="help-text" class="mt-3">
+                        <p class="help-text mt-3">
                             Freelancers need insurance (unlimited liability). LDAs have built-in protection.
                             <strong>⚠️ ROUGH ESTIMATE:</strong> ±20-40%+ variance. Get real quotes from brokers.
                         </p>
-                        <div id="insurance-warning" class="alert alert--warning" class="hidden mt-3"></div>
+                        <div id="insurance-warning" class="alert alert--warning hidden mt-3"></div>
                     </div>
 
                     <div class="expense-split">
@@ -376,11 +376,11 @@
                         </div>
                     </div>
 
-                    <div id="expense-warning" class="alert alert--warning" class="hidden"></div>
-                    <div id="expense-error" class="alert alert--error" class="hidden"></div>
+                    <div id="expense-warning" class="alert alert--warning hidden"></div>
+                    <div id="expense-error" class="alert alert--error hidden"></div>
                     
                     <div class="nav-footer">
-                        <button class="btn btn--primary" data-tab-target="deductions" class="btn-with-icon" aria-label="Proceed to Deductions tab">
+                        <button class="btn btn--primary btn-with-icon" data-tab-target="deductions" aria-label="Proceed to Deductions tab">
                             Continue to Deductions
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="btn-icon">
                                 <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -440,7 +440,7 @@
                     </div>
                     
                     <div class="nav-footer">
-                        <button class="btn btn--primary" data-tab-target="results" class="btn-with-icon" aria-label="View calculation results">
+                        <button class="btn btn--primary btn-with-icon" data-tab-target="results" aria-label="View calculation results">
                             View Results
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="btn-icon">
                                 <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -459,13 +459,13 @@
                     <div class="results-header">
                         <h2>Your Results</h2>
                         <div class="results-actions">
-                            <button id="export-pdf-btn" class="btn btn--secondary" class="hidden">
+                            <button id="export-pdf-btn" class="btn btn--secondary hidden">
                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" class="mr-05">
                                     <path d="M8.5 1.5A1.5 1.5 0 0 0 7 0H4.5A1.5 1.5 0 0 0 3 1.5v13A1.5 1.5 0 0 0 4.5 16h7a1.5 1.5 0 0 0 1.5-1.5V4.621a1.5 1.5 0 0 0-.44-1.06L9.94 .939A1.5 1.5 0 0 0 8.878.5H8.5zM7 1.5a.5.5 0 0 1 .5-.5h1v2.5A.5.5 0 0 0 9 4h2.5v10a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 .5-.5H7z"/>
                                 </svg>
                                 Export to PDF
                             </button>
-                            <button id="save-scenario-btn" class="btn btn--secondary" class="hidden">
+                            <button id="save-scenario-btn" class="btn btn--secondary hidden">
                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" class="mr-05">
                                     <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1H2z"/>
                                 </svg>
@@ -495,11 +495,11 @@
                                             <span>Organized</span>
                                         </label>
                                     </div>
-                                    <p class="help-text" class="mt-05 text--875">
+                                    <p class="help-text mt-05 text--875">
                                         <strong>Simplified limit:</strong> Max €200,000/year turnover
                                     </p>
                                 </div>
-                                <div id="simplified-regime-warning" class="alert alert--warning" class="hidden mt-3 mb-3">
+                                <div id="simplified-regime-warning" class="alert alert--warning hidden mt-3 mb-3">
                                     ⚠️ <strong>Organized accounting enforced:</strong> Your Category B income (€<span id="income-over-limit">0</span>) exceeds the €200,000 simplified regime limit. The system has automatically switched to organized accounting.
                                 </div>
                                 <div class="summary-card__value" id="summary-net-simp">€0.00</div>
@@ -526,7 +526,7 @@
                         </div>
 
                         <!-- Winner Indicator -->
-                        <div id="winner-banner" class="winner-banner" class="hidden">
+                        <div id="winner-banner" class="winner-banner hidden">
                             <div class="winner-banner__icon">🏆</div>
                             <div class="winner-banner__content">
                                 <h3 class="winner-banner__title" id="winner-title">Best Option: Freelancer (Simplified)</h3>
@@ -539,7 +539,7 @@
                         <div class="recommendation">
                             <h3>Why This Structure Wins</h3>
                             <p id="recommendation-text"></p>
-                            <div class="recommendation__details" id="recommendation-details" class="mt-1"></div>
+                            <div class="recommendation__details mt-1" id="recommendation-details"></div>
                             <p class="recommendation__meta">
                                 Breakeven point: <strong id="breakeven-expenses">€0.00</strong> in shared expenses
                             </p>
@@ -901,7 +901,7 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
                                 </div>
                             </div>
                             <p class="help-text"><strong>Sources:</strong> <a href="https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/cirs_rep/index_cirs.htm#a31" target="_blank" rel="noopener" class="link--primary">CIRS Article 31 (Coeficientes)</a> & <a href="https://diariodarepublica.pt/dr/legislacao-consolidada/portaria/2001-177307831" target="_blank" rel="noopener" class="link--primary">Portaria n.º 1011/2001 (Article 151 list)</a></p>
-                            <ul class="info-list" class="mt-3">
+                            <ul class="info-list mt-3">
                                 <li>
                                     <a href="https://diariodarepublica.pt/dr/legislacao-consolidada/portaria/2001-177307831" target="_blank" rel="noopener" class="text--primary">
                                         Portaria n.º 1011/2001 - Article 151 Activity List (Diário da República)
@@ -926,7 +926,7 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
                                 <li><strong>Other CAE codes:</strong> Business activities → 35% coefficient</li>
                             </ul>
                             <p class="help-text"><strong>📋 Official CAE/CIRS Resources:</strong></p>
-                            <ul class="info-list" class="mt-2">
+                            <ul class="info-list mt-2">
                                 <li>
                                     <a href="https://www.gov.pt/servicos/abrir-atividade-nas-financas" target="_blank" rel="noopener" class="link--primary">
                                         Portal das Finanças - Activity Registration
@@ -981,7 +981,7 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
                             </ul>
                             <p class="help-text"><strong>Important:</strong> LDA managers pay significantly higher SS rate (34.75%) vs freelancers (21.4%), but on a lower base (minimum wage) vs freelancers (70% of actual income)</p>
                             
-                            <p class="help-text" class="mt-3"><strong>Source:</strong> <a href="https://diariodarepublica.pt/dr/legislacao-consolidada/lei/2009-34514575" target="_blank" rel="noopener" class="link--primary">Lei 110/2009, Art. 168º (21.4%) & Art. 53º (34.75%)</a> | <a href="https://diariodarepublica.pt/dr/detalhe/portaria/6-b-2025-902111932" target="_blank" rel="noopener" class="link--primary">IAS 2025: €522.50 (Portaria 6-B/2025)</a> | <a href="https://diariodarepublica.pt/dr/detalhe/decreto-lei/112-2024-900706889" target="_blank" rel="noopener" class="link--primary">RMMG 2025: €870 (DL 112/2024)</a></p>
+                            <p class="help-text mt-3"><strong>Source:</strong> <a href="https://diariodarepublica.pt/dr/legislacao-consolidada/lei/2009-34514575" target="_blank" rel="noopener" class="link--primary">Lei 110/2009, Art. 168º (21.4%) & Art. 53º (34.75%)</a> | <a href="https://diariodarepublica.pt/dr/detalhe/portaria/6-b-2025-902111932" target="_blank" rel="noopener" class="link--primary">IAS 2025: €522.50 (Portaria 6-B/2025)</a> | <a href="https://diariodarepublica.pt/dr/detalhe/decreto-lei/112-2024-900706889" target="_blank" rel="noopener" class="link--primary">RMMG 2025: €870 (DL 112/2024)</a></p>
                         </div>
 
                         <!-- Solidarity Tax -->
@@ -1028,7 +1028,7 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
                                     <tr><td>Year 11+</td><td>0%</td><td>100%</td><td>Benefit expired - normal taxation</td></tr>
                                 </tbody>
                             </table>
-                            <div class="disclaimer-box" class="mt-4">
+                            <div class="disclaimer-box mt-4">
                                 <h4>🚨 Critical Exclusion Rule</h4>
                                 <p><strong>IRS Jovem and NHR/IFICI are mutually exclusive.</strong> You CANNOT use both benefits.</p>
                                 <ul class="info-list">
@@ -1054,7 +1054,7 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
                             <h3>NHR / IFICI (20% Flat Rate)</h3>
                             <p class="help-text">Special tax regime for qualifying residents and activities</p>
                             
-                            <div class="disclaimer-box" class="mt-4">
+                            <div class="disclaimer-box mt-4">
                                 <h4>⚠️ IMPORTANT: Calculator Scope Limitation</h4>
                                 <p><strong>This calculator ONLY shows Portuguese professional income (Category B) taxation.</strong></p>
                                 <p>It does NOT calculate foreign income exemptions available under NHR 1.0. If you have foreign income, your actual total tax may be significantly lower than shown here.</p>
@@ -1086,7 +1086,7 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
                                 <li><strong>Eligible Activities:</strong> Scientific research, innovation, high-value professions (Article 151)</li>
                                 <li><strong>Foreign income:</strong> Different treatment than NHR 1.0 - consult tax advisor</li>
                             </ul>
-                            <div class="disclaimer-box" class="mt-4">
+                            <div class="disclaimer-box mt-4">
                                 <h4>🚨 Critical Exclusion Rule</h4>
                                 <p><strong>NHR/IFICI and IRS Jovem are mutually exclusive.</strong> You CANNOT use both benefits.</p>
                                 <ul class="info-list">
@@ -1096,7 +1096,7 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
                                 </ul>
                             </div>
                             
-                            <div class="disclaimer-box" class="mt-4">
+                            <div class="disclaimer-box mt-4">
                                 <h4>📊 NHR 1.0 Foreign Income: Real-World Example</h4>
                                 <p><strong>UK expat with NHR 1.0 status and €85,000 total income:</strong></p>
                                 <ul class="info-list">
@@ -1124,7 +1124,7 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
                             <h3>Professional Liability Insurance (Freelancers) — GUESSETIMATION ONLY</h3>
                             <p class="help-text">Freelancers operating without limited liability protection typically need professional liability insurance</p>
                             
-                            <div class="disclaimer-box" class="warning-box mt-3">
+                            <div class="disclaimer-box warning-box mt-3">
                                 <h4 class="warning-text">⚠️ IMPORTANT: This is a ROUGH GUESSTIMATE, NOT a precise calculation</h4>
                                 <p><strong>Actual premiums can vary by ±20-40% or MORE</strong> depending on:</p>
                                 <ul class="info-list">
@@ -1139,7 +1139,7 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
                             
                             <h4 class="mt-4">Guessetimation Formula (For Reference Only)</h4>
                             <p class="help-text">This calculator uses a simplified industry-average formula to provide a ballpark estimate:</p>
-                            <div class="disclaimer-box" class="mt-3">
+                            <div class="disclaimer-box mt-3">
                                 <p><strong>Formula:</strong> Premium ≈ (BaseRate + Revenue × VariableRate) × RiskMultiplier × AdjustmentFactors</p>
                                 <p class="mt-2"><strong>Note:</strong> This is based on general industry averages and Portugal market data, but actual quotes will vary significantly by insurer</p>
                             </div>
@@ -1147,21 +1147,21 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
                             <h4 class="mt-4">Risk Tiers (Auto-Derived from Activity)</h4>
                             <div class="coefficient-cards">
                                 <div class="coefficient-card">
-                                    <div class="coefficient-card__value" class="text--base">Low Risk</div>
+                                    <div class="coefficient-card__value text--base">Low Risk</div>
                                     <div class="coefficient-card__label">Designers, writers, content creators</div>
-                                    <p class="help-text" class="text--875">Base: €350 + 0.35% revenue × 0.8 multiplier</p>
+                                    <p class="help-text text--875">Base: €350 + 0.35% revenue × 0.8 multiplier</p>
                                     <p class="help-text"><strong>Example:</strong> €100k → ~€640/year (0.64%)</p>
                                 </div>
                                 <div class="coefficient-card">
-                                    <div class="coefficient-card__value" class="text--base">Medium Risk</div>
+                                    <div class="coefficient-card__value text--base">Medium Risk</div>
                                     <div class="coefficient-card__label">IT, developers, business consultants</div>
-                                    <p class="help-text" class="text--875">Base: €450 + 0.45% revenue × 1.0 multiplier</p>
+                                    <p class="help-text text--875">Base: €450 + 0.45% revenue × 1.0 multiplier</p>
                                     <p class="help-text"><strong>Example:</strong> €100k → ~€900/year (0.90%)</p>
                                 </div>
                                 <div class="coefficient-card">
-                                    <div class="coefficient-card__value" class="text--base">High Risk</div>
+                                    <div class="coefficient-card__value text--base">High Risk</div>
                                     <div class="coefficient-card__label">Finance, healthcare tech, financial advisors</div>
-                                    <p class="help-text" class="text--875">Base: €800 + 0.80% revenue × 1.8 multiplier</p>
+                                    <p class="help-text text--875">Base: €800 + 0.80% revenue × 1.8 multiplier</p>
                                     <p class="help-text"><strong>Example:</strong> €100k → ~€2,240/year (2.24%)</p>
                                 </div>
                             </div>
@@ -1176,14 +1176,14 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
                             
                             <h4 class="mt-4">Activity Code → Risk Tier Mapping</h4>
                             <p class="help-text">Auto-derived from activity type:</p>
-                            <ul class="info-list" class="mt-05">
+                            <ul class="info-list mt-05">
                                 <li><strong>High-value services</strong> (CAE 62xxx IT, 70220 consulting, 74100 design) → <strong>Medium Risk</strong></li>
                                 <li><strong>General services</strong> (catch-all) → <strong>Low Risk</strong> (conservative default)</li>
                                 <li><strong>Finance/Healthcare</strong> (CAE 69200 accounting, 69102 legal, 86xxx health) → <strong>High Risk</strong> (explicit override)</li>
                             </ul>
-                            <p class="help-text" class="mt-3">You can manually override the auto-derived risk level in the advanced settings if needed.</p>
+                            <p class="help-text mt-3">You can manually override the auto-derived risk level in the advanced settings if needed.</p>
                             
-                            <div class="disclaimer-box" class="mt-4">
+                            <div class="disclaimer-box mt-4">
                                 <h4>Guessetimation Methodology</h4>
                                 <p><strong>Scaling Property:</strong> Premium percentage generally decreases with revenue due to fixed base costs becoming proportionally smaller. This matches typical insurance pricing patterns.</p>
                                 <p><strong>Industry Averages:</strong> Formula based on general patterns observed across multiple EU/UK insurance providers and industry research, but <strong>this is NOT a validated predictive model</strong>.</p>
@@ -1191,14 +1191,14 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
                                 <p class="error-text mt-2">⚠️ ALWAYS get actual quotes from insurance providers. Do NOT use this estimate for financial planning.</p>
                             </div>
                             
-                            <div class="disclaimer-box" class="mt-4">
+                            <div class="disclaimer-box mt-4">
                                 <h4>LDA vs Freelancer Liability</h4>
                                 <p><strong>LDA (Limited Liability Company):</strong> Built-in limited liability protection. Company assets are separate from personal assets. Professional liability insurance optional (may still be required by specific clients).</p>
                                 <p><strong>Freelancer:</strong> Unlimited personal liability. Your personal assets (home, savings, etc.) are at risk in case of claims. Professional liability insurance strongly recommended.</p>
                                 <p class="mt-2"><strong>Cost Comparison:</strong> Insurance at 0.5-1.5% of revenue is far more cost-effective than LDA overhead (€3,650-8,000/year fixed costs) for most freelancers.</p>
                             </div>
                             
-                            <p class="help-text" class="mt-4"><strong>⚠️ ROUGH ESTIMATES:</strong> ±20-40%+ variance. Actual costs vary by profession, coverage, claims, insurer. Get real quotes. For budgeting only.</p>
+                            <p class="help-text mt-4"><strong>⚠️ ROUGH ESTIMATES:</strong> ±20-40%+ variance. Actual costs vary by profession, coverage, claims, insurer. Get real quotes. For budgeting only.</p>
                             <p class="help-text"><strong>Official Portuguese Insurance Regulation:</strong> <a href="https://www.asf.com.pt/" target="_blank" rel="noopener" class="link--primary">ASF - Autoridade de Supervisão de Seguros e Fundos de Pensões (Insurance Regulator)</a> | <a href="https://dre.pt/dre/legislacao-consolidada/decreto-lei/2015-67474011" target="_blank" rel="noopener" class="link--primary">Decree-Law 72/2008 (Insurance Contract Law)</a></p>
                             <p class="help-text"><strong>Portugal Insurance Providers:</strong> 
                                 <a href="https://www.hiscox.pt/" target="_blank" rel="noopener" class="link--primary">Hiscox Portugal</a>, 
