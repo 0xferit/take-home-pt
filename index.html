@@ -7,48 +7,26 @@
     <meta name="description" content="Optimize your business structure in Portugal. Compare take-home income across Freelancer (Simplified), Freelancer (Organized), and LDA to maximize your net income.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Newsreader:opsz,wght@6..72,500;6..72,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,700;9..144,900&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="app">
         <header class="header">
             <div class="container">
-                <div class="header-inner">
-                    <div class="header-copy">
-                        <div class="header-notice">
-                            <p class="header-notice__text">Tax year 2025 • Portugal • Category B structure planner</p>
-                        </div>
-                        <h1 class="header__title">TakeHome PT</h1>
-                        <p class="header__subtitle">See, in one live workspace, whether freelancing or an LDA leaves you with more money after Portuguese tax and social security.</p>
-                        <p class="header__tagline">Built for high-value and general professional services. Updated for OE 2025 and current IRS Jovem / IFICI rules.</p>
-                    </div>
-                    <div class="header-meta">
-                        <div class="header-meta__item">
-                            <span class="header-meta__label">Last legal refresh</span>
-                            <strong class="header-meta__value">October 2025</strong>
-                        </div>
-                        <div class="header-meta__item">
-                            <span class="header-meta__label">Primary use</span>
-                            <strong class="header-meta__value">Category B comparison</strong>
-                        </div>
-                        <div class="header-meta__item">
-                            <span class="header-meta__label">Decision style</span>
-                            <strong class="header-meta__value">Live 10-year view</strong>
-                        </div>
-                    </div>
+                <div class="header-notice">
+                    <p class="header-notice__text">Tax year 2025 &middot; Portugal</p>
                 </div>
+                <h1 class="header__title">TakeHome PT</h1>
+                <p class="header__subtitle">Compare freelancer vs. LDA structures. See which keeps more money after Portuguese tax and social security.</p>
             </div>
         </header>
 
-        <nav class="tabs" role="navigation" aria-label="Main navigation">
+        <nav class="nav" role="navigation" aria-label="Main navigation">
             <div class="container">
-                <button class="tab active" data-tab="setup" aria-label="Setup: Configure your profile and tax status">Setup</button>
-                <button class="tab" data-tab="income" aria-label="Income: Enter your annual income">Income</button>
-                <button class="tab" data-tab="expenses" aria-label="Expenses: Enter business expenses">Expenses</button>
-                <button class="tab" data-tab="deductions" aria-label="Deductions: Configure tax deductions">Deductions</button>
-                <button class="tab" data-tab="results" aria-label="Results: View calculated comparisons">Results <span id="results-ready-indicator" class="text--success text--bold" aria-hidden="true">✓</span></button>
-                <button class="tab" data-tab="methodology" aria-label="Methodology: View calculation details and legal sources">Methodology</button>
+                <a class="nav__link active" href="#scenario" data-tab="scenario" aria-label="Your Scenario: Configure profile, income, and expenses">Your Scenario</a>
+                <a class="nav__link" href="#results" data-tab="results" aria-label="Results: View calculated comparisons">Results<span id="results-ready-indicator" class="results-indicator" aria-hidden="true"></span></a>
+                <a class="nav__link" href="#methodology" data-tab="methodology" aria-label="How It Works: Calculation details and legal sources">How It Works</a>
             </div>
         </nav>
 
@@ -57,114 +35,95 @@
                 <div class="workspace-layout">
                     <aside id="results-rail" class="results-rail" aria-labelledby="results-rail-title">
                         <div class="results-rail__inner">
-                            <p class="results-rail__eyebrow">Live recommendation</p>
-                            <div class="results-header results-header--rail">
-                                <div>
-                                    <h2 id="results-rail-title">Your running comparison</h2>
-                                    <p class="section-lead section-lead--compact">Adjust the assumptions on the left. This rail updates instantly with the current winner, take-home spread, and 10-year picture.</p>
+                            <!-- Desktop full rail -->
+                            <div class="rail-full">
+                                <h2 id="results-rail-title" class="rail-title">Live comparison</h2>
+
+                                <div id="results-zero-state" class="zero-state">
+                                    <p>Enter income to see your comparison.</p>
                                 </div>
-                                <div class="results-actions">
-                                    <button id="export-pdf-btn" class="btn btn--secondary hidden">
-                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" class="mr-05">
-                                            <path d="M8.5 1.5A1.5 1.5 0 0 0 7 0H4.5A1.5 1.5 0 0 0 3 1.5v13A1.5 1.5 0 0 0 4.5 16h7a1.5 1.5 0 0 0 1.5-1.5V4.621a1.5 1.5 0 0 0-.44-1.06L9.94 .939A1.5 1.5 0 0 0 8.878.5H8.5zM7 1.5a.5.5 0 0 1 .5-.5h1v2.5A.5.5 0 0 0 9 4h2.5v10a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 .5-.5H7z"/>
-                                        </svg>
-                                        Export
-                                    </button>
-                                    <button id="save-scenario-btn" class="btn btn--secondary hidden">
-                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" class="mr-05">
-                                            <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1H2z"/>
-                                        </svg>
-                                        Save
-                                    </button>
-                                </div>
-                            </div>
 
-                            <div class="results-notice">
-                                <p>
-                                    <strong>Automatic updates.</strong> Enter your structure assumptions once, then watch the rail keep score while you work through the inputs.
-                                </p>
-                            </div>
-
-                            <div id="results-zero-state" class="zero-state">
-                                <p>Start with income and expenses to unlock the comparison, recommendation, and 10-year totals.</p>
-                                <button class="btn btn--primary" data-tab-target="income">Start with income</button>
-                            </div>
-
-                            <div id="results-rail-detail">
-                                <div class="summary-cards">
-                                    <div class="summary-card">
-                                        <div class="summary-card__label">
-                                            <span>Freelancer setup</span>
-                                            <div class="radio-toggle">
-                                                <label>
-                                                    <input type="radio" name="freelancer-basis" value="simplified" checked>
-                                                    <span>Simplified</span>
-                                                </label>
-                                                <label>
-                                                    <input type="radio" name="freelancer-basis" value="organized">
-                                                    <span>Organized</span>
-                                                </label>
+                                <div id="results-rail-detail">
+                                    <div class="stat-cards">
+                                        <div class="stat-card">
+                                            <div class="stat-card__eyebrow">Freelancer</div>
+                                            <div class="stat-card__value" id="summary-net-simp">€0.00</div>
+                                            <div class="stat-card__delta">
+                                                <span id="summary-rate-simp">0.0%</span> take-home
                                             </div>
                                         </div>
-                                        <p class="help-text mt-05 text--875">
-                                            <strong>Simplified limit:</strong> Max €200,000/year turnover
+
+                                        <div class="stat-card stat-card--highlight">
+                                            <div class="stat-card__eyebrow">Single-member company</div>
+                                            <div class="stat-card__value" id="summary-net-org">€0.00</div>
+                                            <div class="stat-card__delta">
+                                                <span id="summary-rate-org">0.0%</span> take-home
+                                            </div>
+                                        </div>
+
+                                        <div class="stat-card stat-card--diff">
+                                            <div class="stat-card__eyebrow">Annual spread</div>
+                                            <div class="stat-card__value" id="summary-net-diff">€0.00</div>
+                                            <div class="stat-card__delta">
+                                                <span id="summary-rate-diff">0.0%</span> rate difference
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div id="winner-banner" class="winner-stripe hidden">
+                                        <div class="winner-stripe__badge">Winner</div>
+                                        <div class="winner-stripe__content">
+                                            <h3 class="winner-stripe__title" id="winner-title">Best Option: Freelancer (Simplified)</h3>
+                                            <p class="winner-stripe__subtitle" id="winner-subtitle">Maximizes your take-home income</p>
+                                            <div class="winner-stripe__stats" id="winner-stats"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="recommendation">
+                                        <h3>Why it wins</h3>
+                                        <p id="recommendation-text"></p>
+                                        <div class="recommendation__details" id="recommendation-details"></div>
+                                        <p class="recommendation__meta">
+                                            Breakeven: <strong id="breakeven-expenses">€0.00</strong> shared expenses
                                         </p>
-                                        <div id="simplified-regime-warning" class="alert alert--warning hidden mt-3 mb-3">
-                                            ⚠️ <strong>Organized accounting enforced:</strong> Your Category B income (€<span id="income-over-limit">0</span>) exceeds the €200,000 simplified regime limit. The system has automatically switched to organized accounting.
-                                        </div>
-                                        <div class="summary-card__value" id="summary-net-simp">€0.00</div>
-                                        <div class="summary-card__meta">
-                                            <span id="summary-rate-simp">0.0%</span> take-home
-                                        </div>
                                     </div>
 
-                                    <div class="summary-card summary-card--highlight">
-                                        <div class="summary-card__label">Single-member company</div>
-                                        <div class="summary-card__value" id="summary-net-org">€0.00</div>
-                                        <div class="summary-card__meta">
-                                            <span id="summary-rate-org">0.0%</span> take-home
-                                        </div>
-                                    </div>
-
-                                    <div class="summary-card summary-card--diff">
-                                        <div class="summary-card__label">Current annual spread</div>
-                                        <div class="summary-card__value" id="summary-net-diff">€0.00</div>
-                                        <div class="summary-card__meta">
-                                            <span id="summary-rate-diff">0.0%</span> rate difference
-                                        </div>
+                                    <div class="results-rail__jump">
+                                        <a class="btn btn--secondary" href="#results" data-tab="results">View full breakdown</a>
                                     </div>
                                 </div>
+                            </div>
 
-                                <div id="winner-banner" class="winner-banner hidden">
-                                    <div class="winner-banner__icon">Winner</div>
-                                    <div class="winner-banner__content">
-                                        <h3 class="winner-banner__title" id="winner-title">Best Option: Freelancer (Simplified)</h3>
-                                        <p class="winner-banner__subtitle" id="winner-subtitle">Maximizes your take-home income</p>
-                                        <div class="winner-banner__stats" id="winner-stats"></div>
+                            <!-- Mobile compact bottom bar -->
+                            <div class="rail-compact">
+                                <div class="result-bar">
+                                    <div class="result-bar__item">
+                                        <span class="result-bar__label">FL</span>
+                                        <span class="result-bar__value" id="mobile-net-simp">€0</span>
                                     </div>
-                                </div>
-
-                                <div class="recommendation">
-                                    <h3>Why it wins</h3>
-                                    <p id="recommendation-text"></p>
-                                    <div class="recommendation__details mt-1" id="recommendation-details"></div>
-                                    <p class="recommendation__meta">
-                                        Breakeven point: <strong id="breakeven-expenses">€0.00</strong> in shared expenses
-                                    </p>
-                                </div>
-
-                                <div class="results-rail__jump">
-                                    <button class="btn btn--secondary" data-tab-target="results">Open full breakdown</button>
+                                    <div class="result-bar__divider"></div>
+                                    <div class="result-bar__item">
+                                        <span class="result-bar__label">LDA</span>
+                                        <span class="result-bar__value" id="mobile-net-org">€0</span>
+                                    </div>
+                                    <a class="result-bar__action" href="#results" data-tab="results">Results</a>
                                 </div>
                             </div>
                         </div>
                     </aside>
 
                     <div class="workspace-main">
-                <!-- Setup Tab -->
-                <section id="setup" class="tab-content active workspace-section">
-                    <h2>Your Profile & Tax Status</h2>
-                    <p class="section-lead">Lock the tax regime assumptions first. The calculator uses this section to determine eligibility, coefficients, and which incentives can coexist.</p>
+                <!-- Zone 1: Your Scenario -->
+                <section id="scenario" class="workspace-section">
+                    <h2 class="zone-title">Your Scenario</h2>
+
+                    <!-- Accordion: Activity & Tax Status -->
+                    <div class="accordion-section" id="accordion-setup">
+                        <button class="accordion-trigger" aria-expanded="true" aria-controls="panel-setup">
+                            <span class="accordion-trigger__text">Activity & Tax Status</span>
+                            <svg class="accordion-trigger__icon" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M6 8l4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </button>
+                        <div class="accordion-panel" id="panel-setup">
                     
                     <div class="form-group">
                         <label>Activity Type <span class="required">*</span></label>
@@ -309,21 +268,35 @@
                             ⚠️ <strong>IRS Jovem disabled:</strong> You have selected NHR status. IRS Jovem and NHR are mutually exclusive benefits - you can only use one.
                         </div>
                     </details>
-                    
-                    <div class="nav-footer">
-                        <button class="btn btn--primary btn-with-icon" data-tab-target="income" aria-label="Proceed to Income tab">
-                            Continue to Income
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="btn-icon">
-                                <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </button>
-                    </div>
-                </section>
 
-                <!-- Income Tab -->
-                <section id="income" class="tab-content workspace-section" role="region" aria-labelledby="income-heading">
-                    <h2 id="income-heading">Your Income</h2>
-                    <p class="section-lead">Model the top-line revenue you expect the structure to handle. Growth feeds directly into the 10-year summary and comparison tables.</p>
+                    <div class="form-group">
+                        <label>Freelancer Accounting Basis</label>
+                        <div class="radio-toggle radio-toggle--inline">
+                            <label>
+                                <input type="radio" name="freelancer-basis" value="simplified" checked>
+                                <span>Simplified</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="freelancer-basis" value="organized">
+                                <span>Organized</span>
+                            </label>
+                        </div>
+                        <p class="help-text"><strong>Simplified limit:</strong> Max €200,000/year turnover</p>
+                        <div id="simplified-regime-warning" class="alert alert--warning hidden mt-3 mb-3">
+                            <strong>Organized accounting enforced:</strong> Your Category B income (€<span id="income-over-limit">0</span>) exceeds the €200,000 simplified regime limit.
+                        </div>
+                    </div>
+
+                        </div><!-- /panel-setup -->
+                    </div><!-- /accordion-setup -->
+
+                    <!-- Accordion: Income & Growth -->
+                    <div class="accordion-section" id="accordion-income">
+                        <button class="accordion-trigger" aria-expanded="true" aria-controls="panel-income">
+                            <span class="accordion-trigger__text">Income & Growth</span>
+                            <svg class="accordion-trigger__icon" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M6 8l4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </button>
+                        <div class="accordion-panel" id="panel-income">
                     
                     <div class="form-group">
                         <label for="gross-income">Annual Gross Income from Services (Year 1)</label>
@@ -343,20 +316,17 @@
                         <p class="help-text">Annual growth over 10 years. Conservative: 0-3%, Moderate: 5%, Optimistic: 7-10%.</p>
                     </div>
 
-                    <div class="nav-footer">
-                        <button class="btn btn--primary btn-with-icon" data-tab-target="expenses" aria-label="Proceed to Expenses tab">
-                            Continue to Expenses
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="btn-icon">
-                                <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </button>
-                    </div>
-                </section>
+                        </div><!-- /panel-income -->
+                    </div><!-- /accordion-income -->
 
-                <!-- Expenses Tab -->
-                <section id="expenses" class="tab-content workspace-section" role="region" aria-labelledby="expenses-heading">
-                    <h2 id="expenses-heading">Your Business Expenses</h2>
-                    <p class="section-lead">Capture the shared operating cost base, insurance assumptions, and structure-specific admin overhead that most often decide the breakeven point.</p>
+                    <!-- Accordion: Business Expenses (collapsed by default) -->
+                    <div class="accordion-section" id="accordion-expenses">
+                        <button class="accordion-trigger" aria-expanded="false" aria-controls="panel-expenses">
+                            <span class="accordion-trigger__text">Business Expenses</span>
+                            <span class="accordion-summary" id="accordion-expenses-summary">Auto: 5% of gross</span>
+                            <svg class="accordion-trigger__icon" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M6 8l4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </button>
+                        <div class="accordion-panel" id="panel-expenses" hidden>
 
                     <div class="form-group">
                         <label for="total-business-expenses">Shared Business Expenses</label>
@@ -504,21 +474,18 @@
 
                     <div id="expense-warning" class="alert alert--warning hidden"></div>
                     <div id="expense-error" class="alert alert--error hidden"></div>
-                    
-                    <div class="nav-footer">
-                        <button class="btn btn--primary btn-with-icon" data-tab-target="deductions" aria-label="Proceed to Deductions tab">
-                            Continue to Deductions
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="btn-icon">
-                                <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </button>
-                    </div>
-                </section>
 
-                <!-- Deductions Tab -->
-                <section id="deductions" class="tab-content workspace-section" role="region" aria-labelledby="deductions-heading">
-                    <h2 id="deductions-heading">Personal Tax Deductions</h2>
-                    <p class="section-lead">Apply personal deductions that reduce the final IRS burden in both scenarios. Keep these realistic, because they affect the effective comparison as much as the nominal rates.</p>
+                        </div><!-- /panel-expenses -->
+                    </div><!-- /accordion-expenses -->
+
+                    <!-- Accordion: Personal Deductions (collapsed by default) -->
+                    <div class="accordion-section" id="accordion-deductions">
+                        <button class="accordion-trigger" aria-expanded="false" aria-controls="panel-deductions">
+                            <span class="accordion-trigger__text">Personal Deductions</span>
+                            <span class="accordion-summary" id="accordion-deductions-summary">€0 total</span>
+                            <svg class="accordion-trigger__icon" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M6 8l4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </button>
+                        <div class="accordion-panel" id="panel-deductions" hidden>
 
                     <div class="form-group">
                         <label for="health-expenses">Health Expenses</label>
@@ -563,21 +530,15 @@
                             <strong id="total-deductions-display">€0.00</strong>
                         </div>
                     </div>
-                    
-                    <div class="nav-footer">
-                        <button class="btn btn--primary btn-with-icon" data-tab-target="results" aria-label="View calculation results">
-                            View Results
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="btn-icon">
-                                <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </button>
-                    </div>
-                </section>
 
-                <!-- Results Tab -->
-                <section id="results" class="tab-content workspace-section workspace-section--results" role="region" aria-label="Calculation results and structure comparison">
-                    <h2>Full breakdown & audit trail</h2>
-                    <p class="section-lead">Use this section when you need to inspect the detailed 10-year totals, the line-by-line tax build, and the legal assumptions driving the recommendation in the rail.</p>
+                        </div><!-- /panel-deductions -->
+                    </div><!-- /accordion-deductions -->
+
+                </section><!-- /scenario -->
+
+                <!-- Zone 2: Results -->
+                <section id="results" class="workspace-section workspace-section--results" role="region" aria-label="Calculation results and structure comparison">
+                    <h2 class="zone-title">Full breakdown & audit trail</h2>
                     <div id="results-detail">
                         <!-- Detailed Breakdown -->
                         <div class="breakdown">
@@ -807,36 +768,15 @@
                             <ul id="sanity-list" class="validation-list"></ul>
                         </details>
 
-                        <!-- Inputs at a Glance -->
-                        <div class="glance">
-                            <h4>Your Current Setup</h4>
-                            <div class="glance__grid">
-                                <div class="glance__item">
-                                    <span class="glance__label">NHR Status</span>
-                                    <span class="glance__value" id="glance-nhr-status">Standard</span>
-                                </div>
-                                <div class="glance__item">
-                                    <span class="glance__label">Activity Type</span>
-                                    <span class="glance__value" id="glance-activity-value">High-value</span>
-                                </div>
-                                <div class="glance__item">
-                                    <span class="glance__label">First-year Benefits</span>
-                                    <div class="glance__value" id="glance-firstyear"></div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </section>
 
-                    </div>
-                </div>
+                    </div><!-- /workspace-main -->
+                </div><!-- /workspace-layout -->
 
-                <!-- Methodology Tab -->
-                <section id="methodology" class="tab-content workspace-section workspace-section--appendix" role="region" aria-labelledby="methodology-heading">
-                    <h2 id="methodology-heading">Methodology & Tax Tables</h2>
-                    <p class="section-lead">
-                        This appendix is the legal and computational backup for the live recommendation above. Use it to verify the tables, tax treatment, and explicit scope limits the calculator relies on.
-                    </p>
+                <!-- Zone 3: How It Works -->
+                <section id="methodology" class="workspace-section workspace-section--appendix" role="region" aria-labelledby="methodology-heading">
+                    <h2 id="methodology-heading" class="zone-title">How It Works</h2>
 
                     <div class="methodology-grid">
                         <!-- IRS Progressive Brackets -->
@@ -1356,10 +1296,10 @@ LLC net        = (Cat B services - taxes) + (Investments - 28%)
 
         <footer class="footer">
             <div class="container">
-                <p id="app-version" class="footer__version">TakeHome PT v2025.10.27</p>
+                <p id="app-version" class="footer__version">TakeHome PT v2025.10.27 &middot; Last legal refresh: October 2025</p>
                 <p class="footer__disclaimer">
-                    <strong>Disclaimer:</strong> This is a structure optimization planner, not a tax filing tool. Results are estimates based on 2025 Portuguese tax law for informational purposes only. 
-                    Individual circumstances vary—consult a certified Portuguese accountant (TOC) or tax advisor before making structural decisions.
+                    This is a structure optimization planner, not a tax filing tool. Results are estimates based on 2025 Portuguese tax law for informational purposes only.
+                    Consult a certified Portuguese accountant (TOC) or tax advisor before making structural decisions.
                 </p>
             </div>
         </footer>

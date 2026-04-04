@@ -183,7 +183,47 @@ function syncBenefitExclusionUI() {
     }
 }
 
+function initAccordions() {
+    document.querySelectorAll('.accordion-trigger').forEach((trigger) => {
+        trigger.addEventListener('click', () => {
+            const expanded = trigger.getAttribute('aria-expanded') === 'true';
+            const panelId = trigger.getAttribute('aria-controls');
+            const panel = document.getElementById(panelId);
+            if (!panel) return;
+
+            trigger.setAttribute('aria-expanded', String(!expanded));
+            panel.hidden = expanded;
+        });
+    });
+}
+
+function updateAccordionSummaries() {
+    // Expenses summary
+    const expensesSummary = document.getElementById('accordion-expenses-summary');
+    if (expensesSummary) {
+        const base = appState.expenses['total-business-expenses'] || 0;
+        const adminFL = appState.expenses['admin-freelancer'] || 0;
+        const insurance = appState.liabilityInsurance || 0;
+        expensesSummary.textContent = `${formatCurrency(base + adminFL + insurance)} total`;
+    }
+
+    // Deductions summary
+    const deductionsSummary = document.getElementById('accordion-deductions-summary');
+    if (deductionsSummary) {
+        const total = Object.values(appState.personalDeductions).reduce((sum, v) => sum + (v || 0), 0);
+        deductionsSummary.textContent = total > 0 ? `${formatCurrency(total)} total` : 'None set';
+    }
+}
+
+function updateMobileBar() {
+    const simpEl = document.getElementById('mobile-net-simp');
+    const orgEl = document.getElementById('mobile-net-org');
+    if (simpEl) simpEl.textContent = document.getElementById('summary-net-simp')?.textContent || '€0';
+    if (orgEl) orgEl.textContent = document.getElementById('summary-net-org')?.textContent || '€0';
+}
+
 function initApp() {
+    initAccordions();
     setupEventListeners();
     populateAssumptions();
     applySuggestedAdminIfEnabled();
@@ -229,8 +269,9 @@ function setupEventListeners() {
         recalcTimer = setTimeout(() => calculateAndUpdate(), 200);
     };
 
-    document.querySelectorAll('.tab').forEach((tab) => {
-        tab.addEventListener('click', (event) => {
+    document.querySelectorAll('.nav__link').forEach((link) => {
+        link.addEventListener('click', (event) => {
+            event.preventDefault();
             const tabName = event.currentTarget?.dataset?.tab;
             if (tabName) switchTab(tabName);
         });
@@ -561,17 +602,12 @@ function setupEventListeners() {
         });
     }
 
-    document.querySelectorAll('[data-tab-target]').forEach((trigger) => {
+    // Handle scroll-to links inside rail and mobile bar (not nav links)
+    document.querySelectorAll('.results-rail [data-tab], .result-bar [data-tab]').forEach((trigger) => {
         trigger.addEventListener('click', (event) => {
-            const target = event.currentTarget?.dataset?.tabTarget;
-            if (!target) return;
-            switchTab(target);
-            if (target === 'income') {
-                setTimeout(() => {
-                    const incomeInput = document.getElementById('gross-income');
-                    if (incomeInput) incomeInput.focus();
-                }, 80);
-            }
+            event.preventDefault();
+            const target = event.currentTarget?.dataset?.tab;
+            if (target) switchTab(target);
         });
     });
 }
@@ -589,22 +625,24 @@ function switchTab(tabName) {
 }
 
 function setActiveNavigation(tabName) {
-    document.querySelectorAll('.tab').forEach((tab) => {
-        const isActive = tab.dataset.tab === tabName;
-        tab.classList.toggle('active', isActive);
+    document.querySelectorAll('.nav__link').forEach((link) => {
+        const isActive = link.dataset.tab === tabName;
+        link.classList.toggle('active', isActive);
         if (isActive) {
-            tab.setAttribute('aria-current', 'page');
+            link.setAttribute('aria-current', 'page');
         } else {
-            tab.removeAttribute('aria-current');
+            link.removeAttribute('aria-current');
         }
     });
 }
 
 function setupSectionObserver() {
-    const sections = Array.from(document.querySelectorAll('.workspace-section'));
-    if (!sections.length) return;
+    const zones = ['scenario', 'results', 'methodology']
+        .map((id) => document.getElementById(id))
+        .filter(Boolean);
+    if (!zones.length) return;
 
-    setActiveNavigation(sections[0].id);
+    setActiveNavigation(zones[0].id);
 
     if (!('IntersectionObserver' in window)) return;
 
@@ -617,10 +655,10 @@ function setupSectionObserver() {
         setActiveNavigation(visibleSections[0].target.id);
     }, {
         rootMargin: '-16% 0px -60% 0px',
-        threshold: [0.15, 0.3, 0.6, 0.9],
+        threshold: [0.05, 0.15, 0.3, 0.6],
     });
 
-    sections.forEach((section) => observer.observe(section));
+    zones.forEach((section) => observer.observe(section));
 }
 
 function updateFreelancerTitle() {
@@ -1079,6 +1117,8 @@ function calculateAndUpdate() {
         updateRecommendationDetailsMultiYear(freelancerProjection, transparentProjection);
         updateSanityChecks();
         updateResultsVisibility();
+        updateMobileBar();
+        updateAccordionSummaries();
     } catch (error) {
         console.error('Error updating display:', error);
         console.error('Stack:', error.stack);
