@@ -86,28 +86,28 @@
    ========================================================================== */
 @media (prefers-color-scheme: dark) {
   :root {
-    --limestone: #0F0E17;
-    --bg-body: #0F0E17;
-    --bg-surface: #1E1D2B;
-    --bg-elevated: #2A293A;
-    --color-text: #ECE8E2;
-    --color-text-muted: #A5A19A;
-    --color-border: rgba(236, 232, 226, 0.14);
-    --color-border-strong: rgba(236, 232, 226, 0.28);
-    --color-primary-dark: #7BB5D0;
+    --limestone: #1A1714;
+    --bg-body: #1A1714;
+    --bg-surface: #2A2520;
+    --bg-elevated: #363028;
+    --color-text: #EDE9E3;
+    --color-text-muted: #A8A29A;
+    --color-border: rgba(200, 180, 150, 0.18);
+    --color-border-strong: rgba(200, 180, 150, 0.30);
+    --color-primary-dark: #8DC6DF;
     --azulejo: #6DB3D4;
     --azulejo-light: #8DC6DF;
     --terracotta: #E8917A;
     --terracotta-light: #F0A894;
     --olive: #96C675;
-    --gold: #E0C87A;
-    --gold-text: #E0C87A;
-    --charcoal: #ECE8E2;
+    --gold: #E8C862;
+    --gold-text: #E8C862;
+    --charcoal: #EDE9E3;
 
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
-    --shadow: 0 2px 8px rgba(0, 0, 0, 0.45), 0 1px 3px rgba(0, 0, 0, 0.3);
-    --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.5), 0 2px 6px rgba(0, 0, 0, 0.3);
-    --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.55), 0 6px 12px rgba(0, 0, 0, 0.35);
+    --shadow-sm: 0 1px 3px rgba(10, 8, 4, 0.5);
+    --shadow: 0 2px 8px rgba(10, 8, 4, 0.5), 0 1px 3px rgba(10, 8, 4, 0.35);
+    --shadow-md: 0 6px 20px rgba(10, 8, 4, 0.55), 0 2px 6px rgba(10, 8, 4, 0.35);
+    --shadow-lg: 0 16px 40px rgba(10, 8, 4, 0.6), 0 6px 12px rgba(10, 8, 4, 0.4);
   }
 }
 
@@ -163,46 +163,46 @@ body::before {
 @media (prefers-color-scheme: dark) {
   body {
     background:
-      radial-gradient(ellipse at 10% 0%, rgba(109, 179, 212, 0.08), transparent 44rem),
-      radial-gradient(ellipse at 85% 90%, rgba(224, 200, 122, 0.06), transparent 38rem),
-      linear-gradient(180deg, #141325 0%, var(--bg-body) 50%, #0B0A12 100%);
+      radial-gradient(ellipse at 15% 0%, rgba(232, 200, 98, 0.06), transparent 40rem),
+      radial-gradient(ellipse at 85% 80%, rgba(109, 179, 212, 0.04), transparent 38rem),
+      linear-gradient(180deg, #1F1B17 0%, var(--bg-body) 40%, #141210 100%);
   }
 
-  body::before { opacity: 0.008; }
+  body::before { opacity: 0.010; }
 
-  /* Card lift: strong border + top highlight + shadow */
+  /* Cards: warm surface with amber-tinted borders and top highlight */
   .accordion-section,
   .breakdown__col,
   .methodology-section,
   .ten-year-summary__card,
   .sources-section {
-    border-color: rgba(236, 232, 226, 0.12);
-    box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    border-color: rgba(200, 180, 150, 0.16);
+    box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 245, 220, 0.05);
   }
 
   .results-rail__inner {
-    border-color: rgba(236, 232, 226, 0.12);
-    box-shadow: var(--shadow-md), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    border-color: rgba(200, 180, 150, 0.14);
+    box-shadow: var(--shadow-md), inset 0 1px 0 rgba(255, 245, 220, 0.06);
   }
 
   .stat-card {
-    border-color: rgba(236, 232, 226, 0.14);
+    border-color: rgba(200, 180, 150, 0.18);
     background: var(--bg-elevated);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    box-shadow: inset 0 1px 0 rgba(255, 245, 220, 0.05);
   }
 
   .stat-card--highlight {
-    background: linear-gradient(135deg, rgba(109, 179, 212, 0.12), rgba(224, 200, 122, 0.08));
-    border-color: rgba(109, 179, 212, 0.22);
+    background: linear-gradient(135deg, rgba(109, 179, 212, 0.10), rgba(232, 200, 98, 0.08));
+    border-color: rgba(109, 179, 212, 0.24);
   }
 
   .radio-card {
-    border-color: rgba(236, 232, 226, 0.14);
+    border-color: rgba(200, 180, 150, 0.16);
     background: var(--bg-surface);
   }
 
   .radio-card:hover {
-    border-color: rgba(236, 232, 226, 0.24);
+    border-color: rgba(200, 180, 150, 0.28);
     background: var(--bg-elevated);
   }
 
@@ -213,7 +213,7 @@ body::before {
 
   .input {
     background: var(--bg-elevated);
-    border-bottom-color: rgba(236, 232, 226, 0.30);
+    border-bottom-color: rgba(200, 180, 150, 0.35);
   }
 
   .input:focus {
@@ -222,7 +222,7 @@ body::before {
   }
 
   select.input {
-    background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23A5A19A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23A8A29A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   }
 
   .insurance-card,
@@ -233,7 +233,7 @@ body::before {
   .flow-step,
   .code-block {
     background: var(--bg-elevated);
-    border-color: rgba(236, 232, 226, 0.12);
+    border-color: rgba(200, 180, 150, 0.14);
   }
 
   .winner-stripe {
@@ -242,7 +242,7 @@ body::before {
   }
 
   .comparison-table {
-    border-color: rgba(236, 232, 226, 0.12);
+    border-color: rgba(200, 180, 150, 0.14);
   }
 
   .comparison-table thead,
@@ -251,32 +251,42 @@ body::before {
   }
 
   .header-notice__text {
-    background: rgba(109, 179, 212, 0.12);
-    border-color: rgba(109, 179, 212, 0.25);
+    background: rgba(232, 200, 98, 0.10);
+    border-color: rgba(232, 200, 98, 0.22);
+    color: var(--gold);
   }
 
   .nav {
-    background: rgba(15, 14, 23, 0.94);
-    border-bottom-color: rgba(236, 232, 226, 0.10);
+    background: rgba(26, 23, 20, 0.95);
+    border-bottom-color: rgba(200, 180, 150, 0.12);
   }
 
   .accordion-trigger:hover {
-    background: rgba(236, 232, 226, 0.04);
+    background: rgba(200, 180, 150, 0.06);
   }
 
   .alert--warning {
-    background: rgba(224, 200, 122, 0.12);
+    background: rgba(232, 200, 98, 0.12);
     border-left-color: var(--gold);
   }
 
   .alert--error {
-    background: rgba(232, 145, 122, 0.10);
+    background: rgba(232, 145, 122, 0.12);
     border-left-color: var(--terracotta);
   }
 
   .ten-year-summary__card--accent {
-    background: linear-gradient(135deg, rgba(109, 179, 212, 0.08), rgba(224, 200, 122, 0.06));
-    border-color: rgba(109, 179, 212, 0.15);
+    background: linear-gradient(135deg, rgba(109, 179, 212, 0.08), rgba(232, 200, 98, 0.08));
+    border-color: rgba(109, 179, 212, 0.18);
+  }
+
+  /* Gold thread stays vivid in dark */
+  .results-rail__inner {
+    border-top-color: var(--gold);
+  }
+
+  .header__title::after {
+    background: var(--gold);
   }
 }
 
